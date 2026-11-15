@@ -239,10 +239,13 @@ func _build_azure_outskirts() -> void:
 
 	_add_deco("res://assets/base/environment/decorations/deco_peach_bonsai_01.png", Vector2(-640, -340))
 	_add_deco("res://assets/base/environment/decorations/deco_green_tree_01.png", Vector2(640, -340))
+	_add_deco("res://assets/base/environment/decorations/deco_bush_01.png", Vector2(-560, -290))
+	_add_deco("res://assets/base/environment/decorations/deco_bush_01.png", Vector2(560, -290))
 	_add_deco("res://assets/base/environment/decorations/deco_cloud_rock_01.png", Vector2(-640, 320))
 	_add_deco("res://assets/base/environment/decorations/deco_cloud_rock_01.png", Vector2(640, 320))
 	_add_deco("res://assets/base/environment/decorations/deco_cloud_lantern_01.png", Vector2(-500, 340))
 	_add_deco("res://assets/base/environment/decorations/deco_cloud_lantern_01.png", Vector2(500, 340))
+	_add_sky_backdrop()
 
 
 func _build_azure_center() -> void:
@@ -262,8 +265,11 @@ func _build_azure_center() -> void:
 		Vector2(340, 160),
 	]
 	_add_deco("res://assets/base/environment/decorations/deco_incense_brazier_01.png", Vector2(0, -240))
+	_add_deco("res://assets/base/environment/decorations/deco_bush_01.png", Vector2(-560, 260))
+	_add_deco("res://assets/base/environment/decorations/deco_bush_01.png", Vector2(560, 260))
 	_add_deco("res://assets/base/environment/decorations/deco_cloud_lantern_01.png", Vector2(-520, -320))
 	_add_deco("res://assets/base/environment/decorations/deco_cloud_lantern_01.png", Vector2(520, -320))
+	_add_sky_backdrop()
 
 
 func _build_boss_arena() -> void:
@@ -272,7 +278,12 @@ func _build_boss_arena() -> void:
 	rx = 896.0
 	ry = 512.0
 	_fill_rect_ground(-7, 6, -4, 3, 2)
-	_add_deco("res://assets/base/environment/ground/ground_rune_center_01.png", Vector2(0, 0))
+	_add_deco("res://assets/base/environment/ground/ground_rune_center_01.png", Vector2(0, 0), -4)
+	for i in range(8):
+		var angle := float(i) * TAU / 8.0
+		var ring_pos := Vector2(cos(angle) * 280.0, sin(angle) * 165.0)
+		var tile_idx := (i % 9) + 1
+		_add_deco("res://assets/base/environment/ground/ground_arena_tile_%02d.png" % tile_idx, ring_pos, -5)
 	_surround_cloud_border(-7, 6, -4, 3)
 
 	_pillar_positions = [
@@ -283,6 +294,7 @@ func _build_boss_arena() -> void:
 	]
 	_add_deco("res://assets/base/environment/decorations/deco_cloud_lantern_01.png", Vector2(-720, 0))
 	_add_deco("res://assets/base/environment/decorations/deco_cloud_lantern_01.png", Vector2(720, 0))
+	_add_sky_backdrop()
 
 
 func _build_gate_of_heaven() -> void:
@@ -303,6 +315,14 @@ func _build_gate_of_heaven() -> void:
 	_add_deco("res://assets/base/environment/decorations/deco_cloud_lantern_01.png", Vector2(-180, -80))
 	_add_deco("res://assets/base/environment/decorations/deco_cloud_lantern_01.png", Vector2(180, -80))
 	_add_deco("res://assets/base/props/prop_reward_chest_01.png", Vector2(-160, 60))
+	_add_sky_backdrop()
+
+
+func _add_sky_backdrop() -> void:
+	_add_deco("res://assets/base/environment/decorations/bg_distant_island_01.png", Vector2(-880, -480), -30)
+	_add_deco("res://assets/base/environment/decorations/bg_distant_island_01.png", Vector2(920, -450), -30)
+	_add_deco("res://assets/base/environment/decorations/bg_cloud_bank_01.png", Vector2(-640, 520), -25)
+	_add_deco("res://assets/base/environment/decorations/bg_cloud_bank_01.png", Vector2(640, 520), -25)
 
 
 func _add_deco(res_path: String, pos: Vector2, z_ord: int = 0) -> void:
