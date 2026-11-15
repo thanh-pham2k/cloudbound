@@ -1,0 +1,49 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/world/cloud_arena.gd" id="2_arena"]
+[ext_resource type="Script" path="res://scripts/player/player_controller.gd" id="3_player"]
+[ext_resource type="Script" path="res://scripts/combat/combat_system.gd" id="4_combat"]
+[ext_resource type="Script" path="res://scripts/systems/progression_system.gd" id="5_prog"]
+[ext_resource type="Script" path="res://scripts/systems/floor_manager.gd" id="6_floor"]
+[ext_resource type="Script" path="res://scripts/ui/ui_manager.gd" id="7_ui"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_main")
+custom_scene_theme = "gate_of_heaven"
+next_scene_path = ""
+
+[node name="CloudArena" type="Node2D" parent="."]
+script = ExtResource("2_arena")
+scene_theme = "gate_of_heaven"
+
+[node name="YSort" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Obstacles" type="Node2D" parent="YSort"]
+y_sort_enabled = true
+
+[node name="Entities" type="Node2D" parent="YSort"]
+y_sort_enabled = true
+
+[node name="Player" type="CharacterBody2D" parent="YSort/Entities"]
+position = Vector2(0, 160)
+script = ExtResource("3_player")
+
+[node name="Camera2D" type="Camera2D" parent="YSort/Entities/Player"]
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+
+[node name="Effects" type="Node2D" parent="."]
+
+[node name="CombatSystem" type="Node2D" parent="."]
+script = ExtResource("4_combat")
+
+[node name="ProgressionSystem" type="Node" parent="."]
+script = ExtResource("5_prog")
+
+[node name="FloorManager" type="Node" parent="."]
+script = ExtResource("6_floor")
+
+[node name="UIManager" type="CanvasLayer" parent="."]
+script = ExtResource("7_ui")

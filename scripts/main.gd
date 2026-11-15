@@ -1,5 +1,8 @@
 extends Node2D
 
+@export var custom_scene_theme: String = ""
+@export var next_scene_path: String = ""
+
 @onready var arena: CloudArena = $CloudArena
 @onready var entities: Node2D = $YSort/Entities
 @onready var player: PlayerController = $YSort/Entities/Player
@@ -35,7 +38,12 @@ func _ready() -> void:
 	floor_manager.portal_unlocked.connect(func(_portal: CloudPortal) -> void:
 		ui.update_wave(5, 5, "Cổng Thiên Giới đã mở! Hãy bước vào!")
 	)
-	floor_manager.floor_cleared.connect(ui.show_victory)
+	floor_manager.floor_cleared.connect(func() -> void:
+		if next_scene_path != "" and ResourceLoader.exists(next_scene_path):
+			get_tree().change_scene_to_file(next_scene_path)
+		else:
+			ui.show_victory()
+	)
 
 	ui.restart_requested.connect(func() -> void:
 		get_tree().reload_current_scene()
@@ -43,7 +51,13 @@ func _ready() -> void:
 
 	progression.reset()
 	ui.update_hp(player.current_hp, player.max_hp)
-	floor_manager.start_floor()
+	if custom_scene_theme != "":
+		arena.scene_theme = custom_scene_theme
+		arena._rebuild_visuals()
+		arena._spawn_pillars()
+		floor_manager.start_scene_encounter(custom_scene_theme)
+	else:
+		floor_manager.start_floor()
 
 
 func _on_boss_spawned(boss: BossController) -> void:

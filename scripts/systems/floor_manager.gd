@@ -30,8 +30,8 @@ func setup(player: PlayerController, combat: CombatSystem, arena: CloudArena, en
 	_ysort_entities = entities_node
 	_floor_cfg = GameData.get_floor_config(0)
 	_waves = _floor_cfg.get("waves", [])
-	if _arena != null and not _floor_cfg.is_empty():
-		_arena.configure(float(_floor_cfg.get("arena_rx", 880.0)), float(_floor_cfg.get("arena_ry", 480.0)))
+	if _arena != null and not _floor_cfg.is_empty() and _arena.scene_theme == "azure_outskirts":
+		_arena.configure(float(_floor_cfg.get("arena_rx", 768.0)), float(_floor_cfg.get("arena_ry", 448.0)))
 
 
 func start_floor() -> void:
@@ -39,6 +39,54 @@ func start_floor() -> void:
 	_boss_active = false
 	_floor_done = false
 	_advance_wave()
+
+
+func start_scene_encounter(theme: String) -> void:
+	_current_wave_idx = -1
+	_waves = []
+	_boss_active = false
+	_floor_done = false
+	_active_enemies = 0
+	match theme:
+		"mortal_realm":
+			wave_changed.emit(1, 6, "Cảnh 1: Phàm Gian — Làng Thanh Vân")
+			_spawn_portal(Vector2(520, 20))
+		"stairway_clouds":
+			wave_changed.emit(2, 6, "Cảnh 2: Thang Mây — Cầu Đá Cổ")
+			_spawn_specific_enemy("ranged", Vector2(540, 0))
+		"azure_outskirts":
+			wave_changed.emit(3, 6, "Cảnh 3: Ngoại Vi Thanh Vân")
+			_spawn_specific_enemy("ranged", Vector2(-280, -140))
+			_spawn_specific_enemy("ranged", Vector2(320, -120))
+			_spawn_specific_enemy("melee", Vector2(260, 150))
+		"azure_center":
+			wave_changed.emit(4, 6, "Cảnh 4: Trung Tâm Thanh Vân")
+			_spawn_specific_enemy("melee", Vector2(-200, -120))
+			_spawn_specific_enemy("ranged", Vector2(260, -140))
+			_spawn_specific_enemy("ranged", Vector2(-260, 140))
+			_spawn_specific_enemy("tank", Vector2(180, 120))
+		"boss_arena":
+			_spawn_boss()
+		"gate_of_heaven":
+			wave_changed.emit(6, 6, "Cảnh 6: Cổng Thiên Giới")
+			_spawn_portal(Vector2(0, -180))
+		_:
+			start_floor()
+
+
+func _spawn_specific_enemy(enemy_type: String, pos: Vector2) -> void:
+	if _ysort_entities == null:
+		return
+	var enemy := EnemyBase.new()
+	enemy.position = _arena.clamp_to_arena(pos, 32.0) if _arena != null else pos
+	enemy.setup(enemy_type, _player, _combat, _arena)
+	enemy.died.connect(func(exp_reward: int, _p: Vector2) -> void:
+		_on_enemy_died(exp_reward, _p)
+		if _active_enemies <= 0 and not _boss_active:
+			_spawn_portal(Vector2(560, 0) if _arena != null and _arena.scene_theme == "stairway_clouds" else Vector2(0, -180))
+	)
+	_active_enemies += 1
+	_ysort_entities.add_child(enemy)
 
 
 func _process(delta: float) -> void:
