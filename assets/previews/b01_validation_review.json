@@ -1,0 +1,238 @@
+{
+  "batch": "B01",
+  "status": "REVIEW_REQUIRED",
+  "source": "Local filesystem review, not Godot execution",
+  "inputs_sha256": [
+    {
+      "asset_id": "ground_jade_tile_01",
+      "sha256": "7710599c6d54e4f43bbd63cb7c518a272952873ded9a42b28f0d5bbf96d69290"
+    },
+    {
+      "asset_id": "ground_jade_tile_02",
+      "sha256": "39ba97e4786b0fa5eadc0e8a7a8e2362c47432e1e206ffcd025b267729fffd5a"
+    },
+    {
+      "asset_id": "ground_cloud_tile_01",
+      "sha256": "2c91fc09704c17691aac0fd0a08fe49bdc394aaaabd492240d9d4e1b27c4e6eb"
+    },
+    {
+      "asset_id": "ground_rune_center_01",
+      "sha256": "e405e8b0dc3970a3fc62f86684071a4c32b3e7318aeb71370a562662dc689e0e"
+    },
+    {
+      "asset_id": "ground_grass_stone_transition_01",
+      "sha256": "cd698e6c47963a47745ac85e42b583fc635a303c810ebfc4784c70afc3c83202"
+    },
+    {
+      "asset_id": "platform_cloud_edge_01",
+      "sha256": "9703820fb881eed726e4245c5159021bb73a4fd5f8808c29fed757660ab0448a"
+    },
+    {
+      "asset_id": "platform_cloud_corner_01",
+      "sha256": "35d114b092987fc96b0023943332ba2d5789ebacd5369ae2fad8e55dcac25164"
+    },
+    {
+      "asset_id": "bridge_stone_01",
+      "sha256": "9d2acc0ee53856d0269d727fe2d5fbdce7fc0e1661f78ada3f0c5e4064c4b86f"
+    },
+    {
+      "asset_id": "bridge_stone_02",
+      "sha256": "e1a1ef426941ef09cc3bc2c6629a218ae1d50f50425ea04f03feedf43d5b9ae0"
+    },
+    {
+      "asset_id": "stairs_stone_01",
+      "sha256": "146aef030de7313c2d6e7def83ee1893d67e00b19a469a299a03027d291a21fc"
+    }
+  ],
+  "checked_assets": [
+    {
+      "id": "ground_jade_tile_01",
+      "path": "assets/base/environment/ground/ground_jade_tile_01.png",
+      "role": "repeat",
+      "sha256": "7710599c6d54e4f43bbd63cb7c518a272952873ded9a42b28f0d5bbf96d69290",
+      "dimensions": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        255,
+        255
+      ],
+      "edges": {
+        "left_right_rgba_mae": 2.219,
+        "top_bottom_rgba_mae": 2.844,
+        "horizontal_mirror_mae": 13.912,
+        "vertical_mirror_mae": 18.212
+      },
+      "status": "STRUCTURAL_CHECK_ONLY"
+    },
+    {
+      "id": "ground_jade_tile_02",
+      "path": "assets/base/environment/ground/ground_jade_tile_02.png",
+      "role": "repeat",
+      "sha256": "39ba97e4786b0fa5eadc0e8a7a8e2362c47432e1e206ffcd025b267729fffd5a",
+      "dimensions": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        255,
+        255
+      ],
+      "edges": {
+        "left_right_rgba_mae": 2.627,
+        "top_bottom_rgba_mae": 2.807,
+        "horizontal_mirror_mae": 16.326,
+        "vertical_mirror_mae": 13.662
+      },
+      "status": "STRUCTURAL_CHECK_ONLY"
+    },
+    {
+      "id": "ground_cloud_tile_01",
+      "path": "assets/base/environment/ground/ground_cloud_tile_01.png",
+      "role": "repeat",
+      "sha256": "2c91fc09704c17691aac0fd0a08fe49bdc394aaaabd492240d9d4e1b27c4e6eb",
+      "dimensions": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        255,
+        255
+      ],
+      "edges": {
+        "left_right_rgba_mae": 1.307,
+        "top_bottom_rgba_mae": 2.6,
+        "horizontal_mirror_mae": 10.741,
+        "vertical_mirror_mae": 12.859
+      },
+      "status": "STRUCTURAL_CHECK_ONLY"
+    },
+    {
+      "id": "ground_rune_center_01",
+      "path": "assets/base/environment/ground/ground_rune_center_01.png",
+      "role": "static",
+      "sha256": "e405e8b0dc3970a3fc62f86684071a4c32b3e7318aeb71370a562662dc689e0e",
+      "dimensions": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "status": "STRUCTURAL_CHECK_ONLY"
+    },
+    {
+      "id": "ground_grass_stone_transition_01",
+      "path": "assets/base/environment/ground/ground_grass_stone_transition_01.png",
+      "role": "transition",
+      "sha256": "cd698e6c47963a47745ac85e42b583fc635a303c810ebfc4784c70afc3c83202",
+      "dimensions": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "status": "STRUCTURAL_CHECK_ONLY"
+    },
+    {
+      "id": "platform_cloud_edge_01",
+      "path": "assets/base/environment/platforms/platform_cloud_edge_01.png",
+      "role": "edge",
+      "sha256": "9703820fb881eed726e4245c5159021bb73a4fd5f8808c29fed757660ab0448a",
+      "dimensions": [
+        256,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "status": "STRUCTURAL_CHECK_ONLY"
+    },
+    {
+      "id": "platform_cloud_corner_01",
+      "path": "assets/base/environment/platforms/platform_cloud_corner_01.png",
+      "role": "corner",
+      "sha256": "35d114b092987fc96b0023943332ba2d5789ebacd5369ae2fad8e55dcac25164",
+      "dimensions": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "status": "STRUCTURAL_CHECK_ONLY"
+    },
+    {
+      "id": "bridge_stone_01",
+      "path": "assets/base/environment/bridges/bridge_stone_01.png",
+      "role": "bridge",
+      "sha256": "9d2acc0ee53856d0269d727fe2d5fbdce7fc0e1661f78ada3f0c5e4064c4b86f",
+      "dimensions": [
+        256,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "status": "STRUCTURAL_CHECK_ONLY"
+    },
+    {
+      "id": "bridge_stone_02",
+      "path": "assets/base/environment/bridges/bridge_stone_02.png",
+      "role": "bridge",
+      "sha256": "e1a1ef426941ef09cc3bc2c6629a218ae1d50f50425ea04f03feedf43d5b9ae0",
+      "dimensions": [
+        256,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "status": "STRUCTURAL_CHECK_ONLY"
+    },
+    {
+      "id": "stairs_stone_01",
+      "path": "assets/base/environment/bridges/stairs_stone_01.png",
+      "role": "stairs",
+      "sha256": "146aef030de7313c2d6e7def83ee1893d67e00b19a469a299a03027d291a21fc",
+      "dimensions": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "status": "STRUCTURAL_CHECK_ONLY"
+    }
+  ],
+  "missing_revised_modules": [],
+  "issues": [
+    "No registered physical connector anchors/collision footprints for bridge, stairs and island rims; cannot certify alignment",
+    "Contact-sheet illustrations are NOT independent transparent modules and must not be auto-approved",
+    "Visual seam checks cannot prove correct physical connectivity or walkable collision geometry"
+  ],
+  "godot_headless": {
+    "status": "NOT_RUN",
+    "reason": "Run separate Godot scene on a machine with Godot installed"
+  },
+  "approval": "BLOCKED: visual and runtime evidence absent; approved assets were not overwritten"
+}
