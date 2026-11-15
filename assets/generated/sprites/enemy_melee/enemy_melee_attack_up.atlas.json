@@ -22,7 +22,7 @@
   },
   "allow_horizontal_flip": true,
   "flip_policy": "flip_uv",
-  "atlas_png": "/Users/thanhpv/Documents/Work/cloudbound/assets/generated/cloudbound_enemy_melee_3a73febb4de2/atlases/enemy_melee_attack_up.png",
+  "atlas_png": "/Users/thanhpv/Documents/Work/cloudbound/assets/generated/cloudbound_enemy_melee_16d83ddf4d33/atlases/enemy_melee_attack_up.png",
   "frames": [
     {
       "index": 0,

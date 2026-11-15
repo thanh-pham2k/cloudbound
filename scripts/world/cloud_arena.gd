@@ -1,14 +1,14 @@
 extends Node2D
 class_name CloudArena
 
-## 2.5D Isometric Floating Cloud Island arena with rune tiles, obstacles,
-## boundary enforcement, and ambient drifting cloud wisps.
+## 2.5D Floating Cloud Island arena built from B01/B02 modular 128x128 tiles & props,
+## preserving arena collision, movement boundaries, and spawn logic.
+
+const TILE_SIZE := 128
 
 @export var rx: float = 880.0
 @export var ry: float = 480.0
 
-var _wisps: Array[Dictionary] = []
-var _time: float = 0.0
 var _pillar_positions: Array[Vector2] = [
 	Vector2(-380, -160),
 	Vector2(380, -160),
@@ -16,30 +16,182 @@ var _pillar_positions: Array[Vector2] = [
 	Vector2(380, 160),
 ]
 
+var _terrain_root: Node2D
+var _ground_layer: TileMapLayer
+var _border_layer: TileMapLayer
+var _deco_layer: Node2D
+
 
 func configure(arena_rx: float, arena_ry: float) -> void:
 	rx = arena_rx
 	ry = arena_ry
+	if is_inside_tree():
+		_rebuild_visuals()
 	queue_redraw()
 
 
 func _ready() -> void:
-	_init_wisps()
+	z_index = -10
+	_ensure_layers()
+	_rebuild_visuals()
 	_spawn_pillars()
 	queue_redraw()
 
 
-func _init_wisps() -> void:
-	_wisps.clear()
-	var rng := RandomNumberGenerator.new()
-	rng.seed = 4201
-	for i in range(18):
-		_wisps.append({
-			"pos": Vector2(rng.randf_range(-rx * 1.15, rx * 1.15), rng.randf_range(-ry * 1.15, ry * 1.15)),
-			"speed": rng.randf_range(14.0, 32.0),
-			"radius": rng.randf_range(26.0, 62.0),
-			"alpha": rng.randf_range(0.08, 0.2),
-		})
+func _ensure_layers() -> void:
+	if _terrain_root != null:
+		return
+	var sky := ColorRect.new()
+	sky.name = "SkyBackdrop"
+	sky.color = Color(0.42, 0.72, 0.90, 1.0)
+	sky.position = Vector2(-4000, -4000)
+	sky.size = Vector2(8000, 8000)
+	sky.z_index = -20
+	sky.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(sky)
+
+	_terrain_root = Node2D.new()
+	_terrain_root.name = "ArenaVisuals"
+	_terrain_root.z_index = -10
+	add_child(_terrain_root)
+
+	_border_layer = TileMapLayer.new()
+	_border_layer.name = "IslandBorderLayer"
+	_terrain_root.add_child(_border_layer)
+
+	_ground_layer = TileMapLayer.new()
+	_ground_layer.name = "GroundTileLayer"
+	_terrain_root.add_child(_ground_layer)
+
+	_deco_layer = Node2D.new()
+	_deco_layer.name = "PerimeterDecorations"
+	_terrain_root.add_child(_deco_layer)
+
+
+func _build_tileset(paths: Array[String]) -> TileSet:
+	var ts := TileSet.new()
+	ts.tile_size = Vector2i(TILE_SIZE, TILE_SIZE)
+	for i in range(paths.size()):
+		if not ResourceLoader.exists(paths[i]):
+			continue
+		var src := TileSetAtlasSource.new()
+		src.texture = load(paths[i])
+		src.texture_region_size = Vector2i(TILE_SIZE, TILE_SIZE)
+		src.create_tile(Vector2i(0, 0))
+		ts.add_source(src, i)
+	return ts
+
+
+func _rebuild_visuals() -> void:
+	_ensure_layers()
+	_ground_layer.clear()
+	_border_layer.clear()
+	for c in _deco_layer.get_children():
+		c.queue_free()
+
+	var ground_paths: Array[String] = [
+		"res://assets/base/environment/ground/ground_jade_tile_01.png",            # 0
+		"res://assets/base/environment/ground/ground_jade_tile_02.png",            # 1
+		"res://assets/base/environment/ground/ground_stone_tile_01.png",           # 2
+		"res://assets/base/environment/ground/ground_cloud_tile_01.png",           # 3
+		"res://assets/base/environment/ground/ground_rune_center_01.png",          # 4
+		"res://assets/base/environment/ground/ground_grass_stone_edge_north_01.png", # 5
+		"res://assets/base/environment/ground/ground_grass_stone_edge_south_01.png", # 6
+		"res://assets/base/environment/ground/ground_grass_stone_edge_west_01.png",  # 7
+		"res://assets/base/environment/ground/ground_grass_stone_edge_east_01.png",  # 8
+		"res://assets/base/environment/ground/ground_grass_stone_outer_nw_01.png",   # 9
+		"res://assets/base/environment/ground/ground_grass_stone_outer_ne_01.png",   # 10
+		"res://assets/base/environment/ground/ground_grass_stone_outer_sw_01.png",   # 11
+		"res://assets/base/environment/ground/ground_grass_stone_outer_se_01.png",   # 12
+	]
+	_ground_layer.tile_set = _build_tileset(ground_paths)
+
+	var border_paths: Array[String] = [
+		"res://assets/base/environment/platforms/platform_cloud_edge_north_01.png", # 0
+		"res://assets/base/environment/platforms/platform_cloud_edge_south_01.png", # 1
+		"res://assets/base/environment/platforms/platform_cloud_edge_west_01.png",  # 2
+		"res://assets/base/environment/platforms/platform_cloud_edge_east_01.png",  # 3
+		"res://assets/base/environment/platforms/platform_cloud_corner_nw_01.png",  # 4
+		"res://assets/base/environment/platforms/platform_cloud_corner_ne_01.png",  # 5
+		"res://assets/base/environment/platforms/platform_cloud_corner_sw_01.png",  # 6
+		"res://assets/base/environment/platforms/platform_cloud_corner_se_01.png",  # 7
+		"res://assets/base/environment/platforms/platform_cloud_underside_01.png",  # 8
+	]
+	_border_layer.tile_set = _build_tileset(border_paths)
+
+	var half_cols := maxi(3, int(ceil(rx / float(TILE_SIZE))))
+	var half_rows := maxi(2, int(ceil(ry / float(TILE_SIZE))))
+	var min_x := -half_cols
+	var max_x := half_cols - 1
+	var min_y := -half_rows
+	var max_y := half_rows - 1
+
+	# Fill main floating island floor with B01 jade grass + central carved stone courtyard
+	for gy in range(min_y, max_y + 1):
+		for gx in range(min_x, max_x + 1):
+			var src_id := 0 if ((gx + gy) & 1) == 0 else 1
+			# Central 4x2 stone courtyard (stone base everywhere inside)
+			if gx >= -2 and gx <= 1 and gy >= -1 and gy <= 0:
+				src_id = 2
+			elif gx == -3 and gy == -1:
+				src_id = 12 # outer_se: grass top-left, stone bottom-right
+			elif gx == 2 and gy == -1:
+				src_id = 11 # outer_sw: grass top-right, stone bottom-left
+			elif gx == -3 and gy == 0:
+				src_id = 10 # outer_ne: stone top-right, grass bottom-left
+			elif gx == 2 and gy == 0:
+				src_id = 9  # outer_nw: stone top-left, grass bottom-right
+			elif gy == -2 and gx >= -2 and gx <= 1:
+				src_id = 6  # grass top, stone bottom
+			elif gy == 1 and gx >= -2 and gx <= 1:
+				src_id = 5  # stone top, grass bottom
+			elif gx == -3 and gy >= -1 and gy <= 0:
+				src_id = 8  # grass left, stone right
+			elif gx == 2 and gy >= -1 and gy <= 0:
+				src_id = 7  # stone left, grass right
+			_ground_layer.set_cell(Vector2i(gx, gy), src_id, Vector2i(0, 0))
+
+	# Center rune medallion layered cleanly on top of stone courtyard
+	_add_deco("res://assets/base/environment/ground/ground_rune_center_01.png", Vector2(0, 0))
+
+	# Surround island with B01 cloud platform edges, corners, and underside thickness
+	for gx in range(min_x, max_x + 1):
+		_border_layer.set_cell(Vector2i(gx, min_y - 1), 0, Vector2i(0, 0))
+		_border_layer.set_cell(Vector2i(gx, max_y + 1), 1, Vector2i(0, 0))
+		_border_layer.set_cell(Vector2i(gx, max_y + 2), 8, Vector2i(0, 0))
+	for gy in range(min_y, max_y + 1):
+		_border_layer.set_cell(Vector2i(min_x - 1, gy), 2, Vector2i(0, 0))
+		_border_layer.set_cell(Vector2i(max_x + 1, gy), 3, Vector2i(0, 0))
+	_border_layer.set_cell(Vector2i(min_x - 1, min_y - 1), 4, Vector2i(0, 0))
+	_border_layer.set_cell(Vector2i(max_x + 1, min_y - 1), 5, Vector2i(0, 0))
+	_border_layer.set_cell(Vector2i(min_x - 1, max_y + 1), 6, Vector2i(0, 0))
+	_border_layer.set_cell(Vector2i(max_x + 1, max_y + 1), 7, Vector2i(0, 0))
+
+	# Stone bridge on east edge & stone stairs on south edge
+	var east_x := float((max_x + 1) * TILE_SIZE)
+	_add_deco("res://assets/base/environment/bridges/bridge_stone_entrance_01.png", Vector2(east_x + 64, 0))
+	_add_deco("res://assets/base/environment/bridges/bridge_stone_middle_01.png", Vector2(east_x + 192, 0))
+	_add_deco("res://assets/base/environment/bridges/bridge_stone_exit_01.png", Vector2(east_x + 320, 0))
+	_add_deco("res://assets/base/environment/bridges/stairs_stone_01.png", Vector2(0, float((max_y + 1) * TILE_SIZE) + 48))
+
+	# Sparse perimeter props (lanterns, peach trees, rocks) outside combat center
+	var corner_x := float(max_x * TILE_SIZE) - 16.0
+	var corner_y := float(max_y * TILE_SIZE) - 16.0
+	_add_deco("res://assets/base/environment/decorations/deco_peach_bonsai_01.png", Vector2(-corner_x, -corner_y))
+	_add_deco("res://assets/base/environment/decorations/deco_peach_bonsai_01.png", Vector2(corner_x, -corner_y))
+	_add_deco("res://assets/base/environment/decorations/deco_cloud_lantern_01.png", Vector2(-corner_x + 96, corner_y))
+	_add_deco("res://assets/base/environment/decorations/deco_cloud_lantern_01.png", Vector2(corner_x - 96, corner_y))
+	_add_deco("res://assets/base/environment/decorations/deco_cloud_rock_01.png", Vector2(-corner_x, corner_y))
+	_add_deco("res://assets/base/environment/decorations/deco_cloud_rock_01.png", Vector2(corner_x, corner_y))
+
+
+func _add_deco(res_path: String, pos: Vector2) -> void:
+	if not ResourceLoader.exists(res_path):
+		return
+	var sp := Sprite2D.new()
+	sp.texture = load(res_path)
+	sp.position = pos
+	_deco_layer.add_child(sp)
 
 
 func _spawn_pillars() -> void:
@@ -48,6 +200,11 @@ func _spawn_pillars() -> void:
 		return
 	for child in obstacles_node.get_children():
 		child.queue_free()
+
+	var pillar_tex: Texture2D = null
+	var pillar_path := "res://assets/base/environment/architecture/arch_jade_pillar_01.png"
+	if ResourceLoader.exists(pillar_path):
+		pillar_tex = load(pillar_path)
 
 	for p_pos in _pillar_positions:
 		var pillar := StaticBody2D.new()
@@ -61,18 +218,11 @@ func _spawn_pillars() -> void:
 		col.shape = shape
 		pillar.add_child(col)
 
-		var visual := _PillarVisual.new()
+		var visual := Sprite2D.new()
+		visual.texture = pillar_tex
+		visual.offset = Vector2(0, -76)
 		pillar.add_child(visual)
 		obstacles_node.add_child(pillar)
-
-
-func _process(delta: float) -> void:
-	_time += delta
-	for w in _wisps:
-		w["pos"].x += float(w["speed"]) * delta
-		if w["pos"].x > rx * 1.25:
-			w["pos"].x = -rx * 1.25
-	queue_redraw()
 
 
 func clamp_to_arena(pos: Vector2, margin: float = 28.0) -> Vector2:
@@ -97,81 +247,4 @@ func random_point_in_arena(min_dist_from_center: float = 0.0, max_ratio: float =
 
 
 func _draw() -> void:
-	# Deep sky backdrop
-	draw_rect(Rect2(-rx * 1.8, -ry * 1.8, rx * 3.6, ry * 3.6), Color(0.07, 0.11, 0.22, 1.0))
-
-	# Underside cloud shadow / floating island thickness
-	_draw_ellipse(Vector2(0, 42), rx * 1.02, ry * 1.02, Color(0.14, 0.22, 0.38, 0.9))
-	_draw_ellipse(Vector2(0, 22), rx * 1.01, ry * 1.01, Color(0.72, 0.85, 0.96, 0.45))
-
-	# Outer cloud rim puffs
-	var puff_count := 36
-	for i in range(puff_count):
-		var a := (float(i) / puff_count) * TAU
-		var bob := sin(_time * 1.3 + float(i)) * 3.0
-		var p := Vector2(cos(a) * rx * 0.99, sin(a) * ry * 0.99 + bob)
-		draw_circle(p, 52.0, Color(0.86, 0.94, 1.0, 0.32))
-
-	# Main jade-stone cloud platform
-	_draw_ellipse(Vector2.ZERO, rx, ry, Color(0.18, 0.27, 0.40, 1.0))
-	_draw_ellipse(Vector2.ZERO, rx * 0.96, ry * 0.96, Color(0.22, 0.33, 0.48, 1.0))
-	_draw_ellipse_outline(Vector2.ZERO, rx * 0.96, ry * 0.96, Color(0.95, 0.82, 0.42, 0.55), 3.0)
-
-	# Isometric diamond tile grid inside the ellipse
-	var step_x := 110.0
-	var step_y := 55.0
-	var cols := int(rx / step_x) + 1
-	var rows := int(ry / step_y) + 1
-	for gx in range(-cols, cols + 1):
-		for gy in range(-rows, rows + 1):
-			var center := Vector2(gx * step_x + (gy % 2) * (step_x * 0.5), gy * step_y)
-			if (center.x * center.x) / (rx * rx * 0.88) + (center.y * center.y) / (ry * ry * 0.88) <= 1.0:
-				var pts := PackedVector2Array([
-					center + Vector2(0, -step_y * 0.48),
-					center + Vector2(step_x * 0.48, 0),
-					center + Vector2(0, step_y * 0.48),
-					center + Vector2(-step_x * 0.48, 0),
-				])
-				draw_polyline(pts + PackedVector2Array([pts[0]]), Color(0.45, 0.68, 0.86, 0.14), 1.5)
-
-	# Celestial center rune ring
-	_draw_ellipse_outline(Vector2.ZERO, 210.0, 110.0, Color(0.98, 0.84, 0.40, 0.35), 2.5)
-	_draw_ellipse_outline(Vector2.ZERO, 130.0, 68.0, Color(0.45, 0.90, 0.98, 0.3), 2.0)
-
-	# Ambient drifting cloud wisps
-	for w in _wisps:
-		var wp: Vector2 = w["pos"]
-		var wr: float = w["radius"]
-		var wa: float = w["alpha"]
-		draw_circle(wp, wr, Color(0.92, 0.97, 1.0, wa))
-		draw_circle(wp + Vector2(wr * 0.55, 6), wr * 0.7, Color(0.92, 0.97, 1.0, wa * 0.8))
-
-
-func _draw_ellipse(center: Vector2, erx: float, ery: float, col: Color) -> void:
-	var pts := PackedVector2Array()
-	var segs := 64
-	for i in range(segs):
-		var a := (float(i) / segs) * TAU
-		pts.append(center + Vector2(cos(a) * erx, sin(a) * ery))
-	draw_colored_polygon(pts, col)
-
-
-func _draw_ellipse_outline(center: Vector2, erx: float, ery: float, col: Color, width: float) -> void:
-	var pts := PackedVector2Array()
-	var segs := 64
-	for i in range(segs + 1):
-		var a := (float(i % segs) / segs) * TAU
-		pts.append(center + Vector2(cos(a) * erx, sin(a) * ery))
-	draw_polyline(pts, col, width)
-
-
-class _PillarVisual extends Node2D:
-	func _draw() -> void:
-		# Shadow
-		draw_circle(Vector2(0, 6), 30.0, Color(0.05, 0.08, 0.16, 0.45))
-		# Stone base
-		draw_rect(Rect2(-22, -46, 44, 52), Color(0.32, 0.42, 0.56, 1.0))
-		draw_rect(Rect2(-22, -46, 44, 52), Color(0.75, 0.88, 0.98, 0.5), false, 2.0)
-		# Golden cap & rune
-		draw_rect(Rect2(-26, -54, 52, 12), Color(0.92, 0.76, 0.34, 1.0))
-		draw_circle(Vector2(0, -22), 7.0, Color(0.42, 0.92, 1.0, 0.85))
+	pass

@@ -22,7 +22,7 @@
   },
   "allow_horizontal_flip": true,
   "flip_policy": "flip_uv",
-  "atlas_png": "/Users/thanhpv/Documents/Work/cloudbound/assets/generated/cloudbound_player_hero_4df8b827e06f/atlases/player_hero_walk_down.png",
+  "atlas_png": "/Users/thanhpv/Documents/Work/cloudbound/assets/generated/cloudbound_player_hero_3e9c56317ee4/atlases/player_hero_walk_down.png",
   "frames": [
     {
       "index": 0,

@@ -38,7 +38,7 @@ The pinned submodule at [`tools/gameforge-kit/`](../../tools/gameforge-kit/AGENT
    ```bash
    python3 scripts/tools/validate_assets.py
    ```
-5. Verify Godot headless loading & tests:
+5. Optional lightweight Godot headless resource-load check (asset sanity only — do not run automated gameplay playtests; the user tests gameplay manually):
    ```bash
-   /Applications/Godot.app/Contents/MacOS/Godot --headless --path . res://tests/test_runner.tscn
+   /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --quit
    ```

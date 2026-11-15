@@ -9,3 +9,7 @@ Toolkit: `tools/gameforge-kit/` (pinned Git Submodule)
 - Always pass `--project-root .`, `--output-dir assets/generated`, and `--work-dir .gameforge/work` so nothing is written inside `tools/gameforge-kit/`.
 - Never edit or auto-update `tools/gameforge-kit/` unless explicitly requested.
 - Report missing dependencies (`blender`, `godot`, AI API) and failed validations honestly. When `blender` is unavailable, use procedural placeholder sprite frames routed through `gameforge-kit` normalizer/packer/exporter.
+
+## Validation & Testing Scope
+- **Asset-only validation:** Run `python3 scripts/tools/validate_assets.py` (dimensions, RGBA alpha, atlas JSON, `.tres` existence) and, if needed, a quick headless Godot resource-load check.
+- **No automated gameplay self-testing:** Do NOT write or run simulated gameplay smoke tests, combat/AI playtests, or multi-step Godot runtime test loops. The user will play and test gameplay directly in Godot.

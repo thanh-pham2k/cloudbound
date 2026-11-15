@@ -22,7 +22,7 @@
   },
   "allow_horizontal_flip": true,
   "flip_policy": "flip_uv",
-  "atlas_png": "/Users/thanhpv/Documents/Work/cloudbound/assets/generated/cloudbound_enemy_tank_22e19eff5682/atlases/enemy_tank_idle_up.png",
+  "atlas_png": "/Users/thanhpv/Documents/Work/cloudbound/assets/generated/cloudbound_enemy_tank_c02f9eb091b3/atlases/enemy_tank_idle_up.png",
   "frames": [
     {
       "index": 0,

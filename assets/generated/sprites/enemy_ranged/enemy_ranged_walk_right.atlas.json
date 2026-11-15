@@ -22,7 +22,7 @@
   },
   "allow_horizontal_flip": true,
   "flip_policy": "flip_uv",
-  "atlas_png": "/Users/thanhpv/Documents/Work/cloudbound/assets/generated/cloudbound_enemy_ranged_f1d82cdc6a3d/atlases/enemy_ranged_walk_right.png",
+  "atlas_png": "/Users/thanhpv/Documents/Work/cloudbound/assets/generated/cloudbound_enemy_ranged_5ae75ae328ab/atlases/enemy_ranged_walk_right.png",
   "frames": [
     {
       "index": 0,
