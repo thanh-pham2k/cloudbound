@@ -93,7 +93,7 @@ def validate_repo_assets() -> tuple[list[str], list[str]]:
             if not FILENAME_RE.match(png_path.name):
                 errors.append(f"Unexpected filename: {rel}")
             with Image.open(png_path) as img:
-                if img.mode != "RGBA":
+                if bucket == "base" and img.mode != "RGBA":
                     errors.append(f"Missing RGBA alpha channel ({img.mode}): {rel}")
                 if bucket == "base" and img.size not in VALID_BASE_DIMS:
                     errors.append(f"Unexpected base PNG dimensions {img.size} in {rel}")

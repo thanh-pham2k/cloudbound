@@ -1,0 +1,183 @@
+{
+  "schema_version": "1.0.0",
+  "asset_id": "b01_ground_and_platforms",
+  "asset_type": "environment",
+  "project": "cloudbound",
+  "generator_id": "b01_contact_sheet_adapter",
+  "generator_version": "1.0.0",
+  "seed": 0,
+  "source": {
+    "contact_sheet": "assets/source/environment/b01/original_contact_sheet.png"
+  },
+  "style": {
+    "perspective": "3_4_top_down",
+    "palette": "jade_cream_sky_gold"
+  },
+  "dimensions": {
+    "tile_size": [
+      128,
+      128
+    ],
+    "wide_piece": [
+      256,
+      128
+    ]
+  },
+  "output_formats": [
+    "png_rgba"
+  ],
+  "validation_status": "REVIEW_REQUIRED",
+  "provenance": {
+    "assets": [
+      {
+        "asset_id": "ground_jade_tile_01",
+        "path": "assets/base/environment/ground/ground_jade_tile_01.png",
+        "format": "PNG",
+        "mode": "RGBA",
+        "dimensions": {
+          "width": 128,
+          "height": 128
+        },
+        "repeating_tile": true,
+        "seam_metrics": {
+          "lr_mean_diff": 0.0,
+          "tb_mean_diff": 0.0
+        },
+        "validation_status": "PASS",
+        "notes": "Seamless 128x128 repeating jade grass tile"
+      },
+      {
+        "asset_id": "ground_jade_tile_02",
+        "path": "assets/base/environment/ground/ground_jade_tile_02.png",
+        "format": "PNG",
+        "mode": "RGBA",
+        "dimensions": {
+          "width": 128,
+          "height": 128
+        },
+        "repeating_tile": true,
+        "seam_metrics": {
+          "lr_mean_diff": 0.0,
+          "tb_mean_diff": 0.0
+        },
+        "validation_status": "PASS",
+        "notes": "Seamless 128x128 repeating lime-jade grass variant"
+      },
+      {
+        "asset_id": "ground_cloud_tile_01",
+        "path": "assets/base/environment/ground/ground_cloud_tile_01.png",
+        "format": "PNG",
+        "mode": "RGBA",
+        "dimensions": {
+          "width": 128,
+          "height": 128
+        },
+        "repeating_tile": true,
+        "seam_metrics": {
+          "lr_mean_diff": 0.0,
+          "tb_mean_diff": 0.0
+        },
+        "validation_status": "PASS",
+        "notes": "Seamless 128x128 repeating cloud surface tile"
+      },
+      {
+        "asset_id": "ground_rune_center_01",
+        "path": "assets/base/environment/ground/ground_rune_center_01.png",
+        "format": "PNG",
+        "mode": "RGBA",
+        "dimensions": {
+          "width": 128,
+          "height": 128
+        },
+        "repeating_tile": false,
+        "seam_metrics": null,
+        "validation_status": "PASS",
+        "notes": "128x128 stone/gold rune centerpiece"
+      },
+      {
+        "asset_id": "ground_grass_stone_transition_01",
+        "path": "assets/base/environment/ground/ground_grass_stone_transition_01.png",
+        "format": "PNG",
+        "mode": "RGBA",
+        "dimensions": {
+          "width": 128,
+          "height": 128
+        },
+        "repeating_tile": false,
+        "seam_metrics": null,
+        "validation_status": "REVIEW_REQUIRED",
+        "notes": "Isolated block transition; requires edge-matched tile repaint if used in seamless TileMapLayer"
+      },
+      {
+        "asset_id": "platform_cloud_edge_01",
+        "path": "assets/base/environment/platforms/platform_cloud_edge_01.png",
+        "format": "PNG",
+        "mode": "RGBA",
+        "dimensions": {
+          "width": 256,
+          "height": 128
+        },
+        "repeating_tile": false,
+        "seam_metrics": null,
+        "validation_status": "PASS",
+        "notes": "256x128 cloud platform edge with 2.5D underside thickness"
+      },
+      {
+        "asset_id": "platform_cloud_corner_01",
+        "path": "assets/base/environment/platforms/platform_cloud_corner_01.png",
+        "format": "PNG",
+        "mode": "RGBA",
+        "dimensions": {
+          "width": 128,
+          "height": 128
+        },
+        "repeating_tile": false,
+        "seam_metrics": null,
+        "validation_status": "PASS",
+        "notes": "128x128 cloud platform corner"
+      },
+      {
+        "asset_id": "bridge_stone_01",
+        "path": "assets/base/environment/bridges/bridge_stone_01.png",
+        "format": "PNG",
+        "mode": "RGBA",
+        "dimensions": {
+          "width": 256,
+          "height": 128
+        },
+        "repeating_tile": false,
+        "seam_metrics": null,
+        "validation_status": "PASS",
+        "notes": "256x128 stone bridge with corner pillars"
+      },
+      {
+        "asset_id": "bridge_stone_02",
+        "path": "assets/base/environment/bridges/bridge_stone_02.png",
+        "format": "PNG",
+        "mode": "RGBA",
+        "dimensions": {
+          "width": 256,
+          "height": 128
+        },
+        "repeating_tile": false,
+        "seam_metrics": null,
+        "validation_status": "PASS",
+        "notes": "256x128 stone bridge variant"
+      },
+      {
+        "asset_id": "stairs_stone_01",
+        "path": "assets/base/environment/bridges/stairs_stone_01.png",
+        "format": "PNG",
+        "mode": "RGBA",
+        "dimensions": {
+          "width": 128,
+          "height": 128
+        },
+        "repeating_tile": false,
+        "seam_metrics": null,
+        "validation_status": "PASS",
+        "notes": "128x128 stone stairs"
+      }
+    ]
+  }
+}

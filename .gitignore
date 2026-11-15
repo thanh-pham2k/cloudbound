@@ -5,6 +5,13 @@
 # GameForge Kit working files
 .gameforge/work/
 
+# Asset inbox & archive (raw drops; processed outputs live in assets/base & assets/generated)
+assets/inbox/*
+!assets/inbox/.gitkeep
+!assets/inbox/README.md
+assets/archive/*
+!assets/archive/.gitkeep
+
 # OS / Editor
 .DS_Store
 *.swp
