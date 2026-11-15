@@ -22,7 +22,7 @@
   },
   "allow_horizontal_flip": true,
   "flip_policy": "flip_uv",
-  "atlas_png": "/Users/thanhpv/Documents/Work/cloudbound/assets/generated/cloudbound_boss_thunder_warden_446bf2f7822d/atlases/boss_thunder_warden_idle_up.png",
+  "atlas_png": "/Users/thanhpv/Documents/Work/cloudbound/assets/generated/cloudbound_boss_thunder_warden_8bb78250c82c/atlases/boss_thunder_warden_idle_up.png",
   "frames": [
     {
       "index": 0,

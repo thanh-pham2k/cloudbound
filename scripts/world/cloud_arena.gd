@@ -25,6 +25,7 @@ var _sky_rect: TextureRect
 var _sky_parallax: ParallaxBackground
 var _sky_far_layer: ParallaxLayer
 var _sky_mid_layer: ParallaxLayer
+var _sky_atmo_layer: ParallaxLayer
 
 
 func configure(arena_rx: float, arena_ry: float) -> void:
@@ -72,11 +73,14 @@ func _ensure_layers() -> void:
 	sky_base_layer.add_child(_sky_rect)
 
 	_sky_far_layer = ParallaxLayer.new()
-	_sky_far_layer.motion_scale = Vector2(0.22, 0.16)
+	_sky_far_layer.motion_scale = Vector2(0.18, 0.12)
 	_sky_parallax.add_child(_sky_far_layer)
 	_sky_mid_layer = ParallaxLayer.new()
-	_sky_mid_layer.motion_scale = Vector2(0.42, 0.30)
+	_sky_mid_layer.motion_scale = Vector2(0.32, 0.22)
 	_sky_parallax.add_child(_sky_mid_layer)
+	_sky_atmo_layer = ParallaxLayer.new()
+	_sky_atmo_layer.motion_scale = Vector2(0.45, 0.30)
+	_sky_parallax.add_child(_sky_atmo_layer)
 	add_child(_sky_parallax)
 
 	_terrain_root = Node2D.new()
@@ -121,6 +125,8 @@ func _rebuild_visuals() -> void:
 		c.queue_free()
 	for c in _sky_mid_layer.get_children():
 		c.queue_free()
+	for c in _sky_atmo_layer.get_children():
+		c.queue_free()
 	walkable_rects.clear()
 	_pillar_positions.clear()
 
@@ -151,6 +157,10 @@ func _rebuild_visuals() -> void:
 		"res://assets/base/environment/platforms/platform_cloud_corner_sw_01.png",  # 6
 		"res://assets/base/environment/platforms/platform_cloud_corner_se_01.png",  # 7
 		"res://assets/base/environment/platforms/platform_cloud_underside_01.png",  # 8
+		"res://assets/base/environment/platforms/platform_cloud_inner_nw.png",      # 9
+		"res://assets/base/environment/platforms/platform_cloud_inner_ne.png",      # 10
+		"res://assets/base/environment/platforms/platform_cloud_inner_sw.png",      # 11
+		"res://assets/base/environment/platforms/platform_cloud_inner_se.png",      # 12
 	]
 	_border_layer.tile_set = _build_tileset(border_paths)
 
@@ -218,6 +228,7 @@ func _make_irregular_cells(row_spans: Dictionary) -> Dictionary:
 func _build_irregular_island(cells: Dictionary, ground_sid: int = -1, add_cloud_border: bool = true) -> void:
 	walkable_mode = "rects"
 	var by_row := {}
+	var perim := {}
 	for cell in cells.keys():
 		var gx: int = cell.x
 		var gy: int = cell.y
@@ -226,31 +237,53 @@ func _build_irregular_island(cells: Dictionary, ground_sid: int = -1, add_cloud_
 		if not by_row.has(gy):
 			by_row[gy] = []
 		by_row[gy].append(gx)
+		if add_cloud_border:
+			for dy in range(-1, 2):
+				for dx in range(-1, 2):
+					var nb := Vector2i(gx + dx, gy + dy)
+					if not cells.has(nb):
+						perim[nb] = true
 
-		if not add_cloud_border:
-			continue
-		var has_n := cells.has(Vector2i(gx, gy - 1))
-		var has_s := cells.has(Vector2i(gx, gy + 1))
-		var has_w := cells.has(Vector2i(gx - 1, gy))
-		var has_e := cells.has(Vector2i(gx + 1, gy))
-
-		if not has_n:
-			_border_layer.set_cell(Vector2i(gx, gy - 1), 0, Vector2i(0, 0))
-		if not has_s:
-			_border_layer.set_cell(Vector2i(gx, gy + 1), 1, Vector2i(0, 0))
-			_border_layer.set_cell(Vector2i(gx, gy + 2), 8, Vector2i(0, 0))
-		if not has_w:
-			_border_layer.set_cell(Vector2i(gx - 1, gy), 2, Vector2i(0, 0))
-		if not has_e:
-			_border_layer.set_cell(Vector2i(gx + 1, gy), 3, Vector2i(0, 0))
-		if not has_n and not has_w:
-			_border_layer.set_cell(Vector2i(gx - 1, gy - 1), 4, Vector2i(0, 0))
-		if not has_n and not has_e:
-			_border_layer.set_cell(Vector2i(gx + 1, gy - 1), 5, Vector2i(0, 0))
-		if not has_s and not has_w:
-			_border_layer.set_cell(Vector2i(gx - 1, gy + 1), 6, Vector2i(0, 0))
-		if not has_s and not has_e:
-			_border_layer.set_cell(Vector2i(gx + 1, gy + 1), 7, Vector2i(0, 0))
+	if add_cloud_border:
+		for p in perim.keys():
+			var px: int = p.x
+			var py: int = p.y
+			var n := cells.has(Vector2i(px, py - 1))
+			var s := cells.has(Vector2i(px, py + 1))
+			var w := cells.has(Vector2i(px - 1, py))
+			var e := cells.has(Vector2i(px + 1, py))
+			var tile_id := -1
+			# Concave inner corners (2 adjacent cardinal island neighbors)
+			if s and e and not n and not w:
+				tile_id = 9  # inner_nw
+			elif s and w and not n and not e:
+				tile_id = 10 # inner_ne
+			elif n and e and not s and not w:
+				tile_id = 11 # inner_sw
+			elif n and w and not s and not e:
+				tile_id = 12 # inner_se
+			# Straight cardinal edges
+			elif s and not n and not w and not e:
+				tile_id = 0  # north edge
+			elif n and not s and not w and not e:
+				tile_id = 1  # south edge
+			elif e and not w and not n and not s:
+				tile_id = 2  # west edge
+			elif w and not e and not n and not s:
+				tile_id = 3  # east edge
+			# Outer convex corners (diagonal island neighbor only)
+			elif cells.has(Vector2i(px + 1, py + 1)) and not n and not s and not w and not e:
+				tile_id = 4  # corner_nw
+			elif cells.has(Vector2i(px - 1, py + 1)) and not n and not s and not w and not e:
+				tile_id = 5  # corner_ne
+			elif cells.has(Vector2i(px + 1, py - 1)) and not n and not s and not w and not e:
+				tile_id = 6  # corner_sw
+			elif cells.has(Vector2i(px - 1, py - 1)) and not n and not s and not w and not e:
+				tile_id = 7  # corner_se
+			if tile_id >= 0:
+				_border_layer.set_cell(p, tile_id, Vector2i(0, 0))
+				if tile_id in [1, 6, 7, 11, 12] and not perim.has(Vector2i(px, py + 1)) and not cells.has(Vector2i(px, py + 1)):
+					_border_layer.set_cell(Vector2i(px, py + 1), 8, Vector2i(0, 0))
 
 	# Merge contiguous horizontal cell spans into exact walkable Rect2s
 	for gy in by_row.keys():
@@ -447,17 +480,21 @@ func _add_parallax_sprite(layer: ParallaxLayer, res_path: String, pos: Vector2, 
 
 
 func _add_sky_backdrop(center_island: bool = false) -> void:
+	# ParallaxLayer coordinates are relative to viewport top-left (1280x720)
+	# L1 — Far Islands (0.18, 0.12)
 	if center_island:
-		_add_parallax_sprite(_sky_far_layer, "res://assets/base/environment/decorations/bg_distant_island_01.png", Vector2(64, -300), 1.15, 0.95)
+		_add_parallax_sprite(_sky_far_layer, "res://assets/base/environment/decorations/bg_distant_island_01.png", Vector2(640, 140), 0.95, 0.95)
 	else:
-		_add_parallax_sprite(_sky_far_layer, "res://assets/base/environment/decorations/bg_distant_island_01.png", Vector2(-620, -320), 1.0, 0.92)
-		_add_parallax_sprite(_sky_far_layer, "res://assets/base/environment/decorations/bg_distant_island_01.png", Vector2(660, -300), 0.9, 0.9)
-	# Layered sea of clouds around and beneath the island so no flat blue void dominates
-	_add_parallax_sprite(_sky_far_layer, "res://assets/base/environment/decorations/bg_cloud_bank_01.png", Vector2(-680, 120), 1.5, 0.85)
-	_add_parallax_sprite(_sky_far_layer, "res://assets/base/environment/decorations/bg_cloud_bank_01.png", Vector2(680, 100), 1.5, 0.85)
-	_add_parallax_sprite(_sky_mid_layer, "res://assets/base/environment/decorations/bg_cloud_bank_01.png", Vector2(-460, 340), 1.7, 0.95)
-	_add_parallax_sprite(_sky_mid_layer, "res://assets/base/environment/decorations/bg_cloud_bank_01.png", Vector2(0, 390), 1.9, 0.95)
-	_add_parallax_sprite(_sky_mid_layer, "res://assets/base/environment/decorations/bg_cloud_bank_01.png", Vector2(460, 340), 1.7, 0.95)
+		_add_parallax_sprite(_sky_far_layer, "res://assets/base/environment/decorations/bg_distant_island_01.png", Vector2(150, 160), 0.85, 0.92)
+		_add_parallax_sprite(_sky_far_layer, "res://assets/base/environment/decorations/bg_distant_island_01.png", Vector2(1130, 150), 0.80, 0.90)
+	# L2 — Mid Cloud Banks (0.32, 0.22)
+	_add_parallax_sprite(_sky_mid_layer, "res://assets/base/environment/decorations/bg_cloud_bank_01.png", Vector2(120, 460), 1.35, 0.88)
+	_add_parallax_sprite(_sky_mid_layer, "res://assets/base/environment/decorations/bg_cloud_bank_01.png", Vector2(1160, 440), 1.35, 0.88)
+	_add_parallax_sprite(_sky_mid_layer, "res://assets/base/environment/decorations/bg_cloud_bank_01.png", Vector2(360, 650), 1.5, 0.95)
+	_add_parallax_sprite(_sky_mid_layer, "res://assets/base/environment/decorations/bg_cloud_bank_01.png", Vector2(920, 650), 1.5, 0.95)
+	# L3 — Atmospheric Cloud Wisps (0.45, 0.30)
+	_add_parallax_sprite(_sky_atmo_layer, "res://assets/base/environment/decorations/bg_cloud_bank_01.png", Vector2(260, 110), 1.6, 0.24)
+	_add_parallax_sprite(_sky_atmo_layer, "res://assets/base/environment/decorations/bg_cloud_bank_01.png", Vector2(1020, 120), 1.6, 0.24)
 
 
 func _add_deco(res_path: String, pos: Vector2, z_ord: int = 0, scale_val: float = 1.0) -> void:
