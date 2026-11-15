@@ -1,0 +1,87 @@
+{
+  "enemies": {
+    "melee": {
+      "id": "melee",
+      "name": "Thiên Binh Sa Ngã",
+      "max_hp": 48,
+      "speed": 148.0,
+      "damage": 11,
+      "attack_range": 58.0,
+      "preferred_min_range": 0.0,
+      "detect_range": 950.0,
+      "attack_cooldown": 1.1,
+      "telegraph_time": 0.35,
+      "aoe_radius": 0.0,
+      "projectile_speed": 0.0,
+      "exp_reward": 18,
+      "sprite_frames": "res://assets/generated/sprites/enemy_melee/enemy_melee_sprite_frames.tres",
+      "scale": 0.9
+    },
+    "ranged": {
+      "id": "ranged",
+      "name": "Lôi Cung Thủ",
+      "max_hp": 36,
+      "speed": 128.0,
+      "damage": 12,
+      "attack_range": 340.0,
+      "preferred_min_range": 165.0,
+      "detect_range": 1000.0,
+      "attack_cooldown": 1.65,
+      "telegraph_time": 0.45,
+      "aoe_radius": 0.0,
+      "projectile_speed": 390.0,
+      "exp_reward": 24,
+      "sprite_frames": "res://assets/generated/sprites/enemy_ranged/enemy_ranged_sprite_frames.tres",
+      "scale": 0.9
+    },
+    "tank": {
+      "id": "tank",
+      "name": "Thạch Vệ Cổ",
+      "max_hp": 145,
+      "speed": 88.0,
+      "damage": 22,
+      "attack_range": 78.0,
+      "preferred_min_range": 0.0,
+      "detect_range": 950.0,
+      "attack_cooldown": 2.0,
+      "telegraph_time": 0.65,
+      "aoe_radius": 92.0,
+      "projectile_speed": 0.0,
+      "exp_reward": 48,
+      "sprite_frames": "res://assets/generated/sprites/enemy_tank/enemy_tank_sprite_frames.tres",
+      "scale": 1.15
+    }
+  },
+  "boss": {
+    "id": "boss_thunder_warden",
+    "name": "Thiên Lôi Tướng",
+    "max_hp": 1650,
+    "speed": 112.0,
+    "phase2_hp_ratio": 0.5,
+    "exp_reward": 350,
+    "sprite_frames": "res://assets/generated/sprites/boss_thunder_warden/boss_thunder_warden_sprite_frames.tres",
+    "scale": 1.45,
+    "patterns": {
+      "slam": {
+        "telegraph_time": 0.85,
+        "radius": 135.0,
+        "damage": 28,
+        "phase2_rings": 2
+      },
+      "charge": {
+        "telegraph_time": 0.7,
+        "speed": 540.0,
+        "duration": 0.38,
+        "damage": 30,
+        "hit_radius": 68.0
+      },
+      "barrage": {
+        "telegraph_time": 0.65,
+        "projectile_count": 7,
+        "phase2_projectile_count": 11,
+        "projectile_speed": 360.0,
+        "damage": 18
+      }
+    }
+  }
+}

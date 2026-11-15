@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0.0",
+  "project": "cloudbound",
+  "character_id": "enemy_ranged",
+  "task_id": "enemy_ranged_hurt_up",
+  "animation": "hurt",
+  "direction": "up",
+  "fps": 10.0,
+  "loop": false,
+  "frame_count": 2,
+  "frame_width": 128,
+  "frame_height": 128,
+  "columns": 4,
+  "rows": 1,
+  "padding": 0,
+  "atlas_width": 512,
+  "atlas_height": 128,
+  "pivot": {
+    "anchor_mode": "bottom_center_feet",
+    "x": 64,
+    "y": 112
+  },
+  "allow_horizontal_flip": true,
+  "flip_policy": "flip_uv",
+  "atlas_png": "/Users/thanhpv/Documents/Work/cloudbound/assets/generated/cloudbound_enemy_ranged_f1d82cdc6a3d/atlases/enemy_ranged_hurt_up.png",
+  "frames": [
+    {
+      "index": 0,
+      "x": 0,
+      "y": 0,
+      "w": 128,
+      "h": 128
+    },
+    {
+      "index": 1,
+      "x": 128,
+      "y": 0,
+      "w": 128,
+      "h": 128
+    }
+  ]
+}

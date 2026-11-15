@@ -1,0 +1,13 @@
+# Godot 4
+.godot/
+*.translation
+
+# GameForge Kit working files
+.gameforge/work/
+
+# OS / Editor
+.DS_Store
+*.swp
+*.tmp
+__pycache__/
+*.pyc

@@ -1,0 +1,3 @@
+[submodule "tools/gameforge-kit"]
+	path = tools/gameforge-kit
+	url = https://github.com/thanh-pham2k/gameforge-kit
