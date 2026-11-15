@@ -51,10 +51,24 @@ func _ready() -> void:
 
 	progression.reset()
 	ui.update_hp(player.current_hp, player.max_hp)
+	camera.zoom = Vector2(0.75, 0.75)
 	if custom_scene_theme != "":
 		arena.scene_theme = custom_scene_theme
 		arena._rebuild_visuals()
 		arena._spawn_pillars()
+		match custom_scene_theme:
+			"mortal_realm":
+				player.position = Vector2(0, 60)
+			"stairway_clouds":
+				player.position = Vector2(-140, 0)
+			"azure_outskirts":
+				player.position = Vector2(-160, 20)
+			"azure_center":
+				player.position = Vector2(-120, 60)
+			"boss_arena":
+				player.position = Vector2(-220, 120)
+			"gate_of_heaven":
+				player.position = Vector2(0, 120)
 		floor_manager.start_scene_encounter(custom_scene_theme)
 	else:
 		floor_manager.start_floor()

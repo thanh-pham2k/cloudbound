@@ -22,6 +22,7 @@ func _run_all() -> void:
 	await _test_arena_clamp()
 	await _test_progression_and_upgrades()
 	await _test_enemy_and_boss_lifecycle()
+	await _test_manual_combat_and_walkable_boundaries()
 
 	if _failures.is_empty():
 		print("ALL TESTS PASSED!")
@@ -105,3 +106,32 @@ func _test_enemy_and_boss_lifecycle() -> void:
 	boss.take_damage(boss.max_hp)
 	_assert(bool(state["boss_died"]), "BossController emits died when HP reaches 0")
 	await get_tree().create_timer(0.8).timeout
+
+
+func _test_manual_combat_and_walkable_boundaries() -> void:
+	_assert(InputMap.has_action("attack"), "InputMap defines manual attack action")
+	_assert(InputMap.has_action("skill_1") and InputMap.has_action("skill_2"), "InputMap defines skill_1 and skill_2")
+
+	var player := PlayerController.new()
+	add_child(player)
+	await get_tree().physics_frame
+	_assert(player._atk_timer <= 0.0 and not player._attack_held, "PlayerController does not auto-attack when idle")
+	var attacked := player.try_manual_attack()
+	_assert(attacked and player._atk_timer > 0.0, "PlayerController executes manual attack on request and starts cooldown")
+	var premature := player.try_manual_attack()
+	_assert(not premature, "PlayerController blocks premature attack during cooldown")
+	player.queue_free()
+
+	var arena := CloudArena.new()
+	arena.scene_theme = "azure_outskirts"
+	add_child(arena)
+	var corner_out := arena.clamp_to_arena(Vector2(-600, -350), 28.0)
+	_assert(corner_out.x > -600.0 or corner_out.y > -350.0, "Scene 03 irregular island clamps notched corner back onto walkable ground")
+
+	arena.scene_theme = "stairway_clouds"
+	arena._rebuild_visuals()
+	var on_bridge := arena.clamp_to_arena(Vector2(64, 0), 28.0)
+	_assert(on_bridge.distance_to(Vector2(64, 0)) < 1.0, "Stairway bridge midpoint is walkable")
+	var off_cliff := arena.clamp_to_arena(Vector2(64, 160), 28.0)
+	_assert(off_cliff.y < 100.0, "Stairway bridge clamps cliff fall back onto bridge/island")
+	arena.queue_free()

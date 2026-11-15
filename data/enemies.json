@@ -15,7 +15,7 @@
       "projectile_speed": 0.0,
       "exp_reward": 18,
       "sprite_frames": "res://assets/generated/sprites/enemy_melee/enemy_melee_sprite_frames.tres",
-      "scale": 0.9
+      "scale": 1.18
     },
     "ranged": {
       "id": "ranged",
@@ -32,7 +32,7 @@
       "projectile_speed": 390.0,
       "exp_reward": 24,
       "sprite_frames": "res://assets/generated/sprites/enemy_ranged/enemy_ranged_sprite_frames.tres",
-      "scale": 0.9
+      "scale": 1.05
     },
     "tank": {
       "id": "tank",
@@ -49,7 +49,7 @@
       "projectile_speed": 0.0,
       "exp_reward": 48,
       "sprite_frames": "res://assets/generated/sprites/enemy_tank/enemy_tank_sprite_frames.tres",
-      "scale": 1.15
+      "scale": 1.35
     }
   },
   "boss": {

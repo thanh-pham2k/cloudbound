@@ -45,6 +45,8 @@ var _skill1_timer: float = 0.0
 var _skill2_timer: float = 0.0
 var _hurt_timer: float = 0.0
 var _attack_anim_timer: float = 0.0
+var _attack_held: bool = false
+var _attack_use_mouse: bool = false
 var _is_dead: bool = false
 
 var _facing: String = "down"
@@ -110,8 +112,23 @@ func _ready() -> void:
 	_update_animation(Vector2.ZERO)
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if _is_dead or get_tree().paused:
+		_attack_held = false
+		return
+	if event.is_action("attack"):
+		if event.is_pressed():
+			_attack_held = true
+			_attack_use_mouse = event is InputEventMouseButton
+			if _atk_timer <= 0.0:
+				try_manual_attack()
+		elif event.is_released():
+			_attack_held = false
+
+
 func _physics_process(delta: float) -> void:
-	if _is_dead:
+	if _is_dead or get_tree().paused:
+		_attack_held = false
 		return
 
 	_atk_timer = maxf(0.0, _atk_timer - delta)
@@ -147,8 +164,8 @@ func _physics_process(delta: float) -> void:
 	if _arena != null:
 		global_position = _arena.clamp_to_arena(global_position, 28.0)
 
-	if _atk_timer <= 0.0:
-		_try_auto_attack()
+	if _attack_held and _atk_timer <= 0.0:
+		try_manual_attack()
 
 	_update_facing(move_input)
 	_update_animation(velocity)
@@ -162,28 +179,47 @@ func _start_dash(move_input: Vector2) -> void:
 	_invuln_timer = maxf(_invuln_timer, dash_invuln)
 
 
-func _try_auto_attack() -> void:
-	var target := _find_nearest_enemy(attack_range)
-	if target == null:
-		return
+func try_manual_attack() -> bool:
+	if _is_dead or (is_inside_tree() and get_tree().paused) or _atk_timer > 0.0:
+		return false
 	_atk_timer = attack_cooldown
 	_attack_anim_timer = 0.25
 
-	var dir := (target.global_position - global_position).normalized()
+	var dir := _facing_vector()
+	if _attack_use_mouse and is_inside_tree():
+		var mouse_dir := get_global_mouse_position() - global_position
+		if mouse_dir.length_squared() > 4.0:
+			dir = mouse_dir.normalized()
+	else:
+		var target := _find_nearest_enemy(attack_range)
+		if target != null:
+			var to_target := (target.global_position - global_position)
+			if to_target.length_squared() > 1.0:
+				dir = to_target.normalized()
 	_update_facing(dir)
 
-	var dmg_roll := _roll_damage(attack_damage)
+	var arc_cos := cos(deg_to_rad(67.5))
 	if _combat != null:
-		_combat.spawn_projectile(
-			global_position + Vector2(0, -18),
-			dir * projectile_speed,
-			dmg_roll["amount"],
-			"enemy",
-			Color(0.45, 0.95, 1.0),
-			10.0,
-			0.75,
-			dmg_roll["crit"]
+		_combat.spawn_melee_slash(
+			global_position + Vector2(0, -16),
+			dir,
+			attack_range * 0.92,
+			deg_to_rad(135.0),
+			Color(1.0, 0.85, 0.35)
 		)
+
+	if is_inside_tree():
+		for enemy in get_tree().get_nodes_in_group("enemy"):
+			if not is_instance_valid(enemy) or not enemy.has_method("take_damage"):
+				continue
+			var to_enemy: Vector2 = enemy.global_position - global_position
+			var dist := to_enemy.length()
+			if dist > attack_range:
+				continue
+			if dist <= 48.0 or to_enemy.normalized().dot(dir) >= arc_cos:
+				var dmg_roll := _roll_damage(attack_damage)
+				enemy.take_damage(dmg_roll["amount"], dmg_roll["crit"])
+	return true
 
 
 func _cast_skill_1() -> void:
@@ -206,25 +242,24 @@ func _cast_skill_2() -> void:
 	_attack_anim_timer = 0.35
 
 	var enemies := _get_enemies_in_range(skill2_range)
-	for i in range(skill2_bolts):
-		var angle: float = (float(i) / float(maxi(skill2_bolts, 1))) * TAU
-		var dir := Vector2(cos(angle), sin(angle))
-		var target: Node2D = enemies[i % enemies.size()] if not enemies.is_empty() else null
-		if target != null:
-			dir = (target.global_position - global_position).normalized().rotated(randf_range(-0.25, 0.25))
+	if enemies.is_empty():
+		if _combat != null:
+			_combat.spawn_ring_burst(global_position, skill2_range * 0.45, Color(0.75, 0.55, 1.0))
+		return
+
+	if _combat != null:
+		_combat.add_screen_shake(3.5)
+
+	var strikes := mini(skill2_bolts, enemies.size())
+	for i in range(strikes):
+		var target: Node2D = enemies[i]
+		if not is_instance_valid(target):
+			continue
 		var dmg_roll := _roll_damage(skill2_damage)
 		if _combat != null:
-			_combat.spawn_projectile(
-				global_position + Vector2(0, -22),
-				dir * 480.0,
-				dmg_roll["amount"],
-				"enemy",
-				Color(0.75, 0.55, 1.0),
-				9.0,
-				1.3,
-				dmg_roll["crit"],
-				target
-			)
+			_combat.spawn_ring_burst(target.global_position, 72.0, Color(0.75, 0.55, 1.0))
+		if target.has_method("take_damage"):
+			target.take_damage(dmg_roll["amount"], dmg_roll["crit"])
 
 
 func _roll_damage(base_dmg: float) -> Dictionary:

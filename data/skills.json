@@ -1,11 +1,12 @@
 {
   "auto_attack": {
     "id": "auto_attack",
-    "name": "Thiên Kiếm Trảm",
-    "damage": 24,
-    "cooldown": 0.52,
-    "range": 210.0,
-    "projectile_speed": 560.0
+    "name": "Như Ý Côn Quét",
+    "damage": 28,
+    "cooldown": 0.45,
+    "range": 135.0,
+    "arc_deg": 135.0,
+    "projectile_speed": 0.0
   },
   "dash": {
     "id": "dash",

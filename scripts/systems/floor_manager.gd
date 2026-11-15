@@ -56,9 +56,9 @@ func start_scene_encounter(theme: String) -> void:
 			_spawn_specific_enemy("ranged", Vector2(540, 0))
 		"azure_outskirts":
 			wave_changed.emit(3, 6, "Cảnh 3: Ngoại Vi Thanh Vân")
-			_spawn_specific_enemy("ranged", Vector2(-280, -140))
-			_spawn_specific_enemy("ranged", Vector2(320, -120))
-			_spawn_specific_enemy("melee", Vector2(260, 150))
+			_spawn_specific_enemy("ranged", Vector2(60, 40))
+			_spawn_specific_enemy("ranged", Vector2(180, -40))
+			_spawn_specific_enemy("melee", Vector2(300, -100))
 		"azure_center":
 			wave_changed.emit(4, 6, "Cảnh 4: Trung Tâm Thanh Vân")
 			_spawn_specific_enemy("melee", Vector2(-200, -120))
@@ -170,12 +170,14 @@ func _spawn_boss() -> void:
 	_boss_active = true
 	wave_changed.emit(_waves.size(), _waves.size(), "BOSS: Thiên Lôi Tướng")
 	var boss := BossController.new()
-	boss.position = Vector2(0, -180)
+	boss.position = Vector2(80, -90) if (_arena != null and _arena.scene_theme == "boss_arena") else Vector2(0, -180)
 	if _player != null and boss.position.distance_to(_player.global_position) < 220.0:
 		boss.position = Vector2(0, 180)
 	boss.setup(_player, _combat, _arena)
 	boss.died.connect(_on_boss_died)
 	_ysort_entities.add_child(boss)
+	if _combat != null:
+		_combat.spawn_circle_telegraph(boss.position, 145.0, 1.1, Color(1.0, 0.25, 0.2))
 	boss_spawned.emit(boss)
 
 

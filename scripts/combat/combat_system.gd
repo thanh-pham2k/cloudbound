@@ -100,3 +100,39 @@ class _RingBurstEffect extends Node2D:
 		var a := 1.0 - t
 		draw_circle(Vector2.ZERO, r, Color(color.r, color.g, color.b, a * 0.22))
 		draw_arc(Vector2.ZERO, r, 0.0, TAU, 40, Color(color.r, color.g, color.b, a * 0.9), 4.0)
+
+
+func spawn_melee_slash(pos: Vector2, dir: Vector2, radius: float = 115.0, arc_rad: float = 2.2, col: Color = Color(1.0, 0.85, 0.35)) -> void:
+	if effects_container == null:
+		return
+	var slash := _MeleeSlashEffect.new()
+	slash.position = pos
+	slash.base_angle = dir.angle()
+	slash.radius = radius
+	slash.arc_rad = arc_rad
+	slash.color = col
+	effects_container.add_child(slash)
+
+
+class _MeleeSlashEffect extends Node2D:
+	var base_angle: float = 0.0
+	var radius: float = 115.0
+	var arc_rad: float = 2.2
+	var color: Color = Color(1.0, 0.85, 0.35)
+	var _elapsed: float = 0.0
+	var _duration: float = 0.18
+
+	func _process(delta: float) -> void:
+		_elapsed += delta
+		queue_redraw()
+		if _elapsed >= _duration:
+			queue_free()
+
+	func _draw() -> void:
+		var t := clampf(_elapsed / _duration, 0.0, 1.0)
+		var a := 1.0 - t
+		var r := lerpf(radius * 0.65, radius, t)
+		var start_a := base_angle - arc_rad * 0.5
+		var end_a := base_angle + arc_rad * 0.5
+		draw_arc(Vector2.ZERO, r, start_a, end_a, 24, Color(color.r, color.g, color.b, a * 0.95), 9.0)
+		draw_arc(Vector2.ZERO, r * 0.82, start_a + 0.12, end_a - 0.12, 20, Color(1.0, 0.98, 0.82, a * 0.7), 4.0)
