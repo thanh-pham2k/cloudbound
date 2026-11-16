@@ -3,6 +3,7 @@ class_name CombatSystem
 
 ## Centralized spawner for projectiles, telegraphs, slash effects, and damage numbers.
 
+var painted_visuals := false
 var effects_container: Node2D
 var camera: Camera2D
 var _shake_strength: float = 0.0
@@ -51,6 +52,7 @@ func spawn_projectile(
 	if effects_container == null:
 		return null
 	var proj := GameProjectile.new()
+	proj.painted_visuals = painted_visuals
 	proj.setup(pos, vel, dmg, target_group, col, rad, life, is_crit, homing)
 	effects_container.add_child(proj)
 	return proj
@@ -58,6 +60,7 @@ func spawn_projectile(
 
 func spawn_circle_telegraph(pos: Vector2, radius: float, duration: float, col: Color = Color(1.0, 0.28, 0.22)) -> TelegraphArea:
 	var t := TelegraphArea.new()
+	t.painted_visuals = painted_visuals
 	t.setup_circle(pos, radius, duration, col)
 	if effects_container != null:
 		effects_container.add_child(t)
@@ -76,6 +79,7 @@ func spawn_ring_burst(pos: Vector2, radius: float, col: Color = Color(0.45, 0.92
 	if effects_container == null:
 		return
 	var burst := _RingBurstEffect.new()
+	burst.painted_visuals = painted_visuals
 	burst.position = pos
 	burst.max_radius = radius
 	burst.color = col
@@ -83,6 +87,7 @@ func spawn_ring_burst(pos: Vector2, radius: float, col: Color = Color(0.45, 0.92
 
 
 class _RingBurstEffect extends Node2D:
+	var painted_visuals := false
 	var max_radius: float = 140.0
 	var color: Color = Color(0.45, 0.92, 1.0)
 	var _elapsed: float = 0.0
@@ -98,6 +103,11 @@ class _RingBurstEffect extends Node2D:
 		var t := clampf(_elapsed / _duration, 0.0, 1.0)
 		var r := lerpf(24.0, max_radius, t)
 		var a := 1.0 - t
+		if painted_visuals:
+			const BURST := preload("res://assets/processed/vfx/cyan_ground_burst.png")
+			var size := BURST.get_size() * (2.0 * r / BURST.get_width())
+			draw_texture_rect(BURST, Rect2(Vector2(-size.x * 0.5, -size.y * 0.72), size),
+				false, Color(1.0, 1.0, 1.0, a * 0.78))
 		draw_circle(Vector2.ZERO, r, Color(color.r, color.g, color.b, a * 0.22))
 		draw_arc(Vector2.ZERO, r, 0.0, TAU, 40, Color(color.r, color.g, color.b, a * 0.9), 4.0)
 
@@ -106,6 +116,7 @@ func spawn_melee_slash(pos: Vector2, dir: Vector2, radius: float = 115.0, arc_ra
 	if effects_container == null:
 		return
 	var slash := _MeleeSlashEffect.new()
+	slash.painted_visuals = painted_visuals
 	slash.position = pos
 	slash.base_angle = dir.angle()
 	slash.radius = radius
@@ -115,6 +126,7 @@ func spawn_melee_slash(pos: Vector2, dir: Vector2, radius: float = 115.0, arc_ra
 
 
 class _MeleeSlashEffect extends Node2D:
+	var painted_visuals := false
 	var base_angle: float = 0.0
 	var radius: float = 115.0
 	var arc_rad: float = 2.2
@@ -132,6 +144,13 @@ class _MeleeSlashEffect extends Node2D:
 		var t := clampf(_elapsed / _duration, 0.0, 1.0)
 		var a := 1.0 - t
 		var r := lerpf(radius * 0.65, radius, t)
+		if painted_visuals:
+			const SLASH := preload("res://assets/processed/vfx/golden_slash.png")
+			var size := SLASH.get_size() * (1.32 * r / SLASH.get_width())
+			draw_set_transform(Vector2.ZERO, base_angle + PI)
+			draw_texture_rect(SLASH, Rect2(Vector2(-r, -size.y * 0.5), size),
+				false, Color(1.0, 1.0, 1.0, a))
+			draw_set_transform(Vector2.ZERO)
 		var start_a := base_angle - arc_rad * 0.5
 		var end_a := base_angle + arc_rad * 0.5
 		draw_arc(Vector2.ZERO, r, start_a, end_a, 24, Color(color.r, color.g, color.b, a * 0.95), 9.0)

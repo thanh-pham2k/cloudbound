@@ -74,6 +74,10 @@ func _ready() -> void:
 		s *= 2.15
 	_sprite.scale = Vector2(s, s)
 	_sprite.offset = Vector2(0, -48)
+	if _arena != null and _arena.painted_visuals:
+		const PAINTED := preload("res://scripts/world/painted_sprite.gd")
+		const GUARDIAN := preload("res://assets/processed/characters/armored_rune_colossus.png")
+		PAINTED.set_actor_pose(_sprite, GUARDIAN, 225.0)
 	add_child(_sprite)
 
 	hp_changed.emit(current_hp, max_hp)

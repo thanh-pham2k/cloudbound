@@ -1,6 +1,7 @@
 extends Area2D
 class_name GameProjectile
 
+var painted_visuals := false
 var velocity: Vector2 = Vector2.ZERO
 var damage: int = 10
 var is_crit: bool = false
@@ -71,6 +72,13 @@ func _on_body_entered(body: Node) -> void:
 
 
 func _draw() -> void:
+	if painted_visuals:
+		const COMET := preload("res://assets/processed/vfx/cyan_comet.png")
+		var size := COMET.get_size() * (radius * 5.0 / COMET.get_width())
+		draw_set_transform(Vector2.ZERO, velocity.angle() + 2.57)
+		draw_texture_rect(COMET, Rect2(Vector2(-size.x * 0.22, -size.y * 0.72), size),
+			false, Color.WHITE.lerp(color, 0.32))
+		return
 	draw_circle(Vector2.ZERO, radius * 1.4, Color(color.r, color.g, color.b, 0.35))
 	draw_circle(Vector2.ZERO, radius, color)
 	draw_circle(Vector2.ZERO, radius * 0.45, Color.WHITE)

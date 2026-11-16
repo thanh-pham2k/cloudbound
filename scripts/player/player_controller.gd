@@ -59,6 +59,10 @@ var _arena: CloudArena
 func setup(combat: CombatSystem, arena: CloudArena) -> void:
 	_combat = combat
 	_arena = arena
+	if arena != null and arena.painted_visuals:
+		const PAINTED := preload("res://scripts/world/painted_sprite.gd")
+		const HERO := preload("res://assets/processed/characters/staff_wielding_monkey_hero.png")
+		PAINTED.set_actor_pose(_sprite, HERO, 122.0)
 	_load_config()
 
 

@@ -5,6 +5,7 @@ signal triggered
 
 enum ShapeType { CIRCLE, LINE }
 
+var painted_visuals := false
 var shape_type: ShapeType = ShapeType.CIRCLE
 var radius: float = 90.0
 var line_end: Vector2 = Vector2.RIGHT * 240.0
@@ -50,6 +51,11 @@ func _process(delta: float) -> void:
 func _draw() -> void:
 	var progress := clampf(_elapsed / duration, 0.0, 1.0)
 	if shape_type == ShapeType.CIRCLE:
+		if painted_visuals:
+			const RUNE := preload("res://assets/processed/vfx/red_rune_circle.png")
+			var size := RUNE.get_size() * (2.0 * radius / RUNE.get_width())
+			draw_texture_rect(RUNE, Rect2(-size * 0.5, size),
+				false, Color(1.0, 1.0, 1.0, 0.30 + 0.30 * progress))
 		draw_circle(Vector2.ZERO, radius, Color(base_color.r, base_color.g, base_color.b, 0.16))
 		draw_circle(Vector2.ZERO, radius * progress, Color(base_color.r, base_color.g, base_color.b, 0.32))
 		draw_arc(Vector2.ZERO, radius, 0.0, TAU, 48, Color(base_color.r, base_color.g, base_color.b, 0.85), 2.5)

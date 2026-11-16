@@ -30,7 +30,7 @@ var _player: Node2D
 var _combat: CombatSystem
 var _arena: CloudArena
 var _sprite: AnimatedSprite2D
-var _hp_bar: ProgressBar
+var _hp_bar: Range
 
 
 func setup(id: String, player: Node2D, combat: CombatSystem, arena: CloudArena) -> void:
@@ -73,15 +73,37 @@ func _ready() -> void:
 	var s := float(cfg.get("scale", 1.0))
 	_sprite.scale = Vector2(s, s)
 	_sprite.offset = Vector2(0, -48)
+	var pose_height := 110.0
+	if _arena != null and _arena.painted_visuals:
+		const PAINTED := preload("res://scripts/world/painted_sprite.gd")
+		const CASTER := preload("res://assets/processed/characters/cyan_magic_caster.png")
+		const BOAR := preload("res://assets/processed/characters/boar_axeman.png")
+		const SPIRIT := preload("res://assets/processed/characters/mint_cloud_spirit.png")
+		const GOLEM := preload("res://assets/processed/characters/stone_golem.png")
+		if _arena.scene_theme == "stairway_clouds":
+			pose_height = 104.0
+			PAINTED.set_actor_pose(_sprite, SPIRIT, pose_height)
+		elif enemy_id == "tank":
+			pose_height = 140.0
+			PAINTED.set_actor_pose(_sprite, GOLEM, pose_height)
+		else:
+			PAINTED.set_actor_pose(_sprite, CASTER if enemy_id == "ranged" else BOAR, pose_height)
 	add_child(_sprite)
 
-	_hp_bar = ProgressBar.new()
-	_hp_bar.size = Vector2(44, 6)
-	_hp_bar.position = Vector2(-22, -74)
+	if _arena != null and _arena.painted_visuals:
+		const BAR := preload("res://assets/processed/ui/enemy_health_bar.png")
+		const PAINTED := preload("res://scripts/world/painted_sprite.gd")
+		_hp_bar = PAINTED.make_meter(BAR, Rect2(0, 0, 491, 183), 72.0)
+		_hp_bar.position = Vector2(-36, -pose_height - 24)
+	else:
+		var plain := ProgressBar.new()
+		plain.size = Vector2(44, 6)
+		plain.position = Vector2(-22, -74)
+		plain.show_percentage = false
+		_hp_bar = plain
 	_hp_bar.max_value = max_hp
 	_hp_bar.value = current_hp
-	_hp_bar.show_percentage = false
-	_hp_bar.visible = false
+	_hp_bar.visible = _arena != null and _arena.painted_visuals
 	add_child(_hp_bar)
 
 	_play_anim("idle")

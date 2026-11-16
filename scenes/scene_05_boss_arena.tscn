@@ -15,6 +15,7 @@ next_scene_path = "res://scenes/scene_06_gate_of_heaven.tscn"
 
 [node name="CloudArena" type="Node2D" parent="."]
 script = ExtResource("2_arena")
+painted_visuals = true
 scene_theme = "boss_arena"
 
 [node name="YSort" type="Node2D" parent="."]
@@ -47,3 +48,4 @@ script = ExtResource("6_floor")
 
 [node name="UIManager" type="CanvasLayer" parent="."]
 script = ExtResource("7_ui")
+painted_visuals = true

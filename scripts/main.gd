@@ -16,6 +16,7 @@ extends Node2D
 
 func _ready() -> void:
 	combat.setup(effects, camera)
+	combat.painted_visuals = arena.painted_visuals
 	player.setup(combat, arena)
 	floor_manager.setup(player, combat, arena, entities)
 
@@ -35,8 +36,13 @@ func _ready() -> void:
 	floor_manager.wave_changed.connect(ui.update_wave)
 	floor_manager.enemy_killed.connect(progression.add_exp)
 	floor_manager.boss_spawned.connect(_on_boss_spawned)
-	floor_manager.portal_unlocked.connect(func(_portal: CloudPortal) -> void:
-		ui.update_wave(5, 5, "Cổng Thiên Giới đã mở! Hãy bước vào!")
+	floor_manager.portal_unlocked.connect(func(portal: CloudPortal) -> void:
+		var objective := "Cổng đã mở! Hãy bước vào!"
+		if portal.village_exit:
+			objective = "Hãy bước vào cổng để đến Thang Mây."
+		elif portal.heaven_gate or not arena.painted_visuals:
+			objective = "Cổng Thiên Giới đã mở! Hãy bước vào!"
+		ui.update_wave(5, 5, objective)
 	)
 	floor_manager.floor_cleared.connect(func() -> void:
 		if next_scene_path != "" and ResourceLoader.exists(next_scene_path):
@@ -60,23 +66,22 @@ func _ready() -> void:
 		match custom_scene_theme:
 			"mortal_realm":
 				player.position = Vector2(0, 60)
-				camera.position = Vector2(-22, -98)
+				camera.position = Vector2(0, 23)
 			"stairway_clouds":
-				player.position = Vector2(-292, 38)
-				camera.position = Vector2(260, -32)
+				player.position = Vector2(-475, 145)
+				camera.position = Vector2(475, -75)
 			"azure_outskirts":
-				player.position = Vector2(-185, 95)
-				camera.position = Vector2(155, -75)
+				player.position = Vector2(-280, 91)
+				camera.position = Vector2(280, -8)
 			"azure_center":
 				player.position = Vector2(-120, 60)
-				camera.position = Vector2(120, -81)
+				camera.position = Vector2(120, 20)
 			"boss_arena":
 				player.position = Vector2(-220, 120)
-				camera.position = Vector2(220, -113)
+				camera.position = Vector2(220, -75)
 			"gate_of_heaven":
 				player.position = Vector2(-102, 105)
-				camera.position = Vector2(102, -205)
-				camera.zoom = Vector2(0.70, 0.70)
+				camera.position = Vector2(102, -132)
 		camera.reset_smoothing()
 		floor_manager.start_scene_encounter(custom_scene_theme)
 	else:

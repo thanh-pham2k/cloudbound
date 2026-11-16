@@ -3,10 +3,13 @@ class_name CloudArena
 
 ## Builds the authored terrain and keeps movement on the playable surface.
 
+const PaintedSprite := preload("res://scripts/world/painted_sprite.gd")
 const IslandSurface := preload("res://scripts/world/island_surface.gd")
 
 @export_enum("mortal_realm", "stairway_clouds", "azure_outskirts", "azure_center", "boss_arena", "gate_of_heaven")
 var scene_theme: String = "azure_outskirts"
+
+@export var painted_visuals := false
 
 @export var rx: float = 880.0
 @export var ry: float = 480.0
@@ -96,21 +99,30 @@ func _ensure_layers() -> void:
 
 func _rebuild_visuals() -> void:
 	_ensure_layers()
-	for c in _deco_layer.get_children():
-		c.queue_free()
+	for layer in [_deco_layer, _sky_far_layer, _sky_mid_layer, _sky_atmo_layer]:
+		for child in layer.get_children():
+			layer.remove_child(child)
+			child.queue_free()
 	if _foreground_props != null:
 		for prop in _foreground_props.get_children():
 			_foreground_props.remove_child(prop)
 			prop.queue_free()
-	for c in _sky_far_layer.get_children():
-		c.queue_free()
-	for c in _sky_mid_layer.get_children():
-		c.queue_free()
-	for c in _sky_atmo_layer.get_children():
-		c.queue_free()
 	_island_outline.clear()
 	_inset_outlines.clear()
 	_pillar_positions.clear()
+
+	if painted_visuals:
+		_build_painted_sky()
+		match scene_theme:
+			"mortal_realm":
+				_build_painted_village()
+			"stairway_clouds":
+				_build_painted_bridge()
+			"azure_center", "boss_arena", "gate_of_heaven":
+				_build_painted_courtyard()
+			_:
+				_build_painted_outskirts()
+		return
 
 	match scene_theme:
 		"mortal_realm":
@@ -201,6 +213,116 @@ func _build_stairway_clouds() -> void:
 	_add_deco("res://assets/base/environment/decorations/deco_cloud_rock_01.png", Vector2(-362, 221))
 	_add_deco("res://assets/base/environment/decorations/deco_cloud_rock_01.png", Vector2(377, 103))
 	_add_sky_backdrop(true)
+
+
+func _place_grass_island(origin: Vector2, scale_factor: float) -> PackedVector2Array:
+	const GROUND_ORIGIN := Vector2(323, 158)
+	const ISLAND := preload("res://assets/processed/terrain/large_grass_island.png")
+	# Trace the grass surface in the island texture's pixel coordinates.
+	var surface := PackedVector2Array([
+		Vector2(43, 162), Vector2(92, 123), Vector2(167, 91),
+		Vector2(245, 69), Vector2(357, 66), Vector2(462, 80),
+		Vector2(557, 111), Vector2(605, 147), Vector2(571, 180),
+		Vector2(492, 211), Vector2(411, 239), Vector2(327, 253),
+		Vector2(239, 243), Vector2(150, 218), Vector2(76, 192),
+	])
+	for i in range(surface.size()):
+		surface[i] = origin + (surface[i] - GROUND_ORIGIN) * scale_factor
+	PaintedSprite.place(_deco_layer, ISLAND,
+		origin + (ISLAND.get_size() * 0.5 - GROUND_ORIGIN) * scale_factor, scale_factor)
+	return surface
+
+
+func _painted_prop(art: Texture2D, foot: Vector2, size_factor: float) -> void:
+	var props := _foreground_props if _foreground_props != null else _deco_layer
+	PaintedSprite.place(props, art, foot, size_factor, true)
+
+
+func _build_painted_village() -> void:
+	_island_outline = _place_grass_island(Vector2.ZERO, 2.35)
+	PaintedSprite.place(_deco_layer, preload("res://assets/processed/terrain/curved_garden_path.png"),
+		Vector2(-12, 58), 1.43).rotation = 0.25
+	_painted_prop(preload("res://assets/generated/integration/lantern_roof_house.png"),
+		Vector2(-330, -42), 0.69)
+	_painted_prop(preload("res://assets/processed/nature/pink_blossom_tree.png"),
+		Vector2(424, -42), 0.59)
+
+
+func _build_painted_bridge() -> void:
+	const BRIDGE := preload("res://assets/processed/architecture/arched_stone_bridge.png")
+	const LANTERN := preload("res://assets/processed/nature/stone_lantern.png")
+	var left := _place_grass_island(Vector2(-460, 120), 1.30)
+	var right := _place_grass_island(Vector2(430, -98), 1.35)
+	var bridge := PaintedSprite.place(_deco_layer, BRIDGE, Vector2(0, 37), 1.30)
+	var deck := PackedVector2Array([
+		Vector2(55, 291), Vector2(480, 61), Vector2(550, 104), Vector2(124, 356)
+	])
+	for i in range(deck.size()):
+		deck[i] = bridge.transform * (deck[i] - BRIDGE.get_size() * 0.5)
+	var western_span := Geometry2D.merge_polygons(left, deck)
+	assert(western_span.size() == 1, "Painted bridge deck must meet the western island")
+	var connected := Geometry2D.merge_polygons(western_span[0], right)
+	assert(connected.size() == 1, "Painted bridge deck must meet the eastern island")
+	_island_outline = connected[0]
+	_painted_prop(LANTERN, Vector2(-371, 88), 0.35)
+	_painted_prop(LANTERN, Vector2(374, -146), 0.35)
+
+
+func _build_painted_courtyard() -> void:
+	const STONE := preload("res://assets/processed/terrain/circular_stone_arena.png")
+	const TREE := preload("res://assets/processed/nature/pink_blossom_tree.png")
+	var arena := PaintedSprite.place(_deco_layer, STONE, Vector2(0, 96), 1.86)
+	for i in range(40):
+		_island_outline.append(Vector2.from_angle(i * TAU / 40.0) * Vector2(555, 224))
+	if scene_theme == "boss_arena":
+		arena.modulate = Color(0.65, 0.72, 0.84)
+		var seal := PaintedSprite.place(_deco_layer,
+			preload("res://assets/processed/terrain/carved_cloud_medallion.png"), Vector2.ZERO, 0.48)
+		seal.modulate = Color(0.48, 0.82, 0.95)
+	if scene_theme == "gate_of_heaven":
+		const RAIL := preload("res://assets/generated/integration/stone_balustrade.png")
+		_painted_prop(RAIL, Vector2(-275, -94), 0.55)
+		_painted_prop(RAIL, Vector2(389, -12), 0.55)
+		_painted_prop(TREE, Vector2(-375, 6), 0.57)
+		_painted_prop(TREE, Vector2(403, 76), 0.51)
+		_painted_prop(preload("res://assets/processed/vfx/golden_reward_chest.png"),
+			Vector2(-175, 56), 0.39)
+	else:
+		_pillar_positions = [Vector2(-333, -130), Vector2(333, -130),
+			Vector2(-375, 145), Vector2(375, 145)]
+
+
+func _build_painted_outskirts() -> void:
+	const PATH := preload("res://assets/processed/terrain/straight_garden_path.png")
+	const TREE := preload("res://assets/processed/nature/pink_blossom_tree.png")
+	const ROCK := preload("res://assets/processed/nature/flowering_rock_cluster.png")
+	const BUSH := preload("res://assets/processed/nature/white_flower_shrub.png")
+	const LANTERN := preload("res://assets/processed/nature/stone_lantern.png")
+
+	_island_outline = _place_grass_island(Vector2.ZERO, 2.35)
+	PaintedSprite.place(_deco_layer, PATH, Vector2(-12, 0), 1.42).rotation = 0.18
+	var props := _foreground_props if _foreground_props != null else _deco_layer
+	PaintedSprite.place(props, TREE, Vector2(-450, -82), 0.58, true)
+	PaintedSprite.place(props, TREE, Vector2(410, 112), 0.52, true)
+	PaintedSprite.place(props, ROCK, Vector2(-359, -72), 0.30, true)
+	PaintedSprite.place(props, ROCK, Vector2(320, 157), 0.31, true)
+	PaintedSprite.place(props, BUSH, Vector2(455, -63), 0.25, true)
+	PaintedSprite.place(props, LANTERN, Vector2(-400, 95), 0.32, true)
+	PaintedSprite.place(props, LANTERN, Vector2(369, -80), 0.32, true)
+
+
+func _build_painted_sky() -> void:
+	_sky_rect.texture = preload("res://assets/processed/backgrounds/blue_sky.png")
+	_sky_rect.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	_sky_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	const ISLANDS := preload("res://assets/processed/backgrounds/distant_floating_islands.png")
+	const CLOUD := preload("res://assets/processed/backgrounds/foreground_cloud_bank.png")
+	const WISPS := preload("res://assets/processed/backgrounds/drifting_cloud_wisps.png")
+	PaintedSprite.place(_sky_far_layer, ISLANDS, Vector2(320, 150), 0.65).modulate.a = 0.73
+	PaintedSprite.place(_sky_far_layer, ISLANDS, Vector2(1150, 215), 0.48).modulate.a = 0.62
+	PaintedSprite.place(_sky_mid_layer, CLOUD, Vector2(140, 470), 1.0).modulate.a = 0.87
+	PaintedSprite.place(_sky_mid_layer, CLOUD, Vector2(1100, 580), 1.0).modulate.a = 0.87
+	PaintedSprite.place(_sky_atmo_layer, WISPS, Vector2(820, 638), 0.66).modulate.a = 0.72
 
 
 func _build_azure_outskirts() -> void:
@@ -383,6 +505,11 @@ func _spawn_pillars() -> void:
 		var visual := Sprite2D.new()
 		visual.texture = pillar_tex
 		visual.offset = Vector2(0, -76)
+		if painted_visuals:
+			visual.texture = preload("res://assets/processed/nature/cyan_rune_pillar.png")
+			visual.scale = Vector2.ONE * 0.40
+			visual.offset.y = 2.0 - visual.texture.get_height() * 0.5
+			visual.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 		pillar.add_child(visual)
 		obstacles_node.add_child(pillar)
 

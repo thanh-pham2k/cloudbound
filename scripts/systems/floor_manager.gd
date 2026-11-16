@@ -53,12 +53,12 @@ func start_scene_encounter(theme: String) -> void:
 			_spawn_portal(Vector2(315, -25))
 		"stairway_clouds":
 			wave_changed.emit(2, 6, "Cảnh 2: Thang Mây — Cầu Đá Cổ")
-			_spawn_specific_enemy("ranged", Vector2(540, 0))
+			_spawn_specific_enemy("ranged", Vector2(490, -86))
 		"azure_outskirts":
 			wave_changed.emit(3, 6, "Cảnh 3: Ngoại Vi Thanh Vân")
-			_spawn_specific_enemy("ranged", Vector2(60, 40))
-			_spawn_specific_enemy("ranged", Vector2(180, -40))
-			_spawn_specific_enemy("melee", Vector2(300, -100))
+			_spawn_specific_enemy("ranged", Vector2(-160, -70))
+			_spawn_specific_enemy("ranged", Vector2(328, -42))
+			_spawn_specific_enemy("melee", Vector2(120, 118))
 		"azure_center":
 			wave_changed.emit(4, 6, "Cảnh 4: Trung Tâm Thanh Vân")
 			_spawn_specific_enemy("melee", Vector2(-200, -120))
@@ -83,7 +83,7 @@ func _spawn_specific_enemy(enemy_type: String, pos: Vector2) -> void:
 	enemy.died.connect(func(exp_reward: int, _p: Vector2) -> void:
 		_on_enemy_died(exp_reward, _p)
 		if _active_enemies <= 0 and not _boss_active:
-			_spawn_portal(Vector2(560, 0) if _arena != null and _arena.scene_theme == "stairway_clouds" else Vector2(0, -180))
+			_spawn_portal(Vector2(512, -106) if _arena != null and _arena.scene_theme == "stairway_clouds" else Vector2(0, -180))
 	)
 	_active_enemies += 1
 	_ysort_entities.add_child(enemy)
@@ -170,7 +170,7 @@ func _spawn_boss() -> void:
 	_boss_active = true
 	wave_changed.emit(_waves.size(), _waves.size(), "BOSS: Thiên Lôi Tướng")
 	var boss := BossController.new()
-	boss.position = Vector2(-57, -130) if (_arena != null and _arena.scene_theme == "boss_arena") else Vector2(0, -180)
+	boss.position = Vector2(-57, -86) if (_arena != null and _arena.scene_theme == "boss_arena") else Vector2(0, -180)
 	if _player != null and boss.position.distance_to(_player.global_position) < 220.0:
 		boss.position = Vector2(0, 180)
 	boss.setup(_player, _combat, _arena)
@@ -192,12 +192,14 @@ func _spawn_portal(pos: Vector2) -> void:
 		return
 	var portal := CloudPortal.new()
 	if _arena != null:
+		portal.painted_visuals = _arena.painted_visuals
+		portal.heaven_gate = _arena.scene_theme == "gate_of_heaven"
 		match _arena.scene_theme:
 			"mortal_realm":
 				portal.village_exit = true
 				portal.visual_scale = 1.22
 			"gate_of_heaven":
-				portal.visual_scale = 1.65
+				portal.visual_scale = 1.18 if portal.painted_visuals else 1.65
 	portal.position = _arena.clamp_to_arena(pos, 70.0) if _arena != null else pos
 	portal.entered.connect(func() -> void:
 		_floor_done = true

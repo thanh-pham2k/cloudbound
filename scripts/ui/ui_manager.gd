@@ -4,18 +4,22 @@ class_name UIManager
 signal upgrade_selected(upgrade: Dictionary)
 signal restart_requested
 
-var _hp_bar: ProgressBar
+@export var painted_visuals := false
+
+const PaintedSprite := preload("res://scripts/world/painted_sprite.gd")
+
+var _hp_bar: Range
 var _hp_label: Label
-var _exp_bar: ProgressBar
+var _exp_bar: Range
 var _level_label: Label
 var _wave_label: Label
 var _dash_label: Label
 var _s1_label: Label
 var _s2_label: Label
 
-var _boss_panel: PanelContainer
+var _boss_panel: Control
 var _boss_name_label: Label
-var _boss_hp_bar: ProgressBar
+var _boss_hp_bar: Range
 
 var _upgrade_overlay: ColorRect
 var _upgrade_buttons: Array[Button] = []
@@ -30,8 +34,11 @@ var _is_game_ended: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	_build_hud()
-	_build_boss_bar()
+	if painted_visuals:
+		_build_painted_hud()
+	else:
+		_build_hud()
+		_build_boss_bar()
 	_build_upgrade_modal()
 	_build_pause_modal()
 	_build_end_modal()
@@ -42,6 +49,105 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event.is_action_pressed("pause"):
 		toggle_pause()
+
+
+func _build_painted_hud() -> void:
+	const PORTRAIT := preload("res://assets/processed/ui/monkey_hero_portrait.png")
+	const METERS := preload("res://assets/processed/ui/hero_health_mana_bar.png")
+	const BOSS := preload("res://assets/processed/ui/dragon_boss_health_bar.png")
+	const BUTTONS: Array[Texture2D] = [
+		preload("res://assets/processed/ui/ability_button_lower_left.png"),
+		preload("res://assets/processed/ui/ability_button_top.png"),
+		preload("res://assets/processed/ui/ability_button_lower_right.png"),
+	]
+
+	var layout := Control.new()
+	layout.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(layout)
+	layout.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_hud_art(layout, METERS, Rect2(65, 9, 241, 100))
+	_hud_art(layout, PORTRAIT, Rect2(15, 15, 72, 72))
+	const METER_SCALE := 241.0 / 697.0
+	var hp_region := Rect2(177, 84, 443, 39)
+	var xp_region := Rect2(177, 148, 443, 32)
+	_hp_bar = PaintedSprite.make_meter(METERS, hp_region, hp_region.size.x * METER_SCALE)
+	_exp_bar = PaintedSprite.make_meter(METERS, xp_region, xp_region.size.x * METER_SCALE)
+	_hp_bar.position = Vector2(65, 9) + hp_region.position * METER_SCALE
+	_exp_bar.position = Vector2(65, 9) + xp_region.position * METER_SCALE
+	layout.add_child(_hp_bar)
+	layout.add_child(_exp_bar)
+	_hp_label = _make_skill_pill("")
+	_hp_label.position = Vector2(143, 33)
+	layout.add_child(_hp_label)
+	_level_label = _make_skill_pill("Lv. 1 · XP")
+	_level_label.position = Vector2(143, 54)
+	layout.add_child(_level_label)
+	_wave_label = _make_skill_pill("")
+	_wave_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	layout.add_child(_wave_label)
+	_wave_label.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	_wave_label.offset_left = -430
+	_wave_label.offset_right = -20
+	_wave_label.offset_top = 20
+
+	var skill_row := Control.new()
+	skill_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layout.add_child(skill_row)
+	skill_row.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+	skill_row.offset_top = -96
+	skill_row.offset_bottom = -10
+	_dash_label = _make_skill_pill("")
+	_s1_label = _make_skill_pill("")
+	_s2_label = _make_skill_pill("")
+	var captions: Array[Label] = [_dash_label, _s1_label, _s2_label]
+	var keys := ["Space", "Q", "E"]
+	for i in range(3):
+		var slot := Control.new()
+		slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		skill_row.add_child(slot)
+		slot.set_anchors_preset(Control.PRESET_CENTER_TOP)
+		slot.offset_left = float(i - 1) * 206.0 - 103.0
+		slot.offset_right = slot.offset_left + 206.0
+		_hud_art(slot, BUTTONS[i], Rect2(77, 0, 52, 52))
+		var key := _make_skill_pill(keys[i])
+		key.position = Vector2(77, 15)
+		key.size.x = 52
+		key.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		slot.add_child(key)
+		var caption := captions[i]
+		caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		caption.position.y = 57
+		caption.size.x = 206
+		slot.add_child(caption)
+	update_cooldowns(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+
+	_boss_panel = Control.new()
+	_boss_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layout.add_child(_boss_panel)
+	_boss_panel.set_anchors_preset(Control.PRESET_CENTER_TOP)
+	_boss_panel.offset_left = -150
+	_boss_panel.offset_right = 150
+	_boss_panel.offset_top = 4
+	_boss_panel.hide()
+	_boss_hp_bar = PaintedSprite.make_meter(BOSS, Rect2(Vector2.ZERO, BOSS.get_size()), 300.0)
+	_boss_panel.add_child(_boss_hp_bar)
+	_boss_name_label = _make_skill_pill("")
+	_boss_name_label.position = Vector2(56, 45)
+	_boss_name_label.size.x = 224
+	_boss_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_boss_panel.add_child(_boss_name_label)
+
+
+func _hud_art(parent: Control, art: Texture2D, bounds: Rect2) -> void:
+	var image := TextureRect.new()
+	image.texture = art
+	image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	image.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	image.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	image.position = bounds.position
+	image.size = bounds.size
+	parent.add_child(image)
 
 
 func _build_hud() -> void:
@@ -77,7 +183,7 @@ func _build_hud() -> void:
 
 	_hp_bar = ProgressBar.new()
 	_hp_bar.custom_minimum_size = Vector2(300, 20)
-	_hp_bar.show_percentage = false
+	(_hp_bar as ProgressBar).show_percentage = false
 	vbox.add_child(_hp_bar)
 
 	_hp_label = Label.new()
@@ -87,7 +193,7 @@ func _build_hud() -> void:
 
 	_exp_bar = ProgressBar.new()
 	_exp_bar.custom_minimum_size = Vector2(300, 12)
-	_exp_bar.show_percentage = false
+	(_exp_bar as ProgressBar).show_percentage = false
 	vbox.add_child(_exp_bar)
 
 	# Bottom-center skill bar
@@ -141,7 +247,7 @@ func _build_boss_bar() -> void:
 
 	_boss_hp_bar = ProgressBar.new()
 	_boss_hp_bar.custom_minimum_size = Vector2(0, 18)
-	_boss_hp_bar.show_percentage = false
+	(_boss_hp_bar as ProgressBar).show_percentage = false
 	vbox.add_child(_boss_hp_bar)
 
 
@@ -260,7 +366,7 @@ func update_hp(cur: int, max_v: int) -> void:
 func update_exp(cur: int, req: int, lvl: int) -> void:
 	_exp_bar.max_value = req
 	_exp_bar.value = cur
-	_level_label.text = "Lv. %d" % lvl
+	_level_label.text = ("Lv. %d · XP" if painted_visuals else "Lv. %d") % lvl
 
 
 func update_wave(_num: int, _total: int, label_text: String) -> void:
@@ -268,9 +374,18 @@ func update_wave(_num: int, _total: int, label_text: String) -> void:
 
 
 func update_cooldowns(d_cd: float, _d_max: float, s1_cd: float, _s1_max: float, s2_cd: float, _s2_max: float) -> void:
+	if painted_visuals:
+		_dash_label.text = "Vân Bộ · %s" % _cooldown_text(d_cd)
+		_s1_label.text = "Lôi Quang Trảm · %s" % _cooldown_text(s1_cd)
+		_s2_label.text = "Cửu Thiên Lạc Lôi · %s" % _cooldown_text(s2_cd)
+		return
 	_dash_label.text = "[Space] Vân Bộ: %s" % ("Sẵn sàng" if d_cd <= 0.05 else "%.1fs" % d_cd)
 	_s1_label.text = "[Q] Lôi Quang Trảm: %s" % ("Sẵn sàng" if s1_cd <= 0.05 else "%.1fs" % s1_cd)
 	_s2_label.text = "[E] Cửu Thiên Lạc Lôi: %s" % ("Sẵn sàng" if s2_cd <= 0.05 else "%.1fs" % s2_cd)
+
+
+func _cooldown_text(remaining: float) -> String:
+	return "Sẵn sàng" if remaining <= 0.05 else "%.1fs" % remaining
 
 
 func show_boss_bar(boss_name: String, cur: int, max_v: int, phase: int = 1) -> void:
