@@ -3,7 +3,7 @@
     "id": "auto_attack",
     "name": "Như Ý Côn Quét",
     "damage": 28,
-    "cooldown": 0.45,
+    "cooldown": 0.15,
     "range": 135.0,
     "arc_deg": 135.0,
     "projectile_speed": 0.0
@@ -21,7 +21,7 @@
     "name": "Lôi Quang Trảm",
     "key": "Q",
     "damage": 58,
-    "cooldown": 4.2,
+    "cooldown": 0.1,
     "radius": 165.0
   },
   "skill_2": {
@@ -29,7 +29,7 @@
     "name": "Cửu Thiên Lạc Lôi",
     "key": "E",
     "damage": 38,
-    "cooldown": 7.0,
+    "cooldown": 0.1,
     "bolt_count": 5,
     "range": 420.0
   }

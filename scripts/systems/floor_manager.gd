@@ -24,6 +24,7 @@ var _spawned_in_wave: int = 0
 var _active_enemies: int = 0
 var _boss_active: bool = false
 var _floor_done: bool = false
+var _portal_spawned: bool = false
 
 var _player: PlayerController
 var _combat: CombatSystem
@@ -46,6 +47,7 @@ func start_floor() -> void:
 	_current_wave_idx = -1
 	_boss_active = false
 	_floor_done = false
+	_portal_spawned = false
 	_advance_wave()
 
 
@@ -54,6 +56,7 @@ func start_scene_encounter(theme: String) -> void:
 	_waves = []
 	_boss_active = false
 	_floor_done = false
+	_portal_spawned = false
 	_active_enemies = 0
 	match theme:
 		"mortal_realm":
@@ -200,7 +203,7 @@ func _spawn_boss() -> void:
 	boss.died.connect(_on_boss_died, CONNECT_ONE_SHOT)
 	_ysort_entities.add_child(boss)
 	if _combat != null:
-		_combat.spawn_circle_telegraph(boss.position, 145.0, 1.1, Color(1.0, 0.25, 0.2))
+		_combat.spawn_ring_burst(boss.position, 145.0, Color(0.45, 0.92, 1.0))
 	boss_spawned.emit(boss)
 
 
@@ -211,8 +214,9 @@ func _on_boss_died(exp_reward: int, pos: Vector2) -> void:
 
 
 func _spawn_portal(pos: Vector2) -> void:
-	if _ysort_entities == null:
+	if _ysort_entities == null or _portal_spawned:
 		return
+	_portal_spawned = true
 	var portal := CloudPortal.new()
 	if _arena != null:
 		portal.painted_visuals = _arena.painted_visuals
@@ -224,6 +228,8 @@ func _spawn_portal(pos: Vector2) -> void:
 			"gate_of_heaven":
 				portal.visual_scale = 1.18 if portal.painted_visuals else 1.65
 	portal.position = _arena.clamp_to_arena(pos, 70.0) if _arena != null else pos
+	if _player != null and is_instance_valid(_player) and portal.position.distance_to(_player.global_position) <= 84.0:
+		portal.arm_delay = 0.55
 	portal.entered.connect(func() -> void:
 		_floor_done = true
 		floor_cleared.emit()

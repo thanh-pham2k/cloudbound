@@ -67,20 +67,24 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_body_entered(body: Node) -> void:
-	if _hit or not body.is_in_group(target_group) or not body.has_method("take_damage"):
+	if _hit or not body.is_in_group(target_group) or not body.has_method("take_damage") or body.get("_is_dead"):
 		return
 	_hit = true
-	body.take_damage(damage, is_crit)
-	if painted_visuals:
+	var accepted := false
+	if damage > 0:
+		var hp_before: Variant = body.get("current_hp")
+		var res: Variant = body.take_damage(damage, is_crit)
+		accepted = (res is bool and res) or (res == null and hp_before != null and int(body.get("current_hp")) < int(hp_before))
+	if accepted and painted_visuals and is_instance_valid(get_parent()):
 		const IMPACT := preload("res://assets/generated/combat_vfx/cyan_impact_sprite_frames.tres")
 		var effect := AnimatedSprite2D.new()
 		effect.sprite_frames = IMPACT
 		effect.position = position
-		effect.scale = Vector2.ONE * radius / 18.0
+		effect.scale = Vector2.ONE * maxf(radius / 18.0, 0.55)
 		effect.z_index = z_index
+		effect.autoplay = &"cyan_impact_fx"
 		effect.animation_finished.connect(effect.queue_free)
 		get_parent().add_child.call_deferred(effect)
-		effect.play(&"cyan_impact_fx")
 	queue_free()
 
 

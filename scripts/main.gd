@@ -4,6 +4,8 @@ extends Node2D
 @export var next_scene_path: String = ""
 
 var _scene_transition_active := false
+var _spawn_pos := Vector2.ZERO
+var _camera_following := false
 
 @onready var arena: CloudArena = $CloudArena
 @onready var entities: Node2D = $YSort/Entities
@@ -55,10 +57,12 @@ func _ready() -> void:
 	)
 
 	if GameData.scene_entry.get("scene", "") == scene_file_path:
+		var entry := GameData.scene_entry.duplicate(true)
+		GameData.scene_entry.clear()
 		for upgrade in GameData.selected_upgrades:
 			player.apply_upgrade(upgrade, false)
-		player.current_hp = clampi(GameData.scene_entry["hp"], 1, player.max_hp)
-		progression.restore(GameData.scene_entry)
+		player.current_hp = clampi(int(entry.get("hp", player.max_hp)), 1, player.max_hp)
+		progression.restore(entry)
 		var fade := _create_scene_fade(1.0)
 		var reveal := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 		reveal.tween_property(fade, "color:a", 0.0, 0.22)
@@ -95,13 +99,24 @@ func _ready() -> void:
 				player.position = Vector2(-102, 105)
 				camera.position = Vector2(102, -132)
 		camera.reset_smoothing()
+		_spawn_pos = player.position
 		floor_manager.start_scene_encounter(custom_scene_theme)
 	else:
+		_spawn_pos = player.position
 		floor_manager.start_floor()
 
 
+func _process(delta: float) -> void:
+	if player == null or camera == null or player.get("_is_dead"):
+		return
+	if not _camera_following and player.position.distance_to(_spawn_pos) > 8.0:
+		_camera_following = true
+	if _camera_following and camera.position.length_squared() > 0.25:
+		camera.position = camera.position.lerp(Vector2.ZERO, clampf(delta * 2.5, 0.0, 1.0))
+
+
 func _on_floor_cleared() -> void:
-	if _scene_transition_active:
+	if _scene_transition_active or (player != null and player.get("_is_dead")):
 		return
 	if next_scene_path.is_empty() or not ResourceLoader.exists(next_scene_path):
 		ui.show_victory()

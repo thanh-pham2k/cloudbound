@@ -7,10 +7,13 @@ var visual_scale := 1.0
 var village_exit := false
 var painted_visuals := false
 var heaven_gate := false
+var arm_delay: float = 0.0
+var _arm_timer: float = 0.0
 var _triggered: bool = false
 
 
 func _ready() -> void:
+	_arm_timer = maxf(0.0, arm_delay)
 	collision_layer = 0
 	collision_mask = 2
 
@@ -68,9 +71,22 @@ func _ready() -> void:
 	z_index = 5
 
 
-func _on_body_entered(body: Node) -> void:
+func _physics_process(delta: float) -> void:
 	if _triggered:
 		return
-	if body.is_in_group("player"):
+	if _arm_timer > 0.0:
+		_arm_timer = maxf(0.0, _arm_timer - delta)
+		if _arm_timer > 0.0:
+			return
+		for body in get_overlapping_bodies():
+			_on_body_entered(body)
+			if _triggered:
+				return
+
+
+func _on_body_entered(body: Node) -> void:
+	if _triggered or _arm_timer > 0.0:
+		return
+	if body.is_in_group("player") and not body.get("_is_dead"):
 		_triggered = true
 		entered.emit()

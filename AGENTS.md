@@ -4,9 +4,9 @@ Toolkit: `tools/gameforge-kit/` (pinned Git Submodule)
 
 ## Multi-Agent Execution Workflow
 - Follow [docs/AGENT_WORKFLOW.md](docs/AGENT_WORKFLOW.md) for asset creation, code integration, delegation, and checkpoint actions.
-- Orchestrator owns asset direction and acceptance; Luna High Priority creates asset batches; Hydrogen High implements code and integrates assets.
+- Orchestrator owns asset direction and acceptance; Luna High Priority creates asset batches; Hydrogen High in AGY implements code and integrates assets.
 - Save and verify repository state after every Hydrogen handoff before starting the next task. Repository checkpoints, not agent memory, are the durable source of progress.
-- Resolve agent/model availability honestly; never silently substitute an unavailable named model.
+- Prefer AGY CLI for Hydrogen (`gemini-4-hydrogen-high`, effort `high`); use UI only for capabilities unavailable in CLI. Do not guess a Codex model ID. Verify AGY access and agent availability honestly; never silently substitute another agent.
 
 ## Asset Pipeline Rules
 - Read `tools/gameforge-kit/AGENTS.md` and the relevant `SKILL.md` under `tools/gameforge-kit/skills/` before running asset tasks.

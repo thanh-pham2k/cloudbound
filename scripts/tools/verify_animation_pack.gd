@@ -4,6 +4,9 @@ const WUKONG_FRAMES := "res://assets/animations/wukong/wukong_sprite_frames.tres
 
 
 func _initialize() -> void:
+	if not _verify_gameplay_scripts():
+		quit(1)
+		return
 	var generated := "res://assets/generated/"
 	var pack := {
 		WUKONG_FRAMES: {"walk_up":8,"walk_right":8,"attack_down":6,"attack_up":6,"attack_right":6,"skill_1_down":6,"skill_2_down":6,"dash_right":6,"hurt_down":4,"death_down":8},
@@ -44,6 +47,27 @@ func _initialize() -> void:
 			count += 1
 	print("PASS: %d requested animations, %d SpriteFrames resources" % [count,pack.size()])
 	quit(0 if _verify_scene_chain() else 1)
+
+
+func _verify_gameplay_scripts() -> bool:
+	# PackedScenes can load even when an attached script failed compilation.
+	# Verify script validity before treating scene bindings as a resource PASS.
+	var paths := [
+		"main.gd", "player/player_controller.gd", "enemies/enemy_base.gd",
+		"boss/boss_controller.gd", "combat/combat_system.gd",
+		"combat/telegraph_area.gd", "combat/projectile.gd", "combat/damage_number.gd",
+		"systems/floor_manager.gd", "systems/progression_system.gd", "systems/game_data.gd",
+		"world/cloud_portal.gd", "world/orb_pickup.gd", "ui/ui_manager.gd",
+	]
+	for relative_path: String in paths:
+		var path := "res://scripts/" + relative_path
+		var script := load(path) as Script
+		if script == null or not script.can_instantiate():
+			push_error("Invalid gameplay script: " + path)
+			return false
+	print("PASS: %d gameplay scripts compile (resource check only)" % paths.size())
+	return true
+
 
 func _verify_scene_chain() -> bool:
 	var order := [

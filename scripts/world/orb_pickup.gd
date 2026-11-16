@@ -26,6 +26,15 @@ func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 
 
+func _physics_process(_delta: float) -> void:
+	if _collected or kind != Kind.HEALTH:
+		return
+	for body in get_overlapping_bodies():
+		_on_body_entered(body)
+		if _collected:
+			return
+
+
 func _on_body_entered(body: Node2D) -> void:
 	var player := body as PlayerController
 	if _collected or player == null or player.current_hp <= 0:

@@ -30,10 +30,11 @@ func snapshot() -> Dictionary:
 
 
 func restore(state: Dictionary) -> void:
-	level = state["level"]
-	current_exp = state["exp"]
-	required_exp = state["required_exp"]
-	_pending_level_ups = state["pending_level_ups"]
+	level = maxi(1, int(state.get("level", 1)))
+	current_exp = maxi(0, int(state.get("exp", 0)))
+	required_exp = maxi(1, int(state.get("required_exp", 50)))
+	_pending_level_ups = maxi(0, int(state.get("pending_level_ups", 0)))
+	_is_choosing = false
 	exp_changed.emit(current_exp, required_exp, level)
 	_try_present_choices()
 
