@@ -2,6 +2,12 @@
 
 Toolkit: `tools/gameforge-kit/` (pinned Git Submodule)
 
+## Multi-Agent Execution Workflow
+- Follow [docs/AGENT_WORKFLOW.md](docs/AGENT_WORKFLOW.md) for asset creation, code integration, delegation, and checkpoint actions.
+- Orchestrator owns asset direction and acceptance; Luna High Priority creates asset batches; Hydrogen High implements code and integrates assets.
+- Save and verify repository state after every Hydrogen handoff before starting the next task. Repository checkpoints, not agent memory, are the durable source of progress.
+- Resolve agent/model availability honestly; never silently substitute an unavailable named model.
+
 ## Asset Pipeline Rules
 - Read `tools/gameforge-kit/AGENTS.md` and the relevant `SKILL.md` under `tools/gameforge-kit/skills/` before running asset tasks.
 - Use toolkit CLI scripts (`batch_planner.py`, `frame_normalizer.py`, `atlas_packer.py`, `validators.py`, `godot_exporter.py`, `build_viewer.py`); do not duplicate asset-generation logic.
