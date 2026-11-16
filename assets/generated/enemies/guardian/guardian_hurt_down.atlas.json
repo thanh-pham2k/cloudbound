@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0.0",
+  "project": "cloudbound",
+  "character_id": "guardian",
+  "task_id": "guardian_hurt_down",
+  "animation": "hurt",
+  "direction": "down",
+  "fps": 25.0,
+  "loop": false,
+  "frame_count": 4,
+  "frame_width": 208,
+  "frame_height": 176,
+  "columns": 2,
+  "rows": 2,
+  "padding": 4,
+  "atlas_width": 420,
+  "atlas_height": 356,
+  "pivot": {
+    "x": 104,
+    "y": 151,
+    "anchor_mode": "custom_pixel"
+  },
+  "allow_horizontal_flip": false,
+  "flip_policy": "none",
+  "atlas_png": "assets/generated/enemies/guardian/guardian_hurt_down.png",
+  "frames": [
+    {
+      "index": 0,
+      "x": 0,
+      "y": 0,
+      "w": 208,
+      "h": 176
+    },
+    {
+      "index": 1,
+      "x": 212,
+      "y": 0,
+      "w": 208,
+      "h": 176
+    },
+    {
+      "index": 2,
+      "x": 0,
+      "y": 180,
+      "w": 208,
+      "h": 176
+    },
+    {
+      "index": 3,
+      "x": 212,
+      "y": 180,
+      "w": 208,
+      "h": 176
+    }
+  ]
+}

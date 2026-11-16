@@ -13,6 +13,7 @@ var _hp_label: Label
 var _exp_bar: Range
 var _level_label: Label
 var _wave_label: Label
+var _loot_label: Label
 var _dash_label: Label
 var _s1_label: Label
 var _s2_label: Label
@@ -39,6 +40,13 @@ func _ready() -> void:
 	else:
 		_build_hud()
 		_build_boss_bar()
+	_loot_label = _make_skill_pill("")
+	_loot_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	add_child(_loot_label)
+	_loot_label.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	_loot_label.offset_left = -180
+	_loot_label.offset_right = -20
+	_loot_label.offset_top = 48
 	_build_keyboard_hint()
 	_build_upgrade_modal()
 	_build_pause_modal()
@@ -378,6 +386,10 @@ func update_exp(cur: int, req: int, lvl: int) -> void:
 	_exp_bar.max_value = req
 	_exp_bar.value = cur
 	_level_label.text = ("Lv. %d · XP" if painted_visuals else "Lv. %d") % lvl
+
+
+func update_loot(total: int) -> void:
+	_loot_label.text = "Linh ngọc: %d" % total
 
 
 func update_wave(_num: int, _total: int, label_text: String) -> void:

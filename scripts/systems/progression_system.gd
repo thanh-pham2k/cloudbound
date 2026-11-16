@@ -20,6 +20,24 @@ func reset() -> void:
 	exp_changed.emit(current_exp, required_exp, level)
 
 
+func snapshot() -> Dictionary:
+	return {
+		"level": level,
+		"exp": current_exp,
+		"required_exp": required_exp,
+		"pending_level_ups": _pending_level_ups,
+	}
+
+
+func restore(state: Dictionary) -> void:
+	level = state["level"]
+	current_exp = state["exp"]
+	required_exp = state["required_exp"]
+	_pending_level_ups = state["pending_level_ups"]
+	exp_changed.emit(current_exp, required_exp, level)
+	_try_present_choices()
+
+
 func add_exp(amount: int) -> void:
 	if amount <= 0:
 		return

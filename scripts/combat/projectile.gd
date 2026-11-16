@@ -12,6 +12,7 @@ var color: Color = Color(0.5, 0.95, 1.0)
 var homing_target: Node2D = null
 var homing_speed: float = 0.0
 var _elapsed: float = 0.0
+var _hit := false
 
 
 func setup(
@@ -66,17 +67,30 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_body_entered(body: Node) -> void:
-	if body.is_in_group(target_group) and body.has_method("take_damage"):
-		body.take_damage(damage, is_crit)
-		queue_free()
+	if _hit or not body.is_in_group(target_group) or not body.has_method("take_damage"):
+		return
+	_hit = true
+	body.take_damage(damage, is_crit)
+	if painted_visuals:
+		const IMPACT := preload("res://assets/generated/combat_vfx/cyan_impact_sprite_frames.tres")
+		var effect := AnimatedSprite2D.new()
+		effect.sprite_frames = IMPACT
+		effect.position = position
+		effect.scale = Vector2.ONE * radius / 18.0
+		effect.z_index = z_index
+		effect.animation_finished.connect(effect.queue_free)
+		get_parent().add_child.call_deferred(effect)
+		effect.play(&"cyan_impact_fx")
+	queue_free()
 
 
 func _draw() -> void:
 	if painted_visuals:
-		const COMET := preload("res://assets/processed/vfx/cyan_comet.png")
-		var size := COMET.get_size() * (radius * 5.0 / COMET.get_width())
-		draw_set_transform(Vector2.ZERO, velocity.angle() + 2.57)
-		draw_texture_rect(COMET, Rect2(Vector2(-size.x * 0.22, -size.y * 0.72), size),
+		const COMET := preload("res://assets/generated/combat_vfx/cyan_projectile_sprite_frames.tres")
+		var frame := COMET.get_frame_texture(&"cyan_projectile_fx", int(_elapsed * 14.0) % 6)
+		var size := Vector2.ONE * radius * 7.0
+		draw_set_transform(Vector2.ZERO, velocity.angle())
+		draw_texture_rect(frame, Rect2(Vector2(-size.x * 0.72, -size.y * 0.5), size),
 			false, Color.WHITE.lerp(color, 0.32))
 		return
 	draw_circle(Vector2.ZERO, radius * 1.4, Color(color.r, color.g, color.b, 0.35))

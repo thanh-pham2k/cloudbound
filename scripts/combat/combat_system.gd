@@ -145,10 +145,11 @@ class _MeleeSlashEffect extends Node2D:
 		var a := 1.0 - t
 		var r := lerpf(radius * 0.65, radius, t)
 		if painted_visuals:
-			const SLASH := preload("res://assets/processed/vfx/golden_slash.png")
-			var size := SLASH.get_size() * (1.32 * r / SLASH.get_width())
+			const SLASH := preload("res://assets/generated/combat_vfx/golden_staff_slash_sprite_frames.tres")
+			var frame := SLASH.get_frame_texture(&"golden_staff_slash_fx", mini(int(t * 6.0), 5))
+			var size := Vector2.ONE * 1.65 * r
 			draw_set_transform(Vector2.ZERO, base_angle + PI)
-			draw_texture_rect(SLASH, Rect2(Vector2(-r, -size.y * 0.5), size),
+			draw_texture_rect(frame, Rect2(Vector2(-r, -size.y * 0.5), size),
 				false, Color(1.0, 1.0, 1.0, a))
 			draw_set_transform(Vector2.ZERO)
 		var start_a := base_angle - arc_rad * 0.5

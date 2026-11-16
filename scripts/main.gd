@@ -3,6 +3,8 @@ extends Node2D
 @export var custom_scene_theme: String = ""
 @export var next_scene_path: String = ""
 
+var _scene_transition_active := false
+
 @onready var arena: CloudArena = $CloudArena
 @onready var entities: Node2D = $YSort/Entities
 @onready var player: PlayerController = $YSort/Entities/Player
@@ -30,6 +32,7 @@ func _ready() -> void:
 	progression.level_up_choices_ready.connect(ui.show_upgrade_choices)
 	ui.upgrade_selected.connect(func(upg: Dictionary) -> void:
 		progression.on_upgrade_chosen(upg, player)
+		GameData.selected_upgrades.append(upg.duplicate(true))
 	)
 
 	# Wire FloorManager -> Progression & UI
@@ -44,18 +47,27 @@ func _ready() -> void:
 			objective = "Cổng Thiên Giới đã mở! Hãy bước vào!"
 		ui.update_wave(5, 5, objective)
 	)
-	floor_manager.floor_cleared.connect(func() -> void:
-		if next_scene_path != "" and ResourceLoader.exists(next_scene_path):
-			get_tree().change_scene_to_file(next_scene_path)
-		else:
-			ui.show_victory()
-	)
+	floor_manager.floor_cleared.connect(_on_floor_cleared)
 
 	ui.restart_requested.connect(func() -> void:
+		GameData.reset_run()
 		get_tree().reload_current_scene()
 	)
 
-	progression.reset()
+	if GameData.scene_entry.get("scene", "") == scene_file_path:
+		for upgrade in GameData.selected_upgrades:
+			player.apply_upgrade(upgrade, false)
+		player.current_hp = clampi(GameData.scene_entry["hp"], 1, player.max_hp)
+		progression.restore(GameData.scene_entry)
+		var fade := _create_scene_fade(1.0)
+		var reveal := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+		reveal.tween_property(fade, "color:a", 0.0, 0.22)
+		reveal.tween_callback(fade.get_parent().queue_free)
+	else:
+		GameData.reset_run()
+		progression.reset()
+	GameData.loot_changed.connect(ui.update_loot)
+	ui.update_loot(GameData.loot_currency)
 	ui.update_hp(player.current_hp, player.max_hp)
 	camera.zoom = Vector2(0.75, 0.75)
 	if custom_scene_theme != "":
@@ -86,6 +98,49 @@ func _ready() -> void:
 		floor_manager.start_scene_encounter(custom_scene_theme)
 	else:
 		floor_manager.start_floor()
+
+
+func _on_floor_cleared() -> void:
+	if _scene_transition_active:
+		return
+	if next_scene_path.is_empty() or not ResourceLoader.exists(next_scene_path):
+		ui.show_victory()
+		return
+
+	_scene_transition_active = true
+	ui.set_process_unhandled_input(false)
+	var tree := get_tree()
+	tree.paused = true
+	var fade := _create_scene_fade(0.0)
+	fade.mouse_filter = Control.MOUSE_FILTER_STOP
+	var transition := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	transition.tween_property(fade, "color:a", 1.0, 0.22)
+	await transition.finished
+
+	GameData.scene_entry = progression.snapshot()
+	GameData.scene_entry["hp"] = player.current_hp
+	GameData.scene_entry["scene"] = next_scene_path
+	tree.paused = false
+	var result := tree.change_scene_to_file(next_scene_path)
+	if result != OK:
+		_scene_transition_active = false
+		ui.set_process_unhandled_input(true)
+		fade.get_parent().queue_free()
+		GameData.scene_entry.clear()
+		push_error("Could not load Cloudbound scene: " + next_scene_path)
+
+
+func _create_scene_fade(alpha: float) -> ColorRect:
+	var layer := CanvasLayer.new()
+	layer.layer = 100
+	add_child(layer)
+
+	var fade := ColorRect.new()
+	fade.color = Color(0.0, 0.0, 0.0, alpha)
+	fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layer.add_child(fade)
+	fade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	return fade
 
 
 func _on_boss_spawned(boss: BossController) -> void:

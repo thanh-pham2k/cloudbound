@@ -25,6 +25,45 @@ FILENAME_RE = re.compile(r"^[a-z0-9_.\-]+$")
 VALID_BASE_DIMS = {(64, 64), (128, 128), (128, 64), (256, 128), (128, 192), (256, 256)}
 
 
+def validate_animation_atlases(errors: list[str]) -> None:
+    generated = PROJECT_ROOT / "assets" / "generated"
+    for group in ("wukong", "enemies", "pickups", "combat_vfx"):
+        for metadata in sorted((generated / group).rglob("*.atlas.json")):
+            label = metadata.relative_to(PROJECT_ROOT)
+            meta = json.loads(metadata.read_text(encoding="utf-8"))
+            width, height = meta["frame_width"], meta["frame_height"]
+            columns, rows, padding = meta["columns"], meta["rows"], meta["padding"]
+            expected_size = (columns * (width + padding) - padding,
+                             rows * (height + padding) - padding)
+            png = metadata.with_suffix("").with_suffix(".png")
+            if not png.is_file():
+                errors.append(f"Missing atlas image: {label}")
+                continue
+            with Image.open(png) as image:
+                if image.mode != "RGBA" or image.size != expected_size:
+                    errors.append(f"Invalid RGBA atlas dimensions: {label}")
+                    continue
+                frames = meta["frames"]
+                if len(frames) != meta["frame_count"] or not 0 < len(frames) <= columns * rows:
+                    errors.append(f"Incorrect frame count: {label}")
+                    continue
+                seen = set()
+                for index, frame in enumerate(frames):
+                    x = (index % columns) * (width + padding)
+                    y = (index // columns) * (height + padding)
+                    if (frame["index"], frame["x"], frame["y"], frame["w"], frame["h"]) != (index, x, y, width, height):
+                        errors.append(f"Misaligned cell {index}: {label}")
+                        continue
+                    cell = image.crop((x, y, x + width, y + height))
+                    low, high = cell.getchannel("A").getextrema()
+                    if low != 0 or high == 0:
+                        errors.append(f"Cell {index} needs visible art and transparent pixels: {label}")
+                    pixels = cell.tobytes()
+                    if pixels in seen:
+                        errors.append(f"Duplicate cell {index}: {label}")
+                    seen.add(pixels)
+
+
 def validate_repo_assets() -> tuple[list[str], list[str]]:
     errors: list[str] = []
     notes: list[str] = []
@@ -103,6 +142,7 @@ def validate_repo_assets() -> tuple[list[str], list[str]]:
     if toolkit_gen.is_dir() and any(p.is_file() and p.name != ".gitkeep" for p in toolkit_gen.rglob("*")):
         errors.append("Unsafe output: generated files found inside tools/gameforge-kit/")
 
+    validate_animation_atlases(errors)
     return errors, notes
 
 

@@ -30,6 +30,9 @@ var _player: Node2D
 var _combat: CombatSystem
 var _arena: CloudArena
 var _sprite: AnimatedSprite2D
+var _painted_animation := false
+var _painted_attack := "attack"
+var _painted_walk := "walk"
 var _hp_bar: Range
 
 
@@ -75,19 +78,28 @@ func _ready() -> void:
 	_sprite.offset = Vector2(0, -48)
 	var pose_height := 110.0
 	if _arena != null and _arena.painted_visuals:
-		const PAINTED := preload("res://scripts/world/painted_sprite.gd")
-		const CASTER := preload("res://assets/processed/characters/cyan_magic_caster.png")
-		const BOAR := preload("res://assets/processed/characters/boar_axeman.png")
-		const SPIRIT := preload("res://assets/processed/characters/mint_cloud_spirit.png")
-		const GOLEM := preload("res://assets/processed/characters/stone_golem.png")
+		const CASTER := preload("res://assets/generated/enemies/caster/caster_sprite_frames.tres")
+		const BOAR := preload("res://assets/generated/enemies/boar/boar_sprite_frames.tres")
+		const SPIRIT := preload("res://assets/generated/enemies/spirit/spirit_sprite_frames.tres")
+		const GOLEM := preload("res://assets/generated/enemies/golem/golem_sprite_frames.tres")
 		if _arena.scene_theme == "stairway_clouds":
+			_sprite.sprite_frames = SPIRIT
 			pose_height = 104.0
-			PAINTED.set_actor_pose(_sprite, SPIRIT, pose_height)
 		elif enemy_id == "tank":
+			_sprite.sprite_frames = GOLEM
+			_painted_attack = "stone_punch"
+			_painted_walk = "heavy_walk"
 			pose_height = 140.0
-			PAINTED.set_actor_pose(_sprite, GOLEM, pose_height)
+		elif enemy_id == "ranged":
+			_sprite.sprite_frames = CASTER
+			_painted_attack = "cast"
 		else:
-			PAINTED.set_actor_pose(_sprite, CASTER if enemy_id == "ranged" else BOAR, pose_height)
+			_sprite.sprite_frames = BOAR
+			_painted_attack = "axe_attack"
+		_sprite.offset = Vector2(0.0, -63.0)
+		_sprite.scale = Vector2.ONE * pose_height / 120.0
+		_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+		_painted_animation = true
 	add_child(_sprite)
 
 	if _arena != null and _arena.painted_visuals:
@@ -150,6 +162,8 @@ func _physics_process(delta: float) -> void:
 	if _arena != null:
 		global_position = _arena.clamp_to_arena(global_position, 28.0)
 
+	if _state == AIState.TELEGRAPH:
+		return
 	if _hurt_timer > 0.0:
 		_play_anim("hurt")
 	elif velocity.length() > 10.0:
@@ -161,7 +175,7 @@ func _physics_process(delta: float) -> void:
 func _begin_telegraph(dir: Vector2) -> void:
 	_state = AIState.TELEGRAPH
 	_atk_timer = attack_cooldown + telegraph_time
-	_play_anim("attack")
+	_play_anim("attack", telegraph_time)
 
 	if _combat == null:
 		_state = AIState.CHASE
@@ -205,6 +219,7 @@ func take_damage(amount: int, is_crit: bool = false) -> void:
 
 func _die() -> void:
 	_is_dead = true
+	remove_from_group("enemy")
 	_state = AIState.DEAD
 	velocity = Vector2.ZERO
 	collision_layer = 0
@@ -213,6 +228,10 @@ func _die() -> void:
 	_play_anim("death")
 	died.emit(exp_reward, global_position)
 	var tw := create_tween()
+	if _painted_animation and _sprite.is_playing():
+		var frames := _sprite.sprite_frames
+		var animation := _sprite.animation
+		tw.tween_interval(frames.get_frame_count(animation) / frames.get_animation_speed(animation))
 	tw.tween_property(self, "modulate:a", 0.0, 0.4)
 	tw.tween_callback(queue_free)
 
@@ -231,10 +250,21 @@ func _update_facing(dir: Vector2) -> void:
 		_flip_h = false
 
 
-func _play_anim(anim_name: String) -> void:
+func _play_anim(anim_name: String, duration: float = 0.0) -> void:
 	if _sprite == null or _sprite.sprite_frames == null:
 		return
 	_sprite.flip_h = _flip_h
 	var full_name := "%s_%s" % [anim_name, _facing]
-	if _sprite.sprite_frames.has_animation(full_name) and _sprite.animation != full_name:
-		_sprite.play(full_name)
+	if _painted_animation:
+		match anim_name:
+			"attack":
+				anim_name = _painted_attack
+			"walk":
+				anim_name = _painted_walk
+		full_name = "%s_down" % anim_name
+	if _sprite.sprite_frames.has_animation(full_name) and (_sprite.animation != full_name or not _sprite.is_playing()):
+		var playback_speed := 1.0
+		if _painted_animation and duration > 0.0:
+			var frames := _sprite.sprite_frames
+			playback_speed = frames.get_frame_count(full_name) / (frames.get_animation_speed(full_name) * duration)
+		_sprite.play(full_name, playback_speed)

@@ -47,6 +47,9 @@ var _skill1_timer: float = 0.0
 var _skill2_timer: float = 0.0
 var _hurt_timer: float = 0.0
 var _attack_anim_timer: float = 0.0
+var _action_animation := "attack"
+var _action_facing := "down"
+var _action_flip_h := false
 var _attack_held: bool = false
 var _attack_use_mouse: bool = false
 var _is_dead: bool = false
@@ -162,7 +165,8 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("skill_2") and _skill2_timer <= 0.0:
 		_cast_skill_2()
 
-	if _dash_active_timer > 0.0:
+	var is_dashing := _dash_active_timer > 0.0
+	if is_dashing:
 		_dash_active_timer -= delta
 		velocity = _dash_dir * dash_speed
 		modulate.a = 0.6
@@ -178,7 +182,7 @@ func _physics_process(delta: float) -> void:
 		try_manual_attack()
 
 	_update_facing(move_input)
-	_update_animation(velocity)
+	_update_animation(velocity, is_dashing)
 	cooldowns_updated.emit(_dash_timer, dash_cooldown, _skill1_timer, skill1_cooldown, _skill2_timer, skill2_cooldown)
 
 
@@ -193,7 +197,6 @@ func try_manual_attack() -> bool:
 	if _is_dead or (is_inside_tree() and get_tree().paused) or _atk_timer > 0.0:
 		return false
 	_atk_timer = attack_cooldown
-	_attack_anim_timer = 0.25
 
 	var dir := _facing_vector()
 	if _attack_use_mouse and is_inside_tree():
@@ -207,6 +210,7 @@ func try_manual_attack() -> bool:
 			if to_target.length_squared() > 1.0:
 				dir = to_target.normalized()
 	_update_facing(dir)
+	_start_action_animation("attack", 0.25)
 
 	var arc_cos := cos(deg_to_rad(67.5))
 	if _combat != null:
@@ -234,7 +238,7 @@ func try_manual_attack() -> bool:
 
 func _cast_skill_1() -> void:
 	_skill1_timer = skill1_cooldown
-	_attack_anim_timer = 0.35
+	_start_action_animation("skill_1", 0.35)
 	if _combat != null:
 		_combat.spawn_ring_burst(global_position, skill1_radius, Color(0.98, 0.85, 0.32))
 		_combat.add_screen_shake(4.5)
@@ -249,7 +253,7 @@ func _cast_skill_1() -> void:
 
 func _cast_skill_2() -> void:
 	_skill2_timer = skill2_cooldown
-	_attack_anim_timer = 0.35
+	_start_action_animation("skill_2", 0.35)
 
 	var enemies := _get_enemies_in_range(skill2_range)
 	if enemies.is_empty():
@@ -331,7 +335,7 @@ func on_enemy_killed() -> void:
 		heal(life_on_kill)
 
 
-func apply_upgrade(upgrade: Dictionary) -> void:
+func apply_upgrade(upgrade: Dictionary, heal_on_upgrade: bool = true) -> void:
 	var stat := str(upgrade.get("stat", ""))
 	var val := float(upgrade.get("value", 0.0))
 	match stat:
@@ -341,8 +345,9 @@ func apply_upgrade(upgrade: Dictionary) -> void:
 			attack_cooldown = maxf(0.18, attack_cooldown * val)
 		"max_hp_bonus":
 			max_hp += int(val)
-			heal(int(val))
-			hp_changed.emit(current_hp, max_hp)
+			if heal_on_upgrade:
+				heal(int(val))
+				hp_changed.emit(current_hp, max_hp)
 		"move_speed_mult":
 			move_speed *= (1.0 + val)
 		"dash_cooldown_mult":
@@ -362,6 +367,8 @@ func apply_upgrade(upgrade: Dictionary) -> void:
 func _die() -> void:
 	_is_dead = true
 	velocity = Vector2.ZERO
+	modulate.a = 1.0
+	_sprite.process_mode = Node.PROCESS_MODE_ALWAYS
 	_play_anim("death")
 	died.emit()
 
@@ -390,33 +397,45 @@ func _facing_vector() -> Vector2:
 			return Vector2.DOWN
 
 
-func _update_animation(vel: Vector2) -> void:
+func _start_action_animation(animation: String, duration: float) -> void:
+	_action_animation = animation
+	_action_facing = _facing
+	_action_flip_h = _flip_h
+	_attack_anim_timer = duration
+
+
+func _update_animation(vel: Vector2, is_dashing: bool = false) -> void:
 	if _is_dead:
 		return
 	if _hurt_timer > 0.0:
 		_play_anim("hurt")
+	elif is_dashing and painted_animation_frames != null and painted_animation_frames.has_animation("dash_right"):
+		_play_anim("dash", "right", _dash_dir.x < 0.0)
 	elif _attack_anim_timer > 0.0:
-		_play_anim("attack")
+		var action := _action_animation if _sprite.sprite_frames == painted_animation_frames else "attack"
+		_play_anim(action, _action_facing, _action_flip_h)
 	elif vel.length() > 15.0:
 		_play_anim("walk")
 	else:
 		_play_anim("idle")
 
 
-func _play_anim(anim_name: String) -> void:
+func _play_anim(anim_name: String, facing: String = "", flip_h: bool = false) -> void:
 	if _sprite == null or _sprite.sprite_frames == null:
 		return
-	var full_name := "%s_%s" % [anim_name, _facing]
+	if facing.is_empty():
+		facing = _facing
+		flip_h = _flip_h
+	var full_name := "%s_%s" % [anim_name, facing]
 	if _sprite.sprite_frames == painted_animation_frames:
-		if anim_name != "idle" and anim_name != "walk":
-			# The pack has no approved combat or reaction loops.
-			_sprite.pause()
-			return
 		if not _sprite.sprite_frames.has_animation(full_name):
 			full_name = "%s_down" % anim_name
-		_sprite.flip_h = full_name == "idle_right" and _flip_h
+		if not _sprite.sprite_frames.has_animation(full_name):
+			_sprite.pause()
+			return
+		_sprite.flip_h = full_name.ends_with("_right") and flip_h
 	else:
-		_sprite.flip_h = _flip_h
+		_sprite.flip_h = flip_h
 
 	if _sprite.sprite_frames.has_animation(full_name):
 		if _sprite.animation != full_name or (painted_animation_frames != null and not _sprite.is_playing()):

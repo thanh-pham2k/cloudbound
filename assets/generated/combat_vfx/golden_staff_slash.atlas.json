@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0.0",
+  "project": "cloudbound",
+  "character_id": "golden_staff_slash",
+  "task_id": "golden_staff_slash",
+  "animation": "golden_staff_slash",
+  "direction": "fx",
+  "fps": 24,
+  "loop": false,
+  "frame_count": 6,
+  "frame_width": 128,
+  "frame_height": 128,
+  "columns": 3,
+  "rows": 2,
+  "padding": 4,
+  "atlas_width": 392,
+  "atlas_height": 260,
+  "pivot": {
+    "x": 64,
+    "y": 64,
+    "anchor_mode": "bbox_center"
+  },
+  "allow_horizontal_flip": false,
+  "flip_policy": "none",
+  "atlas_png": "assets/generated/combat_vfx/golden_staff_slash.png",
+  "frames": [
+    {
+      "index": 0,
+      "x": 0,
+      "y": 0,
+      "w": 128,
+      "h": 128
+    },
+    {
+      "index": 1,
+      "x": 132,
+      "y": 0,
+      "w": 128,
+      "h": 128
+    },
+    {
+      "index": 2,
+      "x": 264,
+      "y": 0,
+      "w": 128,
+      "h": 128
+    },
+    {
+      "index": 3,
+      "x": 0,
+      "y": 132,
+      "w": 128,
+      "h": 128
+    },
+    {
+      "index": 4,
+      "x": 132,
+      "y": 132,
+      "w": 128,
+      "h": 128
+    },
+    {
+      "index": 5,
+      "x": 264,
+      "y": 132,
+      "w": 128,
+      "h": 128
+    }
+  ]
+}

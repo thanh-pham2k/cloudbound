@@ -43,7 +43,7 @@ Outputs are written to `assets/generated/sprites/<character_id>/` (never inside 
 /Applications/Godot.app/Contents/MacOS/Godot --path .
 ```
 
-Or open the project folder in the Godot 4 Editor and press **F5** (`scenes/main.tscn`).
+Or open the project folder in the Godot 4 Editor and press **F5** to start the six-scene journey in Mortal Realm. Open `scenes/main.tscn` and press **F6** to run the standalone wave arena.
 
 ### Run Automated Headless Tests
 
@@ -64,7 +64,7 @@ Or open the project folder in the Godot 4 Editor and press **F5** (`scenes/main.
 
 ## Manual Test Checklist
 
-- [ ] Start game (`scenes/main.tscn`) and verify HUD (HP, EXP, Wave 1, Cooldowns) renders cleanly.
+- [ ] Start the standalone wave arena (`scenes/main.tscn`) and verify HUD (HP, EXP, Wave 1, Cooldowns) renders cleanly.
 - [ ] Move in all 8 directions with WASD; verify smooth camera follow, Y-sorting around pillars, and arena boundary clamping.
 - [ ] Dash (`Space`/`Shift`) and use Skills (`K`, `L`); verify cooldown timers update and invulnerability frames work.
 - [ ] Fight `melee`, `ranged` (retreats when approached), and `tank` (telegraphed AoE slam) enemies; verify basic attacks with `J` or left mouse and check damage numbers.

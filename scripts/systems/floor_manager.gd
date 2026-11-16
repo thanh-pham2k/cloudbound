@@ -7,6 +7,14 @@ signal portal_unlocked(portal: CloudPortal)
 signal floor_cleared
 signal enemy_killed(exp_reward: int)
 
+@export_range(0.0, 1.0) var health_drop_chance := 0.22
+@export_range(0.0, 1.0) var loot_drop_chance := 0.35
+@export var health_amount := 18
+@export var loot_amount := 1
+
+const HEALTH_ORB := preload("res://assets/generated/pickups/health_orb_sprite_frames.tres")
+const LOOT_ORB := preload("res://assets/generated/pickups/loot_orb_sprite_frames.tres")
+
 var _floor_cfg: Dictionary = {}
 var _waves: Array = []
 var _current_wave_idx: int = -1
@@ -80,11 +88,11 @@ func _spawn_specific_enemy(enemy_type: String, pos: Vector2) -> void:
 	var enemy := EnemyBase.new()
 	enemy.position = _arena.clamp_to_arena(pos, 32.0) if _arena != null else pos
 	enemy.setup(enemy_type, _player, _combat, _arena)
-	enemy.died.connect(func(exp_reward: int, _p: Vector2) -> void:
-		_on_enemy_died(exp_reward, _p)
+	enemy.died.connect(func(exp_reward: int, death_pos: Vector2) -> void:
+		_on_enemy_died(exp_reward, death_pos)
 		if _active_enemies <= 0 and not _boss_active:
-			_spawn_portal(Vector2(512, -106) if _arena != null and _arena.scene_theme == "stairway_clouds" else Vector2(0, -180))
-	)
+			_spawn_portal.call_deferred(Vector2(512, -106) if _arena != null and _arena.scene_theme == "stairway_clouds" else Vector2(0, -180))
+	, CONNECT_ONE_SHOT)
 	_active_enemies += 1
 	_ysort_entities.add_child(enemy)
 
@@ -133,7 +141,7 @@ func _spawn_enemy_from_wave(wave: Dictionary) -> void:
 	var enemy := EnemyBase.new()
 	enemy.position = spawn_pos
 	enemy.setup(enemy_type, _player, _combat, _arena)
-	enemy.died.connect(_on_enemy_died)
+	enemy.died.connect(_on_enemy_died, CONNECT_ONE_SHOT)
 	_active_enemies += 1
 	_ysort_entities.add_child(enemy)
 
@@ -159,11 +167,26 @@ func _pick_weighted(weights: Dictionary) -> String:
 	return "melee"
 
 
-func _on_enemy_died(exp_reward: int, _pos: Vector2) -> void:
+func _on_enemy_died(exp_reward: int, pos: Vector2) -> void:
 	_active_enemies = maxi(0, _active_enemies - 1)
 	if _player != null:
 		_player.on_enemy_killed()
 	enemy_killed.emit(exp_reward)
+	if randf() < health_drop_chance:
+		_spawn_pickup.call_deferred(OrbPickup.Kind.HEALTH, health_amount, pos, HEALTH_ORB)
+	if randf() < loot_drop_chance:
+		_spawn_pickup.call_deferred(OrbPickup.Kind.LOOT, loot_amount, pos + Vector2(24, 0), LOOT_ORB)
+
+
+func _spawn_pickup(kind: OrbPickup.Kind, amount: int, pos: Vector2, frames: SpriteFrames) -> void:
+	if amount <= 0 or not is_instance_valid(_ysort_entities):
+		return
+	var pickup := OrbPickup.new()
+	pickup.kind = kind
+	pickup.amount = amount
+	pickup.frames = frames
+	pickup.position = _arena.clamp_to_arena(pos, 28.0) if _arena != null else pos
+	_ysort_entities.add_child(pickup)
 
 
 func _spawn_boss() -> void:
@@ -174,7 +197,7 @@ func _spawn_boss() -> void:
 	if _player != null and boss.position.distance_to(_player.global_position) < 220.0:
 		boss.position = Vector2(0, 180)
 	boss.setup(_player, _combat, _arena)
-	boss.died.connect(_on_boss_died)
+	boss.died.connect(_on_boss_died, CONNECT_ONE_SHOT)
 	_ysort_entities.add_child(boss)
 	if _combat != null:
 		_combat.spawn_circle_telegraph(boss.position, 145.0, 1.1, Color(1.0, 0.25, 0.2))
@@ -184,7 +207,7 @@ func _spawn_boss() -> void:
 func _on_boss_died(exp_reward: int, pos: Vector2) -> void:
 	_boss_active = false
 	enemy_killed.emit(exp_reward)
-	_spawn_portal(pos)
+	_spawn_portal.call_deferred(pos)
 
 
 func _spawn_portal(pos: Vector2) -> void:

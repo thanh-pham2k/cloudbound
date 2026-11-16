@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0.0",
+  "project": "cloudbound",
+  "character_id": "wukong",
+  "task_id": "wukong_death_down",
+  "animation": "death",
+  "direction": "down",
+  "fps": 12,
+  "loop": false,
+  "frame_count": 8,
+  "frame_width": 208,
+  "frame_height": 176,
+  "columns": 4,
+  "rows": 2,
+  "padding": 4,
+  "atlas_width": 844,
+  "atlas_height": 356,
+  "pivot": {
+    "x": 104,
+    "y": 151,
+    "anchor_mode": "custom_pixel"
+  },
+  "allow_horizontal_flip": false,
+  "flip_policy": "none",
+  "atlas_png": "assets/generated/wukong/wukong_death_down.png",
+  "frames": [
+    {
+      "index": 0,
+      "x": 0,
+      "y": 0,
+      "w": 208,
+      "h": 176
+    },
+    {
+      "index": 1,
+      "x": 212,
+      "y": 0,
+      "w": 208,
+      "h": 176
+    },
+    {
+      "index": 2,
+      "x": 424,
+      "y": 0,
+      "w": 208,
+      "h": 176
+    },
+    {
+      "index": 3,
+      "x": 636,
+      "y": 0,
+      "w": 208,
+      "h": 176
+    },
+    {
+      "index": 4,
+      "x": 0,
+      "y": 180,
+      "w": 208,
+      "h": 176
+    },
+    {
+      "index": 5,
+      "x": 212,
+      "y": 180,
+      "w": 208,
+      "h": 176
+    },
+    {
+      "index": 6,
+      "x": 424,
+      "y": 180,
+      "w": 208,
+      "h": 176
+    },
+    {
+      "index": 7,
+      "x": 636,
+      "y": 180,
+      "w": 208,
+      "h": 176
+    }
+  ]
+}

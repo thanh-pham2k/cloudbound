@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Đường Đến Thiên Giới"
 config/description="2.5D Isometric Action RPG + Roguelite MVP"
-run/main_scene="res://scenes/main.tscn"
+run/main_scene="res://scenes/scene_01_mortal_realm.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"
 

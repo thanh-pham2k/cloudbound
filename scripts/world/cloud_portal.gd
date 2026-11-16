@@ -26,13 +26,17 @@ func _ready() -> void:
 
 	if painted_visuals:
 		const PAINTED := preload("res://scripts/world/painted_sprite.gd")
-		const VORTEX := preload("res://assets/processed/vfx/blue_vortex_portal.png")
+		const VORTEX := preload("res://assets/generated/combat_vfx/portal_swirl_sprite_frames.tres")
 		const GATE := preload("res://assets/generated/integration/golden_dragon_gateway.png")
+		var vortex := AnimatedSprite2D.new()
+		vortex.sprite_frames = VORTEX
+		vortex.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+		vortex.scale = Vector2.ONE * (1.35 if heaven_gate else 1.8)
+		vortex.offset.y = -58.0
+		visual.add_child(vortex)
+		vortex.play(&"portal_swirl_fx")
 		if heaven_gate:
-			PAINTED.place(visual, VORTEX, Vector2.ZERO, 0.31, true)
 			PAINTED.place(visual, GATE, Vector2.ZERO, 0.53, true)
-		else:
-			PAINTED.place(visual, VORTEX, Vector2.ZERO, 0.42, true)
 	else:
 		var variant := "arch_celestial_gate_01" if village_exit else "arch_heaven_gateway_01"
 		var gw_path := "res://assets/base/environment/architecture/%s.png" % variant

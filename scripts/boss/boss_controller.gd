@@ -35,6 +35,7 @@ var _player: Node2D
 var _combat: CombatSystem
 var _arena: CloudArena
 var _sprite: AnimatedSprite2D
+var _painted_animation := false
 
 
 func setup(player: Node2D, combat: CombatSystem, arena: CloudArena) -> void:
@@ -75,9 +76,12 @@ func _ready() -> void:
 	_sprite.scale = Vector2(s, s)
 	_sprite.offset = Vector2(0, -48)
 	if _arena != null and _arena.painted_visuals:
-		const PAINTED := preload("res://scripts/world/painted_sprite.gd")
-		const GUARDIAN := preload("res://assets/processed/characters/armored_rune_colossus.png")
-		PAINTED.set_actor_pose(_sprite, GUARDIAN, 225.0)
+		const GUARDIAN := preload("res://assets/generated/enemies/guardian/guardian_sprite_frames.tres")
+		_sprite.sprite_frames = GUARDIAN
+		_sprite.offset = Vector2(0.0, -63.0)
+		_sprite.scale = Vector2.ONE * 225.0 / 120.0
+		_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+		_painted_animation = true
 	add_child(_sprite)
 
 	hp_changed.emit(current_hp, max_hp)
@@ -170,6 +174,7 @@ func _do_slam_pattern() -> void:
 		_state = BossState.CHASE
 		return
 
+	_play_anim("attack", "ground_slam", t_time)
 	var t := _combat.spawn_circle_telegraph(target_pos, rad, t_time, Color(1.0, 0.25, 0.2))
 	t.triggered.connect(func() -> void:
 		if _is_dead:
@@ -240,6 +245,7 @@ func _do_barrage_pattern() -> void:
 		_state = BossState.CHASE
 		return
 
+	_play_anim("attack", "cyan_rune_special", t_time)
 	var t := _combat.spawn_circle_telegraph(global_position, 90.0, t_time, Color(0.7, 0.4, 1.0))
 	t.triggered.connect(func() -> void:
 		if _is_dead or _player == null or not is_instance_valid(_player):
@@ -283,12 +289,17 @@ func _enter_phase_2() -> void:
 
 func _die() -> void:
 	_is_dead = true
+	remove_from_group("enemy")
 	_state = BossState.DEAD
 	velocity = Vector2.ZERO
 	collision_layer = 0
 	_play_anim("death")
 	died.emit(exp_reward, global_position)
 	var tw := create_tween()
+	if _painted_animation and _sprite.is_playing():
+		var frames := _sprite.sprite_frames
+		var animation := _sprite.animation
+		tw.tween_interval(frames.get_frame_count(animation) / frames.get_animation_speed(animation))
 	tw.tween_property(self, "modulate:a", 0.0, 0.7)
 	tw.tween_callback(queue_free)
 
@@ -307,10 +318,20 @@ func _update_facing(dir: Vector2) -> void:
 		_flip_h = false
 
 
-func _play_anim(anim_name: String) -> void:
+func _play_anim(anim_name: String, painted_pattern: String = "", duration: float = 0.0) -> void:
 	if _sprite == null or _sprite.sprite_frames == null:
 		return
 	_sprite.flip_h = _flip_h
 	var full_name := "%s_%s" % [anim_name, _facing]
-	if _sprite.sprite_frames.has_animation(full_name) and _sprite.animation != full_name:
-		_sprite.play(full_name)
+	if _painted_animation:
+		if not painted_pattern.is_empty():
+			anim_name = painted_pattern
+		elif anim_name == "walk" or anim_name == "attack":
+			anim_name = "heavy_walk"
+		full_name = "%s_down" % anim_name
+	var frames := _sprite.sprite_frames
+	if frames.has_animation(full_name) and (_sprite.animation != full_name or not _sprite.is_playing()):
+		var playback_speed := 1.0
+		if _painted_animation and duration > 0.0:
+			playback_speed = frames.get_frame_count(full_name) / (frames.get_animation_speed(full_name) * duration)
+		_sprite.play(full_name, playback_speed)

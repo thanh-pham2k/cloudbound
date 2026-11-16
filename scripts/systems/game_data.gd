@@ -1,10 +1,16 @@
 extends Node
 
+signal loot_changed(total: int)
+
 var enemies_data: Dictionary = {}
 var boss_data: Dictionary = {}
 var skills_data: Dictionary = {}
 var upgrades_data: Array = []
 var floors_data: Array = []
+
+var loot_currency := 0
+var scene_entry: Dictionary = {}
+var selected_upgrades: Array[Dictionary] = []
 
 
 func _ready() -> void:
@@ -57,3 +63,16 @@ func get_floor_config(index: int = 0) -> Dictionary:
 	if index >= 0 and index < floors_data.size():
 		return floors_data[index]
 	return {}
+
+
+func award_loot(amount: int) -> void:
+	if amount > 0:
+		loot_currency += amount
+		loot_changed.emit(loot_currency)
+
+
+func reset_run() -> void:
+	scene_entry.clear()
+	selected_upgrades.clear()
+	loot_currency = 0
+	loot_changed.emit(loot_currency)
