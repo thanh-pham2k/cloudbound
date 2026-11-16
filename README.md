@@ -29,10 +29,10 @@ Outputs are written to `assets/generated/sprites/<character_id>/` (never inside 
 | Action | Keys |
 | --- | --- |
 | Move (8 directions) | `W A S D` or Arrow Keys |
-| Auto-Attack | Automatic when nearest enemy is in range |
+| Basic attack | `J` or left mouse button |
 | Dash (`Vân Bộ`) | `Space` or `Shift` |
-| Skill 1 (`Lôi Quang Trảm` — AoE burst) | `Q` or `1` |
-| Skill 2 (`Cửu Thiên Lạc Lôi` — Homing bolts) | `E` or `2` |
+| Skill 1 (`Lôi Quang Trảm` — AoE burst) | `K` |
+| Skill 2 (`Cửu Thiên Lạc Lôi` — Homing bolts) | `L` |
 | Pause / Resume | `Esc` or `P` |
 
 ## How to Run
@@ -66,8 +66,8 @@ Or open the project folder in the Godot 4 Editor and press **F5** (`scenes/main.
 
 - [ ] Start game (`scenes/main.tscn`) and verify HUD (HP, EXP, Wave 1, Cooldowns) renders cleanly.
 - [ ] Move in all 8 directions with WASD; verify smooth camera follow, Y-sorting around pillars, and arena boundary clamping.
-- [ ] Dash (`Space`/`Shift`) and use Skills (`Q`, `E`); verify cooldown timers update and invulnerability frames work.
-- [ ] Fight `melee`, `ranged` (retreats when approached), and `tank` (telegraphed AoE slam) enemies; verify auto-attack and damage numbers.
+- [ ] Dash (`Space`/`Shift`) and use Skills (`K`, `L`); verify cooldown timers update and invulnerability frames work.
+- [ ] Fight `melee`, `ranged` (retreats when approached), and `tank` (telegraphed AoE slam) enemies; verify basic attacks with `J` or left mouse and check damage numbers.
 - [ ] Reach 50 EXP to trigger Level-Up modal; pick 1 of 3 upgrades and verify gameplay pauses/resumes cleanly.
 - [ ] Clear waves to trigger Boss (`Thiên Lôi Tướng`); verify Boss HP bar, 3 telegraphed patterns, and Phase 2 transition at 50% HP.
 - [ ] Defeat Boss to unlock `Cổng Thiên Giới` portal; walk into it to verify Victory screen and Restart button.

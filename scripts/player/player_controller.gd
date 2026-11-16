@@ -7,6 +7,8 @@ signal cooldowns_updated(dash_cd: float, dash_max: float, s1_cd: float, s1_max: 
 
 const SPRITE_PATH := "res://assets/generated/sprites/player_hero/player_hero_sprite_frames.tres"
 
+@export var painted_animation_frames: SpriteFrames
+
 var max_hp: int = 120
 var current_hp: int = 120
 var move_speed: float = 235.0
@@ -62,7 +64,13 @@ func setup(combat: CombatSystem, arena: CloudArena) -> void:
 	if arena != null and arena.painted_visuals:
 		const PAINTED := preload("res://scripts/world/painted_sprite.gd")
 		const HERO := preload("res://assets/processed/characters/staff_wielding_monkey_hero.png")
-		PAINTED.set_actor_pose(_sprite, HERO, 122.0)
+		if painted_animation_frames != null:
+			_sprite.sprite_frames = painted_animation_frames
+			_sprite.offset = Vector2(0, -63)
+			_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+			_play_anim("idle")
+		else:
+			PAINTED.set_actor_pose(_sprite, HERO, 122.0)
 	_load_config()
 
 
@@ -120,14 +128,12 @@ func _unhandled_input(event: InputEvent) -> void:
 	if _is_dead or get_tree().paused:
 		_attack_held = false
 		return
-	if event.is_action("attack"):
-		if event.is_pressed():
-			_attack_held = true
-			_attack_use_mouse = event is InputEventMouseButton
-			if _atk_timer <= 0.0:
-				try_manual_attack()
-		elif event.is_released():
-			_attack_held = false
+	if event.is_action_pressed("attack"):
+		_attack_held = true
+		_attack_use_mouse = event is InputEventMouseButton
+		try_manual_attack()
+	elif event.is_action_released("attack"):
+		_attack_held = false
 
 
 func _physics_process(delta: float) -> void:
@@ -400,7 +406,18 @@ func _update_animation(vel: Vector2) -> void:
 func _play_anim(anim_name: String) -> void:
 	if _sprite == null or _sprite.sprite_frames == null:
 		return
-	_sprite.flip_h = _flip_h
 	var full_name := "%s_%s" % [anim_name, _facing]
-	if _sprite.sprite_frames.has_animation(full_name) and _sprite.animation != full_name:
-		_sprite.play(full_name)
+	if _sprite.sprite_frames == painted_animation_frames:
+		if anim_name != "idle" and anim_name != "walk":
+			# The pack has no approved combat or reaction loops.
+			_sprite.pause()
+			return
+		if not _sprite.sprite_frames.has_animation(full_name):
+			full_name = "%s_down" % anim_name
+		_sprite.flip_h = full_name == "idle_right" and _flip_h
+	else:
+		_sprite.flip_h = _flip_h
+
+	if _sprite.sprite_frames.has_animation(full_name):
+		if _sprite.animation != full_name or (painted_animation_frames != null and not _sprite.is_playing()):
+			_sprite.play(full_name)

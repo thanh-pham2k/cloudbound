@@ -64,9 +64,9 @@ All 45 extracted PNGs loaded as Godot textures with the manifest dimensions. The
 | B07 | `hero_health_mana_bar` | 01–06 · live HP and XP |
 | B07 | `enemy_health_bar` | 02–04 · live enemy HP |
 | B07 | `dragon_boss_health_bar` | 05 · boss health and phase |
-| B07 | `ability_button_top` | 01–06 · Q cooldown indicator |
+| B07 | `ability_button_top` | 01–06 · K cooldown indicator |
 | B07 | `ability_button_lower_left` | 01–06 · Space cooldown indicator |
-| B07 | `ability_button_lower_right` | 01–06 · E cooldown indicator |
+| B07 | `ability_button_lower_right` | 01–06 · L cooldown indicator |
 | B07 | `virtual_joystick` | Hidden · no existing touch movement binding |
 
 ## Implementation and verification

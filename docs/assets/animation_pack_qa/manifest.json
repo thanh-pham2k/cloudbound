@@ -1,0 +1,1703 @@
+{
+  "archive": "Cloudbound_Generated_Assets.zip",
+  "archive_sha256": "61ff4148662301574734e297dab1cf6679d9883c94f039c2ee0cfabf8d849134",
+  "gate": "PARTIAL_READY",
+  "image_count": 54,
+  "assets": [
+    {
+      "index": 0,
+      "file": "asset_sheets/a_clean_asset_sheet_on_a_transparent_background_p.png",
+      "format": "PNG",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "classification": "environment",
+      "identity": "Sky and clouds",
+      "action": "Static backdrop and parallax set",
+      "facing": null,
+      "visible_counts_by_row": [
+        2,
+        2
+      ],
+      "observed_count": 4,
+      "equal_cells_verified": false,
+      "qa_status": "EXISTING_EQUIVALENT",
+      "notes": "Corresponding static art is already available in assets/processed.",
+      "sha256": "f1998b4317124c4c5352684a963f45248a4bd1324b012693e7f208b9bf3cca97"
+    },
+    {
+      "index": 1,
+      "file": "asset_sheets/a_clean_graphic_sprite_sheet_8_frames_2_rows_4.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "enemy_animation",
+      "identity": "Stone Golem",
+      "action": "Walk",
+      "facing": "right 3/4",
+      "visible_counts_by_row": [
+        4,
+        4
+      ],
+      "observed_count": 8,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "4073c5a2fb68e46a1f9f136b13b1e498cbcbdecf49b07bada9ed745331b40319"
+    },
+    {
+      "index": 2,
+      "file": "asset_sheets/a_clean_illustration_sheet_on_transparent_checkerb.png",
+      "format": "PNG",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "classification": "architecture",
+      "identity": "Bridges and architecture",
+      "action": "Static props",
+      "facing": null,
+      "visible_counts_by_row": [
+        2,
+        2,
+        2
+      ],
+      "observed_count": 6,
+      "equal_cells_verified": false,
+      "qa_status": "EXISTING_EQUIVALENT",
+      "notes": "Corresponding static art is already available in assets/processed.",
+      "sha256": "93ce5ac11972a0d9043c86870a079249b254fcdb5f4706d00d57c7e0d9b00e94"
+    },
+    {
+      "index": 3,
+      "file": "asset_sheets/a_clean_png_like_sprite_sheet_on_a_transparent_che.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "combat_vfx",
+      "identity": "Red rune circle",
+      "action": "AoE pulse",
+      "facing": null,
+      "visible_counts_by_row": [
+        6
+      ],
+      "observed_count": 6,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "522289e6aae6d2315b03effc24f1193fba87a24afc3db79659c5e226e59c2eb6"
+    },
+    {
+      "index": 4,
+      "file": "asset_sheets/a_clean_png_sprite_sheet_on_a_transparent_checkerb.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "character_animation",
+      "identity": "Wukong",
+      "action": "Idle",
+      "facing": "right 3/4",
+      "visible_counts_by_row": [
+        4
+      ],
+      "observed_count": 4,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "350ba985082075d59b35a20f663ec6e78d15852872953b520a07eba0ea465790"
+    },
+    {
+      "index": 5,
+      "file": "asset_sheets/a_clean_png_sprite_sheet_on_transparent_checkerboa.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "character_animation",
+      "identity": "Wukong",
+      "action": "Death",
+      "facing": "right 3/4",
+      "visible_counts_by_row": [
+        4,
+        4
+      ],
+      "observed_count": 8,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "2049ccef427533a18c479cd53ad9d79e878e72c457267ae73d7185450ac77fce"
+    },
+    {
+      "index": 6,
+      "file": "asset_sheets/a_clean_png_sprite_sheet_style_image_on_a_transpar.png",
+      "format": "PNG",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "classification": "combat_vfx",
+      "identity": "Portal, chest and spell effects",
+      "action": "Static effect and prop set",
+      "facing": null,
+      "visible_counts_by_row": [
+        3,
+        3
+      ],
+      "observed_count": 6,
+      "equal_cells_verified": false,
+      "qa_status": "EXISTING_EQUIVALENT",
+      "notes": "Corresponding static art is already available in assets/processed.",
+      "sha256": "09c747c343312e8ac121faf94d65be0918ff1b6adba946fddaee9c3c03014789"
+    },
+    {
+      "index": 7,
+      "file": "asset_sheets/a_clean_png_sprite_sheet_ui_asset_sheet_on_a_tra.png",
+      "format": "PNG",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "classification": "ui",
+      "identity": "Fantasy HUD",
+      "action": "Static interface groups",
+      "facing": null,
+      "visible_counts_by_row": [
+        3,
+        3
+      ],
+      "observed_count": 6,
+      "equal_cells_verified": false,
+      "qa_status": "EXISTING_EQUIVALENT",
+      "notes": "Corresponding static art is already available in assets/processed.",
+      "sha256": "cfda38a8a7f54d7ae61acd8f4d57915ca537bb384baf9a4a4f66cb5229b3ee47"
+    },
+    {
+      "index": 8,
+      "file": "asset_sheets/a_clean_sprite_sheet_on_a_transparent_checkerboard.png",
+      "format": "PNG",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "enemy_animation",
+      "identity": "Stone Golem",
+      "action": "Idle / walk / punch / hurt / death",
+      "facing": "right 3/4",
+      "visible_counts_by_row": [
+        4,
+        8,
+        6,
+        4,
+        8
+      ],
+      "observed_count": 30,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use. Mixed sequences and nonuniform spacing prevent a single global grid.",
+      "sha256": "a23360983ebd4b123614c0d90258653374033d64a97eb415871f11318db6e827"
+    },
+    {
+      "index": 9,
+      "file": "asset_sheets/a_clean_sprite_sheet_six_evenly_spaced_frames_in.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "enemy_animation",
+      "identity": "Stone Golem",
+      "action": "Punch",
+      "facing": "right 3/4",
+      "visible_counts_by_row": [
+        6
+      ],
+      "observed_count": 6,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "a27ddee6976358193fcd957143daca4f2261857a53f837d248e9d039fbe44743"
+    },
+    {
+      "index": 10,
+      "file": "asset_sheets/a_clean_spritesheet_image_on_a_transparent_checker.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "classification": "character_animation",
+      "identity": "Wukong",
+      "action": "Idle",
+      "facing": "front/down",
+      "visible_counts_by_row": [
+        4
+      ],
+      "observed_count": 4,
+      "equal_cells_verified": false,
+      "qa_status": "CANDIDATE",
+      "notes": "Visible interiors are separated by true alpha. Low-alpha sheet residue and body anchors still need frame-level review.",
+      "sha256": "30f3f1e3fedf3972cfcee52056390d2292e21374fea113c626ba402b7fcd0201"
+    },
+    {
+      "index": 11,
+      "file": "asset_sheets/a_clean_transparent_background_asset_sheet_no_tex.png",
+      "format": "PNG",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "classification": "environment",
+      "identity": "Terrain and platforms",
+      "action": "Static terrain set",
+      "facing": null,
+      "visible_counts_by_row": [
+        2,
+        2,
+        2
+      ],
+      "observed_count": 6,
+      "equal_cells_verified": false,
+      "qa_status": "EXISTING_EQUIVALENT",
+      "notes": "Corresponding static art is already available in assets/processed.",
+      "sha256": "e1bcd1d6631a75b4afb521c93e2eb49cac5cf00a0ef14890f0fb81b047fdb35b"
+    },
+    {
+      "index": 12,
+      "file": "asset_sheets/a_clean_transparent_background_checker_transparen.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "boss_animation",
+      "identity": "Guardian",
+      "action": "Death",
+      "facing": "front 3/4",
+      "visible_counts_by_row": [
+        4,
+        4
+      ],
+      "observed_count": 8,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "4732199a0ee86736ec04651c9fbc778cd1e1e4978b6f2d60eaa6f022ad3c0ee0"
+    },
+    {
+      "index": 13,
+      "file": "asset_sheets/a_clean_transparent_background_checkerboard_alpha.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "combat_vfx",
+      "identity": "Cyan projectile",
+      "action": "Projectile sequence",
+      "facing": "left",
+      "visible_counts_by_row": [
+        6
+      ],
+      "observed_count": 6,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "ee5f84674921695a28e8482532281ab55024a5e1d9f1fb412f7a3cc31e701a0c"
+    },
+    {
+      "index": 14,
+      "file": "asset_sheets/a_clean_transparent_background_checkerboard_style.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "character_animation",
+      "identity": "Wukong",
+      "action": "Staff attack with embedded slash",
+      "facing": "right 3/4",
+      "visible_counts_by_row": [
+        6
+      ],
+      "observed_count": 6,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "f1307dbbb24ef75e13cb6a97d0c80fefd781e43fdfa248fb13b510b6c8d76cbe"
+    },
+    {
+      "index": 15,
+      "file": "asset_sheets/a_clean_transparent_background_game_asset_sheet.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "enemy_animation",
+      "identity": "Green Cloud Spirit and Blue-robed Ranged Demon",
+      "action": "Each character: idle 4, walk 6, attack 6, hurt 4, death 6",
+      "facing": "right 3/4",
+      "visible_counts_by_row": [
+        10,
+        16,
+        10,
+        16
+      ],
+      "observed_count": 52,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use. Mixed sequences and nonuniform spacing prevent a single global grid.",
+      "sha256": "6d353d4c3b5c77912f09e527dbc8fdcc2e853f5499dd95a91155ebdafd588c79"
+    },
+    {
+      "index": 16,
+      "file": "asset_sheets/a_clean_transparent_background_illustration_sheet.png",
+      "format": "PNG",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "classification": "character_static",
+      "identity": "Wukong and enemy roster",
+      "action": "Six static poses",
+      "facing": null,
+      "visible_counts_by_row": [
+        3,
+        3
+      ],
+      "observed_count": 6,
+      "equal_cells_verified": false,
+      "qa_status": "EXISTING_EQUIVALENT",
+      "notes": "Corresponding static art is already available in assets/processed.",
+      "sha256": "06c211199e2eaa66e1569ff93045d4c3a5dcc5bca9485cc59640fea9ef3f932e"
+    },
+    {
+      "index": 17,
+      "file": "asset_sheets/a_clean_transparent_background_image_with_four_seq.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "enemy_animation",
+      "identity": "Green Cloud Spirit",
+      "action": "Idle",
+      "facing": "right 3/4",
+      "visible_counts_by_row": [
+        4
+      ],
+      "observed_count": 4,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "1ef75d538e997e93293227b596788fd72b65b05c893d2227239b7cb0ba2520d9"
+    },
+    {
+      "index": 18,
+      "file": "asset_sheets/a_clean_transparent_background_png_sprite_sheet.png",
+      "format": "PNG",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "boss_animation",
+      "identity": "Guardian",
+      "action": "Cyan charged slam",
+      "facing": "front 3/4",
+      "visible_counts_by_row": [
+        4,
+        4
+      ],
+      "observed_count": 8,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "90b06afac95e503b2d8e3b97eb80609c99b3dadfb27946ee555c4a38ac4980e2"
+    },
+    {
+      "index": 19,
+      "file": "asset_sheets/a_clean_transparent_background_sprite_sheet_8_fra.png",
+      "format": "PNG",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "character_animation",
+      "identity": "Wukong",
+      "action": "Walk/run",
+      "facing": "rear/up",
+      "visible_counts_by_row": [
+        4,
+        4
+      ],
+      "observed_count": 8,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "91423e736b346cb6adb13a8b0f52c49e2eb911b3d6ab25cb63b967f5bac50b11"
+    },
+    {
+      "index": 20,
+      "file": "asset_sheets/a_clean_transparent_background_sprite_sheet_a_hor.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "character_animation",
+      "identity": "Wukong",
+      "action": "Walk/run",
+      "facing": "right",
+      "visible_counts_by_row": [
+        8
+      ],
+      "observed_count": 8,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "f8e25aadea6e5b0c83cd973ce142a347e0ee57a90b074e4851ffa6cfc4d424d3"
+    },
+    {
+      "index": 21,
+      "file": "asset_sheets/a_clean_transparent_background_sprite_sheet_a_row.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "character_animation",
+      "identity": "Wukong",
+      "action": "Walk/run variant",
+      "facing": "right",
+      "visible_counts_by_row": [
+        8
+      ],
+      "observed_count": 8,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "3f7feef8c95528185a78642ea733e70c51eb8844a80c978f00d6cbd8b9a463b2"
+    },
+    {
+      "index": 22,
+      "file": "asset_sheets/a_clean_transparent_background_sprite_sheet_eight.png",
+      "format": "PNG",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "boss_animation",
+      "identity": "Guardian",
+      "action": "Overhead slam",
+      "facing": "front/down",
+      "visible_counts_by_row": [
+        4,
+        4
+      ],
+      "observed_count": 8,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "bea8f0488dfde40f55bf80d5f18883400120963fa869db200f8883e15c18166a"
+    },
+    {
+      "index": 23,
+      "file": "asset_sheets/a_clean_transparent_background_sprite_sheet_four.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "enemy_animation",
+      "identity": "Green Cloud Spirit",
+      "action": "Hurt",
+      "facing": "right 3/4",
+      "visible_counts_by_row": [
+        4
+      ],
+      "observed_count": 4,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "05ab1354ef669d985c22f73079c52e91bb25dcaa7beb057f300f470b02fbe34f"
+    },
+    {
+      "index": 24,
+      "file": "asset_sheets/a_clean_transparent_background_sprite_sheet_of_a_p.png",
+      "format": "PNG",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "enemy_animation",
+      "identity": "Pig-like Melee Demon",
+      "action": "Idle / walk / attack / hurt / death",
+      "facing": "right 3/4",
+      "visible_counts_by_row": [
+        3,
+        8,
+        6,
+        4,
+        8
+      ],
+      "observed_count": 29,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use. Three idle and eight death poses observed. Mixed sequences and nonuniform spacing prevent a single global grid.",
+      "sha256": "514b7e98d224a2e9d0e7fe1d17279437871330273a473266636a1d9d115e1b6c"
+    },
+    {
+      "index": 25,
+      "file": "asset_sheets/a_clean_transparent_background_sprite_sheet_png.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "character_animation",
+      "identity": "Wukong",
+      "action": "Dash",
+      "facing": "right",
+      "visible_counts_by_row": [
+        6
+      ],
+      "observed_count": 6,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "6c85ee1c9820440064bec7cd15bdcf7059db4b6d1ef7d2899f6e00a765e9286e"
+    },
+    {
+      "index": 26,
+      "file": "asset_sheets/a_clean_transparent_background_sprite_sheet_showin.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "classification": "character_animation",
+      "identity": "Wukong",
+      "action": "Walk/run",
+      "facing": "front/down",
+      "visible_counts_by_row": [
+        8
+      ],
+      "observed_count": 8,
+      "equal_cells_verified": false,
+      "qa_status": "CANDIDATE",
+      "notes": "Visible interiors are separated by true alpha. Low-alpha sheet residue and body anchors still need frame-level review. Final visible silhouette reaches within one pixel of the right edge at alpha above 8.",
+      "sha256": "e8ffbada7971238fa3be9fc835fac1d52445ad6497f610eeb07162d7dd3dcf9d"
+    },
+    {
+      "index": 27,
+      "file": "asset_sheets/a_clean_transparent_background_sprite_sheet_six_e.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "pickup",
+      "identity": "Red health orb",
+      "action": "Orb pulse",
+      "facing": null,
+      "visible_counts_by_row": [
+        6
+      ],
+      "observed_count": 6,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "5aa6dc0296bbeddf4c133165f1c9469c72126090a7855f5500d900fd933ce657"
+    },
+    {
+      "index": 28,
+      "file": "asset_sheets/a_clean_transparent_background_sprite_sheet_style.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "enemy_animation",
+      "identity": "Green Cloud Spirit",
+      "action": "Ranged cast",
+      "facing": "right 3/4",
+      "visible_counts_by_row": [
+        6
+      ],
+      "observed_count": 6,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "3902d5e27188ddd34cfc687cc54ca62538b3c8dabf498babbb6f782d55413177"
+    },
+    {
+      "index": 29,
+      "file": "asset_sheets/a_clean_transparent_background_sprite_sheet_with_f.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "boss_animation",
+      "identity": "Guardian",
+      "action": "Hurt or recoil candidate",
+      "facing": "front 3/4",
+      "visible_counts_by_row": [
+        4
+      ],
+      "observed_count": 4,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "9d42e8653238c86d1c2ec6e5fda75f8a6f6f4924ece9dc41eaa30febc2ff86a4"
+    },
+    {
+      "index": 30,
+      "file": "asset_sheets/a_clean_transparent_background_sprite_sheet_with_s.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "combat_vfx",
+      "identity": "Cyan ground impact",
+      "action": "Impact sequence",
+      "facing": null,
+      "visible_counts_by_row": [
+        6
+      ],
+      "observed_count": 6,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "04b08009229567060213ec79fab94b8d9eeaa445b303c6c44377b6057527a39a"
+    },
+    {
+      "index": 31,
+      "file": "asset_sheets/a_clean_transparent_background_spritesheet_a_hori.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "combat_vfx",
+      "identity": "Cyan stone portal",
+      "action": "Portal swirl",
+      "facing": null,
+      "visible_counts_by_row": [
+        8
+      ],
+      "observed_count": 8,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "e3d30d27bd985dfb03abad57689fe5ceabec7aee84196b2bc18b96fcbe25a6f3"
+    },
+    {
+      "index": 32,
+      "file": "asset_sheets/a_clean_transparent_checkerboard_background_imag.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "character_animation",
+      "identity": "Wukong",
+      "action": "Idle variant",
+      "facing": "front/down",
+      "visible_counts_by_row": [
+        4
+      ],
+      "observed_count": 4,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "56b09361834916174b4adc5f0b9d2bc21f14649ffc223451c8951c3455f755c1"
+    },
+    {
+      "index": 33,
+      "file": "asset_sheets/a_clean_transparent_png_sprite_sheet_8_frames_2.png",
+      "format": "PNG",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "character_animation",
+      "identity": "Wukong",
+      "action": "Walk/run variant",
+      "facing": "front/down",
+      "visible_counts_by_row": [
+        4,
+        4
+      ],
+      "observed_count": 8,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "042683673e7c081fe46520b9e5c2eb246eb238c71cf3e9ba2abc9b36c6b10b16"
+    },
+    {
+      "index": 34,
+      "file": "asset_sheets/a_clean_transparent_png_sprite_sheet_8_sequential.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "character_animation",
+      "identity": "Wukong",
+      "action": "Walk/run variant",
+      "facing": "rear/up",
+      "visible_counts_by_row": [
+        8
+      ],
+      "observed_count": 8,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "f19cad8857d3eac55d6720b999b912a1c2797452e81c28a5f3a94716cf17c099"
+    },
+    {
+      "index": 35,
+      "file": "asset_sheets/a_clean_transparent_png_sprite_sheet_four_sequent.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "character_animation",
+      "identity": "Wukong",
+      "action": "Hurt or recoil candidate",
+      "facing": "right 3/4",
+      "visible_counts_by_row": [
+        4
+      ],
+      "observed_count": 4,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "4f9757a5f685a4989a6007e1cea0699be7387db3fadf29568f3bf51d6967ba7c"
+    },
+    {
+      "index": 36,
+      "file": "asset_sheets/a_clean_transparent_png_sprite_strip_showing_6_seq.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "enemy_animation",
+      "identity": "Green Cloud Spirit",
+      "action": "Death and dissipation",
+      "facing": "right 3/4",
+      "visible_counts_by_row": [
+        6
+      ],
+      "observed_count": 6,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "25685f592d8b3e8d05925e1dbe5d471cf21024d0a8fb620b128eabbd9f7d8da2"
+    },
+    {
+      "index": 37,
+      "file": "asset_sheets/a_clean_transparent_png_spritesheet_no_background.png",
+      "format": "PNG",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "classification": "environment",
+      "identity": "Nature and decorations",
+      "action": "Static prop set",
+      "facing": null,
+      "visible_counts_by_row": [
+        3,
+        3,
+        3
+      ],
+      "observed_count": 9,
+      "equal_cells_verified": false,
+      "qa_status": "EXISTING_EQUIVALENT",
+      "notes": "Corresponding static art is already available in assets/processed.",
+      "sha256": "7376e63c571c06b75d7773470ae6423d386e0dc801dcf63b1dd3b6f3322ab5a7"
+    },
+    {
+      "index": 38,
+      "file": "asset_sheets/a_clean_transparent_png_spritesheet_on_a_checkerbo.png",
+      "format": "PNG",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "combat_vfx_and_pickups",
+      "identity": "Gold slash, cyan projectile, portal, cyan impact, red rune, health and loot",
+      "action": "Seven separate actions",
+      "facing": null,
+      "visible_counts_by_row": [
+        6,
+        6,
+        8,
+        6,
+        6,
+        6,
+        6
+      ],
+      "observed_count": 44,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use. Mixed sequences and nonuniform spacing prevent a single global grid.",
+      "sha256": "8d20a71f6bf1e727d6f91467c0786a8c5f6a3a325ddc0833ddd0227d2cae3a16"
+    },
+    {
+      "index": 39,
+      "file": "asset_sheets/a_transparent_background_sprite_sheet_a_row_of_8.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "character_animation",
+      "identity": "Wukong",
+      "action": "Walk/run variant",
+      "facing": "front/down",
+      "visible_counts_by_row": [
+        8
+      ],
+      "observed_count": 8,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "112319f83588f01ba1b15eb126911add189e51deac724142e6aaffe30fb96554"
+    },
+    {
+      "index": 40,
+      "file": "asset_sheets/a_transparent_background_sprite_sheet_with_four_se.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "character_animation",
+      "identity": "Wukong",
+      "action": "Idle",
+      "facing": "rear/up",
+      "visible_counts_by_row": [
+        4
+      ],
+      "observed_count": 4,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "7979fc641fc164f00949e5e118cb9252a5b63f4a86e9099969c0558ce81bc95b"
+    },
+    {
+      "index": 41,
+      "file": "asset_sheets/a_transparent_png_sprite_sheet_four_evenly_spaced.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "character_animation",
+      "identity": "Wukong",
+      "action": "Idle variant",
+      "facing": "rear/up",
+      "visible_counts_by_row": [
+        4
+      ],
+      "observed_count": 4,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "3ddf153cec90e433261a2675e95e516891bbf607bde1929e520771f4b4a24e9f"
+    },
+    {
+      "index": 42,
+      "file": "asset_sheets/a_transparent_png_sprite_sheet_with_four_evenly_sp.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "classification": "character_animation",
+      "identity": "Wukong",
+      "action": "Idle",
+      "facing": "right 3/4",
+      "visible_counts_by_row": [
+        4
+      ],
+      "observed_count": 4,
+      "equal_cells_verified": false,
+      "qa_status": "CANDIDATE",
+      "notes": "Visible interiors are separated by true alpha. Low-alpha sheet residue and body anchors still need frame-level review.",
+      "sha256": "25cfdcf9c479851fafe09ec54af10ea7b82d2f79c9a84d9e67688869e60f7e07"
+    },
+    {
+      "index": 43,
+      "file": "asset_sheets/a_wide_horizontal_png_sprite_sheet_on_transparent.png",
+      "format": "PNG",
+      "width": 2172,
+      "height": 724,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "enemy_animation",
+      "identity": "Green Cloud Spirit",
+      "action": "Locomotion",
+      "facing": "right 3/4",
+      "visible_counts_by_row": [
+        6
+      ],
+      "observed_count": 6,
+      "equal_cells_verified": false,
+      "qa_status": "REVIEW_REQUIRED",
+      "notes": "Opaque RGB with baked checkerboard. Mask, matte and motion QA required before use.",
+      "sha256": "35c9f96fba89782812c82b4fd1139639b630751b8560c64fd82c3a1fd363d0f9"
+    },
+    {
+      "index": 44,
+      "file": "reference_screenshots/a_colorful_detailed_2.5d_isometric_fantasy_rpg_gam.png",
+      "format": "PNG",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "reference",
+      "identity": "Village panorama",
+      "action": "Reference only",
+      "facing": null,
+      "visible_counts_by_row": [],
+      "observed_count": null,
+      "equal_cells_verified": false,
+      "qa_status": "REFERENCE_ONLY",
+      "notes": "Full-scene visual reference.",
+      "sha256": "476f9c875ae89cb11f28b66b486758c0ac88231133c552a86172c83c27362d08"
+    },
+    {
+      "index": 45,
+      "file": "reference_screenshots/a_detailed_isometric_fantasy_game_scene_for_an_iso.png",
+      "format": "PNG",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "reference",
+      "identity": "Cloud Outskirts variant A",
+      "action": "Reference only",
+      "facing": null,
+      "visible_counts_by_row": [],
+      "observed_count": null,
+      "equal_cells_verified": false,
+      "qa_status": "REFERENCE_ONLY",
+      "notes": "Full-scene visual reference.",
+      "sha256": "80ba901d412c6c5e19fd58b3e370993f2b2215b0f93f77a50cac7e32017df1a4"
+    },
+    {
+      "index": 46,
+      "file": "reference_screenshots/a_detailed_vibrant_hand_painted_isometric_rpg_gam.png",
+      "format": "PNG",
+      "width": 1670,
+      "height": 941,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "reference",
+      "identity": "Cloud Outskirts variant B",
+      "action": "Reference only",
+      "facing": null,
+      "visible_counts_by_row": [],
+      "observed_count": null,
+      "equal_cells_verified": false,
+      "qa_status": "REFERENCE_ONLY",
+      "notes": "Full-scene visual reference.",
+      "sha256": "0a76b4e6e67fae3d15039d4cae69a54ffb4fdd1ecd1c652398253a415dd16989"
+    },
+    {
+      "index": 47,
+      "file": "reference_screenshots/a_single_composite_game_concept_image_a_colorful.png",
+      "format": "PNG",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "reference",
+      "identity": "Six-scene concept board",
+      "action": "Reference only",
+      "facing": null,
+      "visible_counts_by_row": [],
+      "observed_count": null,
+      "equal_cells_verified": false,
+      "qa_status": "REFERENCE_ONLY",
+      "notes": "Full-scene visual reference.",
+      "sha256": "53d93338b334c9c8d98b45ad1a00c1b51e5dcae843d1b7c06d70c8753d42e16b"
+    },
+    {
+      "index": 48,
+      "file": "reference_screenshots/a_vibrant_detailed_2.5d_isometric_action_rpg_boss.png",
+      "format": "PNG",
+      "width": 1671,
+      "height": 941,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "reference",
+      "identity": "Guardian Arena",
+      "action": "Reference only",
+      "facing": null,
+      "visible_counts_by_row": [],
+      "observed_count": null,
+      "equal_cells_verified": false,
+      "qa_status": "REFERENCE_ONLY",
+      "notes": "Full-scene visual reference.",
+      "sha256": "0b753bdba9775ceafb874fa208e82e5363a166b15a620b81312db79fb1e0ee69"
+    },
+    {
+      "index": 49,
+      "file": "reference_screenshots/a_vibrant_detailed_2.5d_isometric_game_scene_in_t.png",
+      "format": "PNG",
+      "width": 1671,
+      "height": 941,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "reference",
+      "identity": "Cloud Bridge",
+      "action": "Reference only",
+      "facing": null,
+      "visible_counts_by_row": [],
+      "observed_count": null,
+      "equal_cells_verified": false,
+      "qa_status": "REFERENCE_ONLY",
+      "notes": "Full-scene visual reference.",
+      "sha256": "b3b5322e65be3d8bdefd87d0956a2ed243cdd053cc94db42a09f16b443a56224"
+    },
+    {
+      "index": 50,
+      "file": "reference_screenshots/a_vibrant_detailed_isometric_2.5d_game_scene_in_t.png",
+      "format": "PNG",
+      "width": 1670,
+      "height": 941,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "reference",
+      "identity": "Gate of Heaven",
+      "action": "Reference only",
+      "facing": null,
+      "visible_counts_by_row": [],
+      "observed_count": null,
+      "equal_cells_verified": false,
+      "qa_status": "REFERENCE_ONLY",
+      "notes": "Full-scene visual reference.",
+      "sha256": "7ed5825f7a0b44759ca3f546b0a0d0ba2cab90e8465ea9a29702014cd7ce9460"
+    },
+    {
+      "index": 51,
+      "file": "reference_screenshots/a_vibrant_detailed_isometric_fantasy_rpg_battle_s.png",
+      "format": "PNG",
+      "width": 1671,
+      "height": 941,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "reference",
+      "identity": "Courtyard encounter",
+      "action": "Reference only",
+      "facing": null,
+      "visible_counts_by_row": [],
+      "observed_count": null,
+      "equal_cells_verified": false,
+      "qa_status": "REFERENCE_ONLY",
+      "notes": "Full-scene visual reference.",
+      "sha256": "c90574ecf4fdf0059040963a709b17270de25b9b5d99945f664eb179ee871bf0"
+    },
+    {
+      "index": 52,
+      "file": "reference_screenshots/image(20261116-124046).png",
+      "format": "PNG",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGBA",
+      "alpha_range": [
+        255,
+        255
+      ],
+      "classification": "reference",
+      "identity": "Cloud Outskirts target candidate",
+      "action": "Reference only",
+      "facing": null,
+      "visible_counts_by_row": [],
+      "observed_count": null,
+      "equal_cells_verified": false,
+      "qa_status": "REFERENCE_ONLY",
+      "notes": "Full-scene visual reference.",
+      "sha256": "01f4b44eb27df3976c734ae14f19b97aeb52bd27901f2affa65d2b4f78e21f23"
+    },
+    {
+      "index": 53,
+      "file": "reference_screenshots/wide_fantasy_game_screenshot_bright_colorful_isom.png",
+      "format": "PNG",
+      "width": 1672,
+      "height": 941,
+      "mode": "RGB",
+      "alpha_range": null,
+      "classification": "reference",
+      "identity": "Courtyard panorama",
+      "action": "Reference only",
+      "facing": null,
+      "visible_counts_by_row": [],
+      "observed_count": null,
+      "equal_cells_verified": false,
+      "qa_status": "REFERENCE_ONLY",
+      "notes": "Full-scene visual reference.",
+      "sha256": "397ad076b28e848e8ca3bbc15f33230c90e99021d8297383e57694b4195641cb"
+    }
+  ],
+  "animations": [
+    {
+      "source_id": 1,
+      "identity": "Stone Golem",
+      "animation": "Walk",
+      "facing": "right 3/4",
+      "observed_frames": 8,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 3,
+      "identity": "Red rune circle",
+      "animation": "AoE pulse",
+      "facing": null,
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 4,
+      "identity": "Wukong",
+      "animation": "Idle",
+      "facing": "right 3/4",
+      "observed_frames": 4,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 5,
+      "identity": "Wukong",
+      "animation": "Death",
+      "facing": "right 3/4",
+      "observed_frames": 8,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 8,
+      "identity": "Stone Golem",
+      "animation": "idle",
+      "facing": "right 3/4",
+      "observed_frames": 4,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 8,
+      "identity": "Stone Golem",
+      "animation": "walk",
+      "facing": "right 3/4",
+      "observed_frames": 8,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 8,
+      "identity": "Stone Golem",
+      "animation": "punch",
+      "facing": "right 3/4",
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 8,
+      "identity": "Stone Golem",
+      "animation": "hurt",
+      "facing": "right 3/4",
+      "observed_frames": 4,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 8,
+      "identity": "Stone Golem",
+      "animation": "death",
+      "facing": "right 3/4",
+      "observed_frames": 8,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 9,
+      "identity": "Stone Golem",
+      "animation": "Punch",
+      "facing": "right 3/4",
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 10,
+      "identity": "Wukong",
+      "animation": "idle_down",
+      "facing": "front/down",
+      "observed_frames": 4,
+      "status": "READY"
+    },
+    {
+      "source_id": 12,
+      "identity": "Guardian",
+      "animation": "Death",
+      "facing": "front 3/4",
+      "observed_frames": 8,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 13,
+      "identity": "Cyan projectile",
+      "animation": "Projectile sequence",
+      "facing": "left",
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 14,
+      "identity": "Wukong",
+      "animation": "Staff attack with embedded slash",
+      "facing": "right 3/4",
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 15,
+      "identity": "Green Cloud Spirit and Blue-robed Ranged Demon",
+      "animation": "Green Cloud Spirit: idle",
+      "facing": "right 3/4",
+      "observed_frames": 4,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 15,
+      "identity": "Green Cloud Spirit and Blue-robed Ranged Demon",
+      "animation": "Green Cloud Spirit: walk",
+      "facing": "right 3/4",
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 15,
+      "identity": "Green Cloud Spirit and Blue-robed Ranged Demon",
+      "animation": "Green Cloud Spirit: attack",
+      "facing": "right 3/4",
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 15,
+      "identity": "Green Cloud Spirit and Blue-robed Ranged Demon",
+      "animation": "Green Cloud Spirit: hurt",
+      "facing": "right 3/4",
+      "observed_frames": 4,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 15,
+      "identity": "Green Cloud Spirit and Blue-robed Ranged Demon",
+      "animation": "Green Cloud Spirit: death",
+      "facing": "right 3/4",
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 15,
+      "identity": "Green Cloud Spirit and Blue-robed Ranged Demon",
+      "animation": "Blue-robed Ranged Demon: idle",
+      "facing": "right 3/4",
+      "observed_frames": 4,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 15,
+      "identity": "Green Cloud Spirit and Blue-robed Ranged Demon",
+      "animation": "Blue-robed Ranged Demon: walk",
+      "facing": "right 3/4",
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 15,
+      "identity": "Green Cloud Spirit and Blue-robed Ranged Demon",
+      "animation": "Blue-robed Ranged Demon: attack",
+      "facing": "right 3/4",
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 15,
+      "identity": "Green Cloud Spirit and Blue-robed Ranged Demon",
+      "animation": "Blue-robed Ranged Demon: hurt",
+      "facing": "right 3/4",
+      "observed_frames": 4,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 15,
+      "identity": "Green Cloud Spirit and Blue-robed Ranged Demon",
+      "animation": "Blue-robed Ranged Demon: death",
+      "facing": "right 3/4",
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 17,
+      "identity": "Green Cloud Spirit",
+      "animation": "Idle",
+      "facing": "right 3/4",
+      "observed_frames": 4,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 18,
+      "identity": "Guardian",
+      "animation": "Cyan charged slam",
+      "facing": "front 3/4",
+      "observed_frames": 8,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 19,
+      "identity": "Wukong",
+      "animation": "Walk/run",
+      "facing": "rear/up",
+      "observed_frames": 8,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 20,
+      "identity": "Wukong",
+      "animation": "Walk/run",
+      "facing": "right",
+      "observed_frames": 8,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 21,
+      "identity": "Wukong",
+      "animation": "Walk/run variant",
+      "facing": "right",
+      "observed_frames": 8,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 22,
+      "identity": "Guardian",
+      "animation": "Overhead slam",
+      "facing": "front/down",
+      "observed_frames": 8,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 23,
+      "identity": "Green Cloud Spirit",
+      "animation": "Hurt",
+      "facing": "right 3/4",
+      "observed_frames": 4,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 24,
+      "identity": "Pig-like Melee Demon",
+      "animation": "idle",
+      "facing": "right 3/4",
+      "observed_frames": 3,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 24,
+      "identity": "Pig-like Melee Demon",
+      "animation": "walk",
+      "facing": "right 3/4",
+      "observed_frames": 8,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 24,
+      "identity": "Pig-like Melee Demon",
+      "animation": "attack",
+      "facing": "right 3/4",
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 24,
+      "identity": "Pig-like Melee Demon",
+      "animation": "hurt",
+      "facing": "right 3/4",
+      "observed_frames": 4,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 24,
+      "identity": "Pig-like Melee Demon",
+      "animation": "death",
+      "facing": "right 3/4",
+      "observed_frames": 8,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 25,
+      "identity": "Wukong",
+      "animation": "Dash",
+      "facing": "right",
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 26,
+      "identity": "Wukong",
+      "animation": "walk_down",
+      "facing": "front/down",
+      "observed_frames": 8,
+      "status": "READY"
+    },
+    {
+      "source_id": 27,
+      "identity": "Red health orb",
+      "animation": "Orb pulse",
+      "facing": null,
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 28,
+      "identity": "Green Cloud Spirit",
+      "animation": "Ranged cast",
+      "facing": "right 3/4",
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 29,
+      "identity": "Guardian",
+      "animation": "Hurt or recoil candidate",
+      "facing": "front 3/4",
+      "observed_frames": 4,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 30,
+      "identity": "Cyan ground impact",
+      "animation": "Impact sequence",
+      "facing": null,
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 31,
+      "identity": "Cyan stone portal",
+      "animation": "Portal swirl",
+      "facing": null,
+      "observed_frames": 8,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 32,
+      "identity": "Wukong",
+      "animation": "Idle variant",
+      "facing": "front/down",
+      "observed_frames": 4,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 33,
+      "identity": "Wukong",
+      "animation": "Walk/run variant",
+      "facing": "front/down",
+      "observed_frames": 8,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 34,
+      "identity": "Wukong",
+      "animation": "Walk/run variant",
+      "facing": "rear/up",
+      "observed_frames": 8,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 35,
+      "identity": "Wukong",
+      "animation": "Hurt or recoil candidate",
+      "facing": "right 3/4",
+      "observed_frames": 4,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 36,
+      "identity": "Green Cloud Spirit",
+      "animation": "Death and dissipation",
+      "facing": "right 3/4",
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 38,
+      "identity": "Gold slash, cyan projectile, portal, cyan impact, red rune, health and loot",
+      "animation": "staff slash",
+      "facing": null,
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 38,
+      "identity": "Gold slash, cyan projectile, portal, cyan impact, red rune, health and loot",
+      "animation": "projectile",
+      "facing": null,
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 38,
+      "identity": "Gold slash, cyan projectile, portal, cyan impact, red rune, health and loot",
+      "animation": "portal",
+      "facing": null,
+      "observed_frames": 8,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 38,
+      "identity": "Gold slash, cyan projectile, portal, cyan impact, red rune, health and loot",
+      "animation": "impact",
+      "facing": null,
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 38,
+      "identity": "Gold slash, cyan projectile, portal, cyan impact, red rune, health and loot",
+      "animation": "AoE warning",
+      "facing": null,
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 38,
+      "identity": "Gold slash, cyan projectile, portal, cyan impact, red rune, health and loot",
+      "animation": "health orb",
+      "facing": null,
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 38,
+      "identity": "Gold slash, cyan projectile, portal, cyan impact, red rune, health and loot",
+      "animation": "loot orb",
+      "facing": null,
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 39,
+      "identity": "Wukong",
+      "animation": "Walk/run variant",
+      "facing": "front/down",
+      "observed_frames": 8,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 40,
+      "identity": "Wukong",
+      "animation": "Idle",
+      "facing": "rear/up",
+      "observed_frames": 4,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 41,
+      "identity": "Wukong",
+      "animation": "Idle variant",
+      "facing": "rear/up",
+      "observed_frames": 4,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": 42,
+      "identity": "Wukong",
+      "animation": "idle_right",
+      "facing": "right 3/4",
+      "observed_frames": 4,
+      "status": "READY"
+    },
+    {
+      "source_id": 43,
+      "identity": "Green Cloud Spirit",
+      "animation": "Locomotion",
+      "facing": "right 3/4",
+      "observed_frames": 6,
+      "status": "NEEDS_REPAIR"
+    },
+    {
+      "source_id": null,
+      "identity": "Wukong",
+      "animation": "skill_1 (K) cast",
+      "facing": null,
+      "observed_frames": 0,
+      "status": "MISSING"
+    },
+    {
+      "source_id": null,
+      "identity": "Wukong",
+      "animation": "skill_2 (L) cast",
+      "facing": null,
+      "observed_frames": 0,
+      "status": "MISSING"
+    },
+    {
+      "source_id": null,
+      "identity": "Guardian",
+      "animation": "dedicated idle",
+      "facing": null,
+      "observed_frames": 0,
+      "status": "MISSING"
+    },
+    {
+      "source_id": null,
+      "identity": "Guardian",
+      "animation": "walk",
+      "facing": null,
+      "observed_frames": 0,
+      "status": "MISSING"
+    }
+  ]
+}

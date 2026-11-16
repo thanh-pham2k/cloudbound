@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/world/cloud_arena.gd" id="2_arena"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://scripts/systems/progression_system.gd" id="5_prog"]
 [ext_resource type="Script" path="res://scripts/systems/floor_manager.gd" id="6_floor"]
 [ext_resource type="Script" path="res://scripts/ui/ui_manager.gd" id="7_ui"]
+
+[ext_resource type="SpriteFrames" path="res://assets/animations/wukong/wukong_sprite_frames.tres" id="8_wukong"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_main")
@@ -30,6 +32,7 @@ y_sort_enabled = true
 [node name="Player" type="CharacterBody2D" parent="YSort/Entities"]
 position = Vector2(0, 80)
 script = ExtResource("3_player")
+painted_animation_frames = ExtResource("8_wukong")
 
 [node name="Camera2D" type="Camera2D" parent="YSort/Entities/Player"]
 position_smoothing_enabled = true

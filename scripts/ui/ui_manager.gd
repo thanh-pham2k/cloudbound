@@ -39,6 +39,7 @@ func _ready() -> void:
 	else:
 		_build_hud()
 		_build_boss_bar()
+	_build_keyboard_hint()
 	_build_upgrade_modal()
 	_build_pause_modal()
 	_build_end_modal()
@@ -100,7 +101,7 @@ func _build_painted_hud() -> void:
 	_s1_label = _make_skill_pill("")
 	_s2_label = _make_skill_pill("")
 	var captions: Array[Label] = [_dash_label, _s1_label, _s2_label]
-	var keys := ["Space", "Q", "E"]
+	var keys := ["Space", "K", "L"]
 	for i in range(3):
 		var slot := Control.new()
 		slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -198,7 +199,8 @@ func _build_hud() -> void:
 
 	# Bottom-center skill bar
 	var skill_margin := MarginContainer.new()
-	skill_margin.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+	skill_margin.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+	skill_margin.offset_top = -46
 	skill_margin.add_theme_constant_override("margin_bottom", 18)
 	add_child(skill_margin)
 
@@ -208,11 +210,20 @@ func _build_hud() -> void:
 	skill_margin.add_child(hbox)
 
 	_dash_label = _make_skill_pill("[Space] Vân Bộ: Sẵn sàng")
-	_s1_label = _make_skill_pill("[Q] Lôi Quang Trảm: Sẵn sàng")
-	_s2_label = _make_skill_pill("[E] Cửu Thiên Lạc Lôi: Sẵn sàng")
+	_s1_label = _make_skill_pill("[K] Lôi Quang Trảm: Sẵn sàng")
+	_s2_label = _make_skill_pill("[L] Cửu Thiên Lạc Lôi: Sẵn sàng")
 	hbox.add_child(_dash_label)
 	hbox.add_child(_s1_label)
 	hbox.add_child(_s2_label)
+
+
+func _build_keyboard_hint() -> void:
+	var hint := _make_skill_pill("WASD  Di chuyển    J  Tấn công    Esc  Tạm dừng")
+	hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(hint)
+	hint.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
+	hint.offset_left = 18
+	hint.offset_top = -31
 
 
 func _make_skill_pill(text: String) -> Label:
@@ -380,8 +391,8 @@ func update_cooldowns(d_cd: float, _d_max: float, s1_cd: float, _s1_max: float, 
 		_s2_label.text = "Cửu Thiên Lạc Lôi · %s" % _cooldown_text(s2_cd)
 		return
 	_dash_label.text = "[Space] Vân Bộ: %s" % ("Sẵn sàng" if d_cd <= 0.05 else "%.1fs" % d_cd)
-	_s1_label.text = "[Q] Lôi Quang Trảm: %s" % ("Sẵn sàng" if s1_cd <= 0.05 else "%.1fs" % s1_cd)
-	_s2_label.text = "[E] Cửu Thiên Lạc Lôi: %s" % ("Sẵn sàng" if s2_cd <= 0.05 else "%.1fs" % s2_cd)
+	_s1_label.text = "[K] Lôi Quang Trảm: %s" % ("Sẵn sàng" if s1_cd <= 0.05 else "%.1fs" % s1_cd)
+	_s2_label.text = "[L] Cửu Thiên Lạc Lôi: %s" % ("Sẵn sàng" if s2_cd <= 0.05 else "%.1fs" % s2_cd)
 
 
 func _cooldown_text(remaining: float) -> String:

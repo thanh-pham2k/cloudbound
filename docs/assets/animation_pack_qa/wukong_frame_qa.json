@@ -1,0 +1,376 @@
+{
+  "profile": {
+    "atlas": {
+      "frame_width": 208,
+      "frame_height": 176,
+      "columns": 4,
+      "rows": 1,
+      "padding": 4,
+      "safe_margin": 4
+    },
+    "pivot": {
+      "x": 104,
+      "y": 151,
+      "anchor_mode": "custom_pixel"
+    },
+    "godot": {
+      "texture_filter": "linear"
+    }
+  },
+  "animations": [
+    {
+      "animation": "idle_down",
+      "source_archive_id": 10,
+      "source_scale": 0.28,
+      "frame_count": 4,
+      "structure": {
+        "status": "PASS",
+        "issues": []
+      },
+      "consistency": {
+        "status": "PASS",
+        "issues": []
+      },
+      "motion": {
+        "status": "REVIEW_REQUIRED",
+        "issues": []
+      },
+      "frames": [
+        {
+          "index": 0,
+          "normalized_path": "assets/animations/wukong/frames/idle_down/frame_01.png",
+          "source_cell_x": [
+            0,
+            547
+          ],
+          "feet_anchor_source_px": [
+            286,
+            556
+          ],
+          "alpha_bbox": [
+            45,
+            25,
+            158,
+            158
+          ]
+        },
+        {
+          "index": 1,
+          "normalized_path": "assets/animations/wukong/frames/idle_down/frame_02.png",
+          "source_cell_x": [
+            547,
+            1088
+          ],
+          "feet_anchor_source_px": [
+            823,
+            556
+          ],
+          "alpha_bbox": [
+            46,
+            26,
+            159,
+            157
+          ]
+        },
+        {
+          "index": 2,
+          "normalized_path": "assets/animations/wukong/frames/idle_down/frame_03.png",
+          "source_cell_x": [
+            1088,
+            1633
+          ],
+          "feet_anchor_source_px": [
+            1371,
+            556
+          ],
+          "alpha_bbox": [
+            44,
+            30,
+            159,
+            157
+          ]
+        },
+        {
+          "index": 3,
+          "normalized_path": "assets/animations/wukong/frames/idle_down/frame_04.png",
+          "source_cell_x": [
+            1633,
+            2172
+          ],
+          "feet_anchor_source_px": [
+            1921,
+            556
+          ],
+          "alpha_bbox": [
+            42,
+            28,
+            155,
+            158
+          ]
+        }
+      ]
+    },
+    {
+      "animation": "idle_right",
+      "source_archive_id": 42,
+      "source_scale": 0.27,
+      "frame_count": 4,
+      "structure": {
+        "status": "PASS",
+        "issues": []
+      },
+      "consistency": {
+        "status": "PASS",
+        "issues": []
+      },
+      "motion": {
+        "status": "REVIEW_REQUIRED",
+        "issues": []
+      },
+      "frames": [
+        {
+          "index": 0,
+          "normalized_path": "assets/animations/wukong/frames/idle_right/frame_01.png",
+          "source_cell_x": [
+            0,
+            512
+          ],
+          "feet_anchor_source_px": [
+            303,
+            588
+          ],
+          "alpha_bbox": [
+            35,
+            27,
+            140,
+            154
+          ]
+        },
+        {
+          "index": 1,
+          "normalized_path": "assets/animations/wukong/frames/idle_right/frame_02.png",
+          "source_cell_x": [
+            512,
+            1054
+          ],
+          "feet_anchor_source_px": [
+            850,
+            588
+          ],
+          "alpha_bbox": [
+            33,
+            22,
+            140,
+            152
+          ]
+        },
+        {
+          "index": 2,
+          "normalized_path": "assets/animations/wukong/frames/idle_right/frame_03.png",
+          "source_cell_x": [
+            1054,
+            1605
+          ],
+          "feet_anchor_source_px": [
+            1385,
+            588
+          ],
+          "alpha_bbox": [
+            34,
+            22,
+            144,
+            153
+          ]
+        },
+        {
+          "index": 3,
+          "normalized_path": "assets/animations/wukong/frames/idle_right/frame_04.png",
+          "source_cell_x": [
+            1605,
+            2172
+          ],
+          "feet_anchor_source_px": [
+            1925,
+            588
+          ],
+          "alpha_bbox": [
+            36,
+            27,
+            141,
+            153
+          ]
+        }
+      ]
+    },
+    {
+      "animation": "walk_down",
+      "source_archive_id": 26,
+      "source_scale": 0.41,
+      "frame_count": 8,
+      "structure": {
+        "status": "PASS",
+        "issues": []
+      },
+      "consistency": {
+        "status": "PASS",
+        "issues": []
+      },
+      "motion": {
+        "status": "REVIEW_REQUIRED",
+        "issues": [
+          {
+            "frame": null,
+            "code": "foot_slide_warning",
+            "message": "Foot anchor horizontal spread is 14.2px (> 12.0px)."
+          }
+        ]
+      },
+      "frames": [
+        {
+          "index": 0,
+          "normalized_path": "assets/animations/wukong/frames/walk_down/frame_01.png",
+          "source_cell_x": [
+            0,
+            284
+          ],
+          "feet_anchor_source_px": [
+            165,
+            512
+          ],
+          "alpha_bbox": [
+            45,
+            34,
+            149,
+            150
+          ]
+        },
+        {
+          "index": 1,
+          "normalized_path": "assets/animations/wukong/frames/walk_down/frame_02.png",
+          "source_cell_x": [
+            284,
+            556
+          ],
+          "feet_anchor_source_px": [
+            438,
+            512
+          ],
+          "alpha_bbox": [
+            47,
+            34,
+            149,
+            154
+          ]
+        },
+        {
+          "index": 2,
+          "normalized_path": "assets/animations/wukong/frames/walk_down/frame_03.png",
+          "source_cell_x": [
+            556,
+            827
+          ],
+          "feet_anchor_source_px": [
+            705,
+            512
+          ],
+          "alpha_bbox": [
+            47,
+            33,
+            151,
+            160
+          ]
+        },
+        {
+          "index": 3,
+          "normalized_path": "assets/animations/wukong/frames/walk_down/frame_04.png",
+          "source_cell_x": [
+            827,
+            1099
+          ],
+          "feet_anchor_source_px": [
+            973,
+            512
+          ],
+          "alpha_bbox": [
+            49,
+            31,
+            152,
+            138
+          ]
+        },
+        {
+          "index": 4,
+          "normalized_path": "assets/animations/wukong/frames/walk_down/frame_05.png",
+          "source_cell_x": [
+            1099,
+            1371
+          ],
+          "feet_anchor_source_px": [
+            1244,
+            512
+          ],
+          "alpha_bbox": [
+            49,
+            32,
+            151,
+            140
+          ]
+        },
+        {
+          "index": 5,
+          "normalized_path": "assets/animations/wukong/frames/walk_down/frame_06.png",
+          "source_cell_x": [
+            1371,
+            1642
+          ],
+          "feet_anchor_source_px": [
+            1516,
+            512
+          ],
+          "alpha_bbox": [
+            49,
+            32,
+            149,
+            158
+          ]
+        },
+        {
+          "index": 6,
+          "normalized_path": "assets/animations/wukong/frames/walk_down/frame_07.png",
+          "source_cell_x": [
+            1642,
+            1915
+          ],
+          "feet_anchor_source_px": [
+            1787,
+            512
+          ],
+          "alpha_bbox": [
+            49,
+            32,
+            151,
+            153
+          ]
+        },
+        {
+          "index": 7,
+          "normalized_path": "assets/animations/wukong/frames/walk_down/frame_08.png",
+          "source_cell_x": [
+            1915,
+            2172
+          ],
+          "feet_anchor_source_px": [
+            2050,
+            512
+          ],
+          "alpha_bbox": [
+            54,
+            37,
+            154,
+            147
+          ]
+        }
+      ]
+    }
+  ]
+}
