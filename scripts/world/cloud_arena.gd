@@ -1,11 +1,9 @@
 extends Node2D
 class_name CloudArena
 
-## Modular 2.5D Floating Cloud Island & Village arena built from B01/B02 128x128 tiles & props.
-## Supports per-scene walkable geometry (multi-island + bridge rects or elliptical arenas)
-## so visual and collision boundaries agree across all six scenes.
+## Builds the authored terrain and keeps movement on the playable surface.
 
-const TILE_SIZE := 128
+const IslandSurface := preload("res://scripts/world/island_surface.gd")
 
 @export_enum("mortal_realm", "stairway_clouds", "azure_outskirts", "azure_center", "boss_arena", "gate_of_heaven")
 var scene_theme: String = "azure_outskirts"
@@ -13,14 +11,13 @@ var scene_theme: String = "azure_outskirts"
 @export var rx: float = 880.0
 @export var ry: float = 480.0
 
-var walkable_mode: String = "ellipse"
-var walkable_rects: Array[Rect2] = []
+var _island_outline := PackedVector2Array()
+var _inset_outlines: Dictionary = {}
 var _pillar_positions: Array[Vector2] = []
 
 var _terrain_root: Node2D
-var _ground_layer: TileMapLayer
-var _border_layer: TileMapLayer
 var _deco_layer: Node2D
+var _foreground_props: Node2D
 var _sky_rect: TextureRect
 var _sky_parallax: ParallaxBackground
 var _sky_far_layer: ParallaxLayer
@@ -58,19 +55,16 @@ func _ensure_layers() -> void:
 
 	_sky_parallax = ParallaxBackground.new()
 	_sky_parallax.layer = -10
-	var sky_base_layer := ParallaxLayer.new()
-	sky_base_layer.motion_scale = Vector2.ZERO
-	_sky_parallax.add_child(sky_base_layer)
-
+	var sky_base := CanvasLayer.new()
+	sky_base.layer = -11
+	add_child(sky_base)
 	_sky_rect = TextureRect.new()
 	_sky_rect.name = "SkyBackdrop"
 	_sky_rect.texture = grad_tex
 	_sky_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	_sky_rect.position = Vector2(-2000, -1500)
-	_sky_rect.size = Vector2(4000, 3000)
-	_sky_rect.z_index = -60
 	_sky_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	sky_base_layer.add_child(_sky_rect)
+	sky_base.add_child(_sky_rect)
+	_sky_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 	_sky_far_layer = ParallaxLayer.new()
 	_sky_far_layer.motion_scale = Vector2(0.18, 0.12)
@@ -88,81 +82,35 @@ func _ensure_layers() -> void:
 	_terrain_root.z_index = -10
 	add_child(_terrain_root)
 
-	_border_layer = TileMapLayer.new()
-	_border_layer.name = "IslandBorderLayer"
-	_terrain_root.add_child(_border_layer)
-
-	_ground_layer = TileMapLayer.new()
-	_ground_layer.name = "GroundTileLayer"
-	_terrain_root.add_child(_ground_layer)
-
 	_deco_layer = Node2D.new()
 	_deco_layer.name = "PerimeterDecorations"
 	_terrain_root.add_child(_deco_layer)
 
-
-func _build_tileset(paths: Array[String]) -> TileSet:
-	var ts := TileSet.new()
-	ts.tile_size = Vector2i(TILE_SIZE, TILE_SIZE)
-	for i in range(paths.size()):
-		if not ResourceLoader.exists(paths[i]):
-			continue
-		var src := TileSetAtlasSource.new()
-		src.texture = load(paths[i])
-		src.texture_region_size = Vector2i(TILE_SIZE, TILE_SIZE)
-		src.create_tile(Vector2i(0, 0))
-		ts.add_source(src, i)
-	return ts
+	var sort_root := get_node_or_null("../YSort")
+	if sort_root != null:
+		_foreground_props = Node2D.new()
+		_foreground_props.name = "IslandProps"
+		_foreground_props.y_sort_enabled = true
+		sort_root.add_child(_foreground_props)
 
 
 func _rebuild_visuals() -> void:
 	_ensure_layers()
-	_ground_layer.clear()
-	_border_layer.clear()
 	for c in _deco_layer.get_children():
 		c.queue_free()
+	if _foreground_props != null:
+		for prop in _foreground_props.get_children():
+			_foreground_props.remove_child(prop)
+			prop.queue_free()
 	for c in _sky_far_layer.get_children():
 		c.queue_free()
 	for c in _sky_mid_layer.get_children():
 		c.queue_free()
 	for c in _sky_atmo_layer.get_children():
 		c.queue_free()
-	walkable_rects.clear()
+	_island_outline.clear()
+	_inset_outlines.clear()
 	_pillar_positions.clear()
-
-	var ground_paths: Array[String] = [
-		"res://assets/base/environment/ground/ground_jade_tile_01.png",            # 0
-		"res://assets/base/environment/ground/ground_jade_tile_02.png",            # 1
-		"res://assets/base/environment/ground/ground_stone_tile_01.png",           # 2
-		"res://assets/base/environment/ground/ground_cloud_tile_01.png",           # 3
-		"res://assets/base/environment/ground/ground_rune_center_01.png",          # 4
-		"res://assets/base/environment/ground/ground_grass_stone_edge_north_01.png", # 5
-		"res://assets/base/environment/ground/ground_grass_stone_edge_south_01.png", # 6
-		"res://assets/base/environment/ground/ground_grass_stone_edge_west_01.png",  # 7
-		"res://assets/base/environment/ground/ground_grass_stone_edge_east_01.png",  # 8
-		"res://assets/base/environment/ground/ground_grass_stone_outer_nw_01.png",   # 9
-		"res://assets/base/environment/ground/ground_grass_stone_outer_ne_01.png",   # 10
-		"res://assets/base/environment/ground/ground_grass_stone_outer_sw_01.png",   # 11
-		"res://assets/base/environment/ground/ground_grass_stone_outer_se_01.png",   # 12
-	]
-	_ground_layer.tile_set = _build_tileset(ground_paths)
-
-	var border_paths: Array[String] = [
-		"res://assets/base/environment/platforms/platform_cloud_edge_north_01.png", # 0
-		"res://assets/base/environment/platforms/platform_cloud_edge_south_01.png", # 1
-		"res://assets/base/environment/platforms/platform_cloud_edge_west_01.png",  # 2
-		"res://assets/base/environment/platforms/platform_cloud_edge_east_01.png",  # 3
-		"res://assets/base/environment/platforms/platform_cloud_corner_nw_01.png",  # 4
-		"res://assets/base/environment/platforms/platform_cloud_corner_ne_01.png",  # 5
-		"res://assets/base/environment/platforms/platform_cloud_corner_sw_01.png",  # 6
-		"res://assets/base/environment/platforms/platform_cloud_corner_se_01.png",  # 7
-		"res://assets/base/environment/platforms/platform_cloud_underside_01.png",  # 8
-		"res://assets/base/environment/platforms/platform_cloud_inner_nw.png",      # 9
-		"res://assets/base/environment/platforms/platform_cloud_inner_ne.png",      # 10
-		"res://assets/base/environment/platforms/platform_cloud_inner_sw.png",      # 11
-		"res://assets/base/environment/platforms/platform_cloud_inner_se.png",      # 12
-	]
-	_border_layer.tile_set = _build_tileset(border_paths)
 
 	match scene_theme:
 		"mortal_realm":
@@ -179,292 +127,178 @@ func _rebuild_visuals() -> void:
 			_build_azure_outskirts()
 
 
-func _fill_rect_ground(min_x: int, max_x: int, min_y: int, max_y: int, src_id: int = -1) -> void:
-	for gy in range(min_y, max_y + 1):
-		for gx in range(min_x, max_x + 1):
-			var sid := src_id if src_id >= 0 else (0 if ((gx + gy) & 1) == 0 else 1)
-			_ground_layer.set_cell(Vector2i(gx, gy), sid, Vector2i(0, 0))
-
-
-func _surround_cloud_border(min_x: int, max_x: int, min_y: int, max_y: int) -> void:
-	for gx in range(min_x, max_x + 1):
-		_border_layer.set_cell(Vector2i(gx, min_y - 1), 0, Vector2i(0, 0))
-		_border_layer.set_cell(Vector2i(gx, max_y + 1), 1, Vector2i(0, 0))
-		_border_layer.set_cell(Vector2i(gx, max_y + 2), 8, Vector2i(0, 0))
-	for gy in range(min_y, max_y + 1):
-		_border_layer.set_cell(Vector2i(min_x - 1, gy), 2, Vector2i(0, 0))
-		_border_layer.set_cell(Vector2i(max_x + 1, gy), 3, Vector2i(0, 0))
-	_border_layer.set_cell(Vector2i(min_x - 1, min_y - 1), 4, Vector2i(0, 0))
-	_border_layer.set_cell(Vector2i(max_x + 1, min_y - 1), 5, Vector2i(0, 0))
-	_border_layer.set_cell(Vector2i(min_x - 1, max_y + 1), 6, Vector2i(0, 0))
-	_border_layer.set_cell(Vector2i(max_x + 1, max_y + 1), 7, Vector2i(0, 0))
-
-
-func _paint_stone_courtyard(cx0: int, cx1: int, cy0: int, cy1: int) -> void:
-	for gy in range(cy0, cy1 + 1):
-		for gx in range(cx0, cx1 + 1):
-			_ground_layer.set_cell(Vector2i(gx, gy), 2, Vector2i(0, 0))
-	for gx in range(cx0, cx1 + 1):
-		_ground_layer.set_cell(Vector2i(gx, cy0 - 1), 6, Vector2i(0, 0))
-		_ground_layer.set_cell(Vector2i(gx, cy1 + 1), 5, Vector2i(0, 0))
-	for gy in range(cy0, cy1 + 1):
-		_ground_layer.set_cell(Vector2i(cx0 - 1, gy), 8, Vector2i(0, 0))
-		_ground_layer.set_cell(Vector2i(cx1 + 1, gy), 7, Vector2i(0, 0))
-	_ground_layer.set_cell(Vector2i(cx0 - 1, cy0 - 1), 12, Vector2i(0, 0))
-	_ground_layer.set_cell(Vector2i(cx1 + 1, cy0 - 1), 11, Vector2i(0, 0))
-	_ground_layer.set_cell(Vector2i(cx0 - 1, cy1 + 1), 10, Vector2i(0, 0))
-	_ground_layer.set_cell(Vector2i(cx1 + 1, cy1 + 1), 9, Vector2i(0, 0))
-
-
-func _make_irregular_cells(row_spans: Dictionary) -> Dictionary:
-	var cells := {}
-	for gy in row_spans.keys():
-		var span: Array = row_spans[gy]
-		for gx in range(int(span[0]), int(span[1]) + 1):
-			cells[Vector2i(gx, int(gy))] = true
-	return cells
-
-
-func _build_irregular_island(cells: Dictionary, ground_sid: int = -1, add_cloud_border: bool = true) -> void:
-	walkable_mode = "rects"
-	var by_row := {}
-	var perim := {}
-	for cell in cells.keys():
-		var gx: int = cell.x
-		var gy: int = cell.y
-		var sid := ground_sid if ground_sid >= 0 else (0 if ((gx + gy) & 1) == 0 else 1)
-		_ground_layer.set_cell(cell, sid, Vector2i(0, 0))
-		if not by_row.has(gy):
-			by_row[gy] = []
-		by_row[gy].append(gx)
-		if add_cloud_border:
-			for dy in range(-1, 2):
-				for dx in range(-1, 2):
-					var nb := Vector2i(gx + dx, gy + dy)
-					if not cells.has(nb):
-						perim[nb] = true
-
-	if add_cloud_border:
-		for p in perim.keys():
-			var px: int = p.x
-			var py: int = p.y
-			var n := cells.has(Vector2i(px, py - 1))
-			var s := cells.has(Vector2i(px, py + 1))
-			var w := cells.has(Vector2i(px - 1, py))
-			var e := cells.has(Vector2i(px + 1, py))
-			var tile_id := -1
-			# Concave inner corners (2 adjacent cardinal island neighbors)
-			if s and e and not n and not w:
-				tile_id = 9  # inner_nw
-			elif s and w and not n and not e:
-				tile_id = 10 # inner_ne
-			elif n and e and not s and not w:
-				tile_id = 11 # inner_sw
-			elif n and w and not s and not e:
-				tile_id = 12 # inner_se
-			# Straight cardinal edges
-			elif s and not n and not w and not e:
-				tile_id = 0  # north edge
-			elif n and not s and not w and not e:
-				tile_id = 1  # south edge
-			elif e and not w and not n and not s:
-				tile_id = 2  # west edge
-			elif w and not e and not n and not s:
-				tile_id = 3  # east edge
-			# Outer convex corners (diagonal island neighbor only)
-			elif cells.has(Vector2i(px + 1, py + 1)) and not n and not s and not w and not e:
-				tile_id = 4  # corner_nw
-			elif cells.has(Vector2i(px - 1, py + 1)) and not n and not s and not w and not e:
-				tile_id = 5  # corner_ne
-			elif cells.has(Vector2i(px + 1, py - 1)) and not n and not s and not w and not e:
-				tile_id = 6  # corner_sw
-			elif cells.has(Vector2i(px - 1, py - 1)) and not n and not s and not w and not e:
-				tile_id = 7  # corner_se
-			if tile_id >= 0:
-				_border_layer.set_cell(p, tile_id, Vector2i(0, 0))
-				if tile_id in [1, 6, 7, 11, 12] and not perim.has(Vector2i(px, py + 1)) and not cells.has(Vector2i(px, py + 1)):
-					_border_layer.set_cell(Vector2i(px, py + 1), 8, Vector2i(0, 0))
-
-	# Merge contiguous horizontal cell spans into exact walkable Rect2s
-	for gy in by_row.keys():
-		var xs: Array = by_row[gy]
-		xs.sort()
-		var run_start: int = xs[0]
-		var run_prev: int = xs[0]
-		for idx in range(1, xs.size()):
-			if xs[idx] == run_prev + 1:
-				run_prev = xs[idx]
-			else:
-				walkable_rects.append(Rect2(run_start * TILE_SIZE, int(gy) * TILE_SIZE, (run_prev - run_start + 1) * TILE_SIZE, TILE_SIZE))
-				run_start = xs[idx]
-				run_prev = xs[idx]
-		walkable_rects.append(Rect2(run_start * TILE_SIZE, int(gy) * TILE_SIZE, (run_prev - run_start + 1) * TILE_SIZE, TILE_SIZE))
+func _add_surface(outline: PackedVector2Array, path: Curve2D,
+		arena_radii: Vector2 = Vector2.ZERO, path_width: float = 70.0) -> void:
+	var surface := IslandSurface.new()
+	_deco_layer.add_child(surface)
+	surface.build(outline, path, arena_radii, path_width)
 
 
 func _build_mortal_realm() -> void:
-	_sky_rect.modulate = Color(1.0, 1.0, 1.0, 1.0)
-	walkable_mode = "rects"
-	rx = 768.0
-	ry = 448.0
-	_fill_rect_ground(-8, 7, -5, 4)
-	# Diagonal stepped stone village pathway leading up-right toward the archway & stairs
-	for step in range(-3, 4):
-		var gx := step
-		var gy := -int(round(float(step) * 0.5))
-		_ground_layer.set_cell(Vector2i(gx, gy), 2, Vector2i(0, 0))
-		_ground_layer.set_cell(Vector2i(gx, gy + 1), 2, Vector2i(0, 0))
-	walkable_rects.append(Rect2(-6 * TILE_SIZE, -4 * TILE_SIZE, 12 * TILE_SIZE, 8 * TILE_SIZE))
-
-	_add_deco("res://assets/base/environment/architecture/arch_village_house_01.png", Vector2(-340, -160))
-	_add_deco("res://assets/base/environment/decorations/deco_peach_bonsai_01.png", Vector2(-560, -240))
-	_add_deco("res://assets/base/environment/decorations/deco_peach_bonsai_01.png", Vector2(-560, 220))
-	_add_deco("res://assets/base/environment/decorations/deco_green_tree_01.png", Vector2(120, -320))
-	_add_deco("res://assets/base/environment/decorations/deco_wooden_fence_01.png", Vector2(-460, 200))
-	_add_deco("res://assets/base/environment/decorations/deco_wooden_fence_01.png", Vector2(280, 220))
-	_add_deco("res://assets/base/environment/decorations/deco_cloud_lantern_01.png", Vector2(240, -100))
-	_add_deco("res://assets/base/environment/bridges/stairs_stone_01.png", Vector2(420, -110))
-	_add_deco("res://assets/base/environment/architecture/arch_celestial_gate_01.png", Vector2(420, -220))
+	_sky_rect.modulate = Color.WHITE
+	rx = 640.0
+	ry = 322.0
+	_island_outline = PackedVector2Array([
+		Vector2(-632, -148), Vector2(-480, -280), Vector2(-236, -318),
+		Vector2(140, -303), Vector2(395, -263), Vector2(558, -169),
+		Vector2(639, -32), Vector2(568, 132), Vector2(354, 257),
+		Vector2(8, 310), Vector2(-303, 275), Vector2(-553, 162), Vector2(-660, 35),
+	])
+	var path := Curve2D.new()
+	path.add_point(Vector2(-243, 279), Vector2.ZERO, Vector2(55, -84))
+	path.add_point(Vector2(-30, 84), Vector2(-77, 30), Vector2(113, -39))
+	path.add_point(Vector2(315, -98), Vector2(-105, 49))
+	_add_surface(_island_outline, path, Vector2.ZERO, 111.0)
+	_add_deco("res://assets/base/environment/architecture/arch_village_house_01.png", Vector2(-272, -45), 1.48)
+	_add_deco("res://assets/base/environment/decorations/deco_peach_bonsai_01.png", Vector2(-487, -65), 1.27)
+	_add_deco("res://assets/base/environment/decorations/deco_wooden_fence_01.png", Vector2(-396, 125))
+	_add_deco("res://assets/base/environment/decorations/deco_wooden_fence_01.png", Vector2(334, 194))
+	_add_deco("res://assets/base/environment/decorations/deco_cloud_lantern_01.png", Vector2(197, -92))
+	_add_deco("res://assets/base/environment/decorations/deco_bush_01.png", Vector2(429, 98))
+	_add_sky_backdrop()
 
 
 func _build_stairway_clouds() -> void:
-	_sky_rect.modulate = Color(0.95, 0.98, 1.0, 1.0)
-	walkable_mode = "rects"
-	rx = 960.0
-	ry = 320.0
-	# Left & right irregular floating islands connected by a 3-segment stone bridge
-	var left_cells := _make_irregular_cells({-2: [-6, -2], -1: [-7, -2], 0: [-7, -2], 1: [-6, -3]})
-	var right_cells := _make_irregular_cells({-2: [2, 6], -1: [2, 7], 0: [2, 7], 1: [3, 6]})
-	_build_irregular_island(left_cells)
-	_build_irregular_island(right_cells)
-
-	# Connected 3-segment stone bridge spanning gx in [-1..1] at y=0
-	_add_deco("res://assets/base/environment/bridges/bridge_stone_entrance_01.png", Vector2(-64, 0), 2)
-	_add_deco("res://assets/base/environment/bridges/bridge_stone_middle_01.png", Vector2(64, 0), 2)
-	_add_deco("res://assets/base/environment/bridges/bridge_stone_exit_01.png", Vector2(192, 0), 2)
-	_add_deco("res://assets/base/environment/bridges/stairs_stone_01.png", Vector2(576, 260))
-
-	_add_deco("res://assets/base/environment/decorations/deco_peach_bonsai_01.png", Vector2(-680, -140))
-	_add_deco("res://assets/base/environment/decorations/deco_cloud_rock_01.png", Vector2(-640, 140))
-	_add_deco("res://assets/base/environment/decorations/deco_green_tree_01.png", Vector2(740, -140))
-	_add_deco("res://assets/base/environment/decorations/deco_cloud_lantern_01.png", Vector2(-200, -100))
-	_add_deco("res://assets/base/environment/decorations/deco_cloud_lantern_01.png", Vector2(320, -100))
-
-	# Bridge walkable rect connecting left and right island walkable_rects
-	walkable_rects.append(Rect2(-192, -52, 512, 104))
+	_sky_rect.modulate = Color(0.95, 0.98, 1.0)
+	rx = 710.0
+	ry = 326.0
+	# A single straight bridge strip overlaps both shorelines at the walkable surface.
+	var left := PackedVector2Array([
+		Vector2(-704, -82), Vector2(-552, -158), Vector2(-339, -135),
+		Vector2(-197, -66), Vector2(-150, 26), Vector2(-175, 171),
+		Vector2(-301, 276), Vector2(-536, 287), Vector2(-690, 179),
+	])
+	var right := PackedVector2Array([
+		Vector2(143, -119), Vector2(277, -243), Vector2(492, -282),
+		Vector2(657, -202), Vector2(723, -57), Vector2(621, 114),
+		Vector2(456, 159), Vector2(224, 142), Vector2(144, 68),
+	])
+	const BRIDGE_ANGLE := -0.22
+	var deck := Rect2(-230, -68, 470, 136)
+	var bridge := PackedVector2Array([
+		deck.position.rotated(BRIDGE_ANGLE), Vector2(deck.end.x, deck.position.y).rotated(BRIDGE_ANGLE),
+		deck.end.rotated(BRIDGE_ANGLE), Vector2(deck.position.x, deck.end.y).rotated(BRIDGE_ANGLE),
+	])
+	var left_path := Curve2D.new()
+	left_path.add_point(Vector2(-586, 136))
+	left_path.add_point(Vector2(-175, 39))
+	var right_path := Curve2D.new()
+	right_path.add_point(Vector2(166, -37))
+	right_path.add_point(Vector2(625, -135))
+	_add_surface(left, left_path)
+	_add_surface(right, right_path)
+	var span := IslandSurface.new()
+	_deco_layer.add_child(span)
+	span.rotation = BRIDGE_ANGLE
+	span.build_bridge(deck)
+	var joined := Geometry2D.merge_polygons(left, bridge)
+	assert(joined.size() == 1, "Bridge must meet the western island")
+	var full := Geometry2D.merge_polygons(joined[0], right)
+	assert(full.size() == 1, "Bridge must meet the eastern island")
+	_island_outline = full[0]
+	_add_deco("res://assets/base/environment/decorations/deco_peach_bonsai_01.png", Vector2(-484, -25), 1.22)
+	_add_deco("res://assets/base/environment/decorations/deco_green_tree_01.png", Vector2(558, -134), 1.20)
+	_add_deco("res://assets/base/environment/decorations/deco_cloud_rock_01.png", Vector2(-362, 221))
+	_add_deco("res://assets/base/environment/decorations/deco_cloud_rock_01.png", Vector2(377, 103))
 	_add_sky_backdrop(true)
 
 
 func _build_azure_outskirts() -> void:
-	_sky_rect.modulate = Color(0.96, 0.98, 1.0, 1.0)
-	rx = 704.0
-	ry = 384.0
-	# Irregular grassy floating island silhouette (NOT a rectangle)
-	var cells := _make_irregular_cells({
-		-3: [-4, 2],
-		-2: [-5, 4],
-		-1: [-5, 4],
-		0: [-5, 4],
-		1: [-4, 3],
-		2: [-3, 2],
-	})
-	_build_irregular_island(cells)
+	_sky_rect.modulate = Color(0.96, 0.98, 1.0)
+	_island_outline = PackedVector2Array([
+		Vector2(-620, -225), Vector2(-510, -315), Vector2(-320, -349),
+		Vector2(-107, -344), Vector2(95, -371), Vector2(319, -338),
+		Vector2(534, -254), Vector2(636, -128), Vector2(649, 18),
+		Vector2(570, 153), Vector2(401, 241), Vector2(235, 261),
+		Vector2(60, 310), Vector2(-189, 319), Vector2(-404, 295),
+		Vector2(-553, 222), Vector2(-631, 117), Vector2(-661, -33),
+	])
+	var path := Curve2D.new()
+	path.add_point(Vector2(-585, 207), Vector2.ZERO, Vector2(117, 11))
+	path.add_point(Vector2(-304, 126), Vector2(-77, 62), Vector2(91, -62))
+	path.add_point(Vector2(11, 13), Vector2(-100, 22), Vector2(110, -23))
+	path.add_point(Vector2(360, -83), Vector2(-85, 42), Vector2(84, -36))
+	path.add_point(Vector2(585, -170), Vector2(-65, 21))
 
-	# Winding stone stepping pathway integrated into the grass
-	var path_cells := [
-		Vector2i(-3, 1), Vector2i(-2, 1), Vector2i(-1, 0),
-		Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, -1)
-	]
-	for pc in path_cells:
-		_ground_layer.set_cell(pc, 2, Vector2i(0, 0))
-
-	# Reference composition: 1 green tree top-left, 1 peach blossom tree bottom-left, rocks & bushes on rim
-	_add_deco("res://assets/base/environment/decorations/deco_green_tree_01.png", Vector2(-460, -240), 0, 1.25)
-	_add_deco("res://assets/base/environment/decorations/deco_peach_bonsai_01.png", Vector2(-440, 210), 0, 1.2)
-	_add_deco("res://assets/base/environment/decorations/deco_bush_01.png", Vector2(-340, -210))
-	_add_deco("res://assets/base/environment/decorations/deco_bush_01.png", Vector2(360, -180))
-	_add_deco("res://assets/base/environment/decorations/deco_cloud_rock_01.png", Vector2(-280, 230))
-	_add_deco("res://assets/base/environment/decorations/deco_cloud_rock_01.png", Vector2(360, 160))
-	_add_sky_backdrop()
+	_add_surface(_island_outline, path)
+	_add_deco("res://assets/base/environment/decorations/deco_green_tree_01.png", Vector2(-425, -181), 1.39)
+	_add_deco("res://assets/base/environment/decorations/deco_peach_bonsai_01.png", Vector2(-470, 173), 1.22)
+	_add_deco("res://assets/base/environment/decorations/deco_bush_01.png", Vector2(-565, -130))
+	_add_deco("res://assets/base/environment/decorations/deco_bush_01.png", Vector2(516, 135), 1.20)
+	_add_deco("res://assets/base/environment/decorations/deco_bush_01.png", Vector2(262, -288), 0.9)
+	_add_deco("res://assets/base/environment/decorations/deco_cloud_rock_01.png", Vector2(-274, 252), 1.18)
+	_add_deco("res://assets/base/environment/decorations/deco_cloud_rock_01.png", Vector2(401, 193), 1.24)
+	_add_deco("res://assets/base/environment/decorations/deco_cloud_rock_01.png", Vector2(-232, -270), 1.08)
+	_add_deco("res://assets/base/environment/decorations/deco_cloud_rock_01.png", Vector2(459, -214), 0.85)
+	_add_deco("res://assets/base/environment/decorations/deco_bush_01.png", Vector2(343, 212), 0.7)
+	_add_deco("res://assets/base/environment/decorations/deco_bush_01.png", Vector2(-216, -247), 0.62)
+	_add_deco("res://assets/base/environment/decorations/deco_cloud_rock_01.png", Vector2(132, -305), 0.59)
+	_add_parallax_sprite(_sky_far_layer, "res://assets/base/environment/decorations/bg_distant_island_01.png", Vector2(134, 165), 0.73, 0.69)
+	var cloud := "res://assets/base/environment/decorations/bg_cloud_bank_01.png"
+	_add_parallax_sprite(_sky_mid_layer, cloud, Vector2(1070, 125), 2.5, 0.54)
+	_add_parallax_sprite(_sky_mid_layer, cloud, Vector2(100, 370), 2.4, 0.75)
+	_add_parallax_sprite(_sky_mid_layer, cloud, Vector2(980, 608), 3.2, 0.85)
+	_add_parallax_sprite(_sky_atmo_layer, cloud, Vector2(348, 610), 3.1, 0.84)
 
 
 func _build_azure_center() -> void:
-	_sky_rect.modulate = Color(0.90, 0.95, 1.0, 1.0)
-	rx = 640.0
-	ry = 384.0
-	var cells := _make_irregular_cells({
-		-3: [-3, 2],
-		-2: [-4, 3],
-		-1: [-5, 4],
-		0: [-5, 4],
-		1: [-4, 3],
-		2: [-3, 2],
-	})
-	_build_irregular_island(cells, 2)
-	_add_deco("res://assets/base/environment/ground/ground_rune_center_01.png", Vector2(0, 0))
-
-	_pillar_positions = [
-		Vector2(-320, -150),
-		Vector2(320, -150),
-		Vector2(-320, 150),
-		Vector2(320, 150),
-	]
-	_add_deco("res://assets/base/environment/decorations/deco_green_tree_01.png", Vector2(-500, -240))
-	_add_deco("res://assets/base/environment/decorations/deco_peach_bonsai_01.png", Vector2(-500, 240))
-	_add_deco("res://assets/base/environment/decorations/deco_incense_brazier_01.png", Vector2(260, -50))
+	_sky_rect.modulate = Color(0.90, 0.95, 1.0)
+	_build_courtyard(Vector2(580, 320))
+	_pillar_positions = [Vector2(-330, -148), Vector2(330, -148),
+		Vector2(-361, 149), Vector2(361, 149)]
+	_add_deco("res://assets/base/environment/decorations/deco_green_tree_01.png", Vector2(-459, -88), 1.10)
+	_add_deco("res://assets/base/environment/decorations/deco_peach_bonsai_01.png", Vector2(-449, 140), 1.05)
+	_add_deco("res://assets/base/environment/decorations/deco_incense_brazier_01.png", Vector2(313, -60))
 	_add_sky_backdrop()
 
 
-func _build_boss_arena() -> void:
-	_sky_rect.modulate = Color(0.75, 0.85, 0.98, 1.0)
-	rx = 720.0
-	ry = 440.0
-	var cells := _make_irregular_cells({
-		-4: [-3, 2],
-		-3: [-4, 3],
-		-2: [-5, 4],
-		-1: [-5, 4],
-		0: [-5, 4],
-		1: [-5, 4],
-		2: [-4, 3],
-		3: [-3, 2],
-	})
-	_build_irregular_island(cells, 2)
-	_add_deco("res://assets/base/environment/ground/ground_rune_center_01.png", Vector2(0, 0), -4)
-	for i in range(8):
-		var angle := float(i) * TAU / 8.0
-		var ring_pos := Vector2(cos(angle) * 280.0, sin(angle) * 165.0)
-		var tile_idx := (i % 9) + 1
-		_add_deco("res://assets/base/environment/ground/ground_arena_tile_%02d.png" % tile_idx, ring_pos, -5)
+func _build_courtyard(radii: Vector2) -> void:
+	rx = radii.x
+	ry = radii.y
+	for index in range(36):
+		var angle := index * TAU / 36.0
+		var edge := Vector2.from_angle(angle) * radii
+		_island_outline.append(edge * (1.0 + sin(angle * 7.0) * 0.025))
+	_add_surface(_island_outline, null, radii - Vector2(50, 39))
 
+
+func _build_boss_arena() -> void:
+	_sky_rect.modulate = Color(0.91, 0.96, 1.0)
+	_build_courtyard(Vector2(650, 362))
 	_pillar_positions = [
-		Vector2(-400, -190),
-		Vector2(400, -190),
-		Vector2(-400, 190),
-		Vector2(400, 190),
+		Vector2(-387, -199), Vector2(387, -199),
+		Vector2(-425, 173), Vector2(425, 173),
 	]
-	_add_deco("res://assets/base/environment/decorations/deco_cloud_lantern_01.png", Vector2(-520, 0))
-	_add_deco("res://assets/base/environment/decorations/deco_cloud_lantern_01.png", Vector2(520, 0))
+	_add_deco("res://assets/base/environment/decorations/deco_bush_01.png", Vector2(-543, 95))
+	_add_deco("res://assets/base/environment/decorations/deco_bush_01.png", Vector2(500, 140))
+	_add_deco("res://assets/base/environment/decorations/deco_cloud_rock_01.png", Vector2(-190, 308))
+	_add_deco("res://assets/base/environment/decorations/deco_cloud_rock_01.png", Vector2(320, 267))
 	_add_sky_backdrop()
 
 
 func _build_gate_of_heaven() -> void:
-	_sky_rect.modulate = Color(1.0, 1.0, 1.0, 1.0)
-	rx = 320.0
-	ry = 320.0
-	var cells := _make_irregular_cells({
-		-2: [-2, 1],
-		-1: [-2, 1],
-		0: [-2, 1],
-		1: [-2, 1],
-		2: [-1, 0],
-	})
-	_build_irregular_island(cells, 2)
-
-	_add_deco("res://assets/base/environment/architecture/arch_heaven_gateway_01.png", Vector2(0, -210), -1)
-	_add_deco("res://assets/base/environment/decorations/deco_peach_bonsai_01.png", Vector2(-280, -140))
-	_add_deco("res://assets/base/environment/decorations/deco_cloud_lantern_01.png", Vector2(-200, -40))
-	_add_deco("res://assets/base/environment/decorations/deco_cloud_lantern_01.png", Vector2(200, -40))
-	_add_deco("res://assets/base/props/prop_reward_chest_01.png", Vector2(-180, 90))
+	_sky_rect.modulate = Color.WHITE
+	rx = 455.0
+	ry = 327.0
+	_island_outline = PackedVector2Array([
+		Vector2(-437, -104), Vector2(-365, -227), Vector2(-192, -304),
+		Vector2(21, -327), Vector2(204, -308), Vector2(390, -232),
+		Vector2(462, -91), Vector2(441, 57), Vector2(340, 167),
+		Vector2(204, 250), Vector2(32, 285), Vector2(-174, 274),
+		Vector2(-325, 210), Vector2(-427, 82),
+	])
+	var path := Curve2D.new()
+	path.add_point(Vector2(-175, 280), Vector2.ZERO, Vector2(24, -80))
+	path.add_point(Vector2(-89, 91), Vector2(-38, 67), Vector2(49, -79))
+	path.add_point(Vector2(58, -208), Vector2(-11, 74))
+	_add_surface(_island_outline, path, Vector2.ZERO, 115.0)
+	_add_deco("res://assets/base/environment/decorations/deco_peach_bonsai_01.png", Vector2(-313, -121), 1.35)
+	_add_deco("res://assets/base/environment/decorations/deco_cloud_lantern_01.png", Vector2(-203, -65), 1.3)
+	_add_deco("res://assets/base/environment/decorations/deco_cloud_lantern_01.png", Vector2(274, -157), 1.3)
+	_add_deco("res://assets/base/props/prop_reward_chest_01.png", Vector2(-257, 82), 1.2)
+	_add_deco("res://assets/base/environment/decorations/deco_cloud_rock_01.png", Vector2(260, 164), 1.35)
+	_add_deco("res://assets/base/environment/decorations/deco_bush_01.png", Vector2(-283, 182))
+	_add_deco("res://assets/base/environment/decorations/deco_bush_01.png", Vector2(321, 84))
 	_add_sky_backdrop()
 
 
@@ -497,15 +331,29 @@ func _add_sky_backdrop(center_island: bool = false) -> void:
 	_add_parallax_sprite(_sky_atmo_layer, "res://assets/base/environment/decorations/bg_cloud_bank_01.png", Vector2(1020, 120), 1.6, 0.24)
 
 
-func _add_deco(res_path: String, pos: Vector2, z_ord: int = 0, scale_val: float = 1.0) -> void:
+func _add_deco(res_path: String, pos: Vector2, scale_val: float = 1.0) -> void:
 	if not ResourceLoader.exists(res_path):
 		return
 	var sp := Sprite2D.new()
 	sp.texture = load(res_path)
 	sp.position = pos
-	sp.z_index = z_ord
-	sp.scale = Vector2(scale_val, scale_val)
-	_deco_layer.add_child(sp)
+	sp.scale = Vector2.ONE * scale_val
+	if res_path.ends_with("arch_village_house_01.png"):
+		var cleanup := ShaderMaterial.new()
+		cleanup.shader = preload("res://scripts/world/prop_cleanup.gdshader")
+		cleanup.set_shader_parameter("roof_span", Vector2(0.76, 0.90))
+		cleanup.set_shader_parameter("row_limit", 0.16)
+		sp.material = cleanup
+	if _foreground_props == null:
+		_deco_layer.add_child(sp)
+		return
+
+	# Preserve the authored center while sorting at the visible ground contact.
+	var height := sp.texture.get_height()
+	var contact := height * 0.5 - (20 if height >= 192 else 14)
+	sp.position.y += contact * scale_val
+	sp.offset.y = -contact
+	_foreground_props.add_child(sp)
 
 
 func _spawn_pillars() -> void:
@@ -540,23 +388,25 @@ func _spawn_pillars() -> void:
 
 
 func clamp_to_arena(pos: Vector2, margin: float = 28.0) -> Vector2:
-	if walkable_mode == "rects" and not walkable_rects.is_empty():
-		var best_pt := pos
-		var best_d2 := INF
-		for r in walkable_rects:
-			var is_bridge := r.size.y < 140.0
-			var mx := 0.0 if is_bridge else margin
-			var my := minf(margin, r.size.y * 0.25) if is_bridge else margin
-			var min_p := Vector2(r.position.x + mx, r.position.y + my)
-			var max_p := Vector2(r.end.x - mx, r.end.y - my)
-			var clamped := Vector2(clampf(pos.x, min_p.x, max_p.x), clampf(pos.y, min_p.y, max_p.y))
-			var d2 := pos.distance_squared_to(clamped)
-			if d2 < best_d2:
-				best_d2 = d2
-				best_pt = clamped
-				if d2 <= 0.001:
-					return clamped
-		return best_pt
+	if not _island_outline.is_empty():
+		if not _inset_outlines.has(margin):
+			_inset_outlines[margin] = Geometry2D.offset_polygon(_island_outline, -maxf(margin, 0.0))
+		var insets: Array = _inset_outlines[margin]
+		# Large clearance requests can close a bridge neck. Retain both islands.
+		if insets.is_empty():
+			insets = [_island_outline]
+		var best := Vector2.ZERO
+		var best_distance := INF
+		for inset: PackedVector2Array in insets:
+			if Geometry2D.is_point_in_polygon(pos, inset):
+				return pos
+			for index in range(inset.size()):
+				var candidate := Geometry2D.get_closest_point_to_segment(pos, inset[index], inset[(index + 1) % inset.size()])
+				var distance := pos.distance_squared_to(candidate)
+				if distance < best_distance:
+					best = candidate
+					best_distance = distance
+		return best
 
 	var erx := maxf(rx - margin, 100.0)
 	var ery := maxf(ry - margin, 100.0)
@@ -569,28 +419,10 @@ func clamp_to_arena(pos: Vector2, margin: float = 28.0) -> Vector2:
 
 
 func random_point_in_arena(min_dist_from_center: float = 0.0, max_ratio: float = 0.86) -> Vector2:
-	if walkable_mode == "rects" and not walkable_rects.is_empty():
-		var candidates: Array[Rect2] = []
-		for r in walkable_rects:
-			if r.size.y >= 160.0:
-				candidates.append(r)
-		if candidates.is_empty():
-			candidates = walkable_rects
-		for _i in range(16):
-			var r: Rect2 = candidates[randi() % candidates.size()]
-			var pad := 48.0
-			var pt := Vector2(
-				randf_range(r.position.x + pad, r.end.x - pad),
-				randf_range(r.position.y + pad, r.end.y - pad)
-			)
-			if pt.length() >= min_dist_from_center:
-				return pt
-		return candidates[0].get_center()
-
 	for _i in range(16):
 		var angle := randf() * TAU
 		var r := sqrt(randf()) * max_ratio
 		var pt := Vector2(cos(angle) * rx * r, sin(angle) * ry * r)
-		if pt.length() >= min_dist_from_center:
+		if pt.length() >= min_dist_from_center and clamp_to_arena(pt, 48.0).is_equal_approx(pt):
 			return pt
-	return Vector2(rx * 0.6, 0.0)
+	return clamp_to_arena(Vector2(rx * 0.6, 0.0), 48.0)

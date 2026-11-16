@@ -70,6 +70,8 @@ func _ready() -> void:
 	if sp_path != "" and ResourceLoader.exists(sp_path):
 		_sprite.sprite_frames = load(sp_path)
 	var s := float(cfg.get("scale", 1.45))
+	if _arena != null and _arena.scene_theme == "boss_arena":
+		s *= 2.15
 	_sprite.scale = Vector2(s, s)
 	_sprite.offset = Vector2(0, -48)
 	add_child(_sprite)

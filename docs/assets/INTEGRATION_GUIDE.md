@@ -42,3 +42,20 @@ The pinned submodule at [`tools/gameforge-kit/`](../../tools/gameforge-kit/AGENT
    ```bash
    /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --quit
    ```
+
+## 4. Runtime B01 Terrain
+
+The six playable scenes assemble grass, cliff panels, paving, courtyards,
+and bridge decks from `scripts/world/island_surface.gd` and
+`island_surface.gdshader`. Edit the scene layouts in
+`scripts/world/cloud_arena.gd`. Pass an ordered shoreline and a path
+curve for grass scenes, or an ellipse radius for courtyards. In Scene 02
+the two shorelines and the rotated deck polygon are merged for movement.
+These runtime sources are reusable Godot geometry and materials and
+require no raster export step. The sprite pipeline above still applies
+to new animation frames and atlases.
+
+Use the existing screenshot scene to capture an opening frame without
+automated input. The project asset validator covers the PNG and atlas
+inventory. The Godot import and renderer captures cover the new runtime
+material and scene bindings.

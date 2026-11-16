@@ -32,3 +32,32 @@
 4. **Scene 04 — Azure Cloud Center (`scene_04_azure_center`):** Circular/carved stone courtyard with ancient cyan-rune jade pillars, crystal pedestal reward, demon, and slimes.
 5. **Scene 05 — Cloudstone Boss Arena (`scene_05_boss_arena`):** Large carved stone arena hosting the Giant Cyan-Rune Stone Guardian with clear ground-slam warning telegraphs and ample dodge space.
 6. **Scene 06 — Gate of Heaven (`scene_06_gate_of_heaven`):** Golden celestial gateway, swirling 8-frame portal energy, reward chest, and peaceful cloud atmosphere.
+
+## 4. Gameplay Terrain Contract
+
+The supplied six-panel gameplay reference takes priority for composition
+and palette. Use warm yellow-green grass, cream and rose-taupe pavers,
+slate-violet cliffs, and soft blue atmosphere. Keep cyan concentrated in
+runes, crystals, distant water, and the guardian. Preserve the fixed
+three-quarter view, red-gold staff hero, and independent player camera.
+
+The six gameplay scenes use the shared Godot island surface. Author a
+top-surface outline first, then layer the grass material, perimeter moss,
+front cliff faces, and either a stone path or elliptical courtyard.
+Use the same outline for walkable bounds and apply actor clearance
+inside that outline. A bridge connects the walkable regions at deck
+height. Cliff faces and atmospheric cloud banks sit below or behind it.
+Keep the supporting prop art separate so feet and foreground objects
+can sort at ground contact.
+
+Scene 03 sets the composition standard. Frame the green tree at the
+upper left, put the peach tree on the lower-left rim, and curve the
+path between them into open combat space. Keep larger rocks and bushes
+at the perimeter. Scene 05 uses radial paving and four rune pillars to
+frame the guardian and keep the attack telegraph readable. Scene 06
+uses the gate and its gold light as the focal point, with the chest and
+blossom tree off the approach.
+
+The older cloud-rim PNGs, square terrain tiles, and assembly sheets
+remain available for asset review. Their approval status is independent
+of the runtime terrain. See the [runtime visual audit](VISUAL_REBUILD_REPORT.md).

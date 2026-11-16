@@ -50,7 +50,7 @@ func start_scene_encounter(theme: String) -> void:
 	match theme:
 		"mortal_realm":
 			wave_changed.emit(1, 6, "Cảnh 1: Phàm Gian — Làng Thanh Vân")
-			_spawn_portal(Vector2(520, 20))
+			_spawn_portal(Vector2(315, -25))
 		"stairway_clouds":
 			wave_changed.emit(2, 6, "Cảnh 2: Thang Mây — Cầu Đá Cổ")
 			_spawn_specific_enemy("ranged", Vector2(540, 0))
@@ -69,7 +69,7 @@ func start_scene_encounter(theme: String) -> void:
 			_spawn_boss()
 		"gate_of_heaven":
 			wave_changed.emit(6, 6, "Cảnh 6: Cổng Thiên Giới")
-			_spawn_portal(Vector2(0, -180))
+			_spawn_portal(Vector2(58, -162))
 		_:
 			start_floor()
 
@@ -170,7 +170,7 @@ func _spawn_boss() -> void:
 	_boss_active = true
 	wave_changed.emit(_waves.size(), _waves.size(), "BOSS: Thiên Lôi Tướng")
 	var boss := BossController.new()
-	boss.position = Vector2(80, -90) if (_arena != null and _arena.scene_theme == "boss_arena") else Vector2(0, -180)
+	boss.position = Vector2(-57, -130) if (_arena != null and _arena.scene_theme == "boss_arena") else Vector2(0, -180)
 	if _player != null and boss.position.distance_to(_player.global_position) < 220.0:
 		boss.position = Vector2(0, 180)
 	boss.setup(_player, _combat, _arena)
@@ -191,6 +191,13 @@ func _spawn_portal(pos: Vector2) -> void:
 	if _ysort_entities == null:
 		return
 	var portal := CloudPortal.new()
+	if _arena != null:
+		match _arena.scene_theme:
+			"mortal_realm":
+				portal.village_exit = true
+				portal.visual_scale = 1.22
+			"gate_of_heaven":
+				portal.visual_scale = 1.65
 	portal.position = _arena.clamp_to_arena(pos, 70.0) if _arena != null else pos
 	portal.entered.connect(func() -> void:
 		_floor_done = true

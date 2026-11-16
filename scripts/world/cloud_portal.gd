@@ -3,6 +3,8 @@ class_name CloudPortal
 
 signal entered
 
+var visual_scale := 1.0
+var village_exit := false
 var _triggered: bool = false
 
 
@@ -16,31 +18,27 @@ func _ready() -> void:
 	col.shape = shape
 	add_child(col)
 
-	var gw_path := "res://assets/base/environment/architecture/arch_heaven_gateway_01.png"
+	var visual := Node2D.new()
+	visual.scale = Vector2.ONE * visual_scale
+	add_child(visual)
+
+	var variant := "arch_celestial_gate_01" if village_exit else "arch_heaven_gateway_01"
+	var gw_path := "res://assets/base/environment/architecture/%s.png" % variant
 	if ResourceLoader.exists(gw_path):
 		var gw := Sprite2D.new()
 		gw.texture = load(gw_path)
-		gw.offset = Vector2(0, -76)
-		add_child(gw)
-
-	var sf := SpriteFrames.new()
-	sf.add_animation("swirl")
-	sf.set_animation_speed("swirl", 10.0)
-	sf.set_animation_loop("swirl", true)
-	for i in range(8):
-		var fpath := "res://assets/base/vfx/vfx_heaven_portal_%02d.png" % i
-		if ResourceLoader.exists(fpath):
-			sf.add_frame("swirl", load(fpath))
-	if sf.get_frame_count("swirl") > 0:
-		var swirl := AnimatedSprite2D.new()
-		swirl.sprite_frames = sf
-		swirl.offset = Vector2(0, -42)
-		swirl.play("swirl")
-		add_child(swirl)
+		gw.offset = Vector2(0, -108)
+		if not village_exit:
+			var light := ShaderMaterial.new()
+			light.shader = preload("res://scripts/world/prop_cleanup.gdshader")
+			light.set_shader_parameter("roof_span", Vector2(0.46, 0.54))
+			light.set_shader_parameter("portal_light", 0.24)
+			gw.material = light
+		visual.add_child(gw)
 
 	var label := Label.new()
-	label.text = "Cổng Thiên Giới"
-	label.position = Vector2(-56, -138)
+	label.text = "Thang Mây" if village_exit else "Cổng Thiên Giới"
+	label.position = Vector2(-56, -155 * visual_scale)
 	label.add_theme_font_size_override("font_size", 15)
 	label.add_theme_color_override("font_color", Color(0.95, 0.92, 0.55))
 	label.add_theme_color_override("font_outline_color", Color(0.05, 0.08, 0.14, 0.9))
