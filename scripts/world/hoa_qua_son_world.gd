@@ -84,8 +84,10 @@ func _build_monkey_village() -> void:
 	spawn_disc.z_index = -1
 	add_child(spawn_disc)
 
-	for hut in L.HUTS:
-		_add_static_prop("hut", hut["pos"], hut["scale"], Vector2(44.0, 22.0) * hut["scale"])
+	for i in L.HUTS.size():
+		var hut: Dictionary = L.HUTS[i]
+		var hut_kind := "hut" if i == 0 else "hut_small"
+		_add_static_prop(hut_kind, hut["pos"], hut["scale"], Vector2(44.0, 22.0) * hut["scale"])
 
 	for npc_data in L.NPCS:
 		var npc := InteractableObject.new()
@@ -142,6 +144,12 @@ func _build_monster_clearing() -> void:
 
 
 func _build_boss_cave() -> void:
+	var stairs := IsoPlaceholder.new()
+	stairs.kind = "stairs"
+	stairs.position = Vector2(1945.0, -965.0)
+	stairs.z_index = -1
+	add_child(stairs)
+
 	for pos in L.BOSS_TORCHES:
 		_add_static_prop("torch", pos, 1.0, Vector2(10.0, 6.0))
 
