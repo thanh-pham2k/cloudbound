@@ -218,3 +218,60 @@ Camera & Art Style (Minimal Stylized 2.5D Isometric):
 Negative constraints: No photorealism, no cast shadows on white background, no overlapping objects, no text.
 ```
 
+---
+
+## Batch 8 — Seamless Ground Surfaces, Cave Arch & Mountains (`assets/inbox/B8_ground_surfaces.png`)
+
+**Gồm 6 subimages (lưới 3×2) — Chuyên dùng lát sàn & nền không viền đen để ghép liền mạch như ảnh concept:**
+1. Mảng cỏ pastel liền mạch (`ground_grass_patch` — không viền)
+2. Mảng sân đất kem liền mạch (`ground_dirt_patch` — không viền)
+3. Mảng sàn đá lục giác Hang Boss (`ground_cave_floor` — không viền)
+4. Vòm vách đá Hang Boss hình móng ngựa (`cave_back_wall`)
+5. Góc vách đá 2.5D phủ cỏ (`cliff_corner_ledge`)
+6. Nền trời & núi xa Hoa Quả Sơn (`bg_distant_mountains`)
+
+```text
+Create a 2.5D isometric game terrain surface & background sprite sheet containing 6 separate assets arranged in a clean 3x2 grid on a solid pure white (#FFFFFF) background with wide empty spacing between each item, no overlapping, and no text or labels.
+
+Camera & Art Style (Minimal Stylized 2.5D Isometric, matching the Hoa Qua Son concept sheet):
+- Fixed 2.5D isometric projection (35-45 degree elevated angle).
+- Minimal Stylized look: soft pastel hand-painted cel shading, clean low-detail shapes, unified pastel palette (#9ED48A grass, #EBD8B7 cream dirt, #DDD6CE stone floor, #7B8499 cliff rock, #B8D4E3 sky & distant mountains).
+
+6 Subimages (3x2 grid):
+1. Top-left (Seamless Grass Ground Patch): Soft rounded organic flat grass patch in pastel jade-green (#9ED48A, #86C577) with a few tiny grass blades and 2-3 tiny white-yellow flower dots, NO dark outline around the outer edge so it blends seamlessly.
+2. Top-center (Seamless Cream Dirt Plaza Patch): Soft rounded organic flat dirt clearing patch in warm cream-tan (#EBD8B7, #DFC79F) with subtle soft shading, NO dark outline around the outer edge so it blends seamlessly.
+3. Top-right (Boss Cave Hex/Stone Floor Patch): Flat 2.5D isometric paved stone floor patch in warm light stone-gray (#DDD6CE) with subtle muted mortar lines (#B8B0A4) forming soft hexagonal/irregular flagstones, NO dark outline around the outer edge.
+4. Bottom-left (Boss Cave Horseshoe Rock Wall): Large 2.5D isometric curved horseshoe-shaped rocky cave back-wall made of chunky faceted gray stones (#9CA3AF, #7B8499) with crisp dark ink outlines (#1E293B), open at the front-bottom so a boss arena sits inside.
+5. Bottom-center (Elevated Cliff Corner Segment): 2.5D isometric chunky slate-gray mountain cliff corner (#7B8499, #9CA3AF) topped with soft pastel green grass edge (#9ED48A) and crisp #1E293B outlines.
+6. Bottom-right (Distant Misty Mountains & Sky): Wide soft pastel sky-blue (#CBEAF8) backdrop with layered misty blue-green mountain silhouettes (#9EC5D6, #7FAEC4) and 2 fluffy white clouds.
+
+Negative constraints: No photorealism, no text, no labels, no overlapping items, no dark black borders on items 1-3.
+```
+
+---
+
+## Batch 9 — Water Stream & Ground Transitions (`assets/inbox/B9_water_transitions.png`)
+
+**Gồm 4 subimages (lưới 2×2):**
+1. Dòng suối xanh ngọc (`stream_water`)
+2. Đá cuội rải rìa đường (`pebble_cluster`)
+3. Cột đèn lồng gỗ Làng Khỉ (`lantern_post`)
+4. Ánh sáng vàng Cổng Mở (`fx_portal_glow`)
+
+```text
+Create a 2.5D isometric game environment detail sprite sheet containing 4 separate assets arranged in a clean 2x2 grid on a solid pure white (#FFFFFF) background with wide empty spacing between each item, no overlapping, no cast shadows on background, and no text or labels.
+
+Camera & Art Style (Minimal Stylized 2.5D Isometric):
+- Fixed 2.5D isometric projection (35-45 degree elevated angle).
+- Minimal Stylized look: simple clean shapes, pastel palette, crisp dark indigo-slate ink outline (#1E293B) for solid props.
+
+4 Subimages (2x2 grid):
+1. Top-left (Isometric Stream Water Segment): 2.5D isometric curved clear sky-blue water stream strip (#7CC6EE) with soft white-cyan ripples (#CBEAF8) and subtle grassy-stone bank edges.
+2. Top-right (Small Pebble Cluster): 3-4 tiny smooth rounded gray stones (#D8D2CA, #9CA3AF) grouped loosely for ground path edges, crisp #1E293B outline.
+3. Bottom-left (Village Wooden Lantern Post): Cozy 2.5D isometric small wooden post (#9C6644) hanging a glowing red-gold Chinese paper lantern (#DC2626, #FBBF24).
+4. Bottom-right (Golden Portal Glow FX): Soft glowing warm golden-yellow archway light aura (#FBBF24, #FEF08A) for the unlocked Boss Cave exit.
+
+Negative constraints: No photorealism, no cast shadows on white background, no overlapping items, no text.
+```
+
+
