@@ -1,0 +1,466 @@
+class_name HoaQuaSonWorld
+extends Node2D
+## Playable Semantic Layout prototype for Phase 2 — Hoa Qua Son.
+## Builds the 4 connected areas + secret branch from HoaQuaSonLayout.
+
+const L := preload("res://scripts/world/hoa_qua_son_layout.gd")
+const P := L.PALETTE
+
+var player: PlayerController
+var entities_root: Node2D
+var ground_layer: _GroundLayer
+var elder_npc: InteractableObject
+var boss_chest: InteractableObject
+var boss_exit: InteractableObject
+var boss_exit_blocker: CollisionShape2D
+
+# Quest progression: 0 = talk to Elder for Q1, 1 = Q1 active (kill 3), 2 = Q1 turn-in,
+# 3 = Q2 active (collect 5 peaches), 4 = Q2 turn-in, 5 = Q3 active (defeat boss), 6 = Q3 done
+var quest_stage: int = 0
+var kills_count: int = 0
+var peaches_count: int = 0
+var boss_defeated: bool = false
+
+var _hud_stats: Label
+var _hud_area: Label
+var _hud_quest: Label
+var _hud_prompt: Label
+var _toast_label: Label
+var _toast_timer: float = 0.0
+
+
+func _ready() -> void:
+	_build_ground()
+	_build_outer_boundary()
+
+	entities_root = Node2D.new()
+	entities_root.name = "Entities"
+	entities_root.y_sort_enabled = true
+	add_child(entities_root)
+
+	_build_monkey_village()
+	_build_peach_forest()
+	_build_monster_clearing()
+	_build_boss_cave()
+	_spawn_player()
+	_build_hud()
+	_refresh_hud()
+
+
+func _process(delta: float) -> void:
+	if _toast_timer > 0.0:
+		_toast_timer -= delta
+		if _toast_timer <= 0.0 and _toast_label:
+			_toast_label.visible = false
+	if player and _hud_prompt:
+		var p := player.get_nearest_interactable_prompt()
+		_hud_prompt.text = p
+		_hud_prompt.visible = not p.is_empty()
+		_hud_area.text = "Khu vực: %s" % _get_current_area_name(player.global_position)
+
+
+func _build_ground() -> void:
+	ground_layer = _GroundLayer.new()
+	ground_layer.name = "GroundLayer"
+	add_child(ground_layer)
+
+
+func _build_outer_boundary() -> void:
+	var body := StaticBody2D.new()
+	body.name = "OuterBoundary"
+	body.collision_layer = 2
+	body.collision_mask = 0
+	var poly := CollisionPolygon2D.new()
+	poly.build_mode = CollisionPolygon2D.BUILD_SEGMENTS
+	poly.polygon = PackedVector2Array(L.WALKABLE_BOUNDARY)
+	body.add_child(poly)
+	add_child(body)
+
+
+func _build_monkey_village() -> void:
+	var spawn_disc := IsoPlaceholder.new()
+	spawn_disc.kind = "spawn_disc"
+	spawn_disc.position = L.SPAWN_POS
+	spawn_disc.z_index = -1
+	add_child(spawn_disc)
+
+	for hut in L.HUTS:
+		_add_static_prop("hut", hut["pos"], hut["scale"], Vector2(44.0, 22.0) * hut["scale"])
+
+	for npc_data in L.NPCS:
+		var npc := InteractableObject.new()
+		npc.kind = "npc"
+		npc.item_id = npc_data["id"]
+		npc.display_name = npc_data["name"]
+		npc.position = npc_data["pos"]
+		npc.prompt_text = "[E] Nói chuyện với %s" % npc_data["name"]
+		npc.interacted.connect(_on_npc_interacted)
+		entities_root.add_child(npc)
+		if npc_data["id"] == "elder_monkey":
+			elder_npc = npc
+
+
+func _build_peach_forest() -> void:
+	for pos in L.PEACH_TREES:
+		_add_static_prop("peach_tree", pos, 1.0, Vector2(12.0, 8.0))
+	for pos in L.GREEN_TREES:
+		_add_static_prop("green_tree", pos, 1.0, Vector2(12.0, 8.0))
+
+	for i in L.PEACH_PICKUPS.size():
+		var peach := InteractableObject.new()
+		peach.kind = "peach"
+		peach.item_id = "peach_%d" % i
+		peach.display_name = "Đào Tiên"
+		peach.position = L.PEACH_PICKUPS[i]
+		peach.prompt_text = "[E] Nhặt Đào Tiên"
+		peach.interacted.connect(_on_peach_interacted)
+		entities_root.add_child(peach)
+
+	_add_static_prop("peach_tree", L.SECRET_SPECIAL_TREE, 1.2, Vector2(14.0, 9.0))
+
+	var secret_chest := InteractableObject.new()
+	secret_chest.kind = "chest"
+	secret_chest.item_id = "secret_chest"
+	secret_chest.display_name = "Rương Bí Mật"
+	secret_chest.position = L.SECRET_CHEST_POS
+	secret_chest.prompt_text = "[E] Mở Rương Bí Mật"
+	secret_chest.interacted.connect(_on_chest_interacted)
+	entities_root.add_child(secret_chest)
+
+
+func _build_monster_clearing() -> void:
+	for pos in L.ROCKS:
+		_add_static_prop("rock", pos, 1.0, Vector2(20.0, 11.0))
+
+	for m in L.MONSTERS:
+		var enemy := EnemyBase.new()
+		enemy.enemy_id = m["id"]
+		enemy.display_name = m["name"]
+		enemy.position = m["pos"]
+		enemy.died.connect(_on_enemy_died)
+		entities_root.add_child(enemy)
+
+
+func _build_boss_cave() -> void:
+	for pos in L.BOSS_TORCHES:
+		_add_static_prop("torch", pos, 1.0, Vector2(10.0, 6.0))
+
+	var boss := EnemyBase.new()
+	boss.enemy_id = L.BOSS["id"]
+	boss.display_name = L.BOSS["name"]
+	boss.is_boss = true
+	boss.max_hp = 180
+	boss.attack_damage = 18
+	boss.move_speed = 130.0
+	boss.detect_radius = 240.0
+	boss.leash_radius = 320.0
+	boss.attack_range = 60.0
+	boss.reward_exp = 150
+	boss.reward_gold = 50
+	boss.position = L.BOSS["pos"]
+	boss.died.connect(_on_enemy_died)
+	entities_root.add_child(boss)
+
+	boss_chest = InteractableObject.new()
+	boss_chest.kind = "chest"
+	boss_chest.item_id = "boss_chest"
+	boss_chest.display_name = "Rương Yêu Vương"
+	boss_chest.position = L.BOSS_CHEST_POS
+	boss_chest.prompt_text = "[E] Mở Rương Phần Thưởng"
+	boss_chest.visible = false
+	boss_chest.active = false
+	boss_chest.interacted.connect(_on_chest_interacted)
+	entities_root.add_child(boss_chest)
+
+	boss_exit = InteractableObject.new()
+	boss_exit.kind = "exit_arch"
+	boss_exit.item_id = "boss_exit"
+	boss_exit.display_name = "Cổng Khu Vực Mới"
+	boss_exit.position = L.BOSS_EXIT_POS
+	boss_exit.prompt_text = "[E] Cổng bị khóa (Hạ Yêu Vương để mở)"
+	boss_exit.unlocked = false
+	boss_exit.interacted.connect(_on_exit_interacted)
+	entities_root.add_child(boss_exit)
+
+	var gate_body := StaticBody2D.new()
+	gate_body.name = "BossExitBlocker"
+	gate_body.position = L.BOSS_EXIT_POS
+	gate_body.collision_layer = 2
+	gate_body.collision_mask = 0
+	boss_exit_blocker = CollisionShape2D.new()
+	var gate_rect := RectangleShape2D.new()
+	gate_rect.size = Vector2(72.0, 26.0)
+	boss_exit_blocker.shape = gate_rect
+	gate_body.add_child(boss_exit_blocker)
+	entities_root.add_child(gate_body)
+
+
+func _add_static_prop(kind: String, pos: Vector2, s: float, col_half: Vector2) -> void:
+	var body := StaticBody2D.new()
+	body.position = pos
+	body.collision_layer = 2
+	body.collision_mask = 0
+
+	var col := CollisionShape2D.new()
+	var rect := RectangleShape2D.new()
+	rect.size = col_half * 2.0
+	col.shape = rect
+	body.add_child(col)
+
+	var vis := IsoPlaceholder.new()
+	vis.kind = kind
+	vis.item_scale = s
+	body.add_child(vis)
+
+	entities_root.add_child(body)
+
+
+func _spawn_player() -> void:
+	player = PlayerController.new()
+	player.name = "Player"
+	player.position = L.SPAWN_POS
+	player.spawn_position = L.SPAWN_POS
+	player.stats_changed.connect(_refresh_hud)
+	player.respawned.connect(func(): _show_toast("Bạn đã hồi sinh tại Làng Khỉ (giữ nguyên EXP & Vàng)."))
+
+	var cam := Camera2D.new()
+	cam.name = "Camera2D"
+	cam.position_smoothing_enabled = true
+	cam.position_smoothing_speed = 8.0
+	player.add_child(cam)
+
+	entities_root.add_child(player)
+
+
+func _on_npc_interacted(item: InteractableObject, p: PlayerController) -> void:
+	if item.item_id == "guide_monkey":
+		_show_toast("Khỉ Gác Cổng: Đi thẳng ĐB qua Rừng Đào → Bãi Quái → Hang Boss. Rẽ phải ở Rừng Đào có Khu Bí Mật!")
+		return
+
+	match quest_stage:
+		0:
+			quest_stage = 1
+			_show_toast("Khỉ Trưởng Lão: Hãy ra Bãi Quái tiêu diệt 3 Lợn Rừng bảo vệ làng! (Q1)")
+		1:
+			if kills_count >= 3:
+				quest_stage = 3
+				p.grant_rewards(50, 20)
+				_show_toast("Hoàn thành Q1 (+50 EXP, +20 Vàng)! Q2: Hãy thu thập 5 Đào Tiên trong Rừng Đào!")
+			else:
+				_show_toast("Khỉ Trưởng Lão: Ngươi đã hạ %d/3 yêu quái. Cố lên!" % kills_count)
+		3:
+			if peaches_count >= 5:
+				quest_stage = 5
+				p.grant_rewards(40, 15)
+				_show_toast("Hoàn thành Q2 (+40 EXP, +15 Vàng)! Q3: Tiến vào Hang Boss đánh bại Yêu Vương!")
+			else:
+				_show_toast("Khỉ Trưởng Lão: Đã thu thập %d/5 Đào Tiên." % peaches_count)
+		5:
+			if boss_defeated:
+				quest_stage = 6
+				_show_toast("Khỉ Trưởng Lão: Tuyệt vời! Hoa Quả Sơn đã bình yên, cổng khu vực mới đã mở!")
+			else:
+				_show_toast("Khỉ Trưởng Lão: Yêu Vương đang chờ ở Hang Boss phía Đông Bắc!")
+		_:
+			_show_toast("Khỉ Trưởng Lão: Chúc mừng Đại Thánh đã hoàn thành chương đầu!")
+	_refresh_hud()
+
+
+func _on_peach_interacted(item: InteractableObject, p: PlayerController) -> void:
+	peaches_count += 1
+	p.heal(25)
+	item.active = false
+	item.visible = false
+	_show_toast("Nhặt Đào Tiên (%d/5) — Hồi 25 HP!" % peaches_count)
+	_refresh_hud()
+
+
+func _on_chest_interacted(item: InteractableObject, p: PlayerController) -> void:
+	item.set_opened(true)
+	if item.item_id == "secret_chest":
+		p.heal(50)
+		p.grant_rewards(30, 25)
+		_show_toast("Mở Rương Bí Mật: +50 HP, +30 EXP, +25 Vàng!")
+	else:
+		p.grant_rewards(50, 50)
+		_show_toast("Mở Rương Yêu Vương: +50 EXP, +50 Vàng!")
+	_refresh_hud()
+
+
+func _on_enemy_died(_enemy_id: String, is_boss: bool, rew_exp: int, rew_gold: int) -> void:
+	if player:
+		player.grant_rewards(rew_exp, rew_gold)
+	if is_boss:
+		boss_defeated = true
+		if boss_chest:
+			boss_chest.visible = true
+			boss_chest.active = true
+		if boss_exit:
+			boss_exit.set_unlocked(true)
+			boss_exit.prompt_text = "[E] Bước qua Cổng Khu Vực Mới (Hoàn thành Vertical Slice)"
+		if boss_exit_blocker:
+			boss_exit_blocker.set_deferred("disabled", true)
+		if ground_layer:
+			ground_layer.boss_cleared = true
+			ground_layer.queue_redraw()
+		_show_toast("Yêu Vương đã bị đánh bại! Rương phần thưởng & Cổng khu vực mới đã mở!")
+	else:
+		kills_count += 1
+		_show_toast("Đã hạ yêu quái (%d/3) — +%d EXP, +%d Vàng" % [kills_count, rew_exp, rew_gold])
+	_refresh_hud()
+
+
+func _on_exit_interacted(_item: InteractableObject, _p: PlayerController) -> void:
+	if boss_defeated:
+		_show_toast("CHÚC MỪNG! Bạn đã hoàn thành Vertical Slice Hoa Quả Sơn (4 khu vực + Boss)!")
+	else:
+		_show_toast("Cổng đang bị phong ấn. Hãy đánh bại Yêu Vương trước!")
+
+
+func _get_current_area_name(pos: Vector2) -> String:
+	var best_name := "Đường mòn"
+	var best_dist := INF
+	for area in L.AREAS:
+		var d := pos.distance_to(area["center"])
+		if d <= area["radius"].x * 0.95 and d < best_dist:
+			best_dist = d
+			best_name = area["name"]
+	return best_name
+
+
+func _build_hud() -> void:
+	var layer := CanvasLayer.new()
+	layer.name = "HUD"
+	add_child(layer)
+
+	_hud_stats = Label.new()
+	_hud_stats.position = Vector2(16, 12)
+	_hud_stats.add_theme_color_override("font_outline_color", P["ink"])
+	_hud_stats.add_theme_constant_override("outline_size", 3)
+	layer.add_child(_hud_stats)
+
+	_hud_area = Label.new()
+	_hud_area.position = Vector2(16, 38)
+	_hud_area.add_theme_color_override("font_color", P["gold"])
+	_hud_area.add_theme_color_override("font_outline_color", P["ink"])
+	_hud_area.add_theme_constant_override("outline_size", 3)
+	layer.add_child(_hud_area)
+
+	_hud_quest = Label.new()
+	_hud_quest.position = Vector2(880, 12)
+	_hud_quest.size = Vector2(384, 80)
+	_hud_quest.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_hud_quest.add_theme_color_override("font_outline_color", P["ink"])
+	_hud_quest.add_theme_constant_override("outline_size", 3)
+	layer.add_child(_hud_quest)
+
+	_hud_prompt = Label.new()
+	_hud_prompt.position = Vector2(340, 620)
+	_hud_prompt.size = Vector2(600, 32)
+	_hud_prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_hud_prompt.add_theme_color_override("font_color", P["gold"])
+	_hud_prompt.add_theme_color_override("font_outline_color", P["ink"])
+	_hud_prompt.add_theme_constant_override("outline_size", 4)
+	_hud_prompt.visible = false
+	layer.add_child(_hud_prompt)
+
+	var controls := Label.new()
+	controls.text = "WASD: Di chuyển | Space: Lướt | K: Đánh gậy | E: Tương tác"
+	controls.position = Vector2(340, 682)
+	controls.size = Vector2(600, 28)
+	controls.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	controls.add_theme_color_override("font_outline_color", P["ink"])
+	controls.add_theme_constant_override("outline_size", 3)
+	layer.add_child(controls)
+
+	_toast_label = Label.new()
+	_toast_label.position = Vector2(240, 80)
+	_toast_label.size = Vector2(800, 36)
+	_toast_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_toast_label.add_theme_color_override("font_color", Color.WHITE)
+	_toast_label.add_theme_color_override("font_outline_color", P["ink"])
+	_toast_label.add_theme_constant_override("outline_size", 4)
+	_toast_label.visible = false
+	layer.add_child(_toast_label)
+
+
+func _refresh_hud() -> void:
+	if player and _hud_stats:
+		_hud_stats.text = "Ngộ Không Lv.%d | HP %d/%d | DMG %d | EXP %d | Vàng %d" % [
+			player.level, player.hp, player.max_hp, player.attack_damage, player.exp_points, player.gold
+		]
+	if _hud_quest:
+		var q_text := ""
+		match quest_stage:
+			0:
+				q_text = "Nhiệm vụ: Gặp Khỉ Trưởng Lão [E]"
+			1:
+				q_text = "Q1 — Bảo vệ làng: Hạ yêu quái (%d/3)" % mini(kills_count, 3)
+			3:
+				q_text = "Q2 — Rừng Đào: Thu thập đào (%d/5)" % mini(peaches_count, 5)
+			5:
+				q_text = "Q3 — Hang Boss: Hạ Yêu Vương (%s)" % ("Xong - Về gặp Trưởng Lão/Qua cổng" if boss_defeated else "0/1")
+			_:
+				q_text = "Hoàn thành Vertical Slice Hoa Quả Sơn!"
+		_hud_quest.text = q_text
+	if elder_npc:
+		var ready_turn_in := (quest_stage == 1 and kills_count >= 3) or (quest_stage == 3 and peaches_count >= 5)
+		elder_npc.set_quest_marker("?" if ready_turn_in else ("!" if quest_stage == 0 else ""))
+
+
+func _show_toast(msg: String) -> void:
+	if _toast_label:
+		_toast_label.text = msg
+		_toast_label.visible = true
+		_toast_timer = 4.0
+
+
+class _GroundLayer extends Node2D:
+	var boss_cleared: bool = false
+
+	func _draw() -> void:
+		# Outer soft grass canvas
+		draw_rect(Rect2(-900, -1700, 4100, 2400), P["grass_dark"])
+		# Playable island base
+		var boundary_pts := PackedVector2Array(L.WALKABLE_BOUNDARY)
+		draw_colored_polygon(boundary_pts, P["grass_light"])
+		var border := PackedVector2Array(boundary_pts)
+		border.append(boundary_pts[0])
+		draw_polyline(border, P["ink"], 3.0, true)
+
+		# Area floor pads matching SVG semantic colors
+		for area in L.AREAS:
+			var col: Color = P["grass_light"].lightened(0.06)
+			match area["surface"]:
+				"cave":
+					col = P["stone_light"]
+				"clearing":
+					col = P["path_cream"]
+				"secret":
+					col = P["path_cream"]
+				"forest":
+					col = Color("#CFE7C9")
+			_draw_iso_ellipse(area["center"], area["radius"].x * 0.72, area["radius"].y * 0.72, col, area["surface"] == "cave")
+
+		# Winding main trail & secret branch trail
+		var main_pts := PackedVector2Array(L.MAIN_PATH_POINTS)
+		var secret_pts := PackedVector2Array(L.SECRET_BRANCH_POINTS)
+		draw_polyline(main_pts, P["path_edge"], 84.0, true)
+		draw_polyline(main_pts, P["path_cream"], 72.0, true)
+		draw_polyline(secret_pts, P["path_edge"], 54.0, true)
+		draw_polyline(secret_pts, P["path_cream"], 44.0, true)
+
+		# Victory path highlight from Boss Chest to Unlocked Exit
+		if boss_cleared:
+			draw_dashed_line(L.BOSS_CHEST_POS, L.BOSS_EXIT_POS, P["gold"], 5.0, 12.0)
+
+	func _draw_iso_ellipse(center: Vector2, rx: float, ry: float, color: Color, outline: bool) -> void:
+		var pts := PackedVector2Array()
+		for i in 32:
+			var a := (float(i) / 32.0) * TAU
+			pts.append(center + Vector2(cos(a) * rx, sin(a) * ry))
+		draw_colored_polygon(pts, color)
+		if outline:
+			var closed := PackedVector2Array(pts)
+			closed.append(pts[0])
+			draw_polyline(closed, P["stone_dark"], 3.0, true)
