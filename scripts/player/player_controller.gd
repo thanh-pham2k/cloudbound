@@ -72,6 +72,7 @@ func _physics_process(delta: float) -> void:
 		_visual.queue_redraw()
 
 	if Input.is_action_just_pressed("dash") and _dash_cd <= 0.0 and _dash_timer <= 0.0:
+		_spawn_dash_dust()
 		_dash_timer = DASH_DURATION
 		_dash_cd = DASH_COOLDOWN
 		_invuln_timer = DASH_DURATION + 0.06
@@ -136,6 +137,18 @@ func _spawn_slash_fx() -> void:
 	var tw := fx.create_tween()
 	tw.tween_property(fx, "modulate:a", 0.0, 0.18)
 	tw.tween_callback(fx.queue_free)
+
+
+func _spawn_dash_dust() -> void:
+	var dust := Sprite2D.new()
+	dust.texture = load("res://assets/sprites/concept/dash_dust.png")
+	dust.position = position - last_facing * 25.0
+	dust.scale = Vector2.ONE * 75.0 / dust.texture.get_width()
+	dust.rotation = last_facing.angle()
+	get_parent().add_child(dust)
+	var tween := dust.create_tween()
+	tween.tween_property(dust, "modulate:a", 0.0, 0.35)
+	tween.tween_callback(dust.queue_free)
 
 
 func _perform_interact() -> void:

@@ -34,6 +34,8 @@ var _telegraph_timer: float = 0.0
 var _telegraph_duration: float = 0.55
 var _knockback_vel: Vector2 = Vector2.ZERO
 var _hit_flash_timer: float = 0.0
+var _alert: Sprite2D
+var _alert_time: float = 0.0
 var _visual: IsoPlaceholder
 
 
@@ -55,12 +57,20 @@ func _ready() -> void:
 	_visual.kind = "boss" if is_boss else enemy_kind
 	_visual.item_scale = 1.0
 	add_child(_visual)
+	_alert = Sprite2D.new()
+	_alert.texture = load("res://assets/sprites/concept/enemy_alert_marks.png")
+	_alert.scale = Vector2.ONE * 28.0 / _alert.texture.get_width()
+	_alert.position = Vector2(0, -145 if is_boss else -68)
+	_alert.visible = false
+	add_child(_alert)
 
 
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
 
+	_alert_time = maxf(0.0, _alert_time - delta)
+	_alert.visible = _alert_time > 0.0
 	_attack_cd = maxf(0.0, _attack_cd - delta)
 	_hit_flash_timer = maxf(0.0, _hit_flash_timer - delta)
 	_visual.hit_flash = _hit_flash_timer
@@ -74,6 +84,7 @@ func _physics_process(delta: float) -> void:
 		State.PATROL:
 			_visual.anim_state = "idle"
 			if player and dist_to_player <= detect_radius:
+				_alert_time = 0.65
 				_state = State.CHASE
 			else:
 				_process_patrol(delta)

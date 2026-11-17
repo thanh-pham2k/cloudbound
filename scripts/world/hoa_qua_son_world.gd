@@ -8,7 +8,7 @@ const P := L.PALETTE
 
 var player: PlayerController
 var entities_root: Node2D
-var ground_layer: _GroundLayer
+var terrain_layer: ConceptTerrain
 var elder_npc: InteractableObject
 var boss_chest: InteractableObject
 var boss_exit: InteractableObject
@@ -68,115 +68,9 @@ func _process(delta: float) -> void:
 
 
 func _build_ground() -> void:
-	ground_layer = _GroundLayer.new()
-	ground_layer.name = "GroundLayer"
-	ground_layer.z_index = -10
-	add_child(ground_layer)
-
-	# Distant misty mountain backdrop behind the upper-left/top horizon
-	var bg_tex := load("res://assets/sprites/environment/bg_distant_mountains.png") as Texture2D
-	if bg_tex:
-		for mx in [-450.0, 250.0, 950.0, 1650.0, 2350.0]:
-			var bg := Sprite2D.new()
-			bg.texture = bg_tex
-			bg.position = Vector2(mx, mx * -0.45 - 380.0)
-			bg.scale = Vector2(1.8, 1.8)
-			bg.z_index = -20
-			add_child(bg)
-
-	# Dense hand-painted grass patches covering the island surface
-	var grass_tex := load("res://assets/sprites/tiles/ground_grass_patch.png") as Texture2D
-	if grass_tex:
-		var boundary := PackedVector2Array(L.WALKABLE_BOUNDARY)
-		var rng := RandomNumberGenerator.new()
-		rng.seed = 4202
-		for gx in range(-280, 2460, 175):
-			for gy in range(-1260, 160, 115):
-				var pt := Vector2(float(gx) + rng.randf_range(-28.0, 28.0), float(gy) + rng.randf_range(-18.0, 18.0))
-				if Geometry2D.is_point_in_polygon(pt, boundary):
-					var sp := Sprite2D.new()
-					sp.texture = grass_tex
-					sp.position = pt
-					var sc := rng.randf_range(0.75, 1.0)
-					sp.scale = Vector2(sc, sc)
-					sp.flip_h = rng.randf() > 0.5
-					sp.modulate = Color(1, 1, 1, 0.92)
-					sp.z_index = -6
-					add_child(sp)
-
-	# Seamless hand-painted cream dirt along the winding main path, secret branch, and clearings
-	var dirt_tex := load("res://assets/sprites/tiles/ground_dirt_patch.png") as Texture2D
-	if dirt_tex:
-		for pts_arr in [L.MAIN_PATH_POINTS, L.SECRET_BRANCH_POINTS]:
-			var is_secret: bool = (pts_arr == L.SECRET_BRANCH_POINTS)
-			var step_len := 52.0 if is_secret else 62.0
-			var sc := Vector2(0.32, 0.28) if is_secret else Vector2(0.44, 0.36)
-			for i in range(pts_arr.size() - 1):
-				var a: Vector2 = pts_arr[i]
-				var b: Vector2 = pts_arr[i + 1]
-				var seg_len := a.distance_to(b)
-				var steps := maxi(1, int(ceil(seg_len / step_len)))
-				for s in range(steps + 1):
-					var t := float(s) / float(steps)
-					var sp := Sprite2D.new()
-					sp.texture = dirt_tex
-					sp.position = a.lerp(b, t)
-					sp.scale = sc
-					sp.flip_h = (s % 2 == 1)
-					sp.z_index = -5
-					add_child(sp)
-
-		var dirt_spots := [
-			{"pos": Vector2(30.0, -25.0), "scale": Vector2(1.15, 0.98)},
-			{"pos": Vector2(1175.0, -280.0), "scale": Vector2(0.62, 0.58)},
-			{"pos": Vector2(1465.0, -815.0), "scale": Vector2(1.32, 1.12)},
-		]
-		for d in dirt_spots:
-			var sp := Sprite2D.new()
-			sp.texture = dirt_tex
-			sp.position = d["pos"]
-			sp.scale = d["scale"]
-			sp.z_index = -4
-			add_child(sp)
-
-	# Seamless stone floor patches for Boss Cave
-	var cave_tex := load("res://assets/sprites/tiles/ground_cave_floor.png") as Texture2D
-	if cave_tex:
-		for off in [Vector2(-70, 20), Vector2(75, -25), Vector2(0, 0)]:
-			var sp := Sprite2D.new()
-			sp.texture = cave_tex
-			sp.position = Vector2(2200.0, -1100.0) + off
-			sp.scale = Vector2(0.95, 0.88)
-			sp.z_index = -3
-			add_child(sp)
-
-	# Hand-painted 2.5D cliff wall blocks along the lower/front rim of the island
-	var cliff_tex := load("res://assets/sprites/environment/cliff_wall.png") as Texture2D
-	if cliff_tex:
-		var boundary := PackedVector2Array(L.WALKABLE_BOUNDARY)
-		for i in boundary.size():
-			var p1 := boundary[i]
-			var p2 := boundary[(i + 1) % boundary.size()]
-			if p2.x > p1.x or p1.y > -220.0:
-				var seg_len := p1.distance_to(p2)
-				var steps := maxi(1, int(ceil(seg_len / 135.0)))
-				for s in range(steps):
-					var t := (float(s) + 0.5) / float(steps)
-					var sp := Sprite2D.new()
-					sp.texture = cliff_tex
-					sp.position = p1.lerp(p2, t) + Vector2(0.0, 42.0)
-					sp.scale = Vector2(0.42, 0.42)
-					sp.flip_h = p2.y > p1.y
-					sp.z_index = -8
-					add_child(sp)
-
-	# Waterfalls at cliff edges
-	for wf_pos in L.WATERFALLS:
-		var wf := IsoPlaceholder.new()
-		wf.kind = "waterfall"
-		wf.position = wf_pos
-		wf.z_index = -2
-		add_child(wf)
+	terrain_layer = ConceptTerrain.new()
+	terrain_layer.name = "ConceptTerrain"
+	add_child(terrain_layer)
 
 
 func _build_outer_boundary() -> void:
@@ -297,16 +191,22 @@ func _build_monster_clearing() -> void:
 func _build_boss_cave() -> void:
 	var cave_wall := IsoPlaceholder.new()
 	cave_wall.kind = "cave_wall"
-	cave_wall.position = Vector2(2205.0, -980.0)
-	cave_wall.item_scale = 1.48
-	cave_wall.z_index = -1
+	cave_wall.position = Vector2(2205.0, -1170.0)
+	cave_wall.item_scale = 1.0
+	cave_wall.z_index = -2
 	add_child(cave_wall)
 
 	var stairs := IsoPlaceholder.new()
 	stairs.kind = "stairs"
-	stairs.position = Vector2(1945.0, -965.0)
+	stairs.position = Vector2(2010.0, -975.0)
 	stairs.z_index = -1
 	add_child(stairs)
+
+	var front_rim := IsoPlaceholder.new()
+	front_rim.kind = "cave_front_rim"
+	front_rim.position = Vector2(2270, -992)
+	front_rim.z_index = -1
+	add_child(front_rim)
 
 	for pos in L.BOSS_TORCHES:
 		_add_static_prop("torch", pos, 1.0, Vector2(10.0, 6.0))
@@ -475,9 +375,8 @@ func _on_enemy_died(_enemy_id: String, is_boss: bool, rew_exp: int, rew_gold: in
 			boss_exit.prompt_text = "[E] Bước qua Cổng Khu Vực Mới (Hoàn thành Vertical Slice)"
 		if boss_exit_blocker:
 			boss_exit_blocker.set_deferred("disabled", true)
-		if ground_layer:
-			ground_layer.boss_cleared = true
-			ground_layer.queue_redraw()
+		if terrain_layer:
+			terrain_layer.mark_boss_cleared()
 		_show_toast("Yêu Vương đã bị đánh bại! Rương phần thưởng & Cổng khu vực mới đã mở!")
 	else:
 		kills_count += 1
@@ -668,30 +567,3 @@ func _show_toast(msg: String) -> void:
 		_toast_label.text = msg
 		_toast_label.visible = true
 		_toast_timer = 4.0
-
-
-class _GroundLayer extends Node2D:
-	var boss_cleared: bool = false
-
-	func _draw() -> void:
-		# Distant mountain sky-mist valley backdrop (matching concept overview)
-		draw_rect(Rect2(-900, -1700, 4100, 2400), Color("#B8D4E3"))
-
-		# Playable island grass base (soft edge, covered by hand-painted grass & dirt patches)
-		var boundary_pts := PackedVector2Array(L.WALKABLE_BOUNDARY)
-		draw_colored_polygon(boundary_pts, P["grass_light"])
-
-		# Victory path highlight from Boss Chest to Unlocked Exit
-		if boss_cleared:
-			draw_dashed_line(L.BOSS_CHEST_POS, L.BOSS_EXIT_POS, P["gold"], 5.0, 12.0)
-
-	func _draw_iso_ellipse(center: Vector2, rx: float, ry: float, color: Color, outline: bool) -> void:
-		var pts := PackedVector2Array()
-		for i in 32:
-			var a := (float(i) / 32.0) * TAU
-			pts.append(center + Vector2(cos(a) * rx, sin(a) * ry))
-		draw_colored_polygon(pts, color)
-		if outline:
-			var closed := PackedVector2Array(pts)
-			closed.append(pts[0])
-			draw_polyline(closed, P["stone_dark"], 3.0, true)

@@ -13,6 +13,8 @@ signal interacted(item: InteractableObject, player: PlayerController)
 
 var _visual: IsoPlaceholder
 var _marker_label: Label
+var _quest_bubble: Sprite2D
+var _reward_rays: Sprite2D
 
 
 func _ready() -> void:
@@ -35,7 +37,22 @@ func _ready() -> void:
 			_visual.state_active = unlocked
 	add_child(_visual)
 
+	if kind == "chest" or kind == "exit_arch":
+		_reward_rays = Sprite2D.new()
+		_reward_rays.texture = load("res://assets/sprites/concept/chest_reward_rays.png" if kind == "chest" else "res://assets/sprites/fx/fx_portal_glow.png")
+		_reward_rays.scale = Vector2.ONE * (90.0 if kind == "chest" else 120.0) / _reward_rays.texture.get_width()
+		_reward_rays.position = Vector2(0, -32)
+		_reward_rays.show_behind_parent = true
+		_reward_rays.visible = kind == "chest" or unlocked
+		add_child(_reward_rays)
+		move_child(_reward_rays, 0)
+
 	if kind == "npc" and item_id == "elder_monkey":
+		_quest_bubble = Sprite2D.new()
+		_quest_bubble.texture = load("res://assets/sprites/concept/quest_bubble_available.png")
+		_quest_bubble.scale = Vector2.ONE * 35.0 / _quest_bubble.texture.get_width()
+		_quest_bubble.position = Vector2(0, -83)
+		add_child(_quest_bubble)
 		_marker_label = Label.new()
 		_marker_label.text = "!"
 		_marker_label.position = Vector2(-6, -58)
@@ -44,6 +61,7 @@ func _ready() -> void:
 		_marker_label.add_theme_constant_override("outline_size", 4)
 		_marker_label.add_theme_font_size_override("font_size", 20)
 		add_child(_marker_label)
+		_marker_label.visible = false
 
 
 func can_interact() -> bool:
@@ -61,6 +79,8 @@ func interact(player: PlayerController) -> void:
 
 
 func set_opened(opened: bool) -> void:
+	if _reward_rays:
+		_reward_rays.visible = not opened
 	active = not opened
 	if _visual:
 		_visual.state_active = opened
@@ -68,6 +88,8 @@ func set_opened(opened: bool) -> void:
 
 
 func set_unlocked(value: bool) -> void:
+	if _reward_rays:
+		_reward_rays.visible = value
 	unlocked = value
 	if _visual:
 		_visual.state_active = unlocked
@@ -77,4 +99,6 @@ func set_unlocked(value: bool) -> void:
 func set_quest_marker(symbol: String) -> void:
 	if _marker_label:
 		_marker_label.text = symbol
-		_marker_label.visible = not symbol.is_empty()
+		_marker_label.visible = symbol == "?"
+	if _quest_bubble:
+		_quest_bubble.visible = symbol == "!"

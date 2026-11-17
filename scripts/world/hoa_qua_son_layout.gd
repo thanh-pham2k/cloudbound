@@ -114,7 +114,7 @@ const GREEN_TREES := [
 	Vector2(120.0, -220.0),
 	Vector2(-150.0, 130.0),
 	Vector2(335.0, 75.0),
-	Vector2(1245.0, -935.0),
+	Vector2(1245.0, -850.0),
 	Vector2(1745.0, -625.0),
 	Vector2(1805.0, -765.0),
 ]
@@ -206,10 +206,10 @@ const BOSS := {
 
 const BOSS_TORCHES := [
 	Vector2(2020.0, -1085.0),
-	Vector2(2115.0, -975.0),
+	Vector2(2380.0, -1085.0),
 ]
 
-const BOSS_EXIT_POS := Vector2(2305.0, -1235.0)
+const BOSS_EXIT_POS := Vector2(2225.0, -1200.0)
 const BOSS_CHEST_POS := Vector2(2200.0, -1100.0)
 
 ## Outer walkable boundary polygon (counter-clockwise) so the player stays
