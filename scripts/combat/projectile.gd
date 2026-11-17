@@ -76,27 +76,11 @@ func _on_body_entered(body: Node) -> void:
 		var res: Variant = body.take_damage(damage, is_crit)
 		accepted = (res is bool and res) or (res == null and hp_before != null and int(body.get("current_hp")) < int(hp_before))
 	if accepted and painted_visuals and is_instance_valid(get_parent()):
-		const IMPACT := preload("res://assets/generated/combat_vfx/cyan_impact_sprite_frames.tres")
-		var effect := AnimatedSprite2D.new()
-		effect.sprite_frames = IMPACT
-		effect.position = position
-		effect.scale = Vector2.ONE * maxf(radius / 18.0, 0.55)
-		effect.z_index = z_index
-		effect.autoplay = &"cyan_impact_fx"
-		effect.animation_finished.connect(effect.queue_free)
-		get_parent().add_child.call_deferred(effect)
+		pass
 	queue_free()
 
 
 func _draw() -> void:
-	if painted_visuals:
-		const COMET := preload("res://assets/generated/combat_vfx/cyan_projectile_sprite_frames.tres")
-		var frame := COMET.get_frame_texture(&"cyan_projectile_fx", int(_elapsed * 14.0) % 6)
-		var size := Vector2.ONE * radius * 7.0
-		draw_set_transform(Vector2.ZERO, velocity.angle())
-		draw_texture_rect(frame, Rect2(Vector2(-size.x * 0.72, -size.y * 0.5), size),
-			false, Color.WHITE.lerp(color, 0.32))
-		return
 	draw_circle(Vector2.ZERO, radius * 1.4, Color(color.r, color.g, color.b, 0.35))
 	draw_circle(Vector2.ZERO, radius, color)
 	draw_circle(Vector2.ZERO, radius * 0.45, Color.WHITE)

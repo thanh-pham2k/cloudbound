@@ -80,21 +80,9 @@ func _ready() -> void:
 	add_child(col)
 
 	_sprite = AnimatedSprite2D.new()
-	var sp_path := str(cfg.get("sprite_frames", ""))
-	if sp_path != "" and ResourceLoader.exists(sp_path):
-		_sprite.sprite_frames = load(sp_path)
-	var s := float(cfg.get("scale", 1.45))
-	if _arena != null and _arena.scene_theme == "boss_arena":
-		s *= 2.15
-	_sprite.scale = Vector2(s, s)
-	_sprite.offset = Vector2(0, -48)
-	if _arena != null and _arena.painted_visuals:
-		const GUARDIAN := preload("res://assets/generated/enemies/guardian/guardian_sprite_frames.tres")
-		_sprite.sprite_frames = GUARDIAN
-		_sprite.offset = Vector2(0.0, -63.0)
-		_sprite.scale = Vector2.ONE * 225.0 / 120.0
-		_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-		_painted_animation = true
+	const PAINTED := preload("res://scripts/world/painted_sprite.gd")
+	const GUARDIAN := preload("res://assets/characters/boss_thunder_warden/base.png")
+	PAINTED.set_actor_pose(_sprite, GUARDIAN, 225.0)
 	add_child(_sprite)
 
 	hp_changed.emit(current_hp, max_hp)

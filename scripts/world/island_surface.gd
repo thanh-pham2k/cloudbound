@@ -2,10 +2,10 @@ extends Node2D
 ## A repeatable terrain material, cliff segments and paving clipped to an authored shoreline.
 
 const SURFACE := preload("res://scripts/world/island_surface.gdshader")
-const GRASS_TEX := preload("res://assets/base/environment/ground/ground_jade_seamless_01.png")
-const STONE_TEX := preload("res://assets/base/environment/ground/ground_stone_seamless_01.png")
-const PATH_TEX := preload("res://assets/base/environment/ground/ground_path_seamless_01.png")
-const CLIFF_TEX := preload("res://assets/base/environment/platforms/cliff_rock_seamless.png")
+const GRASS_TEX := preload("res://assets/environment/tile_grass_01/base.png")
+const STONE_TEX := preload("res://assets/environment/tile_stone_01/base.png")
+const PATH_TEX := preload("res://assets/environment/tile_stone_01/base.png")
+const CLIFF_TEX := preload("res://assets/environment/cliff_edge_01/base.png")
 
 var _random := RandomNumberGenerator.new()
 

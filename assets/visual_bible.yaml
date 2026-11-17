@@ -5,7 +5,8 @@ source_doc: "docs/assets/VISUAL_BIBLE.md"
 
 # 1. Art Style & Gameplay-First Direction
 art_style:
-  style: stylized_2_5d_isometric
+  label: "Minimal Hand-Painted Isometric"
+  style: minimal_hand_painted_isometric
   priority: gameplay_first  # Low detail, strong silhouette, readable at gameplay zoom before polish
   detail_level: low
   outline: crisp_dark_ink
@@ -91,6 +92,7 @@ assets:
 
 # 7. Reference Library
 references:
+  map_concept: "assets/references/map_concept.jpg"
   environment: "assets/references/environment.png"
   characters: "assets/references/characters.png"
   props: "assets/references/props.png"

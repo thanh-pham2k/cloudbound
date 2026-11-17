@@ -5,7 +5,7 @@ Tạo 1 ảnh sheet rồi thả vào `assets/inbox/B3_environment.png`.
 ```text
 Create a 2.5D isometric game environment asset sheet (5 objects) on a solid flat pure white background with wide empty spacing between each object, no overlapping, no ground plane connecting them, no text or labels.
 
-Strict 2.5D Isometric Camera & Style:
+Strict 2.5D Isometric Camera & Style (Minimal Hand-Painted Isometric):
 - True 2.5D isometric game projection (standard 2:1 isometric dimetric camera angle, elevated ~30 degrees, 45-degree diagonal orientation showing top and two front-isometric faces for solid structures).
 - Gameplay-first low detail: clean readable silhouettes, soft rounded shapes, minimal surface noise.
 - Soft painterly cel shading, top-left 45-degree warm daylight, crisp dark indigo-slate ink outline (#1E293B).

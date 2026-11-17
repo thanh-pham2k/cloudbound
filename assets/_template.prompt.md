@@ -9,4 +9,4 @@ scale_vs_hero: 1.0
 Mô tả ngắn gọn hình dáng và vai trò gameplay.
 
 **Prompt:**
-`2.5D isometric <object>, <colors from visual_bible.yaml>, low detail soft cel shading, dark ink outline #1E293B, transparent background`
+`Minimal Hand-Painted Isometric 2.5D game asset, <object>, <colors from visual_bible.yaml>, low detail soft cel shading, dark ink outline #1E293B, transparent background`

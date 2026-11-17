@@ -27,33 +27,9 @@ func _ready() -> void:
 	visual.scale = Vector2.ONE * visual_scale
 	add_child(visual)
 
-	if painted_visuals:
-		const PAINTED := preload("res://scripts/world/painted_sprite.gd")
-		const VORTEX := preload("res://assets/generated/combat_vfx/portal_swirl_sprite_frames.tres")
-		const GATE := preload("res://assets/generated/integration/golden_dragon_gateway.png")
-		var vortex := AnimatedSprite2D.new()
-		vortex.sprite_frames = VORTEX
-		vortex.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-		vortex.scale = Vector2.ONE * (1.35 if heaven_gate else 1.8)
-		vortex.offset.y = -58.0
-		visual.add_child(vortex)
-		vortex.play(&"portal_swirl_fx")
-		if heaven_gate:
-			PAINTED.place(visual, GATE, Vector2.ZERO, 0.53, true)
-	else:
-		var variant := "arch_celestial_gate_01" if village_exit else "arch_heaven_gateway_01"
-		var gw_path := "res://assets/base/environment/architecture/%s.png" % variant
-		if ResourceLoader.exists(gw_path):
-			var gw := Sprite2D.new()
-			gw.texture = load(gw_path)
-			gw.offset = Vector2(0, -108)
-			if not village_exit:
-				var light := ShaderMaterial.new()
-				light.shader = preload("res://scripts/world/prop_cleanup.gdshader")
-				light.set_shader_parameter("roof_span", Vector2(0.46, 0.54))
-				light.set_shader_parameter("portal_light", 0.24)
-				gw.material = light
-			visual.add_child(gw)
+	const PAINTED := preload("res://scripts/world/painted_sprite.gd")
+	const GATE := preload("res://assets/props/gate_heaven_01/base.png")
+	PAINTED.place(visual, GATE, Vector2.ZERO, 0.72, true)
 
 	var label := Label.new()
 	label.text = "Thang Mây" if village_exit else "Cổng Thiên Giới"

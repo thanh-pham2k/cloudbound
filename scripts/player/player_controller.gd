@@ -5,7 +5,7 @@ signal hp_changed(current_hp: int, max_hp: int)
 signal died
 signal cooldowns_updated(dash_cd: float, dash_max: float, s1_cd: float, s1_max: float, s2_cd: float, s2_max: float)
 
-const SPRITE_PATH := "res://assets/generated/sprites/player_hero/player_hero_sprite_frames.tres"
+const SPRITE_PATH := "res://assets/characters/player_hero/base.png"
 const ACTION_BUFFER_WINDOW := 0.18
 const ACTION_IMPACT_FRAMES := {
 	&"attack_down": 3,
@@ -85,17 +85,16 @@ var _arena: CloudArena
 func setup(combat: CombatSystem, arena: CloudArena) -> void:
 	_combat = combat
 	_arena = arena
-	if arena != null and arena.painted_visuals:
-		const PAINTED := preload("res://scripts/world/painted_sprite.gd")
-		const HERO := preload("res://assets/processed/characters/staff_wielding_monkey_hero.png")
-		if painted_animation_frames != null:
-			_sprite.sprite_frames = painted_animation_frames
-			_sprite.offset = Vector2(0, -63)
-			_sprite.scale = Vector2.ONE
-			_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-			_play_anim("idle", "", false, 1.0, true)
-		else:
-			PAINTED.set_actor_pose(_sprite, HERO, 122.0)
+	const PAINTED := preload("res://scripts/world/painted_sprite.gd")
+	const HERO := preload("res://assets/characters/player_hero/base.png")
+	if painted_animation_frames != null:
+		_sprite.sprite_frames = painted_animation_frames
+		_sprite.offset = Vector2(0, -63)
+		_sprite.scale = Vector2.ONE
+		_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+		_play_anim("idle", "", false, 1.0, true)
+	else:
+		PAINTED.set_actor_pose(_sprite, HERO, 122.0)
 	_load_config()
 
 

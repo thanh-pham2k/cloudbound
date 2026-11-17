@@ -137,12 +137,6 @@ func _draw() -> void:
 	var progress := clampf(_elapsed / duration, 0.0, 1.0)
 	match shape_type:
 		ShapeType.CIRCLE:
-			if painted_visuals:
-				const RUNE := preload("res://assets/generated/combat_vfx/red_aoe_warning_sprite_frames.tres")
-				var frame := RUNE.get_frame_texture(&"red_aoe_warning_fx", int(_elapsed * 12.0) % 6)
-				var size := Vector2.ONE * 2.4 * radius
-				draw_texture_rect(frame, Rect2(-size * 0.5, size),
-					false, Color(1.0, 1.0, 1.0, 0.30 + 0.30 * progress))
 			draw_circle(Vector2.ZERO, radius, Color(base_color.r, base_color.g, base_color.b, 0.16))
 			draw_circle(Vector2.ZERO, radius * progress, Color(base_color.r, base_color.g, base_color.b, 0.32))
 			draw_arc(Vector2.ZERO, radius, 0.0, TAU, 48, Color(base_color.r, base_color.g, base_color.b, 0.85), 2.5)

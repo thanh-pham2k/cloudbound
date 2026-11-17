@@ -5,7 +5,7 @@ Tạo 1 ảnh sheet rồi thả vào `assets/inbox/B4_props.png`.
 ```text
 Create a 2.5D isometric game interactive props sheet (5 props) on a solid flat pure white background with wide empty spacing between each prop, no overlapping, no ground floor, no text or labels.
 
-Strict 2.5D Isometric Camera & Style:
+Strict 2.5D Isometric Camera & Style (Minimal Hand-Painted Isometric):
 - True 2.5D isometric game projection (standard 2:1 isometric dimetric camera angle, elevated ~30 degrees, 45-degree diagonal orientation showing clear top and two isometric side faces).
 - Gameplay-first low detail: strong readable silhouettes, clear interactive focal points, minimal surface clutter.
 - Soft painterly cel shading, top-left 45-degree warm daylight, crisp dark indigo-slate ink outline (#1E293B).

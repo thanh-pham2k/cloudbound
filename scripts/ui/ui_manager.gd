@@ -35,11 +35,8 @@ var _is_game_ended: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	if painted_visuals:
-		_build_painted_hud()
-	else:
-		_build_hud()
-		_build_boss_bar()
+	_build_hud()
+	_build_boss_bar()
 	_loot_label = _make_skill_pill("")
 	_loot_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	add_child(_loot_label)
@@ -61,14 +58,15 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _build_painted_hud() -> void:
-	const PORTRAIT := preload("res://assets/processed/ui/monkey_hero_portrait.png")
-	const METERS := preload("res://assets/processed/ui/hero_health_mana_bar.png")
-	const BOSS := preload("res://assets/processed/ui/dragon_boss_health_bar.png")
-	const BUTTONS: Array[Texture2D] = [
-		preload("res://assets/processed/ui/ability_button_lower_left.png"),
-		preload("res://assets/processed/ui/ability_button_top.png"),
-		preload("res://assets/processed/ui/ability_button_lower_right.png"),
-	]
+	_build_hud()
+	_build_boss_bar()
+
+
+func _unused_painted_hud_placeholder() -> void:
+	const PORTRAIT: Texture2D = null
+	const METERS: Texture2D = null
+	const BOSS: Texture2D = null
+	const BUTTONS: Array[Texture2D] = []
 
 	var layout := Control.new()
 	layout.mouse_filter = Control.MOUSE_FILTER_IGNORE

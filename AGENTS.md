@@ -2,6 +2,11 @@
 
 Toolkit: `tools/gameforge-kit/` (pinned Git Submodule)
 
+## Global Art & Map Standard
+- **Art Style:** `Minimal Hand-Painted Isometric` (2.5D `2:1` isometric dimetric, ~30° pitch, 45° rotated axes, gameplay-first low detail, `#1E293B` ink outline).
+- **Authoritative Config:** [assets/visual_bible.yaml](assets/visual_bible.yaml) (`Global` → `assets/<category>/config.yaml` → `assets/<category>/<id>/prompt.md`) and Golden References in `assets/references/` (`map_concept.jpg`, `characters.png`, `environment.png`, `props.png`).
+- **World Structure:** Single continuous 5-zone seamless map (`Thanh Vân Village` → `Forest Outskirts` → `Stone Bridge / Temple Center` → `Thunder Boss Arena` → `Gate of Heaven`) progressing South-West to North-East.
+
 ## Multi-Agent Execution Workflow
 - Follow [docs/AGENT_WORKFLOW.md](docs/AGENT_WORKFLOW.md) for asset creation, code integration, delegation, and checkpoint actions.
 - Orchestrator owns asset direction and acceptance; Luna High Priority creates asset batches; Hydrogen High in AGY implements code and integrates assets.

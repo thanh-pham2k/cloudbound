@@ -6,8 +6,8 @@ class_name CloudArena
 const PaintedSprite := preload("res://scripts/world/painted_sprite.gd")
 const IslandSurface := preload("res://scripts/world/island_surface.gd")
 
-@export_enum("mortal_realm", "stairway_clouds", "azure_outskirts", "azure_center", "boss_arena", "gate_of_heaven")
-var scene_theme: String = "azure_outskirts"
+@export_enum("seamless_journey", "mortal_realm", "stairway_clouds", "azure_outskirts", "azure_center", "boss_arena", "gate_of_heaven")
+var scene_theme: String = "seamless_journey"
 
 @export var painted_visuals := false
 
@@ -111,20 +111,9 @@ func _rebuild_visuals() -> void:
 	_inset_outlines.clear()
 	_pillar_positions.clear()
 
-	if painted_visuals:
-		_build_painted_sky()
-		match scene_theme:
-			"mortal_realm":
-				_build_painted_village()
-			"stairway_clouds":
-				_build_painted_bridge()
-			"azure_center", "boss_arena", "gate_of_heaven":
-				_build_painted_courtyard()
-			_:
-				_build_painted_outskirts()
-		return
-
 	match scene_theme:
+		"seamless_journey":
+			_build_seamless_journey()
 		"mortal_realm":
 			_build_mortal_realm()
 		"stairway_clouds":
@@ -144,6 +133,88 @@ func _add_surface(outline: PackedVector2Array, path: Curve2D,
 	var surface := IslandSurface.new()
 	_deco_layer.add_child(surface)
 	surface.build(outline, path, arena_radii, path_width)
+
+
+func _make_iso_island(center: Vector2, radii: Vector2, steps: int = 16) -> PackedVector2Array:
+	var pts := PackedVector2Array()
+	for i in range(steps):
+		var a := i * TAU / float(steps)
+		pts.append(center + Vector2(cos(a) * radii.x, sin(a) * radii.y))
+	return pts
+
+
+func _make_bridge_poly(a: Vector2, b: Vector2, half_width: float = 72.0) -> PackedVector2Array:
+	var dir := (b - a).normalized()
+	var perp := Vector2(-dir.y, dir.x) * half_width
+	return PackedVector2Array([a - perp, b - perp, b + perp, a + perp])
+
+
+func _build_seamless_journey() -> void:
+	_sky_rect.modulate = Color(0.97, 0.99, 1.0)
+	var zones := [
+		{"center": Vector2(0, 0), "radii": Vector2(540, 310), "stone": Vector2.ZERO},
+		{"center": Vector2(1450, -320), "radii": Vector2(640, 360), "stone": Vector2.ZERO},
+		{"center": Vector2(2980, -700), "radii": Vector2(640, 360), "stone": Vector2(460, 250)},
+		{"center": Vector2(4620, -1120), "radii": Vector2(720, 410), "stone": Vector2(540, 300)},
+		{"center": Vector2(6120, -1480), "radii": Vector2(520, 300), "stone": Vector2(380, 210)},
+	]
+	var bridges := [
+		[Vector2(470, -100), Vector2(890, -200)],
+		[Vector2(1990, -450), Vector2(2430, -560)],
+		[Vector2(3520, -830), Vector2(4000, -960)],
+		[Vector2(5230, -1270), Vector2(5690, -1380)],
+	]
+
+	var merged := _make_iso_island(zones[0]["center"], zones[0]["radii"])
+	for idx in range(zones.size()):
+		var z: Dictionary = zones[idx]
+		var z_poly := _make_iso_island(z["center"], z["radii"])
+		var path := Curve2D.new()
+		if idx < 2:
+			path.add_point(z["center"] + Vector2(-z["radii"].x * 0.75, 40))
+			path.add_point(z["center"] + Vector2(z["radii"].x * 0.75, -40))
+		_add_surface(z_poly, path, z["stone"], 76.0)
+		if idx > 0:
+			var m1 := Geometry2D.merge_polygons(merged, z_poly)
+			if not m1.is_empty():
+				merged = m1[0]
+
+	for b in bridges:
+		var a_pt: Vector2 = b[0]
+		var b_pt: Vector2 = b[1]
+		var b_poly := _make_bridge_poly(a_pt, b_pt, 76.0)
+		var m2 := Geometry2D.merge_polygons(merged, b_poly)
+		if not m2.is_empty():
+			merged = m2[0]
+		var mid := (a_pt + b_pt) * 0.5
+		_add_deco("res://assets/environment/bridge_stone_01/base.png", mid, 1.55)
+		_add_deco("res://assets/props/lantern_01/base.png", a_pt + Vector2(-35, -75), 0.72)
+		_add_deco("res://assets/props/lantern_01/base.png", b_pt + Vector2(35, 75), 0.72)
+
+	_island_outline = merged
+
+	# Zone 1: Làng Thanh Vân
+	_add_deco("res://assets/environment/tree_peach_01/base.png", Vector2(-320, -130), 1.15)
+	_add_deco("res://assets/environment/tree_green_01/base.png", Vector2(280, -160), 1.15)
+	_add_deco("res://assets/environment/rock_moss_01/base.png", Vector2(-240, 150), 0.9)
+
+	# Zone 2: Ngoại Vi Thanh Vân
+	_add_deco("res://assets/environment/tree_green_01/base.png", Vector2(1150, -490), 1.2)
+	_add_deco("res://assets/environment/tree_peach_01/base.png", Vector2(1740, -150), 1.15)
+	_add_deco("res://assets/environment/rock_moss_01/base.png", Vector2(1380, -110), 0.95)
+	_add_deco("res://assets/environment/rock_moss_01/base.png", Vector2(1690, -460), 0.85)
+
+	# Zone 3 & Zone 4: Trụ Rune
+	for c in [Vector2(2980, -700), Vector2(4620, -1120)]:
+		_pillar_positions.append(c + Vector2(-310, -140))
+		_pillar_positions.append(c + Vector2(310, -140))
+		_pillar_positions.append(c + Vector2(-340, 140))
+		_pillar_positions.append(c + Vector2(340, 140))
+
+	# Zone 5: Cổng Thiên Giới & Rương thưởng
+	_add_deco("res://assets/environment/tree_peach_01/base.png", Vector2(5880, -1610), 1.15)
+	_add_deco("res://assets/props/chest_reward_01/base.png", Vector2(5980, -1420), 0.9)
+	_add_sky_backdrop(true)
 
 
 func _build_mortal_realm() -> void:
@@ -215,114 +286,9 @@ func _build_stairway_clouds() -> void:
 	_add_sky_backdrop(true)
 
 
-func _place_grass_island(origin: Vector2, scale_factor: float) -> PackedVector2Array:
-	const GROUND_ORIGIN := Vector2(323, 158)
-	const ISLAND := preload("res://assets/processed/terrain/large_grass_island.png")
-	# Trace the grass surface in the island texture's pixel coordinates.
-	var surface := PackedVector2Array([
-		Vector2(43, 162), Vector2(92, 123), Vector2(167, 91),
-		Vector2(245, 69), Vector2(357, 66), Vector2(462, 80),
-		Vector2(557, 111), Vector2(605, 147), Vector2(571, 180),
-		Vector2(492, 211), Vector2(411, 239), Vector2(327, 253),
-		Vector2(239, 243), Vector2(150, 218), Vector2(76, 192),
-	])
-	for i in range(surface.size()):
-		surface[i] = origin + (surface[i] - GROUND_ORIGIN) * scale_factor
-	PaintedSprite.place(_deco_layer, ISLAND,
-		origin + (ISLAND.get_size() * 0.5 - GROUND_ORIGIN) * scale_factor, scale_factor)
-	return surface
-
-
 func _painted_prop(art: Texture2D, foot: Vector2, size_factor: float) -> void:
 	var props := _foreground_props if _foreground_props != null else _deco_layer
 	PaintedSprite.place(props, art, foot, size_factor, true)
-
-
-func _build_painted_village() -> void:
-	_island_outline = _place_grass_island(Vector2.ZERO, 2.35)
-	PaintedSprite.place(_deco_layer, preload("res://assets/processed/terrain/curved_garden_path.png"),
-		Vector2(-12, 58), 1.43).rotation = 0.25
-	_painted_prop(preload("res://assets/generated/integration/lantern_roof_house.png"),
-		Vector2(-330, -42), 0.69)
-	_painted_prop(preload("res://assets/processed/nature/pink_blossom_tree.png"),
-		Vector2(424, -42), 0.59)
-
-
-func _build_painted_bridge() -> void:
-	const BRIDGE := preload("res://assets/processed/architecture/arched_stone_bridge.png")
-	const LANTERN := preload("res://assets/processed/nature/stone_lantern.png")
-	var left := _place_grass_island(Vector2(-460, 120), 1.30)
-	var right := _place_grass_island(Vector2(430, -98), 1.35)
-	var bridge := PaintedSprite.place(_deco_layer, BRIDGE, Vector2(0, 37), 1.30)
-	var deck := PackedVector2Array([
-		Vector2(55, 291), Vector2(480, 61), Vector2(550, 104), Vector2(124, 356)
-	])
-	for i in range(deck.size()):
-		deck[i] = bridge.transform * (deck[i] - BRIDGE.get_size() * 0.5)
-	var western_span := Geometry2D.merge_polygons(left, deck)
-	assert(western_span.size() == 1, "Painted bridge deck must meet the western island")
-	var connected := Geometry2D.merge_polygons(western_span[0], right)
-	assert(connected.size() == 1, "Painted bridge deck must meet the eastern island")
-	_island_outline = connected[0]
-	_painted_prop(LANTERN, Vector2(-371, 88), 0.35)
-	_painted_prop(LANTERN, Vector2(374, -146), 0.35)
-
-
-func _build_painted_courtyard() -> void:
-	const STONE := preload("res://assets/processed/terrain/circular_stone_arena.png")
-	const TREE := preload("res://assets/processed/nature/pink_blossom_tree.png")
-	var arena := PaintedSprite.place(_deco_layer, STONE, Vector2(0, 96), 1.86)
-	for i in range(40):
-		_island_outline.append(Vector2.from_angle(i * TAU / 40.0) * Vector2(555, 224))
-	if scene_theme == "boss_arena":
-		arena.modulate = Color(0.65, 0.72, 0.84)
-		var seal := PaintedSprite.place(_deco_layer,
-			preload("res://assets/processed/terrain/carved_cloud_medallion.png"), Vector2.ZERO, 0.48)
-		seal.modulate = Color(0.48, 0.82, 0.95)
-	if scene_theme == "gate_of_heaven":
-		const RAIL := preload("res://assets/generated/integration/stone_balustrade.png")
-		_painted_prop(RAIL, Vector2(-275, -94), 0.55)
-		_painted_prop(RAIL, Vector2(389, -12), 0.55)
-		_painted_prop(TREE, Vector2(-375, 6), 0.57)
-		_painted_prop(TREE, Vector2(403, 76), 0.51)
-		_painted_prop(preload("res://assets/processed/vfx/golden_reward_chest.png"),
-			Vector2(-175, 56), 0.39)
-	else:
-		_pillar_positions = [Vector2(-333, -130), Vector2(333, -130),
-			Vector2(-375, 145), Vector2(375, 145)]
-
-
-func _build_painted_outskirts() -> void:
-	const PATH := preload("res://assets/processed/terrain/straight_garden_path.png")
-	const TREE := preload("res://assets/processed/nature/pink_blossom_tree.png")
-	const ROCK := preload("res://assets/processed/nature/flowering_rock_cluster.png")
-	const BUSH := preload("res://assets/processed/nature/white_flower_shrub.png")
-	const LANTERN := preload("res://assets/processed/nature/stone_lantern.png")
-
-	_island_outline = _place_grass_island(Vector2.ZERO, 2.35)
-	PaintedSprite.place(_deco_layer, PATH, Vector2(-12, 0), 1.42).rotation = 0.18
-	var props := _foreground_props if _foreground_props != null else _deco_layer
-	PaintedSprite.place(props, TREE, Vector2(-450, -82), 0.58, true)
-	PaintedSprite.place(props, TREE, Vector2(410, 112), 0.52, true)
-	PaintedSprite.place(props, ROCK, Vector2(-359, -72), 0.30, true)
-	PaintedSprite.place(props, ROCK, Vector2(320, 157), 0.31, true)
-	PaintedSprite.place(props, BUSH, Vector2(455, -63), 0.25, true)
-	PaintedSprite.place(props, LANTERN, Vector2(-400, 95), 0.32, true)
-	PaintedSprite.place(props, LANTERN, Vector2(369, -80), 0.32, true)
-
-
-func _build_painted_sky() -> void:
-	_sky_rect.texture = preload("res://assets/processed/backgrounds/blue_sky.png")
-	_sky_rect.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-	_sky_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-	const ISLANDS := preload("res://assets/processed/backgrounds/distant_floating_islands.png")
-	const CLOUD := preload("res://assets/processed/backgrounds/foreground_cloud_bank.png")
-	const WISPS := preload("res://assets/processed/backgrounds/drifting_cloud_wisps.png")
-	PaintedSprite.place(_sky_far_layer, ISLANDS, Vector2(320, 150), 0.65).modulate.a = 0.73
-	PaintedSprite.place(_sky_far_layer, ISLANDS, Vector2(1150, 215), 0.48).modulate.a = 0.62
-	PaintedSprite.place(_sky_mid_layer, CLOUD, Vector2(140, 470), 1.0).modulate.a = 0.87
-	PaintedSprite.place(_sky_mid_layer, CLOUD, Vector2(1100, 580), 1.0).modulate.a = 0.87
-	PaintedSprite.place(_sky_atmo_layer, WISPS, Vector2(820, 638), 0.66).modulate.a = 0.72
 
 
 func _build_azure_outskirts() -> void:
@@ -453,19 +419,27 @@ func _add_sky_backdrop(center_island: bool = false) -> void:
 	_add_parallax_sprite(_sky_atmo_layer, "res://assets/base/environment/decorations/bg_cloud_bank_01.png", Vector2(1020, 120), 1.6, 0.24)
 
 
+const LEGACY_DECO_MAP := {
+	"deco_green_tree_01.png": "res://assets/environment/tree_green_01/base.png",
+	"deco_peach_bonsai_01.png": "res://assets/environment/tree_peach_01/base.png",
+	"deco_cloud_rock_01.png": "res://assets/environment/rock_moss_01/base.png",
+	"deco_cloud_lantern_01.png": "res://assets/props/lantern_01/base.png",
+	"prop_reward_chest_01.png": "res://assets/props/chest_reward_01/base.png",
+	"bridge_stone_01.png": "res://assets/environment/bridge_stone_01/base.png",
+}
+
+
 func _add_deco(res_path: String, pos: Vector2, scale_val: float = 1.0) -> void:
-	if not ResourceLoader.exists(res_path):
+	var mapped := res_path
+	var fname := res_path.get_file()
+	if LEGACY_DECO_MAP.has(fname):
+		mapped = LEGACY_DECO_MAP[fname]
+	if not ResourceLoader.exists(mapped):
 		return
 	var sp := Sprite2D.new()
-	sp.texture = load(res_path)
+	sp.texture = load(mapped)
 	sp.position = pos
 	sp.scale = Vector2.ONE * scale_val
-	if res_path.ends_with("arch_village_house_01.png"):
-		var cleanup := ShaderMaterial.new()
-		cleanup.shader = preload("res://scripts/world/prop_cleanup.gdshader")
-		cleanup.set_shader_parameter("roof_span", Vector2(0.76, 0.90))
-		cleanup.set_shader_parameter("row_limit", 0.16)
-		sp.material = cleanup
 	if _foreground_props == null:
 		_deco_layer.add_child(sp)
 		return
@@ -485,10 +459,7 @@ func _spawn_pillars() -> void:
 	for child in obstacles_node.get_children():
 		child.queue_free()
 
-	var pillar_tex: Texture2D = null
-	var pillar_path := "res://assets/base/environment/architecture/arch_jade_pillar_01.png"
-	if ResourceLoader.exists(pillar_path):
-		pillar_tex = load(pillar_path)
+	const PILLAR_TEX := preload("res://assets/props/pillar_rune_01/base.png")
 
 	for p_pos in _pillar_positions:
 		var pillar := StaticBody2D.new()
@@ -503,13 +474,8 @@ func _spawn_pillars() -> void:
 		pillar.add_child(col)
 
 		var visual := Sprite2D.new()
-		visual.texture = pillar_tex
-		visual.offset = Vector2(0, -76)
-		if painted_visuals:
-			visual.texture = preload("res://assets/processed/nature/cyan_rune_pillar.png")
-			visual.scale = Vector2.ONE * 0.40
-			visual.offset.y = 2.0 - visual.texture.get_height() * 0.5
-			visual.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+		visual.texture = PILLAR_TEX
+		visual.offset = Vector2(0, -86)
 		pillar.add_child(visual)
 		obstacles_node.add_child(pillar)
 

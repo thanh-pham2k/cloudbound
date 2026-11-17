@@ -7,7 +7,7 @@ Tạo 2 ảnh riêng rồi thả vào `assets/inbox/B2_tile_grass.png` và `asse
 ```text
 Create a single 2.5D isometric 2:1 diamond ground tile (width:height = 2:1 diamond shape) centered on a solid flat pure white background, no border frame, no text.
 
-Strict 2.5D Isometric Style & Palette:
+Strict 2.5D Isometric Style & Palette (Minimal Hand-Painted Isometric):
 - True 2:1 isometric diamond projection, flat top walkable surface only (no thick cliff side).
 - Gameplay-first low detail, soft cel shading, minimal texture so characters and combat telegraphs stay clear.
 - Primary color: Soft Jade Green (#6BBF9B) with subtle Deep Jade Moss (#4E9A7A) shading and 2-3 tiny soft grass blades.
@@ -22,7 +22,7 @@ Negative constraints: No 3D cliff thickness, no square orthographic tile, no hea
 ```text
 Create a single 2.5D isometric 2:1 diamond stone floor tile (width:height = 2:1 diamond shape) centered on a solid flat pure white background, no border frame, no text.
 
-Strict 2.5D Isometric Style & Palette:
+Strict 2.5D Isometric Style & Palette (Minimal Hand-Painted Isometric):
 - True 2:1 isometric diamond projection, flat top walkable surface only.
 - Gameplay-first low detail, soft cel shading, minimal texture.
 - Primary colors: Warm Cream (#F5EFE0) and Carved Stone (#E4D8BE) courtyard flagstones aligned along the 2:1 isometric diagonal grid, with subtle low-contrast paver lines (#1E293B).

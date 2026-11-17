@@ -91,46 +91,29 @@ func _ready() -> void:
 	_sprite.scale = Vector2(s, s)
 	_sprite.offset = Vector2(0, -48)
 	var pose_height := 110.0
-	if _arena != null and _arena.painted_visuals:
-		const CASTER := preload("res://assets/generated/enemies/caster/caster_sprite_frames.tres")
-		const BOAR := preload("res://assets/generated/enemies/boar/boar_sprite_frames.tres")
-		const SPIRIT := preload("res://assets/generated/enemies/spirit/spirit_sprite_frames.tres")
-		const GOLEM := preload("res://assets/generated/enemies/golem/golem_sprite_frames.tres")
-		if _arena.scene_theme == "stairway_clouds":
-			_sprite.sprite_frames = SPIRIT
-			pose_height = 104.0
-		elif enemy_id == "tank":
-			_sprite.sprite_frames = GOLEM
-			_painted_attack = "stone_punch"
-			_painted_walk = "heavy_walk"
-			pose_height = 140.0
-		elif enemy_id == "ranged":
-			_sprite.sprite_frames = CASTER
-			_painted_attack = "cast"
-		else:
-			_sprite.sprite_frames = BOAR
-			_painted_attack = "axe_attack"
-		_sprite.offset = Vector2(0.0, -63.0)
-		_sprite.scale = Vector2.ONE * pose_height / 120.0
-		_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-		_painted_animation = true
+	const PAINTED := preload("res://scripts/world/painted_sprite.gd")
+	const ENEMY_RANGED := preload("res://assets/characters/enemy_ranged/base.png")
+	const ENEMY_MELEE := preload("res://assets/characters/enemy_melee/base.png")
+	const ENEMY_TANK := preload("res://assets/characters/enemy_tank/base.png")
+	var base_tex: Texture2D = ENEMY_MELEE
+	if enemy_id == "tank":
+		base_tex = ENEMY_TANK
+		pose_height = 140.0
+	elif enemy_id == "ranged":
+		base_tex = ENEMY_RANGED
+		pose_height = 92.0
+	PAINTED.set_actor_pose(_sprite, base_tex, pose_height)
 	_pose_height = pose_height
 	add_child(_sprite)
 
-	if _arena != null and _arena.painted_visuals:
-		const BAR := preload("res://assets/processed/ui/enemy_health_bar.png")
-		const PAINTED := preload("res://scripts/world/painted_sprite.gd")
-		_hp_bar = PAINTED.make_meter(BAR, Rect2(0, 0, 491, 183), 72.0)
-		_hp_bar.position = Vector2(-36, -pose_height - 24)
-	else:
-		var plain := ProgressBar.new()
-		plain.size = Vector2(44, 6)
-		plain.position = Vector2(-22, -74)
-		plain.show_percentage = false
-		_hp_bar = plain
+	var plain := ProgressBar.new()
+	plain.size = Vector2(44, 6)
+	plain.position = Vector2(-22, -pose_height - 16)
+	plain.show_percentage = false
+	_hp_bar = plain
 	_hp_bar.max_value = max_hp
 	_hp_bar.value = current_hp
-	_hp_bar.visible = _arena != null and _arena.painted_visuals
+	_hp_bar.visible = true
 	add_child(_hp_bar)
 
 	_play_anim("idle")

@@ -5,7 +5,7 @@ Tạo 1 ảnh sheet rồi thả vào `assets/inbox/B1_characters.png`.
 ```text
 Create a 2.5D isometric game character sprite sheet (5 characters) on a solid flat pure white background with wide empty spacing between each character, no overlapping, no ground tiles, no text or labels.
 
-Strict 2.5D Isometric Camera & Style:
+Strict 2.5D Isometric Camera & Style (Minimal Hand-Painted Isometric):
 - True 2.5D isometric game projection (standard 2:1 isometric dimetric camera angle, elevated ~30 degrees, 45-degree diagonal orientation so characters stand on an isometric plane facing front-right-down).
 - Gameplay-first low detail: clean readable silhouettes, simple shapes, minimal surface noise.
 - Soft painterly cel shading, top-left 45-degree warm daylight, crisp uniform dark indigo-slate ink outline (#1E293B).

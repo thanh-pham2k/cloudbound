@@ -80,6 +80,9 @@ func _ready() -> void:
 			arena._rebuild_visuals()
 			arena._spawn_pillars()
 		match custom_scene_theme:
+			"seamless_journey":
+				player.position = Vector2(-120, 40)
+				camera.position = Vector2.ZERO
 			"mortal_realm":
 				player.position = Vector2(0, 60)
 				camera.position = Vector2(0, 23)

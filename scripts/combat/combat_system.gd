@@ -124,25 +124,13 @@ func spawn_hit_impact(pos: Vector2, col: Color = Color(0.75, 0.95, 1.0), scale_f
 	if effects_container == null:
 		return
 	var local_pos := _to_effects_local(pos)
-	if painted_visuals:
-		const IMPACT := preload("res://assets/generated/combat_vfx/cyan_impact_sprite_frames.tres")
-		var fx := AnimatedSprite2D.new()
-		fx.sprite_frames = IMPACT
-		fx.position = local_pos
-		fx.scale = Vector2.ONE * scale_factor
-		fx.modulate = Color.WHITE.lerp(col, 0.35)
-		fx.z_index = 20
-		fx.autoplay = &"cyan_impact_fx"
-		fx.animation_finished.connect(fx.queue_free)
-		effects_container.add_child(fx)
-	else:
-		var burst := _RingBurstEffect.new()
-		burst.painted_visuals = false
-		burst.position = local_pos
-		burst.max_radius = 36.0 * scale_factor
-		burst.color = col
-		burst.z_index = 20
-		effects_container.add_child(burst)
+	var burst := _RingBurstEffect.new()
+	burst.painted_visuals = false
+	burst.position = local_pos
+	burst.max_radius = 36.0 * scale_factor
+	burst.color = col
+	burst.z_index = 20
+	effects_container.add_child(burst)
 
 
 func spawn_ring_burst(pos: Vector2, radius: float, col: Color = Color(0.45, 0.92, 1.0)) -> void:
@@ -174,11 +162,6 @@ class _RingBurstEffect extends Node2D:
 		var t := clampf(_elapsed / _duration, 0.0, 1.0)
 		var r := lerpf(24.0, max_radius, t)
 		var a := 1.0 - t
-		if painted_visuals:
-			const BURST := preload("res://assets/processed/vfx/cyan_ground_burst.png")
-			var size := BURST.get_size() * (2.0 * r / BURST.get_width())
-			draw_texture_rect(BURST, Rect2(Vector2(-size.x * 0.5, -size.y * 0.72), size),
-				false, Color(1.0, 1.0, 1.0, a * 0.78))
 		draw_circle(Vector2.ZERO, r, Color(color.r, color.g, color.b, a * 0.22))
 		draw_arc(Vector2.ZERO, r, 0.0, TAU, 40, Color(color.r, color.g, color.b, a * 0.9), 4.0)
 
@@ -216,14 +199,6 @@ class _MeleeSlashEffect extends Node2D:
 		var t := clampf(_elapsed / _duration, 0.0, 1.0)
 		var a := 1.0 - t
 		var r := lerpf(radius * 0.65, radius, t)
-		if painted_visuals:
-			const SLASH := preload("res://assets/generated/combat_vfx/golden_staff_slash_sprite_frames.tres")
-			var frame := SLASH.get_frame_texture(&"golden_staff_slash_fx", mini(int(t * 6.0), 5))
-			var size := Vector2.ONE * 1.65 * r
-			draw_set_transform(Vector2.ZERO, base_angle + PI)
-			draw_texture_rect(frame, Rect2(Vector2(-r, -size.y * 0.5), size),
-				false, Color(1.0, 1.0, 1.0, a))
-			draw_set_transform(Vector2.ZERO)
 		var start_a := base_angle - arc_rad * 0.5
 		var end_a := base_angle + arc_rad * 0.5
 		draw_arc(Vector2.ZERO, r, start_a, end_a, 24, Color(color.r, color.g, color.b, a * 0.95), 9.0)
