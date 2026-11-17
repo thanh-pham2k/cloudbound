@@ -1,44 +1,58 @@
-# Scene Concept Prompt — Hoa Quả Sơn (Phase 2)
+# Scene Concept Batch Prompt — Hoa Quả Sơn (Phase 2)
 
-Dựa trên [PHASE_2_SCENE_CONCEPT_BLUEPRINT.md](../PHASE_2_SCENE_CONCEPT_BLUEPRINT.md) và [PHASE_1_GAMEPLAY_BLUEPRINT.md](../PHASE_1_GAMEPLAY_BLUEPRINT.md).
+Dựa trên [PHASE_2_SCENE_CONCEPT_BLUEPRINT.md](../PHASE_2_SCENE_CONCEPT_BLUEPRINT.md) và quy tắc **Batch-Based Generation** trong [AGENTS.md](../../AGENTS.md): tạo **1 ảnh sheet gồm nhiều subimages tách biệt** để xem cả tổng thể bản đồ lẫn từng khu vực / trạng thái gameplay trong cùng một phong cách nhất quán.
 
-## 1. Master Prompt (Copy & Paste)
+---
 
-```text
-Create a wide 16:9 2.5D isometric game level concept overview of Hoa Qua Son (Flower Fruit Mountain) in a Minimal Stylized art style.
+## 1. Batch Scene Concept Sheet — 6 Subimages (Grid 3×2, Khuyên dùng)
 
-Camera & Visual Style:
-- Fixed 2.5D isometric projection (35-45 degree elevated camera angle, clean diagonal layout flowing from bottom-left to top-right).
-- Minimal Stylized look: simple clean shapes, low detail, minimal surface texture, no visual clutter, soft pastel color palette (soft pastel jade-green grass, warm cream-tan dirt trails, soft pastel pink peach blossoms, warm light-brown wooden huts, muted warm-gray rocks and slate-stone cliffs).
-- Consistent soft top-left daylight, subtle contact shadows, crisp readable silhouettes, high gameplay readability.
-
-World Structure & Semantic Layout (ONE continuous connected map, no disconnected islands):
-- A single clear winding dirt path connects 4 main areas from bottom-left to top-right, plus 1 small secret side branch:
-1. Bottom-left (Monkey Village / Lang Khi): Safe starting clearing with 2-3 simple stylized wooden monkey huts arranged around a small open central plaza, a small stone spawn marker, and an elder monkey NPC standing clearly in the plaza.
-2. Lower-middle (Peach Forest / Rung Dao): The winding trail passes through a sparse grove of clustered pastel-pink peach trees with a few visible glowing peaches on the ground/low branches; trees are spaced around the path so they never block or obscure the trail.
-3. Side branch from Peach Forest (Secret Nook / Khu Bi Mat): A narrower secondary trail branches off to the side into a small secluded clearing with a single large special peach tree and a small reward chest.
-4. Upper-middle (Monster Clearing / Bai Quai): A wide, open, flat combat clearing with just a few simple low rocks and trees around the edges, leaving plenty of open space for movement and dashing, with 2-3 small simple monster silhouettes.
-5. Top-right (Boss Cave / Hang Boss): A prominent carved stone cave archway opening into a wide, clearly visible sunken rocky boss arena (cutaway/open-top view so the interior combat floor is easy to read) with a larger Demon King boss silhouette waiting in the center.
-
-Scale & Readability:
-- Consistent relative scale across the entire map (player hero size < huts < peach trees < boss cave).
-- Clear contrast between walkable dirt paths, open grass/arena floors, and impassable outer cliff/forest boundaries.
-
-Negative constraints: No text, no labels, no numbers, no UI/HUD overlays, no grid lines, no photorealism, no dark gritty textures, no dense foliage blocking the path, no floating disconnected islands.
-```
-
-## 2. Prompt biến thể (Nếu AI tạo quá nhiều chi tiết hoặc che đường)
-
-Dùng bản rút gọn này nếu ảnh lần 1 bị rối hoặc cây che mất đường đi:
+Tạo **1 ảnh duy nhất** chứa **6 subimages** (lưới 3 cột × 2 hàng, ngăn cách rõ ràng bằng viền trắng sạch, không chồng lấn, không bị cắt):
 
 ```text
-Minimal stylized 2.5D isometric game map concept, 16:9 wide overview, 40-degree fixed isometric camera, pastel color palette, very simple low-detail geometric shapes, clean readable layout with zero clutter. One continuous winding cream-tan dirt path on soft pastel green grass flowing from bottom-left to top-right connecting: (1) bottom-left: small village plaza with 3 simple wooden huts and a tiny monkey hero; (2) lower-middle: sparse clusters of pastel pink peach trees with a small side trail branching right to a tiny secret clearing with a golden chest; (3) upper-middle: wide open flat battle clearing with a few simple low rocks; (4) top-right: prominent stone cave entrance opening into a wide open-top circular stone boss arena. Crisp silhouettes, soft daylight, high gameplay readability. No text, no labels, no UI, no photorealism, no dense trees covering the path.
+Create a 3x2 grid concept art sheet containing 6 separate, clearly framed 2.5D isometric scene subimages for the game "Hoa Qua Son" (Flower Fruit Mountain), separated by clean white gutters, with zero overlapping and zero text or labels.
+
+Consistent Style Across All 6 Subimages (Minimal Stylized 2.5D Isometric):
+- Fixed 2.5D isometric projection (35-45 degree elevated camera angle).
+- Minimal Stylized look: simple clean geometric shapes, low detail, minimal surface texture, no clutter, unified pastel color palette (soft pastel jade-green grass, warm cream-tan dirt paths, pastel pink peach blossoms, warm light-brown wooden huts, muted warm-gray rocks and slate-stone cliffs).
+- Consistent top-left soft daylight, subtle contact shadows, crisp readable silhouettes, high gameplay readability.
+
+6 Subimages (3 columns x 2 rows):
+1. Top-left (Full Map Overview): Wide connected overview showing ONE continuous winding dirt path flowing from bottom-left to top-right across 4 areas (Monkey Village -> Peach Forest with a small side branch to a Secret Nook -> Monster Clearing -> Boss Cave).
+2. Top-center (Area 1 — Monkey Village / Safe Hub & Quest State): Close-up isometric view of the central plaza with 2-3 simple wooden monkey huts, stone spawn marker, Elder Monkey NPC with a subtle quest icon cue, and Monkey Hero (Sun Wukong with staff) standing ready.
+3. Top-right (Area 2 — Peach Forest & Secret Branch / Exploration State): Close-up isometric view of sparse clustered pastel-pink peach trees along a winding trail, collectible glowing peaches, and a narrower side path branching off to a secluded mossy nook with a reward chest.
+4. Bottom-left (Area 3 — Monster Clearing / Active Combat State): Close-up isometric view of a wide open flat battle clearing with a few low rocks and peripheral trees, showing the Monkey Hero mid-dash/staff-attack fighting 2 small simple demon monsters with plenty of dodge space.
+5. Bottom-center (Area 4 — Boss Cave / Boss Fight State): Close-up isometric view of a prominent stone cave entrance opening into a wide sunken stone arena, showing the Monkey Hero facing a larger Demon King boss in the center.
+6. Bottom-right (Area 4 — Boss Cave / Cleared & Unlocked State): Same Boss Cave arena after victory — boss defeated, a glowing golden archway / newly unlocked path opening at the back of the cave, and a reward chest/glow in the center.
+
+Negative constraints: No text, no labels, no numbers, no UI/HUD overlays, no photorealism, no dark gritty textures, no overlapping panels, no cropped objects at panel edges.
 ```
 
-## 3. Checklist kiểm tra ảnh Concept trước khi duyệt Phase 2
+---
 
-- [ ] Thấy rõ 4 khu vực chính: Làng Khỉ → Rừng Đào → Bãi Quái → Hang Boss.
-- [ ] Thấy rõ 1 nhánh phụ rẽ từ Rừng Đào sang Khu Bí Mật.
-- [ ] Đường đi chính liên tục, không bị cây/đá/nhà che khuất.
-- [ ] Không gian Bãi Quái và Hang Boss đủ rộng để di chuyển & lướt (dash).
-- [ ] Phong cách Minimal Stylized pastel đồng nhất, đơn giản, dễ tách thành asset độc lập theo batch.
+## 2. Biến thể 2×2 — 4 Subimages (Nếu muốn mỗi ô to & rõ hơn)
+
+Dùng bản này nếu AI vẽ lưới 3×2 bị nhỏ chi tiết:
+
+```text
+Create a 2x2 grid concept art sheet containing 4 separate, clearly framed 2.5D isometric scene subimages for "Hoa Qua Son", separated by clean white gutters, with zero overlapping and no text or labels.
+
+Consistent Style Across All 4 Subimages:
+- Fixed 2.5D isometric camera (35-45 degree angle), Minimal Stylized low-detail shapes, unified pastel palette (pastel jade-green grass, cream-tan dirt trails, pastel pink peach blossoms, warm wooden huts, muted slate-stone cliffs), soft top-left daylight, high gameplay readability.
+
+4 Subimages (2x2 grid):
+1. Top-left (Full Connected Map Overview): Continuous winding path from bottom-left to top-right connecting Monkey Village -> Peach Forest (+ side Secret Nook) -> Monster Clearing -> Boss Cave.
+2. Top-right (Village & Peach Forest — Exploration/Quest State): Monkey Village plaza with 2-3 wooden huts and Elder NPC leading into sparse pastel-pink peach trees, glowing collectible peaches, and the side branch to a secret chest.
+3. Bottom-left (Monster Clearing — Combat State): Wide open flat arena with low peripheral rocks, showing Monkey Hero with staff fighting 2 small demon monsters with clear dodge space.
+4. Bottom-right (Boss Cave — Boss Fight & Unlockable Path): Prominent stone cave opening into a wide sunken rocky arena with the larger Demon King boss and a sealed/unlockable back exit archway.
+
+Negative constraints: No text, no labels, no UI, no photorealism, no overlapping panels, no dense foliage blocking paths.
+```
+
+---
+
+## 3. Checklist kiểm tra Batch Scene Concept trước khi duyệt Phase 2
+
+- [ ] Cả 6 (hoặc 4) subimages đều tách biệt rõ ràng, không dính/chồng lấn, không bị cắt mất chi tiết ở mép ô.
+- [ ] Cùng một góc nhìn 2.5D isometric (35–45°), cùng bảng màu pastel và mức độ chi tiết Minimal Stylized.
+- [ ] Thấy đủ 4 khu vực chính + 1 nhánh phụ và các trạng thái: **Tổng quan → Hub/Quest → Khám phá/Thu thập → Chiến đấu → Boss Fight → Mở khóa lối đi**.
+- [ ] Đường đi rõ ràng, khu chiến đấu rộng rãi, không bị cây/đá che khuất.
