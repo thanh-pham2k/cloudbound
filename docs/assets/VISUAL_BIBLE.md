@@ -10,7 +10,7 @@
     - `enemy_melee`: **Small Horned Demon** (red-skinned chibi imp with dark horns and wooden club).
     - `enemy_tank`: **Stone Guardian** (heavy moss-topped carved stone golem with glowing cyan runes).
   - **Boss (`boss_thunder_warden`):** **Giant Cyan-Rune Stone Guardian** (~2.5x–3x hero scale, carved stone body, moss crown, glowing cyan runes, ground-slam telegraphs).
-- **Camera & Projection:** Fixed **3/4 top-down** 2D gameplay camera (`Camera2D`, no 3D rendering) with `2.5D` depth illusion via front-facing platform thickness and Godot `Y-sorting`.
+- **Camera & Projection:** Fixed **2.5D Isometric** (`2:1` dimetric, ~30° pitch, 45° rotated axes) 2D gameplay camera (`Camera2D`, no 3D rendering) with `2.5D` depth via top + two front-isometric faces and Godot `Y-sorting` (forbids flat 2D side-view and pure 90° top-down).
 - **Rendering Style:** Warm painterly cel-shading, soft gradients, clean outer silhouettes, and high-contrast combat telegraphs.
 
 ## 2. Color Palette

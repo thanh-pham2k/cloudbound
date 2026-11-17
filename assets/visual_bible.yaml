@@ -14,11 +14,16 @@ art_style:
   shading: soft_cel
   texture: minimal
 
-# 2. Perspective & Fixed Camera
+# 2. Perspective & Fixed Camera (Global 2.5D Isometric Standard)
 camera:
   perspective: isometric_2_5d
-  projection: fixed_isometric_2_1  # 2:1 isometric tile ratio (e.g. 128x64, 256x128)
+  projection: fixed_isometric_2_1  # 2:1 isometric dimetric tile ratio (e.g. 128x64, 256x128)
   angle_deg: 30
+  axis_rotation_deg: 45
+  volume_cues: top_and_two_front_isometric_faces
+  forbidden_views:
+    - flat_2d_side_view
+    - pure_90deg_top_down
   y_sorting: true
   godot_texture_filter: nearest
 
@@ -94,8 +99,8 @@ references:
 inheritance:
   order:
     - global: "assets/visual_bible.yaml"
-    - category: "assets/metadata/<category>/config.yaml"
-    - asset_override: "assets/metadata/<category>/<asset_id>.json (optional)"
+    - category: "assets/<category>/config.yaml"
+    - asset_override: "assets/<category>/<asset_id>/prompt.md (optional YAML frontmatter)"
 
 # 9. QA Validation Criteria
 qa_criteria:
