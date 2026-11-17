@@ -98,12 +98,6 @@ const NPCS := [
 		"pos": Vector2(-15.0, -85.0),
 		"role": "quest_giver",
 	},
-	{
-		"id": "gate_monkey",
-		"name": "Khỉ Gác Cổng",
-		"pos": Vector2(255.0, -175.0),
-		"role": "guide",
-	},
 ]
 
 const PEACH_TREES := [

@@ -4,6 +4,8 @@ extends CharacterBody2D
 
 signal died(enemy_id: String, is_boss: bool, reward_exp: int, reward_gold: int)
 
+const FloatingTextScript := preload("res://scripts/ui/floating_text.gd")
+
 enum State { PATROL, CHASE, ATTACK, RETURN }
 
 @export var enemy_id: String = "boar"
@@ -27,6 +29,8 @@ var _state: State = State.PATROL
 var _patrol_target: Vector2 = Vector2.ZERO
 var _patrol_wait: float = 0.8
 var _attack_cd: float = 0.0
+var _telegraph_timer: float = 0.0
+var _telegraph_duration: float = 0.55
 var _knockback_vel: Vector2 = Vector2.ZERO
 var _hit_flash_timer: float = 0.0
 var _visual: IsoPlaceholder
@@ -72,22 +76,37 @@ func _physics_process(delta: float) -> void:
 			else:
 				_process_patrol(delta)
 		State.CHASE:
+			_telegraph_timer = 0.0
 			if not player or dist_from_home > leash_radius or dist_to_player > leash_radius:
 				_state = State.RETURN
 			elif dist_to_player <= attack_range:
 				_state = State.ATTACK
 			else:
 				var dir := (player.global_position - global_position).normalized()
+				_visual.facing_dir = dir
 				velocity = dir * move_speed + _knockback_vel
 		State.ATTACK:
 			velocity = _knockback_vel
-			if not player or dist_to_player > attack_range * 1.25:
-				_state = State.CHASE
-			elif _attack_cd <= 0.0:
-				_attack_cd = attack_cooldown
-				if player.has_method("take_damage"):
-					var kb := (player.global_position - global_position).normalized() * (220.0 if is_boss else 140.0)
-					player.take_damage(attack_damage, kb)
+			if is_boss:
+				if _telegraph_timer > 0.0:
+					_telegraph_timer -= delta
+					if _telegraph_timer <= 0.0:
+						_attack_cd = attack_cooldown
+						if player and global_position.distance_to(player.global_position) <= attack_range * 1.45 and player.has_method("take_damage"):
+							var kb := (player.global_position - global_position).normalized() * 240.0
+							player.take_damage(attack_damage, kb)
+				elif not player or dist_to_player > attack_range * 1.35:
+					_state = State.CHASE
+				elif _attack_cd <= 0.0:
+					_telegraph_timer = _telegraph_duration
+			else:
+				if not player or dist_to_player > attack_range * 1.25:
+					_state = State.CHASE
+				elif _attack_cd <= 0.0:
+					_attack_cd = attack_cooldown
+					if player.has_method("take_damage"):
+						var kb := (player.global_position - global_position).normalized() * 140.0
+						player.take_damage(attack_damage, kb)
 		State.RETURN:
 			if player and dist_to_player <= detect_radius * 0.75 and dist_from_home < leash_radius * 0.6:
 				_state = State.CHASE
@@ -117,8 +136,19 @@ func _process_patrol(delta: float) -> void:
 func _draw() -> void:
 	if is_dead:
 		return
+	if is_boss and _telegraph_timer > 0.0:
+		var prog := 1.0 - (_telegraph_timer / _telegraph_duration)
+		var r := attack_range * 1.45
+		var pts := PackedVector2Array()
+		for i in 28:
+			var a := (float(i) / 28.0) * TAU
+			pts.append(Vector2(cos(a) * r, sin(a) * r * 0.56))
+		draw_colored_polygon(pts, Color(0.86, 0.15, 0.15, 0.18 + 0.25 * prog))
+		var ring := PackedVector2Array(pts)
+		ring.append(pts[0])
+		draw_polyline(ring, Color("#DC2626"), 2.5, true)
 	var bar_w := 60.0 if is_boss else 34.0
-	var bar_y := -82.0 if is_boss else -34.0
+	var bar_y := -132.0 if is_boss else -56.0
 	var ratio := clampf(float(hp) / float(max_hp), 0.0, 1.0)
 	draw_rect(Rect2(-bar_w * 0.5, bar_y, bar_w, 5.0), Color("#1E293B"))
 	draw_rect(Rect2(-bar_w * 0.5 + 1.0, bar_y + 1.0, (bar_w - 2.0) * ratio, 3.0), Color("#DC2626"))
@@ -130,9 +160,15 @@ func take_damage(amount: int, knockback: Vector2 = Vector2.ZERO) -> void:
 	hp = maxi(0, hp - amount)
 	_hit_flash_timer = 0.14
 	_knockback_vel = knockback * (0.45 if is_boss else 1.0)
-	_state = State.CHASE
+	if _state == State.PATROL:
+		_state = State.CHASE
 	_visual.queue_redraw()
 	queue_redraw()
+	if is_inside_tree() and get_parent() != null:
+		var pop := FloatingTextScript.new()
+		pop.setup("-%d" % amount, Color("#FBBF24"))
+		pop.position = position + Vector2(0, -64.0 if is_boss else -40.0)
+		get_parent().add_child(pop)
 	if hp <= 0:
 		is_dead = true
 		died.emit(enemy_id, is_boss, reward_exp, reward_gold)

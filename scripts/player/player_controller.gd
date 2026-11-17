@@ -4,6 +4,9 @@ extends CharacterBody2D
 
 signal stats_changed
 signal respawned
+signal leveled_up(new_level: int)
+
+const FloatingTextScript := preload("res://scripts/ui/floating_text.gd")
 
 const MOVE_SPEED := 235.0
 const DASH_SPEED := 620.0
@@ -135,6 +138,7 @@ func take_damage(amount: int, knockback: Vector2 = Vector2.ZERO) -> void:
 	_hit_flash_timer = 0.14
 	velocity += knockback
 	_visual.queue_redraw()
+	_spawn_popup("-%d" % amount, Color("#EF4444"))
 	stats_changed.emit()
 	if hp <= 0:
 		respawn()
@@ -151,18 +155,41 @@ func respawn() -> void:
 
 func heal(amount: int) -> void:
 	hp = mini(max_hp, hp + amount)
+	_spawn_popup("+%d HP" % amount, Color("#4ADE80"))
 	stats_changed.emit()
 
 
 func grant_rewards(add_exp: int, add_gold: int) -> void:
 	exp_points += add_exp
 	gold += add_gold
+	var did_level := false
 	while level < 5 and exp_points >= LEVEL_EXP[level]:
 		level += 1
 		max_hp += 25
 		attack_damage += 6
 		hp = max_hp
+		did_level = true
+		leveled_up.emit(level)
+	if did_level:
+		_spawn_popup("LEVEL UP! Lv.%d" % level, Color("#FBBF24"))
 	stats_changed.emit()
+
+
+func get_exp_progress() -> Vector2i:
+	if level >= 5:
+		return Vector2i(1, 1)
+	var prev: int = LEVEL_EXP[level - 1]
+	var next: int = LEVEL_EXP[level]
+	return Vector2i(exp_points - prev, next - prev)
+
+
+func _spawn_popup(msg: String, col: Color) -> void:
+	if not is_inside_tree() or get_parent() == null:
+		return
+	var pop := FloatingTextScript.new()
+	pop.setup(msg, col)
+	pop.position = position + Vector2(0, -54)
+	get_parent().add_child(pop)
 
 
 func get_nearest_interactable_prompt() -> String:

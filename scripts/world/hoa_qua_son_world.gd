@@ -23,8 +23,14 @@ var boss_defeated: bool = false
 
 var _hud_stats: Label
 var _hud_area: Label
+var _hud_hp_bar: ProgressBar
+var _hud_exp_bar: ProgressBar
 var _hud_quest: Label
 var _hud_prompt: Label
+var _dialogue_panel: PanelContainer
+var _dialogue_speaker: Label
+var _dialogue_body: Label
+var _dialogue_npc_pos: Vector2 = Vector2.ZERO
 var _toast_label: Label
 var _toast_timer: float = 0.0
 
@@ -55,8 +61,10 @@ func _process(delta: float) -> void:
 	if player and _hud_prompt:
 		var p := player.get_nearest_interactable_prompt()
 		_hud_prompt.text = p
-		_hud_prompt.visible = not p.is_empty()
+		_hud_prompt.visible = not p.is_empty() and not (_dialogue_panel and _dialogue_panel.visible)
 		_hud_area.text = "Khu vực: %s" % _get_current_area_name(player.global_position)
+		if _dialogue_panel and _dialogue_panel.visible and player.global_position.distance_to(_dialogue_npc_pos) > 110.0:
+			_dialogue_panel.visible = false
 
 
 func _build_ground() -> void:
@@ -241,37 +249,46 @@ func _spawn_player() -> void:
 
 
 func _on_npc_interacted(item: InteractableObject, p: PlayerController) -> void:
-	if item.item_id == "guide_monkey":
-		_show_toast("Khỉ Gác Cổng: Đi thẳng ĐB qua Rừng Đào → Bãi Quái → Hang Boss. Rẽ phải ở Rừng Đào có Khu Bí Mật!")
+	if _dialogue_panel and _dialogue_panel.visible:
+		_dialogue_panel.visible = false
 		return
+
+	_dialogue_npc_pos = item.global_position
 
 	match quest_stage:
 		0:
 			quest_stage = 1
-			_show_toast("Khỉ Trưởng Lão: Hãy ra Bãi Quái tiêu diệt 3 Lợn Rừng bảo vệ làng! (Q1)")
+			_show_dialogue("Khỉ Trưởng Lão", "Yêu quái đang quấy phá ngoài Bãi Quái! Ngộ Không hãy tiêu diệt 3 Lợn Rừng để bảo vệ làng. (Thưởng: 50 EXP + 20 Vàng)")
 		1:
 			if kills_count >= 3:
 				quest_stage = 3
 				p.grant_rewards(50, 20)
-				_show_toast("Hoàn thành Q1 (+50 EXP, +20 Vàng)! Q2: Hãy thu thập 5 Đào Tiên trong Rừng Đào!")
+				_show_dialogue("Khỉ Trưởng Lão", "Làm tốt lắm! (+50 EXP, +20 Vàng)\nNhiệm vụ 2: Hãy thu thập 5 Đào Tiên dưới gốc cây trong Rừng Đào. (Thưởng: 40 EXP + 15 Vàng)")
 			else:
-				_show_toast("Khỉ Trưởng Lão: Ngươi đã hạ %d/3 yêu quái. Cố lên!" % kills_count)
+				_show_dialogue("Khỉ Trưởng Lão", "Ngươi đã hạ %d/3 Lợn Rừng ở Bãi Quái. Cố lên!" % kills_count)
 		3:
 			if peaches_count >= 5:
 				quest_stage = 5
 				p.grant_rewards(40, 15)
-				_show_toast("Hoàn thành Q2 (+40 EXP, +15 Vàng)! Q3: Tiến vào Hang Boss đánh bại Yêu Vương!")
+				_show_dialogue("Khỉ Trưởng Lão", "Tuyệt vời! (+40 EXP, +15 Vàng)\nNhiệm vụ cuối: Tiến vào Hang Boss đánh bại Yêu Vương để mở khóa khu vực mới! (Thưởng: 150 EXP)")
 			else:
-				_show_toast("Khỉ Trưởng Lão: Đã thu thập %d/5 Đào Tiên." % peaches_count)
+				_show_dialogue("Khỉ Trưởng Lão", "Đã thu thập %d/5 Đào Tiên. Nhớ kiểm tra dưới gốc các cây đào!" % peaches_count)
 		5:
 			if boss_defeated:
 				quest_stage = 6
-				_show_toast("Khỉ Trưởng Lão: Tuyệt vời! Hoa Quả Sơn đã bình yên, cổng khu vực mới đã mở!")
+				_show_dialogue("Khỉ Trưởng Lão", "Hoa Quả Sơn đã bình yên! Cổng khu vực mới ở Hang Boss đã mở khóa.")
 			else:
-				_show_toast("Khỉ Trưởng Lão: Yêu Vương đang chờ ở Hang Boss phía Đông Bắc!")
+				_show_dialogue("Khỉ Trưởng Lão", "Yêu Vương đang chờ ở Hang Boss phía Đông Bắc. Hãy dùng Space để né đòn đập đất!")
 		_:
-			_show_toast("Khỉ Trưởng Lão: Chúc mừng Đại Thánh đã hoàn thành chương đầu!")
+			_show_dialogue("Khỉ Trưởng Lão", "Chúc mừng Đại Thánh đã hoàn thành chương đầu của Hoa Quả Sơn!")
 	_refresh_hud()
+
+
+func _show_dialogue(speaker: String, body: String) -> void:
+	if _dialogue_panel:
+		_dialogue_speaker.text = speaker
+		_dialogue_body.text = body
+		_dialogue_panel.visible = true
 
 
 func _on_peach_interacted(item: InteractableObject, p: PlayerController) -> void:
@@ -336,35 +353,97 @@ func _get_current_area_name(pos: Vector2) -> String:
 	return best_name
 
 
+func _make_panel_style() -> StyleBoxFlat:
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(0.118, 0.161, 0.231, 0.86)
+	sb.border_color = P["gold"]
+	sb.set_border_width_all(2)
+	sb.set_corner_radius_all(8)
+	sb.set_content_margin_all(10)
+	return sb
+
+
 func _build_hud() -> void:
 	var layer := CanvasLayer.new()
 	layer.name = "HUD"
 	add_child(layer)
 
+	var panel_style := _make_panel_style()
+
+	# Top-left Player Status Panel
+	var stats_panel := PanelContainer.new()
+	stats_panel.position = Vector2(14, 12)
+	stats_panel.add_theme_stylebox_override("panel", panel_style)
+	layer.add_child(stats_panel)
+
+	var stats_box := VBoxContainer.new()
+	stats_box.custom_minimum_size = Vector2(280, 0)
+	stats_panel.add_child(stats_box)
+
 	_hud_stats = Label.new()
-	_hud_stats.position = Vector2(16, 12)
-	_hud_stats.add_theme_color_override("font_outline_color", P["ink"])
-	_hud_stats.add_theme_constant_override("outline_size", 3)
-	layer.add_child(_hud_stats)
+	_hud_stats.add_theme_font_size_override("font_size", 14)
+	stats_box.add_child(_hud_stats)
+
+	_hud_hp_bar = ProgressBar.new()
+	_hud_hp_bar.custom_minimum_size = Vector2(260, 12)
+	_hud_hp_bar.show_percentage = false
+	_hud_hp_bar.modulate = Color("#EF4444")
+	stats_box.add_child(_hud_hp_bar)
+
+	_hud_exp_bar = ProgressBar.new()
+	_hud_exp_bar.custom_minimum_size = Vector2(260, 8)
+	_hud_exp_bar.show_percentage = false
+	_hud_exp_bar.modulate = Color("#FBBF24")
+	stats_box.add_child(_hud_exp_bar)
 
 	_hud_area = Label.new()
-	_hud_area.position = Vector2(16, 38)
 	_hud_area.add_theme_color_override("font_color", P["gold"])
-	_hud_area.add_theme_color_override("font_outline_color", P["ink"])
-	_hud_area.add_theme_constant_override("outline_size", 3)
-	layer.add_child(_hud_area)
+	_hud_area.add_theme_font_size_override("font_size", 13)
+	stats_box.add_child(_hud_area)
+
+	# Top-right Quest Tracker Panel
+	var quest_panel := PanelContainer.new()
+	quest_panel.position = Vector2(906, 12)
+	quest_panel.custom_minimum_size = Vector2(360, 0)
+	quest_panel.add_theme_stylebox_override("panel", panel_style)
+	layer.add_child(quest_panel)
 
 	_hud_quest = Label.new()
-	_hud_quest.position = Vector2(880, 12)
-	_hud_quest.size = Vector2(384, 80)
-	_hud_quest.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_hud_quest.add_theme_color_override("font_outline_color", P["ink"])
-	_hud_quest.add_theme_constant_override("outline_size", 3)
-	layer.add_child(_hud_quest)
+	_hud_quest.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_hud_quest.add_theme_font_size_override("font_size", 14)
+	quest_panel.add_child(_hud_quest)
+
+	# Bottom-center NPC Dialogue Panel
+	_dialogue_panel = PanelContainer.new()
+	_dialogue_panel.position = Vector2(260, 520)
+	_dialogue_panel.custom_minimum_size = Vector2(760, 110)
+	_dialogue_panel.add_theme_stylebox_override("panel", panel_style)
+	_dialogue_panel.visible = false
+	layer.add_child(_dialogue_panel)
+
+	var dlg_box := VBoxContainer.new()
+	_dialogue_panel.add_child(dlg_box)
+
+	_dialogue_speaker = Label.new()
+	_dialogue_speaker.add_theme_color_override("font_color", P["gold"])
+	_dialogue_speaker.add_theme_font_size_override("font_size", 16)
+	dlg_box.add_child(_dialogue_speaker)
+
+	_dialogue_body = Label.new()
+	_dialogue_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_dialogue_body.add_theme_font_size_override("font_size", 14)
+	dlg_box.add_child(_dialogue_body)
+
+	var dlg_hint := Label.new()
+	dlg_hint.text = "[E] Đóng hội thoại"
+	dlg_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	dlg_hint.add_theme_color_override("font_color", P["stone_light"])
+	dlg_hint.add_theme_font_size_override("font_size", 12)
+	dlg_box.add_child(dlg_hint)
 
 	_hud_prompt = Label.new()
-	_hud_prompt.position = Vector2(340, 620)
-	_hud_prompt.size = Vector2(600, 32)
+	_hud_prompt.position = Vector2(340, 642)
+	_hud_prompt.size = Vector2(600, 28)
 	_hud_prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_hud_prompt.add_theme_color_override("font_color", P["gold"])
 	_hud_prompt.add_theme_color_override("font_outline_color", P["ink"])
@@ -382,7 +461,7 @@ func _build_hud() -> void:
 	layer.add_child(controls)
 
 	_toast_label = Label.new()
-	_toast_label.position = Vector2(240, 80)
+	_toast_label.position = Vector2(240, 92)
 	_toast_label.size = Vector2(800, 36)
 	_toast_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_toast_label.add_theme_color_override("font_color", Color.WHITE)
@@ -394,20 +473,38 @@ func _build_hud() -> void:
 
 func _refresh_hud() -> void:
 	if player and _hud_stats:
-		_hud_stats.text = "Ngộ Không Lv.%d | HP %d/%d | DMG %d | EXP %d | Vàng %d" % [
-			player.level, player.hp, player.max_hp, player.attack_damage, player.exp_points, player.gold
+		_hud_stats.text = "Ngộ Không Lv.%d | DMG %d | Vàng %d | HP %d/%d" % [
+			player.level, player.attack_damage, player.gold, player.hp, player.max_hp
 		]
+		if _hud_hp_bar:
+			_hud_hp_bar.max_value = player.max_hp
+			_hud_hp_bar.value = player.hp
+		if _hud_exp_bar:
+			var exp_prog := player.get_exp_progress()
+			_hud_exp_bar.max_value = exp_prog.y
+			_hud_exp_bar.value = exp_prog.x
 	if _hud_quest:
 		var q_text := ""
 		match quest_stage:
 			0:
-				q_text = "Nhiệm vụ: Gặp Khỉ Trưởng Lão [E]"
+				q_text = "Nhiệm vụ: Gặp Khỉ Trưởng Lão [E]\nNhận nhiệm vụ bảo vệ Hoa Quả Sơn"
 			1:
-				q_text = "Q1 — Bảo vệ làng: Hạ yêu quái (%d/3)" % mini(kills_count, 3)
+				var q1_done := kills_count >= 3
+				q_text = "Q1 — Bảo vệ làng (%d/3)\n%s" % [
+					mini(kills_count, 3),
+					"Quay về gặp Khỉ Trưởng Lão [?]" if q1_done else "Hạ 3 Lợn Rừng tại Bãi Quái (Thưởng: 50 EXP, 20 Vàng)"
+				]
 			3:
-				q_text = "Q2 — Rừng Đào: Thu thập đào (%d/5)" % mini(peaches_count, 5)
+				var q2_done := peaches_count >= 5
+				q_text = "Q2 — Thu thập Đào Tiên (%d/5)\n%s" % [
+					mini(peaches_count, 5),
+					"Quay về gặp Khỉ Trưởng Lão [?]" if q2_done else "Tìm dưới gốc cây ở Rừng Đào (Thưởng: 40 EXP, 15 Vàng)"
+				]
 			5:
-				q_text = "Q3 — Hang Boss: Hạ Yêu Vương (%s)" % ("Xong - Về gặp Trưởng Lão/Qua cổng" if boss_defeated else "0/1")
+				q_text = "Q3 — Đánh bại Yêu Vương (%s)\n%s" % [
+					"1/1" if boss_defeated else "0/1",
+					"Mở rương & bước qua Cổng Hang Boss!" if boss_defeated else "Tiến vào Hang Boss (Thưởng: 150 EXP)"
+				]
 			_:
 				q_text = "Hoàn thành Vertical Slice Hoa Quả Sơn!"
 		_hud_quest.text = q_text
