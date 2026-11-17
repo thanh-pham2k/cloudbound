@@ -70,7 +70,113 @@ func _process(delta: float) -> void:
 func _build_ground() -> void:
 	ground_layer = _GroundLayer.new()
 	ground_layer.name = "GroundLayer"
+	ground_layer.z_index = -10
 	add_child(ground_layer)
+
+	# Distant misty mountain backdrop behind the upper-left/top horizon
+	var bg_tex := load("res://assets/sprites/environment/bg_distant_mountains.png") as Texture2D
+	if bg_tex:
+		for mx in [-450.0, 250.0, 950.0, 1650.0, 2350.0]:
+			var bg := Sprite2D.new()
+			bg.texture = bg_tex
+			bg.position = Vector2(mx, mx * -0.45 - 380.0)
+			bg.scale = Vector2(1.8, 1.8)
+			bg.z_index = -20
+			add_child(bg)
+
+	# Dense hand-painted grass patches covering the island surface
+	var grass_tex := load("res://assets/sprites/tiles/ground_grass_patch.png") as Texture2D
+	if grass_tex:
+		var boundary := PackedVector2Array(L.WALKABLE_BOUNDARY)
+		var rng := RandomNumberGenerator.new()
+		rng.seed = 4202
+		for gx in range(-280, 2460, 175):
+			for gy in range(-1260, 160, 115):
+				var pt := Vector2(float(gx) + rng.randf_range(-28.0, 28.0), float(gy) + rng.randf_range(-18.0, 18.0))
+				if Geometry2D.is_point_in_polygon(pt, boundary):
+					var sp := Sprite2D.new()
+					sp.texture = grass_tex
+					sp.position = pt
+					var sc := rng.randf_range(0.75, 1.0)
+					sp.scale = Vector2(sc, sc)
+					sp.flip_h = rng.randf() > 0.5
+					sp.modulate = Color(1, 1, 1, 0.92)
+					sp.z_index = -6
+					add_child(sp)
+
+	# Seamless hand-painted cream dirt along the winding main path, secret branch, and clearings
+	var dirt_tex := load("res://assets/sprites/tiles/ground_dirt_patch.png") as Texture2D
+	if dirt_tex:
+		for pts_arr in [L.MAIN_PATH_POINTS, L.SECRET_BRANCH_POINTS]:
+			var is_secret: bool = (pts_arr == L.SECRET_BRANCH_POINTS)
+			var step_len := 52.0 if is_secret else 62.0
+			var sc := Vector2(0.32, 0.28) if is_secret else Vector2(0.44, 0.36)
+			for i in range(pts_arr.size() - 1):
+				var a: Vector2 = pts_arr[i]
+				var b: Vector2 = pts_arr[i + 1]
+				var seg_len := a.distance_to(b)
+				var steps := maxi(1, int(ceil(seg_len / step_len)))
+				for s in range(steps + 1):
+					var t := float(s) / float(steps)
+					var sp := Sprite2D.new()
+					sp.texture = dirt_tex
+					sp.position = a.lerp(b, t)
+					sp.scale = sc
+					sp.flip_h = (s % 2 == 1)
+					sp.z_index = -5
+					add_child(sp)
+
+		var dirt_spots := [
+			{"pos": Vector2(30.0, -25.0), "scale": Vector2(1.15, 0.98)},
+			{"pos": Vector2(1175.0, -280.0), "scale": Vector2(0.62, 0.58)},
+			{"pos": Vector2(1465.0, -815.0), "scale": Vector2(1.32, 1.12)},
+		]
+		for d in dirt_spots:
+			var sp := Sprite2D.new()
+			sp.texture = dirt_tex
+			sp.position = d["pos"]
+			sp.scale = d["scale"]
+			sp.z_index = -4
+			add_child(sp)
+
+	# Seamless stone floor patches for Boss Cave
+	var cave_tex := load("res://assets/sprites/tiles/ground_cave_floor.png") as Texture2D
+	if cave_tex:
+		for off in [Vector2(-70, 20), Vector2(75, -25), Vector2(0, 0)]:
+			var sp := Sprite2D.new()
+			sp.texture = cave_tex
+			sp.position = Vector2(2200.0, -1100.0) + off
+			sp.scale = Vector2(0.95, 0.88)
+			sp.z_index = -3
+			add_child(sp)
+
+	# Hand-painted 2.5D cliff wall blocks along the lower/front rim of the island
+	var cliff_tex := load("res://assets/sprites/environment/cliff_wall.png") as Texture2D
+	if cliff_tex:
+		var boundary := PackedVector2Array(L.WALKABLE_BOUNDARY)
+		for i in boundary.size():
+			var p1 := boundary[i]
+			var p2 := boundary[(i + 1) % boundary.size()]
+			if p2.x > p1.x or p1.y > -220.0:
+				var seg_len := p1.distance_to(p2)
+				var steps := maxi(1, int(ceil(seg_len / 135.0)))
+				for s in range(steps):
+					var t := (float(s) + 0.5) / float(steps)
+					var sp := Sprite2D.new()
+					sp.texture = cliff_tex
+					sp.position = p1.lerp(p2, t) + Vector2(0.0, 42.0)
+					sp.scale = Vector2(0.42, 0.42)
+					sp.flip_h = p2.y > p1.y
+					sp.z_index = -8
+					add_child(sp)
+
+	# Waterfalls at cliff edges
+	for wf_pos in L.WATERFALLS:
+		var wf := IsoPlaceholder.new()
+		wf.kind = "waterfall"
+		wf.position = wf_pos
+		wf.z_index = -2
+		add_child(wf)
 
 
 func _build_outer_boundary() -> void:
@@ -97,6 +203,11 @@ func _build_monkey_village() -> void:
 		var hut_kind := "hut" if i == 0 else "hut_small"
 		_add_static_prop(hut_kind, hut["pos"], hut["scale"], Vector2(44.0, 22.0) * hut["scale"])
 
+	for pos in L.FENCES:
+		_add_static_prop("fence", pos, 1.0, Vector2(22.0, 8.0))
+	for pos in L.LANTERNS:
+		_add_static_prop("lantern", pos, 1.0, Vector2(10.0, 6.0))
+
 	for npc_data in L.NPCS:
 		var npc := InteractableObject.new()
 		npc.kind = "npc"
@@ -115,6 +226,33 @@ func _build_peach_forest() -> void:
 		_add_static_prop("peach_tree", pos, 1.0, Vector2(12.0, 8.0))
 	for pos in L.GREEN_TREES:
 		_add_static_prop("green_tree", pos, 1.0, Vector2(12.0, 8.0))
+	for pos in L.BUSHES:
+		_add_static_prop("bush", pos, 1.0, Vector2(16.0, 8.0))
+	for pos in L.GRASS_TUFTS:
+		var tuft := IsoPlaceholder.new()
+		tuft.kind = "grass_tuft"
+		tuft.position = pos
+		tuft.z_index = -1
+		add_child(tuft)
+
+	for pos in L.PEBBLES:
+		var peb := IsoPlaceholder.new()
+		peb.kind = "pebble"
+		peb.position = pos
+		peb.z_index = -1
+		add_child(peb)
+
+	var stream := IsoPlaceholder.new()
+	stream.kind = "stream"
+	stream.position = L.BRIDGE_POS + Vector2(5.0, 5.0)
+	stream.z_index = -2
+	add_child(stream)
+
+	var bridge := IsoPlaceholder.new()
+	bridge.kind = "bridge"
+	bridge.position = L.BRIDGE_POS
+	bridge.z_index = -1
+	add_child(bridge)
 
 	for i in L.PEACH_PICKUPS.size():
 		var peach := InteractableObject.new()
@@ -145,13 +283,25 @@ func _build_monster_clearing() -> void:
 	for m in L.MONSTERS:
 		var enemy := EnemyBase.new()
 		enemy.enemy_id = m["id"]
+		enemy.enemy_kind = m.get("kind", "boar")
 		enemy.display_name = m["name"]
+		if enemy.enemy_kind == "imp":
+			enemy.max_hp = 50
+			enemy.move_speed = 135.0
+			enemy.attack_damage = 14
 		enemy.position = m["pos"]
 		enemy.died.connect(_on_enemy_died)
 		entities_root.add_child(enemy)
 
 
 func _build_boss_cave() -> void:
+	var cave_wall := IsoPlaceholder.new()
+	cave_wall.kind = "cave_wall"
+	cave_wall.position = Vector2(2205.0, -980.0)
+	cave_wall.item_scale = 1.48
+	cave_wall.z_index = -1
+	add_child(cave_wall)
+
 	var stairs := IsoPlaceholder.new()
 	stairs.kind = "stairs"
 	stairs.position = Vector2(1945.0, -965.0)
@@ -524,36 +674,12 @@ class _GroundLayer extends Node2D:
 	var boss_cleared: bool = false
 
 	func _draw() -> void:
-		# Outer soft grass canvas
-		draw_rect(Rect2(-900, -1700, 4100, 2400), P["grass_dark"])
-		# Playable island base
+		# Distant mountain sky-mist valley backdrop (matching concept overview)
+		draw_rect(Rect2(-900, -1700, 4100, 2400), Color("#B8D4E3"))
+
+		# Playable island grass base (soft edge, covered by hand-painted grass & dirt patches)
 		var boundary_pts := PackedVector2Array(L.WALKABLE_BOUNDARY)
 		draw_colored_polygon(boundary_pts, P["grass_light"])
-		var border := PackedVector2Array(boundary_pts)
-		border.append(boundary_pts[0])
-		draw_polyline(border, P["ink"], 3.0, true)
-
-		# Area floor pads matching SVG semantic colors
-		for area in L.AREAS:
-			var col: Color = P["grass_light"].lightened(0.06)
-			match area["surface"]:
-				"cave":
-					col = P["stone_light"]
-				"clearing":
-					col = P["path_cream"]
-				"secret":
-					col = P["path_cream"]
-				"forest":
-					col = Color("#CFE7C9")
-			_draw_iso_ellipse(area["center"], area["radius"].x * 0.72, area["radius"].y * 0.72, col, area["surface"] == "cave")
-
-		# Winding main trail & secret branch trail
-		var main_pts := PackedVector2Array(L.MAIN_PATH_POINTS)
-		var secret_pts := PackedVector2Array(L.SECRET_BRANCH_POINTS)
-		draw_polyline(main_pts, P["path_edge"], 84.0, true)
-		draw_polyline(main_pts, P["path_cream"], 72.0, true)
-		draw_polyline(secret_pts, P["path_edge"], 54.0, true)
-		draw_polyline(secret_pts, P["path_cream"], 44.0, true)
 
 		# Victory path highlight from Boss Chest to Unlocked Exit
 		if boss_cleared:

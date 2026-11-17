@@ -128,14 +128,12 @@ const ROCKS := [
 	Vector2(1385.0, -685.0),
 	Vector2(1890.0, -1000.0),
 	Vector2(1955.0, -860.0),
-	# Boss cave rim rocks
-	Vector2(1990.0, -1185.0),
-	Vector2(2115.0, -1255.0),
-	Vector2(2285.0, -1260.0),
-	Vector2(2445.0, -1155.0),
-	Vector2(2415.0, -1005.0),
-	Vector2(2250.0, -945.0),
-	Vector2(2065.0, -955.0),
+	# Boss cave front-side rim rocks (back rim framed by cave_back_wall.png)
+	Vector2(1985.0, -1125.0),
+	Vector2(2440.0, -1090.0),
+	Vector2(2385.0, -995.0),
+	Vector2(2265.0, -955.0),
+	Vector2(2145.0, -950.0),
 ]
 
 # Each collectible peach sits right beneath/beside a peach tree trunk (matching original concept)
@@ -150,11 +148,54 @@ const PEACH_PICKUPS := [
 const SECRET_SPECIAL_TREE := Vector2(1235.0, -320.0)
 const SECRET_CHEST_POS := Vector2(1170.0, -280.0)
 
-# Boar monsters positioned in the clearing slightly left of the winding main path
 const MONSTERS := [
-	{"id": "boar_1", "name": "Lợn Rừng 1", "pos": Vector2(1365.0, -845.0)},
-	{"id": "boar_2", "name": "Lợn Rừng 2", "pos": Vector2(1505.0, -865.0)},
-	{"id": "boar_3", "name": "Lợn Rừng 3", "pos": Vector2(1435.0, -760.0)},
+	{"id": "boar_1", "kind": "boar", "name": "Lợn Rừng 1", "pos": Vector2(1365.0, -845.0)},
+	{"id": "boar_2", "kind": "boar", "name": "Lợn Rừng 2", "pos": Vector2(1505.0, -865.0)},
+	{"id": "boar_3", "kind": "boar", "name": "Lợn Rừng 3", "pos": Vector2(1435.0, -760.0)},
+	{"id": "imp_1", "kind": "imp", "name": "Tiểu Yêu Rừng", "pos": Vector2(1575.0, -795.0)},
+]
+
+const FENCES := [
+	Vector2(-95.0, -195.0),
+	Vector2(-15.0, -210.0),
+]
+
+const BRIDGE_POS := Vector2(985.0, -340.0)
+
+const BUSHES := [
+	Vector2(-240.0, 85.0),
+	Vector2(175.0, 95.0),
+	Vector2(355.0, -265.0),
+	Vector2(870.0, -225.0),
+	Vector2(1290.0, -330.0),
+	Vector2(1690.0, -810.0),
+]
+
+const GRASS_TUFTS := [
+	Vector2(-85.0, 45.0),
+	Vector2(135.0, 20.0),
+	Vector2(495.0, -295.0),
+	Vector2(760.0, -485.0),
+	Vector2(1145.0, -475.0),
+	Vector2(1345.0, -735.0),
+]
+
+const LANTERNS := [
+	Vector2(-125.0, -35.0),
+	Vector2(165.0, -75.0),
+]
+
+const PEBBLES := [
+	Vector2(220.0, -95.0),
+	Vector2(560.0, -210.0),
+	Vector2(890.0, -450.0),
+	Vector2(1310.0, -640.0),
+	Vector2(1745.0, -820.0),
+]
+
+const WATERFALLS := [
+	Vector2(175.0, 95.0),
+	Vector2(1285.0, -145.0),
 ]
 
 const BOSS := {
@@ -168,7 +209,7 @@ const BOSS_TORCHES := [
 	Vector2(2115.0, -975.0),
 ]
 
-const BOSS_EXIT_POS := Vector2(2415.0, -1205.0)
+const BOSS_EXIT_POS := Vector2(2305.0, -1235.0)
 const BOSS_CHEST_POS := Vector2(2200.0, -1100.0)
 
 ## Outer walkable boundary polygon (counter-clockwise) so the player stays

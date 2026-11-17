@@ -60,6 +60,71 @@ BATCHES = [
             (2, 1): "interactables/gate_unlocked.png",
         },
     },
+    {
+        "file": "001-create-a-2-5d-isometric-character-animation-sprite-sheet-for.png",
+        "cols": 4,
+        "rows": 2,
+        "cells": {
+            (0, 0): "characters/hero_idle_1.png",
+            (1, 0): "characters/hero_idle_2.png",
+            (2, 0): "characters/hero_run_1.png",
+            (3, 0): "characters/hero_run_2.png",
+            (0, 1): "characters/hero_attack_1.png",
+            (1, 1): "characters/hero_attack_2.png",
+            (2, 1): "characters/hero_dash_1.png",
+            (3, 1): "characters/hero_dash_2.png",
+        },
+    },
+    {
+        "file": "002-create-a-2-5d-isometric-game-combat-monster-sprite-sheet-con.png",
+        "cols": 3,
+        "rows": 2,
+        "cells": {
+            (0, 0): "characters/enemy_imp.png",
+            (1, 0): "characters/enemy_boar_attack.png",
+            (2, 0): "characters/boss_slam.png",
+            (0, 1): "interactables/gold_coin.png",
+            (1, 1): "fx/fx_staff_slash.png",
+            (2, 1): "fx/fx_boss_slam.png",
+        },
+    },
+    {
+        "file": "003-create-a-2-5d-isometric-game-environment-detail-sprite-sheet.png",
+        "cols": 3,
+        "rows": 2,
+        "cells": {
+            (0, 0): "environment/fence_wooden.png",
+            (1, 0): "environment/bridge_wooden.png",
+            (2, 0): "environment/bush_green.png",
+            (0, 1): "environment/grass_tuft.png",
+            (1, 1): "environment/cliff_wall.png",
+            (2, 1): "environment/waterfall.png",
+        },
+    },
+    {
+        "file": "001-create-a-2-5d-isometric-game-terrain-surface-background-spri.png",
+        "cols": 3,
+        "rows": 2,
+        "cells": {
+            (0, 0): "tiles/ground_grass_patch.png",
+            (1, 0): "tiles/ground_dirt_patch.png",
+            (2, 0): "tiles/ground_cave_floor.png",
+            (0, 1): "environment/cave_back_wall.png",
+            (1, 1): "environment/cliff_corner_ledge.png",
+            (2, 1): "environment/bg_distant_mountains.png",
+        },
+    },
+    {
+        "file": "002-create-a-2-5d-isometric-game-environment-detail-sprite-sheet.png",
+        "cols": 2,
+        "rows": 2,
+        "cells": {
+            (0, 0): "environment/stream_water.png",
+            (1, 0): "environment/pebble_cluster.png",
+            (0, 1): "environment/lantern_post.png",
+            (1, 1): "fx/fx_portal_glow.png",
+        },
+    },
 ]
 
 

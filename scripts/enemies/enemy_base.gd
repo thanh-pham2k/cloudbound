@@ -9,6 +9,7 @@ const FloatingTextScript := preload("res://scripts/ui/floating_text.gd")
 enum State { PATROL, CHASE, ATTACK, RETURN }
 
 @export var enemy_id: String = "boar"
+@export var enemy_kind: String = "boar"  # "boar", "imp", "boss"
 @export var display_name: String = "Yêu Quái"
 @export var is_boss: bool = false
 @export var max_hp: int = 60
@@ -51,7 +52,7 @@ func _ready() -> void:
 	add_child(col)
 
 	_visual = IsoPlaceholder.new()
-	_visual.kind = "boss" if is_boss else "boar"
+	_visual.kind = "boss" if is_boss else enemy_kind
 	_visual.item_scale = 1.0
 	add_child(_visual)
 
@@ -71,11 +72,13 @@ func _physics_process(delta: float) -> void:
 
 	match _state:
 		State.PATROL:
+			_visual.anim_state = "idle"
 			if player and dist_to_player <= detect_radius:
 				_state = State.CHASE
 			else:
 				_process_patrol(delta)
 		State.CHASE:
+			_visual.anim_state = "idle"
 			_telegraph_timer = 0.0
 			if not player or dist_from_home > leash_radius or dist_to_player > leash_radius:
 				_state = State.RETURN
@@ -86,12 +89,14 @@ func _physics_process(delta: float) -> void:
 				_visual.facing_dir = dir
 				velocity = dir * move_speed + _knockback_vel
 		State.ATTACK:
+			_visual.anim_state = "attack"
 			velocity = _knockback_vel
 			if is_boss:
 				if _telegraph_timer > 0.0:
 					_telegraph_timer -= delta
 					if _telegraph_timer <= 0.0:
 						_attack_cd = attack_cooldown
+						_spawn_boss_slam_fx()
 						if player and global_position.distance_to(player.global_position) <= attack_range * 1.45 and player.has_method("take_damage"):
 							var kb := (player.global_position - global_position).normalized() * 240.0
 							player.take_damage(attack_damage, kb)
@@ -108,6 +113,7 @@ func _physics_process(delta: float) -> void:
 						var kb := (player.global_position - global_position).normalized() * 140.0
 						player.take_damage(attack_damage, kb)
 		State.RETURN:
+			_visual.anim_state = "idle"
 			if player and dist_to_player <= detect_radius * 0.75 and dist_from_home < leash_radius * 0.6:
 				_state = State.CHASE
 			elif global_position.distance_to(home_position) <= 12.0:
@@ -173,3 +179,18 @@ func take_damage(amount: int, knockback: Vector2 = Vector2.ZERO) -> void:
 		is_dead = true
 		died.emit(enemy_id, is_boss, reward_exp, reward_gold)
 		queue_free()
+
+
+func _spawn_boss_slam_fx() -> void:
+	var tex := load("res://assets/sprites/fx/fx_boss_slam.png") as Texture2D
+	if tex == null or get_parent() == null:
+		return
+	var fx := Sprite2D.new()
+	fx.texture = tex
+	fx.position = position
+	fx.scale = Vector2(0.38, 0.24)
+	fx.z_index = -1
+	get_parent().add_child(fx)
+	var tw := fx.create_tween()
+	tw.tween_property(fx, "modulate:a", 0.0, 0.35)
+	tw.tween_callback(fx.queue_free)

@@ -79,8 +79,15 @@ func _physics_process(delta: float) -> void:
 	if _dash_timer > 0.0:
 		_dash_timer -= delta
 		velocity = last_facing * DASH_SPEED
+		_visual.anim_state = "dash"
 	else:
 		velocity = input_vec.normalized() * MOVE_SPEED if input_vec.length() > 0.01 else Vector2.ZERO
+		if _attack_fx_timer > 0.0:
+			_visual.anim_state = "attack"
+		elif velocity.length() > 5.0:
+			_visual.anim_state = "run"
+		else:
+			_visual.anim_state = "idle"
 
 	move_and_slide()
 
@@ -104,7 +111,8 @@ func _draw() -> void:
 
 func _perform_attack() -> void:
 	_attack_cd = ATTACK_COOLDOWN
-	_attack_fx_timer = 0.16
+	_attack_fx_timer = 0.22
+	_spawn_slash_fx()
 	queue_redraw()
 	for node in get_tree().get_nodes_in_group("enemies"):
 		if not is_instance_valid(node) or node.is_dead:
@@ -112,6 +120,22 @@ func _perform_attack() -> void:
 		var to_enemy: Vector2 = node.global_position - global_position
 		if to_enemy.length() <= ATTACK_RANGE and (to_enemy.length() < 24.0 or to_enemy.normalized().dot(last_facing) > 0.15):
 			node.take_damage(attack_damage, to_enemy.normalized() * 190.0)
+
+
+func _spawn_slash_fx() -> void:
+	var tex := load("res://assets/sprites/fx/fx_staff_slash.png") as Texture2D
+	if tex == null or get_parent() == null:
+		return
+	var fx := Sprite2D.new()
+	fx.texture = tex
+	fx.position = position + last_facing * 28.0 + Vector2(0, -18)
+	fx.rotation = last_facing.angle()
+	fx.scale = Vector2(0.14, 0.14)
+	fx.z_index = 20
+	get_parent().add_child(fx)
+	var tw := fx.create_tween()
+	tw.tween_property(fx, "modulate:a", 0.0, 0.18)
+	tw.tween_callback(fx.queue_free)
 
 
 func _perform_interact() -> void:
