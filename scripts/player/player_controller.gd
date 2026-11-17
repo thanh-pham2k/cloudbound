@@ -33,7 +33,7 @@ var projectile_speed: float = 560.0
 # Dash stats
 var dash_speed: float = 640.0
 var dash_duration: float = 0.18
-var dash_cooldown: float = 1.5
+var dash_cooldown: float = 0.1
 var dash_invuln: float = 0.24
 
 # Skill 1 (Q)
@@ -586,7 +586,7 @@ func apply_upgrade(upgrade: Dictionary, heal_on_upgrade: bool = true) -> void:
 		"move_speed_mult":
 			move_speed *= (1.0 + val)
 		"dash_cooldown_mult":
-			dash_cooldown = maxf(0.45, dash_cooldown * val)
+			dash_cooldown = maxf(0.05, dash_cooldown * val)
 		"skill1_power":
 			skill1_damage *= (1.0 + val)
 			skill1_radius *= 1.2

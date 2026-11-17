@@ -1,0 +1,22 @@
+category: props
+inherits: "assets/visual_bible.yaml"
+reference: "assets/references/props.png"
+
+# Category defaults for interactive objects & pickups
+dimensions:
+  valid_sizes:
+    - [64, 64]
+    - [128, 128]
+    - [128, 192]
+    - [256, 256]
+
+anchor:
+  mode: bottom_center
+
+collision:
+  mode: base_footprint
+  pickup_mode: trigger_area
+
+animation:
+  default_states: ["idle"]
+  optional_states: ["interact", "open", "active"]

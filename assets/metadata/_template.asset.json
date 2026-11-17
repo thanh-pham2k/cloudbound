@@ -1,0 +1,10 @@
+{
+  "$comment": "Optional Asset Override. Only create a per-asset JSON when overriding category defaults or specifying custom states/dimensions.",
+  "id": "tree_001",
+  "category": "environment",
+  "overrides": {
+    "dimensions": { "width": 128, "height": 192, "scale_vs_hero": 2.0 },
+    "states": ["idle", "shaking"],
+    "collision": { "mode": "base_only" }
+  }
+}

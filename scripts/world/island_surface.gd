@@ -2,20 +2,22 @@ extends Node2D
 ## A repeatable terrain material, cliff segments and paving clipped to an authored shoreline.
 
 const SURFACE := preload("res://scripts/world/island_surface.gdshader")
+const GRASS_TEX := preload("res://assets/base/environment/ground/ground_jade_seamless_01.png")
+const STONE_TEX := preload("res://assets/base/environment/ground/ground_stone_seamless_01.png")
+const PATH_TEX := preload("res://assets/base/environment/ground/ground_path_seamless_01.png")
+const CLIFF_TEX := preload("res://assets/base/environment/platforms/cliff_rock_seamless.png")
 
 var _random := RandomNumberGenerator.new()
 
 
 func build(outline: PackedVector2Array, path: Curve2D, arena_radii: Vector2 = Vector2.ZERO, path_width: float = 70.0) -> void:
 	_random.seed = 319
-	var grass := _material(Color("#7f973b"), Color("#d5d479"), Vector2.ONE)
-	var cliff := _material(Color("#505573"), Color("#a29a9c"), Vector2(1.5, 0.45))
 	var bounds := _bounds(outline)
 	var center := bounds.get_center()
 	var foundation := PackedVector2Array()
 	for point in outline:
 		foundation.append(center + (point - center) * Vector2(0.83, 0.95) + Vector2(-12, 93))
-	_polygon(foundation, Color.WHITE, cliff)
+	_polygon(foundation, Color(0.86, 0.85, 0.92), null, CLIFF_TEX, Vector2(0.75, 0.75))
 	for index in range(outline.size()):
 		var start := outline[index]
 		var end := outline[(index + 1) % outline.size()]
@@ -29,10 +31,10 @@ func build(outline: PackedVector2Array, path: Curve2D, arena_radii: Vector2 = Ve
 			var depth := 56.0 + (1.0 - relative_x) * 115.0 + _random.randf_range(-27, 20)
 			var foot := (a + b) * 0.5 + Vector2(_random.randf_range(-42, -14), depth)
 			var seam := b + Vector2(-18, depth * 0.72)
-			_polygon(PackedVector2Array([a, b, seam, foot, a + Vector2(-18, depth * 0.62)]), Color.WHITE, cliff)
+			_polygon(PackedVector2Array([a, b, seam, foot, a + Vector2(-18, depth * 0.62)]), Color.WHITE, null, CLIFF_TEX, Vector2(0.75, 0.75))
 			_polygon(PackedVector2Array([a, a.lerp(b, 0.42), foot, a + Vector2(-18, depth * 0.62)]),
 				Color(0.22, 0.24, 0.39, _random.randf_range(0.15, 0.37)))
-	_polygon(outline, Color.WHITE, grass)
+	_polygon(outline, Color.WHITE, null, GRASS_TEX, Vector2(1.15, 1.15))
 	if arena_radii != Vector2.ZERO:
 		_build_courtyard(arena_radii)
 	else:
@@ -43,7 +45,6 @@ func build(outline: PackedVector2Array, path: Curve2D, arena_radii: Vector2 = Ve
 
 
 func build_bridge(deck: Rect2) -> void:
-	var stone := _material(Color("#b09c89"), Color("#ebd6b7"), Vector2.ONE)
 	_rectangle(Rect2(deck.position + Vector2(0, 6), deck.size + Vector2(0, 27)), Color("#646279"))
 	_rectangle(Rect2(deck.position, deck.size + Vector2(0, 15)), Color("#a08b78"))
 	_rectangle(deck, Color("#a08b78"))
@@ -51,26 +52,24 @@ func build_bridge(deck: Rect2) -> void:
 		var x := deck.position.x - (row & 1) * 29.0
 		while x < deck.end.x:
 			var slab := Rect2(x + 1, deck.position.y + row * 34.0 + 1, 56.0, 32.0)
-			_rectangle(slab.intersection(deck), Color.WHITE, stone)
+			_rectangle(slab.intersection(deck), Color.WHITE, null, STONE_TEX, Vector2(1.1, 1.1))
 			x += 58.0
 	for y in [deck.position.y, deck.end.y]:
 		_rectangle(Rect2(deck.position.x, y - 5, deck.size.x, 10), Color("#857466"))
-		_rectangle(Rect2(deck.position.x, y - 11, deck.size.x, 7), Color.WHITE, stone)
+		_rectangle(Rect2(deck.position.x, y - 11, deck.size.x, 7), Color.WHITE, null, STONE_TEX, Vector2(1.1, 1.1))
 		for x in [deck.position.x + 14, deck.position.x + 151, deck.end.x - 151, deck.end.x - 14]:
 			_rectangle(Rect2(x - 10, y - 26, 20, 33), Color("#a58d77"))
-			_rectangle(Rect2(x - 12, y - 29, 24, 9), Color.WHITE, stone)
+			_rectangle(Rect2(x - 12, y - 29, 24, 9), Color.WHITE, null, STONE_TEX, Vector2(1.1, 1.1))
 
 
-func _rectangle(rect: Rect2, tint: Color, surface: ShaderMaterial = null) -> void:
+func _rectangle(rect: Rect2, tint: Color, surface: ShaderMaterial = null, tex: Texture2D = null, tex_scale: Vector2 = Vector2.ONE) -> void:
 	_polygon(PackedVector2Array([rect.position, Vector2(rect.end.x, rect.position.y),
-		rect.end, Vector2(rect.position.x, rect.end.y)]), tint, surface)
+		rect.end, Vector2(rect.position.x, rect.end.y)]), tint, surface, tex, tex_scale)
 
 
 func _build_courtyard(radii: Vector2) -> void:
-	var mortar := _material(Color("#928575"), Color("#beaa96"), Vector2.ONE)
 	var edging := _ellipse_sector(radii, 0.0, TAU, 0.0, 1.04, 72)
-	_polygon(edging, Color.WHITE, mortar)
-	var stone := _material(Color("#a39387"), Color("#dbc4b2"), Vector2(0.8, 1.0))
+	_polygon(edging, Color(0.88, 0.84, 0.80), null, PATH_TEX, Vector2(1.15, 1.15))
 	for row in range(11):
 		var outer := (row + 1) / 11.0
 		var inner := row / 11.0
@@ -80,7 +79,7 @@ func _build_courtyard(radii: Vector2) -> void:
 			var start := (column + (row & 1) * 0.5) * step
 			var slab := _ellipse_sector(radii, start + 0.002, start + step - 0.002,
 				inner + 0.002, outer - 0.003, 3)
-			_polygon(slab, Color.WHITE, stone)
+			_polygon(slab, Color.WHITE, null, STONE_TEX, Vector2(1.15, 1.15))
 			_polygon(slab, Color(0.36, 0.23, 0.20, _random.randf_range(0, 0.16)))
 	for radius in [0.24, 0.26, 0.93, 0.96, 1.02]:
 		var band := Line2D.new()
@@ -134,17 +133,21 @@ func _material(low: Color, high: Color, grain_scale: Vector2) -> ShaderMaterial:
 	return material
 
 
-func _polygon(points: PackedVector2Array, tint: Color, surface: ShaderMaterial = null) -> void:
+func _polygon(points: PackedVector2Array, tint: Color, surface: ShaderMaterial = null, tex: Texture2D = null, tex_scale: Vector2 = Vector2.ONE) -> void:
 	var shape := Polygon2D.new()
 	shape.polygon = points
 	shape.color = tint
 	shape.material = surface
+	if tex != null:
+		shape.texture = tex
+		shape.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+		shape.texture_scale = tex_scale
+		shape.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	shape.antialiased = true
 	add_child(shape)
 
 
 func _pave(outline: PackedVector2Array, path: Curve2D, path_width: float) -> void:
-	var palette := [Color("#c9b796"), Color("#d5c2a7"), Color("#bbab94"), Color("#dac6a6")]
 	var bounds := _bounds(outline)
 	for row in range(floori(bounds.position.y / 25.0), ceili(bounds.end.y / 25.0)):
 		for column in range(floori(bounds.position.x / 53.0), ceili(bounds.end.x / 53.0)):
@@ -161,10 +164,10 @@ func _pave(outline: PackedVector2Array, path: Curve2D, path_width: float) -> voi
 				center + Vector2(width - 4, 9), center + Vector2(-width + 3, _random.randf_range(8, 14)),
 			])
 			for piece in Geometry2D.intersect_polygons(stone, outline):
-				_polygon(piece, palette[_random.randi_range(0, palette.size() - 1)])
+				_polygon(piece, Color.WHITE, null, PATH_TEX, Vector2(1.1, 1.1))
 				var highlight := PackedVector2Array([stone[0], stone[1], stone[2], stone[2] + Vector2(-5, 3), stone[1] + Vector2(2, 3)])
 				for lip in Geometry2D.intersect_polygons(highlight, outline):
-					_polygon(lip, Color(1.0, 0.96, 0.82, 0.38))
+					_polygon(lip, Color(1.0, 0.96, 0.82, 0.32))
 
 
 func _bounds(outline: PackedVector2Array) -> Rect2:
