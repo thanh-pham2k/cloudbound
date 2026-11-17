@@ -1,5 +1,0 @@
-{
-  "atlas": {"frame_width": 64, "frame_height": 64, "columns": 3, "rows": 2, "padding": 4},
-  "pivot": {"x": 32, "y": 32, "anchor_mode": "bbox_center"},
-  "godot": {"texture_filter": "linear"}
-}
