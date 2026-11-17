@@ -126,3 +126,95 @@ Camera & Art Style (Minimal Stylized 2.5D Isometric):
 
 Negative constraints: No flat 2D side-view, no 90-degree top-down, no photorealism, no cast shadows on white background, no overlapping objects, no text.
 ```
+
+---
+
+## Batch 5 — Hero Animation Keyframes (`assets/inbox/B5_hero_anim.png`)
+
+**Gồm 8 subimages (lưới 4×2) cho 4 trạng thái MVP của Tôn Ngộ Không:**
+- Hàng 1: `Idle 1`, `Idle 2`, `Run 1`, `Run 2`
+- Hàng 2: `Attack Windup`, `Attack Swing`, `Dash 1`, `Dash 2`
+
+```text
+Create a 2.5D isometric character animation sprite sheet for the Monkey Hero (Sun Wukong) containing 8 separate keyframes arranged in a clean 4x2 grid on a solid pure white (#FFFFFF) background with wide empty spacing between each pose, no overlapping, no cast shadows on background, and no text or labels.
+
+Consistent Design & Style (matching existing Hero):
+- Cute chibi monkey warrior with warm brown fur (#D4A373), yellow-gold tunic (#FBBF24), golden headband, flowing red scarf (#DC2626), holding a red-and-gold staff.
+- Fixed 2.5D isometric projection (35-45 degree elevated angle, facing front-right-down).
+- Minimal Stylized look: clean shapes, soft cel shading, crisp uniform dark indigo-slate ink outline (#1E293B).
+
+8 Keyframes (4 columns x 2 rows, identical character size across all cells):
+- Row 1 (Idle & Run):
+  1. Col 1 (Idle 1): Standing relaxed combat-ready pose holding staff upright.
+  2. Col 2 (Idle 2): Subtle breathing/bob pose, scarf slightly lifted, staff held slightly lower.
+  3. Col 3 (Run 1): Mid-stride running pose leaning slightly forward, left foot forward, scarf trailing back.
+  4. Col 4 (Run 2): Opposite stride running pose, right foot forward, scarf trailing back.
+- Row 2 (Attack & Dash):
+  5. Col 1 (Attack Windup): Pulling red-gold staff back behind shoulder ready to strike.
+  6. Col 2 (Attack Swing): Sweeping staff forward in a wide horizontal strike with a subtle golden arc motion.
+  7. Col 3 (Dash 1): Low forward-leaning dash lunge with staff tucked back and red scarf streaming straight behind.
+  8. Col 4 (Dash 2): Extended fast-dash glide pose with trailing wind-wisp lines.
+
+Negative constraints: No flat 2D side-view, no 90-degree top-down, no photorealism, no cast shadows on white background, no overlapping poses, no text.
+```
+
+---
+
+## Batch 6 — Enemy #2, Boss/Boar Combat & FX (`assets/inbox/B6_enemies_fx.png`)
+
+**Gồm 6 subimages (lưới 3×2):**
+1. Quái thứ 2 — Tiểu Yêu Rừng (`enemy_imp`)
+2. Lợn Rừng Tấn Công (`enemy_boar_attack`)
+3. Yêu Vương Đập Đất (`boss_slam`)
+4. Đồng Vàng (`gold_coin`)
+5. Vệt Chém Gậy (`fx_staff_slash`)
+6. Vòng Sóng Đập Đất (`fx_boss_slam`)
+
+```text
+Create a 2.5D isometric game combat & monster sprite sheet containing 6 separate assets arranged in a clean 3x2 grid on a solid pure white (#FFFFFF) background with wide empty spacing between each item, no overlapping, no cast shadows on background, and no text or labels.
+
+Camera & Art Style (Minimal Stylized 2.5D Isometric):
+- Fixed 2.5D isometric projection (35-45 degree elevated angle).
+- Minimal Stylized look: simple clean shapes, soft cel shading, crisp dark indigo-slate ink outline (#1E293B), matching our existing chibi characters.
+
+6 Subimages (3x2 grid):
+1. Top-left (Monster #2 — Forest Imp): Cute chibi horned forest demon imp with muted crimson skin (#C95B5B), dark little horns (#1E293B), tattered brown loincloth (#9C6644), holding a simple wooden club.
+2. Top-center (Wild Boar Charge Pose): Same chunky dark slate-gray wild boar (#7B8499) with cream tusks lowered forward in an aggressive charging lunge pose.
+3. Top-right (Demon King Boss Slam Pose): Same large crimson-skinned Demon King boss with gold armor/crown (#FBBF24) and red cape, raising both arms and slamming his heavy golden staff downward.
+4. Bottom-left (Gold Coin Pickup): Stylized chunky ancient Chinese gold coin (#FBBF24) with a square center hole and warm shine.
+5. Bottom-center (Staff Slash FX): Clean stylized golden-white crescent slash arc effect (#FBBF24, #FFFFFF) with crisp minimal stylized edges.
+6. Bottom-right (Boss Ground Slam FX): Clean 2.5D isometric flat circular shockwave ring in warm orange-gold and crimson (#FBBF24, #DC2626).
+
+Negative constraints: No photorealism, no cast shadows on white background, no overlapping items, no text.
+```
+
+---
+
+## Batch 7 — Environment Details (`assets/inbox/B7_env_details.png`)
+
+**Gồm 6 subimages (lưới 3×2):**
+1. Hàng Rào Gỗ (`fence_wooden`)
+2. Cầu Gỗ Nhỏ (`bridge_wooden`)
+3. Bụi Cây Xanh (`bush_green`)
+4. Cụm Cỏ Hoa (`grass_tuft`)
+5. Vách Đá 2.5D (`cliff_wall`)
+6. Thác Nước (`waterfall`)
+
+```text
+Create a 2.5D isometric game environment detail sprite sheet containing 6 separate objects arranged in a clean 3x2 grid on a solid pure white (#FFFFFF) background with wide empty spacing between each object, no overlapping, no cast shadows on background, and no text or labels.
+
+Camera & Art Style (Minimal Stylized 2.5D Isometric):
+- Fixed 2.5D isometric projection (35-45 degree elevated angle).
+- Minimal Stylized look: simple clean geometric shapes, low detail, pastel palette, crisp dark indigo-slate ink outline (#1E293B).
+
+6 Subimages (3x2 grid):
+1. Top-left (Wooden Fence): 2.5D isometric short rustic wooden fence segment aligned along the 45-degree isometric diagonal in warm wood-brown (#D4A373, #9C6644).
+2. Top-center (Small Wooden Bridge): 2.5D isometric short plank wooden bridge with low side posts aligned along the 45-degree isometric diagonal (#D4A373, #9C6644).
+3. Top-right (Round Pastel Bush): Stylized low rounded green bush (#9ED48A, #7BB86E) with 2-3 tiny pink blossom dots (#F9A8D4).
+4. Bottom-left (Grass & Flower Tuft): Small simple cluster of pastel green grass blades (#9ED48A) with 2 tiny cream-yellow wildflowers (#E9C46A).
+5. Bottom-center (Isometric Cliff Wall Segment): 2.5D isometric faceted slate-gray mountain cliff block (#7B8499, #9CA3AF) with a thin pastel green grass cap (#9ED48A) on top.
+6. Bottom-right (Waterfall Strip): Stylized 2.5D isometric cascading sky-blue waterfall (#7CC6EE) with soft white-cyan foam (#CBEAF8) at the bottom.
+
+Negative constraints: No photorealism, no cast shadows on white background, no overlapping objects, no text.
+```
+
