@@ -2,6 +2,27 @@
 
 Áp dụng cho mọi công việc mới về concept scene, segmentation, semantic blueprint, placement và integration. Quy tắc này bổ sung AGENTS.md. Mục tiêu là thế giới chơi được và nhãn màu nhất quán, không phải chỉ tạo ảnh đẹp.
 
+## 0. Mặc định mới: segmentation cơ bản, không dựng cảnh chi tiết
+
+Khi người dùng yêu cầu tạo lại scene, scene map hoặc segmentation mà không yêu cầu minh họa chi tiết, ưu tiên **bản đồ kế hoạch semantic 2D phẳng**. Không tự động tạo thêm concept 2.5D, sheet nhiều ô hoặc toàn bộ thế giới.
+
+**Giới hạn mặc định:**
+
+- Tối đa 2 vùng gameplay: một vùng bắt đầu/quảng trường và một vùng đích/rừng. Chúng chỉ là vùng chức năng; không thêm màu class riêng cho mỗi vùng.
+- Một mặt đất liên tục, một đường nối rộng và đơn giản; không nhánh phụ, cầu, nước, vách, thác hoặc tầng cao ở vòng đầu.
+- Tối đa 2 footprint nhà và 2 footprint cây. Ít hơn được phép. Mỗi object chỉ là một hình học đơn giản, tách biệt, một màu.
+- Tối đa 5 class: background `#B8D4E3`, grass `#8FCB74`, path `#E8C88F`, building `#D88C45`, tree_green `#438F52`. Giữ nguyên ID registry; không đánh số lại từ 0 cho subset.
+- Giữ ít nhất 70% diện tích mặt đất không bị footprint tĩnh chiếm. Đây là kiểm tra độ thoáng, không thay thế kiểm tra kết nối/clearance.
+- Không vẽ nhân vật, NPC, pickup, spawn icon, cổng, đá, hoa, UI, legend hoặc chữ trên ảnh nhãn. Spawn/goal và tương tác được ghi bằng tọa độ/metadata hoặc review overlay riêng.
+
+**Quy ước biểu diễn:** góc nhìn overhead 2D phẳng để đọc mặt bằng. Nhà là footprint hình chữ nhật, cây là footprint hình tròn; không mái, thân, tán, hiên, bậc, phối cảnh khối hoặc extrusion. Đây là `semantic_plan`, không phải visible segmentation của một ảnh minh họa. Không dùng footprint tròn này làm silhouette tán cây khi adapt. Camera/game art 2.5D của Godot vẫn giữ nguyên; khi chuyển từ plan sang hình chiếu phải khai báo transform rõ.
+
+**Cấm ở giai đoạn cơ bản:** gradient, bóng, texture, bevel, outline trang trí, anti-alias trong label chuẩn, chi tiết kiến trúc, cảnh nền, nhiều panel, sprite sheet, nhiều biến thể trong một ảnh. Dùng mảng màu kín và ranh giới đơn giản.
+
+**Điều kiện nâng mức chi tiết:** chỉ thêm class, vật thể hoặc concept minh họa sau yêu cầu rõ của người dùng và sau khi layout cơ bản đã được kiểm tra. Không kế thừa mặc định “3 nhà, 4 cây đào, NPC và vật phẩm” từ prompt v2/v3 trước đây.
+
+Ảnh do AI tạo theo prompt chỉ là bản đề xuất. Trước khi dùng làm mask chuẩn: chuẩn hóa màu/geometry bằng công cụ quyết định được ID, kiểm tra rồi mới adapt. Việc đưa mã hex vào prompt không bảo đảm output đúng RGB hoặc có đường đi hợp lệ.
+
 ## 1. Gameplay và quan hệ không gian trước
 
 1. Chốt spawn, điểm đến và tuyến nối trước khi đặt nhà/cây/đá. Mỗi khu vực phải có lối vào/ra có chức năng; nhánh phụ phải nối vào tuyến chính.
@@ -63,12 +84,12 @@ Bóng không phải object/collider mới. Cùng một pixel có thể là nư�
 
 ## 4. Quy trình bắt buộc
 
-1. Chốt scope, nguồn ảnh, góc camera, tỷ lệ, class registry và core loop.
+1. Chốt scope, nguồn ảnh, góc camera, tỷ lệ, class registry và core loop. Nếu không có yêu cầu khác, dùng giới hạn segmentation cơ bản ở mục 0.
 2. Dựng topology/đường đi và vùng mặt đất đơn giản; đặt hành lang bảo vệ.
 3. Đặt object theo chức năng, anchor chân, footprint và visual envelope. Giữ khoảng trống để đi và tương tác.
 4. Render semantic map theo registry bằng công cụ quyết định được màu/ID. **Không dùng output ImageGen làm label mask RGB chuẩn trực tiếp.**
 5. Validate geometry, màu và gameplay connectivity. Chỉ coi đạt khi không còn lỗi.
-6. Nếu cần concept, dùng blueprint đã qua kiểm tra làm bố cục đầu vào. Prompt phải cấm nhà/mái/bậc/tán cây chiếm hành lang bảo vệ.
+6. Chỉ tạo concept minh họa nếu người dùng yêu cầu; dùng blueprint đã qua kiểm tra làm bố cục đầu vào. Prompt phải cấm nhà/mái/bậc/tán cây chiếm hành lang bảo vệ.
 7. Kiểm tra ảnh sinh thực tế. Nếu object thay vị trí/kích thước hoặc thêm đồ: sửa ảnh, hoặc cập nhật annotation/blueprint và chạy lại validator. Không gọi một mask kế hoạch là segmentation pixel chính xác của ảnh sinh.
 8. Sau đó mới tạo asset theo batch, ráp Godot, đối chiếu ảnh chạy thật và chơi thử. Mỗi lần thay asset/scale làm đổi visual envelope phải kiểm tra lại.
 
@@ -85,9 +106,11 @@ Với concept nhiều ô: một góc tổng quan xác định tọa độ; góc 
 - Khi đổi scope/resolution/scale: kiểm tra lại tất cả; không kế thừa báo cáo PASS cũ.
 - Báo cáo phân biệt rõ: trace thủ công, suy dựng vùng khuất, segmentation tự động, concept minh họa và dữ liệu đã kiểm thử trong engine. Không phóng đại độ chính xác.
 
-## 6. Công cụ tham chiếu v3
+## 6. Công cụ tham chiếu v3 (legacy, không phải độ phức tạp mặc định)
 
-- Dựng: `python3 scripts/tools/build_semantic_world.py`
+Bộ v3 gồm 17 object và nhiều class hơn giới hạn cơ bản. Giữ để tham khảo/kiểm tra lại bản cũ; không chạy builder v3 như mặc định cho một yêu cầu tạo scene mới đơn giản. Prompt cơ bản hiện hành: `docs/prompts/BASIC_SEGMENTATION_SCENE.md`.
+
+- Dựng lại riêng bản v3: `python3 scripts/tools/build_semantic_world.py`
 - Sau khi chỉnh `layout.json` trực tiếp: thêm `--render-only` để không ghi đè geometry.
 - Kiểm tra: `python3 scripts/tools/validate_semantic_world.py`
 - Kết quả: `assets/blueprints/semantic_world_v3/validation.json`
