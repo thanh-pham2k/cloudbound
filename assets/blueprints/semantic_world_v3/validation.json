@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "checks": "Canonical palette, IDs, ground footprints, corridor visibility, agent-eroded connectivity, all entrances and interactions",
+  "metrics": {
+    "instances": 17,
+    "reachable_targets": 7,
+    "agent_radius": 20,
+    "path_width": 120,
+    "protected_width": 160,
+    "semantic_colors": 12,
+    "registered_colors": 16,
+    "reachable_pixels": 635600,
+    "protected_collision_overlap": 0,
+    "protected_visual_overlap": 0,
+    "footprint_outside_ground": 0
+  },
+  "failures": []
+}

@@ -1,0 +1,89 @@
+{
+  "reason": "Already extracted/adapted source sheets; runtime sprites remain in assets/sprites",
+  "files": [
+    {
+      "file": "001-create-a-2-5d-isometric-game-character-sprite-sheet-containi.png",
+      "sha256": "15bd06a443f29b45715fc69ef8d2bf785d2e7d19e3e4f5633ca2a0a7da14ab5c",
+      "previous_path": "assets/inbox/001-create-a-2-5d-isometric-game-character-sprite-sheet-containi.png",
+      "archive_path": "assets/archive/adapted/001-create-a-2-5d-isometric-game-character-sprite-sheet-containi.png"
+    },
+    {
+      "file": "002-create-a-2-5d-isometric-game-terrain-tile-sheet-containing-4.png",
+      "sha256": "8aadf492491577a3b0bc4fc54e63f98b518e63dafd35d2d421fd4b25a0266156",
+      "previous_path": "assets/inbox/002-create-a-2-5d-isometric-game-terrain-tile-sheet-containing-4.png",
+      "archive_path": "assets/archive/adapted/002-create-a-2-5d-isometric-game-terrain-tile-sheet-containing-4.png"
+    },
+    {
+      "file": "003-create-a-2-5d-isometric-game-environment-props-sprite-sheet-.png",
+      "sha256": "3915806c85ee13bd2399f667833d825a6185466d430a94b3ce9da13d38ea9fc1",
+      "previous_path": "assets/inbox/003-create-a-2-5d-isometric-game-environment-props-sprite-sheet-.png",
+      "archive_path": "assets/archive/adapted/003-create-a-2-5d-isometric-game-environment-props-sprite-sheet-.png"
+    },
+    {
+      "file": "004-create-a-2-5d-isometric-game-interactive-props-sprite-sheet-.png",
+      "sha256": "abb57712e820633af6c2381f2348e135ba80da87c6714a486770797a96afc169",
+      "previous_path": "assets/inbox/004-create-a-2-5d-isometric-game-interactive-props-sprite-sheet-.png",
+      "archive_path": "assets/archive/adapted/004-create-a-2-5d-isometric-game-interactive-props-sprite-sheet-.png"
+    },
+    {
+      "file": "001-create-a-2-5d-isometric-character-animation-sprite-sheet-for.png",
+      "sha256": "92b14b42a00adcbb27efb551699bd69c7c1354ebd4d5ac056233edd84e31b4d4",
+      "previous_path": "assets/inbox/001-create-a-2-5d-isometric-character-animation-sprite-sheet-for.png",
+      "archive_path": "assets/archive/adapted/001-create-a-2-5d-isometric-character-animation-sprite-sheet-for.png"
+    },
+    {
+      "file": "002-create-a-2-5d-isometric-game-combat-monster-sprite-sheet-con.png",
+      "sha256": "6c0bb68fc99cd86d6e0130ea115afc4a88780e94f1c4e9d82e79b7e44bf42b02",
+      "previous_path": "assets/inbox/002-create-a-2-5d-isometric-game-combat-monster-sprite-sheet-con.png",
+      "archive_path": "assets/archive/adapted/002-create-a-2-5d-isometric-game-combat-monster-sprite-sheet-con.png"
+    },
+    {
+      "file": "003-create-a-2-5d-isometric-game-environment-detail-sprite-sheet.png",
+      "sha256": "558faae1fd7903706e0cb74511f4fd29d1890fcb88c83ba74465491a2d081ee1",
+      "previous_path": "assets/inbox/003-create-a-2-5d-isometric-game-environment-detail-sprite-sheet.png",
+      "archive_path": "assets/archive/adapted/003-create-a-2-5d-isometric-game-environment-detail-sprite-sheet.png"
+    },
+    {
+      "file": "001-create-a-2-5d-isometric-game-terrain-surface-background-spri.png",
+      "sha256": "0988b9eb999a5204db6bbb06aa8678e1ffccd25f83e077a68d845304989377c9",
+      "previous_path": "assets/inbox/001-create-a-2-5d-isometric-game-terrain-surface-background-spri.png",
+      "archive_path": "assets/archive/adapted/001-create-a-2-5d-isometric-game-terrain-surface-background-spri.png"
+    },
+    {
+      "file": "002-create-a-2-5d-isometric-game-environment-detail-sprite-sheet.png",
+      "sha256": "9aaed680c55cff38fb6d1153242590744eed7e3360da336f6564c60104aff6fc",
+      "previous_path": "assets/inbox/002-create-a-2-5d-isometric-game-environment-detail-sprite-sheet.png",
+      "archive_path": "assets/archive/adapted/002-create-a-2-5d-isometric-game-environment-detail-sprite-sheet.png"
+    },
+    {
+      "file": "001-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+      "sha256": "1ab7b5edb56cbab693839f197fc77114aeee46deae92bb0ad5b14f38d36d834f",
+      "previous_path": "assets/inbox/001-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+      "archive_path": "assets/archive/adapted/001-use-the-attached-six-panel-game-concept-as-the-visual-refere.png"
+    },
+    {
+      "file": "002-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+      "sha256": "6bf9d8e923171879ff2696b3de7468d61722af8089fff2dbe81727f5387b1809",
+      "previous_path": "assets/inbox/002-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+      "archive_path": "assets/archive/adapted/002-use-the-attached-six-panel-game-concept-as-the-visual-refere.png"
+    },
+    {
+      "file": "003-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+      "sha256": "b5700b0d76e567a5a355b39546e06eba9d107add5deeab46d52424a91685eaee",
+      "previous_path": "assets/inbox/003-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+      "archive_path": "assets/archive/adapted/003-use-the-attached-six-panel-game-concept-as-the-visual-refere.png"
+    },
+    {
+      "file": "004-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+      "sha256": "243f1b29e7b7d86ad74ff0fe8c1ce039bf4a7f4f80ed293ecd488849eb39b2fd",
+      "previous_path": "assets/inbox/004-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+      "archive_path": "assets/archive/adapted/004-use-the-attached-six-panel-game-concept-as-the-visual-refere.png"
+    },
+    {
+      "file": "005-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+      "sha256": "22786be60e14d8c79e18bef11f24f376360b27e35e9eacf3f558740266325dc0",
+      "previous_path": "assets/inbox/005-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+      "archive_path": "assets/archive/adapted/005-use-the-attached-six-panel-game-concept-as-the-visual-refere.png"
+    }
+  ]
+}

@@ -14,7 +14,7 @@ NAMES = [
 OUT=ROOT/'assets/sprites/concept';OUT.mkdir(parents=True,exist_ok=True)
 manifest=[]
 for batch,names in enumerate(NAMES,1):
- source=next((ROOT/'assets/inbox').glob(f'{batch:03d}-use-the-attached*.png'))
+ source=next(p for folder in [ROOT/'assets/inbox',ROOT/'assets/archive/adapted'] for p in folder.glob(f'{batch:03d}-use-the-attached*.png'))
  sheet=Image.open(source);cw,ch=sheet.width//3,sheet.height//2
  for i,name in enumerate(names):
   box=((i%3)*cw,(i//3)*ch,(i%3+1)*cw,(i//3+1)*ch)

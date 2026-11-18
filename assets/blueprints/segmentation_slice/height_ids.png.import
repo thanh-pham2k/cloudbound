@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cko3g35p5uysc"
-path="res://.godot/imported/004-create-a-2-5d-isometric-game-interactive-props-sprite-sheet-.png-2e38c5271c7db4101dd793a7b7ea9c31.ctex"
+uid="uid://c2y6gcg4goipx"
+path="res://.godot/imported/height_ids.png-81efa906e616c8ca09c0027c897769a7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/inbox/004-create-a-2-5d-isometric-game-interactive-props-sprite-sheet-.png"
-dest_files=["res://.godot/imported/004-create-a-2-5d-isometric-game-interactive-props-sprite-sheet-.png-2e38c5271c7db4101dd793a7b7ea9c31.ctex"]
+source_file="res://assets/blueprints/segmentation_slice/height_ids.png"
+dest_files=["res://.godot/imported/height_ids.png-81efa906e616c8ca09c0027c897769a7.ctex"]
 
 [params]
 

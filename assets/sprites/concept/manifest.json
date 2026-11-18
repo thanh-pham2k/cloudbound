@@ -1,7 +1,7 @@
 [
   {
     "name": "terrain_grass_fill",
-    "source": "assets/inbox/001-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/001-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 0,
     "crop": [
       0,
@@ -16,7 +16,7 @@
   },
   {
     "name": "terrain_dirt_fill",
-    "source": "assets/inbox/001-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/001-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 1,
     "crop": [
       512,
@@ -31,7 +31,7 @@
   },
   {
     "name": "terrain_grass_dirt_transition_a",
-    "source": "assets/inbox/001-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/001-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 2,
     "crop": [
       1024,
@@ -46,7 +46,7 @@
   },
   {
     "name": "terrain_grass_dirt_transition_b",
-    "source": "assets/inbox/001-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/001-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 3,
     "crop": [
       0,
@@ -61,7 +61,7 @@
   },
   {
     "name": "terrain_path_curve",
-    "source": "assets/inbox/001-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/001-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 4,
     "crop": [
       512,
@@ -76,7 +76,7 @@
   },
   {
     "name": "terrain_path_fork",
-    "source": "assets/inbox/001-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/001-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 5,
     "crop": [
       1024,
@@ -91,7 +91,7 @@
   },
   {
     "name": "cliff_tall_a",
-    "source": "assets/inbox/002-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/002-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 0,
     "crop": [
       0,
@@ -106,7 +106,7 @@
   },
   {
     "name": "cliff_tall_b",
-    "source": "assets/inbox/002-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/002-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 1,
     "crop": [
       512,
@@ -121,7 +121,7 @@
   },
   {
     "name": "cliff_outer_corner",
-    "source": "assets/inbox/002-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/002-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 2,
     "crop": [
       1024,
@@ -136,7 +136,7 @@
   },
   {
     "name": "cliff_inner_corner",
-    "source": "assets/inbox/002-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/002-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 3,
     "crop": [
       0,
@@ -151,7 +151,7 @@
   },
   {
     "name": "cliff_terrace_connector",
-    "source": "assets/inbox/002-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/002-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 4,
     "crop": [
       512,
@@ -166,7 +166,7 @@
   },
   {
     "name": "cliff_grass_rim",
-    "source": "assets/inbox/002-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/002-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 5,
     "crop": [
       1024,
@@ -181,7 +181,7 @@
   },
   {
     "name": "waterfall_long",
-    "source": "assets/inbox/003-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/003-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 0,
     "crop": [
       0,
@@ -196,7 +196,7 @@
   },
   {
     "name": "waterfall_crest",
-    "source": "assets/inbox/003-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/003-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 1,
     "crop": [
       512,
@@ -211,7 +211,7 @@
   },
   {
     "name": "waterfall_mist",
-    "source": "assets/inbox/003-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/003-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 2,
     "crop": [
       1024,
@@ -226,7 +226,7 @@
   },
   {
     "name": "cloud_bank",
-    "source": "assets/inbox/003-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/003-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 3,
     "crop": [
       0,
@@ -241,7 +241,7 @@
   },
   {
     "name": "distant_mountain_layer",
-    "source": "assets/inbox/003-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/003-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 4,
     "crop": [
       512,
@@ -256,7 +256,7 @@
   },
   {
     "name": "stream_extension",
-    "source": "assets/inbox/003-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/003-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 5,
     "crop": [
       1024,
@@ -271,7 +271,7 @@
   },
   {
     "name": "hut_main_concept",
-    "source": "assets/inbox/004-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/004-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 0,
     "crop": [
       0,
@@ -286,7 +286,7 @@
   },
   {
     "name": "hut_small_concept",
-    "source": "assets/inbox/004-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/004-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 1,
     "crop": [
       512,
@@ -301,7 +301,7 @@
   },
   {
     "name": "cave_back_wide",
-    "source": "assets/inbox/004-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/004-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 2,
     "crop": [
       1024,
@@ -316,7 +316,7 @@
   },
   {
     "name": "cave_front_rim",
-    "source": "assets/inbox/004-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/004-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 3,
     "crop": [
       0,
@@ -331,7 +331,7 @@
   },
   {
     "name": "cave_floor_fill",
-    "source": "assets/inbox/004-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/004-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 4,
     "crop": [
       512,
@@ -346,7 +346,7 @@
   },
   {
     "name": "cave_stairs_wide",
-    "source": "assets/inbox/004-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/004-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 5,
     "crop": [
       1024,
@@ -361,7 +361,7 @@
   },
   {
     "name": "flower_daisy_cluster",
-    "source": "assets/inbox/005-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/005-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 0,
     "crop": [
       0,
@@ -376,7 +376,7 @@
   },
   {
     "name": "petal_scatter",
-    "source": "assets/inbox/005-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/005-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 1,
     "crop": [
       512,
@@ -391,7 +391,7 @@
   },
   {
     "name": "quest_bubble_available",
-    "source": "assets/inbox/005-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/005-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 2,
     "crop": [
       1024,
@@ -406,7 +406,7 @@
   },
   {
     "name": "enemy_alert_marks",
-    "source": "assets/inbox/005-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/005-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 3,
     "crop": [
       0,
@@ -421,7 +421,7 @@
   },
   {
     "name": "chest_reward_rays",
-    "source": "assets/inbox/005-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/005-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 4,
     "crop": [
       512,
@@ -436,7 +436,7 @@
   },
   {
     "name": "dash_dust",
-    "source": "assets/inbox/005-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
+    "source": "assets/archive/adapted/005-use-the-attached-six-panel-game-concept-as-the-visual-refere.png",
     "cell": 5,
     "crop": [
       1024,

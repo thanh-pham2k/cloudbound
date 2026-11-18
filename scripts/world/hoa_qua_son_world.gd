@@ -501,7 +501,7 @@ func _build_hud() -> void:
 	layer.add_child(_hud_prompt)
 
 	var controls := Label.new()
-	controls.text = "WASD: Di chuyển | Space: Lướt | K: Đánh gậy | E: Tương tác"
+	controls.text = "WASD: Di chuyển | Space: Lướt | K: Đánh gậy | E: Tương tác | F2: Thử phân vùng"
 	controls.position = Vector2(340, 682)
 	controls.size = Vector2(600, 28)
 	controls.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -567,3 +567,8 @@ func _show_toast(msg: String) -> void:
 		_toast_label.text = msg
 		_toast_label.visible = true
 		_toast_timer = 4.0
+
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F2:
+		get_tree().change_scene_to_file("res://scenes/segmentation_slice.tscn")

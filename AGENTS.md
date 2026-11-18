@@ -52,3 +52,13 @@
 **Nguyên tắc:** *Gameplay First → Semantic First → Simple Assets → Consistency → Polish Later.*
 
 **Chiến lược:** Hoàn thành một khu vực nhỏ có thể chơi được (**Vertical Slice**) trước khi mở rộng toàn bộ thế giới.
+
+## Semantic World & Segmentation — Required
+
+Before creating or revising a scene concept, segmentation, semantic blueprint, or asset placement, read and follow [`docs/rules/SEMANTIC_SEGMENTATION_RULES.md`](docs/rules/SEMANTIC_SEGMENTATION_RULES.md).
+
+- Use the canonical class IDs and exact label colors in `assets/blueprints/semantic_palette.json`; never invent a new per-map palette.
+- Author connected gameplay routes first. Reserve a clear corridor before placing objects; neither colliders nor roofs/canopies/steps may block or conceal critical route segments.
+- Keep surface, visible class, instance, footprint/collision, walkability and height data separate. Record foot anchors, doors, scale and provenance.
+- Generate strict label masks deterministically; ImageGen illustrations are references, not trusted RGB label masks or validated layouts.
+- Validate palette, agent clearance, all entrances/pickups, and visual-envelope intersections before adapting assets. Revalidate after placement/scale changes.

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b0xrfodsr7x3g"
-path="res://.godot/imported/001-create-a-2-5d-isometric-character-animation-sprite-sheet-for.png-b8026726c87401a37ac30bf489b4606a.ctex"
+uid="uid://byr24s01guajt"
+path="res://.godot/imported/instance_ids.png-ed15ff1d58df61d62318832d668caa5f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/inbox/001-create-a-2-5d-isometric-character-animation-sprite-sheet-for.png"
-dest_files=["res://.godot/imported/001-create-a-2-5d-isometric-character-animation-sprite-sheet-for.png-b8026726c87401a37ac30bf489b4606a.ctex"]
+source_file="res://assets/blueprints/segmentation_slice/instance_ids.png"
+dest_files=["res://.godot/imported/instance_ids.png-ed15ff1d58df61d62318832d668caa5f.ctex"]
 
 [params]
 

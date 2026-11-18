@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bftxtkh77e6s8"
-path="res://.godot/imported/003-create-a-2-5d-isometric-game-environment-props-sprite-sheet-.png-34325352678f175eb6169ce2e89ff9cb.ctex"
+uid="uid://ci1nxk11mjxb0"
+path="res://.godot/imported/surface_ids.png-3c6acb153bfc94ea61f9c21a71347802.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/inbox/003-create-a-2-5d-isometric-game-environment-props-sprite-sheet-.png"
-dest_files=["res://.godot/imported/003-create-a-2-5d-isometric-game-environment-props-sprite-sheet-.png-34325352678f175eb6169ce2e89ff9cb.ctex"]
+source_file="res://assets/blueprints/segmentation_slice/surface_ids.png"
+dest_files=["res://.godot/imported/surface_ids.png-3c6acb153bfc94ea61f9c21a71347802.ctex"]
 
 [params]
 

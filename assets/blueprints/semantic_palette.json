@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "encoding": "Opaque RGB PNG; exact colors, no antialiasing, no shadows, no gradients",
+  "classes": [
+    {"id":0,"name":"unknown","hex":"#FF00FF"},
+    {"id":1,"name":"background","hex":"#B8D4E3"},
+    {"id":2,"name":"grass","hex":"#8FCB74"},
+    {"id":3,"name":"path","hex":"#E8C88F"},
+    {"id":4,"name":"water","hex":"#5DBDDD"},
+    {"id":5,"name":"cliff","hex":"#8B819B"},
+    {"id":6,"name":"building","hex":"#D88C45"},
+    {"id":7,"name":"tree_green","hex":"#438F52"},
+    {"id":8,"name":"tree_peach","hex":"#F28FB0"},
+    {"id":9,"name":"rock","hex":"#8A94A6"},
+    {"id":10,"name":"spawn","hex":"#B5BCC6"},
+    {"id":11,"name":"npc","hex":"#8D5C42"},
+    {"id":12,"name":"player","hex":"#E5B64F"},
+    {"id":13,"name":"pickup","hex":"#FFB86B"},
+    {"id":14,"name":"bridge","hex":"#96714B"},
+    {"id":15,"name":"gate","hex":"#845CB8"}
+  ]
+}

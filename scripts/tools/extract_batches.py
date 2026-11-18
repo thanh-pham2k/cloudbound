@@ -8,6 +8,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
 INBOX = ROOT / "assets" / "inbox"
+ARCHIVE = ROOT / "assets" / "archive" / "adapted"
 OUT = ROOT / "assets" / "sprites"
 
 BATCHES = [
@@ -193,6 +194,8 @@ def main() -> None:
     count = 0
     for batch in BATCHES:
         src = INBOX / batch["file"]
+        if not src.exists():
+            src = ARCHIVE / batch["file"]
         if not src.exists():
             raise FileNotFoundError(f"Missing batch sheet: {src}")
         sheet = Image.open(src)

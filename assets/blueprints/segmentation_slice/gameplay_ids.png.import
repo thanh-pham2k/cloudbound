@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dhbhqcg3lf4l8"
-path="res://.godot/imported/001-create-a-2-5d-isometric-game-terrain-surface-background-spri.png-89140e2f8e319893bdb233a3330400e2.ctex"
+uid="uid://c3e24hsfc4oib"
+path="res://.godot/imported/gameplay_ids.png-916b0841b10e5c38c2c20ed2897ac075.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/inbox/001-create-a-2-5d-isometric-game-terrain-surface-background-spri.png"
-dest_files=["res://.godot/imported/001-create-a-2-5d-isometric-game-terrain-surface-background-spri.png-89140e2f8e319893bdb233a3330400e2.ctex"]
+source_file="res://assets/blueprints/segmentation_slice/gameplay_ids.png"
+dest_files=["res://.godot/imported/gameplay_ids.png-916b0841b10e5c38c2c20ed2897ac075.ctex"]
 
 [params]
 
