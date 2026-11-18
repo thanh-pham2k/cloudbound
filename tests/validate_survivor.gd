@@ -13,8 +13,12 @@ var spent := 0
 var peak_army := 0
 var seen := {}
 var shots := {}
+const FORMATION_SHOTS := ["formation-left", "gameplay", "formation-right"]
 var _seconds_logged := 0
 var _clock := 0.0
+var _enemy_routes := {}
+var _routes_hold := true
+var _formation_holds := true
 
 
 func _initialize() -> void:
@@ -54,9 +58,11 @@ func _run() -> void:
 	game = Scene.instantiate()
 	root.add_child(game)
 	await process_frame
-	_check(game.state == game.State.MENU, "Project opens at main menu")
+	_check(game.state == game.State.MENU and not game.hero.visible,
+		"Project opens at main menu with the battlefield commander hidden")
 	_click(Vector2(640, 538))
-	_check(game.state == game.State.RUNNING, "Start button starts the match through GUI input")
+	_check(game.state == game.State.RUNNING and game.hero.visible,
+		"Start button starts the match and shows the commander through GUI input")
 	if game.state != game.State.RUNNING:
 		quit(1)
 		return
@@ -103,6 +109,8 @@ func _run() -> void:
 	_check(ground_tile.polygon[0].y <= -period and ground_tile.polygon[2].y >= 720.0,
 		"Terrain polygon covers the viewport across the entire recycling period")
 
+	_validate_enemy_lanes()
+	game.start_game()
 	game._enter(game.State.SHOP)
 	_check(not game.buy_monkey() and game.gold == 0, "Recruit blocks insufficient Gold")
 	_check(not game.buy_weapon(0, "bow"), "Weapon purchase blocks an empty slot")
@@ -125,37 +133,53 @@ func _run() -> void:
 	game.gold = 0
 	_check(not game.buy_weapon(0, "magic") and game.army[0].weapon_id == "bow", "Unaffordable weapon preserves equipped item")
 	game.gold = 116
-	game._damage(game.army[3], 1000)
-	_check(game.army_count() == 4 and game.buy_monkey() and game.army_count() == 5,
-		"Fallen monkey frees its slot for replacement")
+	var fallen := game.army[3]
+	var previous_slot := fallen.position
+	var survivor_id := game.army[4].get_instance_id()
+	game._damage(fallen, 1000)
+	_check(game.army_count() == 4 and game.buy_monkey() and game.army_count() == 5
+		and game.army[3] != fallen and game.army[3].slot == 3
+		and game.army[3].position == previous_slot and game.army[4].get_instance_id() == survivor_id
+		and not fallen.visible,
+		"Replacement fills the same vacant slot without moving survivors")
 	game.resume()
+	await _validate_formation_switches()
 
 	var arrow_user := game.army[0]
 	var magic_user := game.army[1]
-	var x := arrow_user.position.x
-	var cross := game._spawn_enemy("boar", 1)
-	cross.position = Vector2(x + 220, arrow_user.position.y)
+	var cross := game._spawn_enemy("boar", 2)
+	cross.position = Vector2(game.field.LANES[2], arrow_user.position.y)
 	game._attack(arrow_user, 0.1)
 	game._move_projectiles(0.5)
-	_check(cross.hp < cross.max_hp, "Bow travels to and damages a target a lane-width away")
-	cross.position = magic_user.position + Vector2(185, -40)
-	var splash := game._spawn_enemy("boar", 1)
-	splash.position = cross.position + Vector2(90, 0)
+	_check(cross.hp < cross.max_hp, "Bow travels to and damages a target in the adjacent lane")
+	cross.hurt(cross.hp)
+	game.enemies.erase(cross)
+	var magic_target := game._spawn_enemy("boar", 0)
+	magic_target.position = Vector2(game.field.LANES[0], magic_user.position.y)
+	var splash := game._spawn_enemy("boar", 0)
+	splash.position = magic_target.position + Vector2(0, -100)
 	game._attack(magic_user, 0.1)
-	_check(splash.hp < splash.max_hp, "Magic damages a second nearby enemy")
-	var melee := game.army[2]
-	var durable := game._spawn_enemy("boar", 1)
-	durable.position = melee.position + Vector2(-220, 0)
+	_check(magic_target.hp < magic_target.max_hp and splash.hp < splash.max_hp,
+		"Magic targets the adjacent lane and damages a second enemy there")
+
+	var melee := game.army[4]
+	var durable := game._spawn_enemy("boar", 2)
+	durable.position = Vector2(game.field.LANES[2], melee.position.y - 70)
 	game.enemies.assign([durable])
 	game._attack(melee, 0.1)
-	_check(durable.hp == durable.max_hp, "Wooden Staff cannot reach a target a lane-width away")
-	durable.position = melee.position + Vector2(-55, 0)
+	_check(durable.hp == durable.max_hp, "Wooden Staff cannot reach a distant adjacent-lane target")
+	var flank := game.army[2]
+	durable.position.y = flank.position.y
+	game._attack(flank, 0.1)
+	_check(durable.hp < durable.max_hp, "Wooden Staff can hit across the lane boundary when in reach")
+	durable.position = melee.position + Vector2(0, -55)
+	var hp := durable.hp
 	melee.weapon_id = ""
 	game._attack(melee, 0.1)
-	_check(durable.hp == durable.max_hp, "Missing equipped weapon is safe")
+	_check(durable.hp == hp, "Missing equipped weapon is safe")
 	game._equip(melee, "staff")
 	game._attack(melee, 0.1)
-	_check(durable.hp < durable.max_hp, "Wooden Staff attacks within melee range")
+	_check(durable.hp < hp, "Wooden Staff attacks within melee range")
 	game._damage(game.hero, 9999)
 	_check(game.state == game.State.DEFEAT, "Zero Wukong HP opens Defeat")
 	_click(Vector2(520, 457))
@@ -169,9 +193,97 @@ func _run() -> void:
 	await _play_full_run()
 
 
+func _validate_enemy_lanes() -> void:
+	var allies: Array[Survivor.Actor] = [game.hero]
+	var centered := true
+	var fixed_route := true
+	for column in game.field.LANES.size():
+		for kind in ["slime", "boar", "boss"]:
+			var enemy := game._spawn_enemy(kind, column)
+			var center: float = game.field.LANES[column]
+			centered = centered and enemy.enemy_lane == column and enemy.position == Vector2(center, -8)
+			# Tempt a chase by putting the only defender in the adjacent lane.
+			game.hero.position = Vector2(game.field.LANES[(column + 1) % 3], 473.0)
+			for step in 180:
+				game._update_enemy(enemy, allies, null, 1.0 / 60.0)
+				fixed_route = fixed_route and is_equal_approx(enemy.position.x, center)
+			fixed_route = fixed_route and enemy.position.y > 225 and enemy.windup == 0.0
+	_check(centered, "Slimes, boars and the boss spawn on each assigned lane center")
+	_check(fixed_route, "Every enemy type advances down its own lane with an ally beside it in another lane")
+	var leader := game._spawn_enemy("boar", 0)
+	var follower := game._spawn_enemy("slime", 0)
+	leader.position.y = 367.0
+	follower.position.y = 292.0
+	for step in 30:
+		game._update_enemy(follower, allies, leader, 1.0 / 60.0)
+	_check(absf(follower.position.x - game.field.LANES[0]) > 0.0
+		and game.field.in_lane(follower.position.x, 0) and leader.position.y - follower.position.y >= 75.0,
+		"Same-lane followers separate locally and queue behind the leader")
+
+	# A windup begun in lane 0 cannot follow Wukong out of lane 0.
+	game.hero.position = Vector2(420, 430)
+	leader.position = Vector2(420, 350)
+	var hp := game.hero.hp
+	game._update_enemy(leader, allies, null, 0.016)
+	var wound_up := leader.windup > 0.0
+	game.hero.position.x = 531.0
+	game._update_enemy(leader, allies, null, 0.5)
+	_check(wound_up and game.hero.hp == hp, "A lane strike stays in its original lane")
+	leader.position.y = game.field.REAR_LINE_Y
+	game._update_enemy(leader, allies, null, 0.016)
+	_check(leader.hp == 0 and game.hero.hp == hp - leader.attack_damage
+		and game.gold == 0 and game.xp == 0, "A regular rear-line breach costs HP without rewards")
+	var boss := game._spawn_enemy("boss", 1)
+	game.hero.position.x = 860.0
+	boss.position.y = game.field.REAR_LINE_Y
+	game._update_enemy(boss, allies, null, 0.016)
+	var boss_wound_up := boss.windup > 0.0 and boss.strikes_rear_line
+	hp = game.hero.hp
+	game._update_enemy(boss, allies, null, 1.0)
+	_check(boss_wound_up and boss.hp > 0 and game.hero.hp == hp - boss.attack_damage
+		and boss.position.x == 640.0, "A boss at the rear line stays in lane and telegraphs its breach hits")
+
+
+func _validate_formation_switches() -> void:
+	var valid := _formation_valid()
+	var started_in_flight := false
+	for command in [KEY_LEFT, KEY_RIGHT, KEY_RIGHT, KEY_LEFT]:
+		var before := game.hero.position.x
+		_key(command)
+		for frame in 25:
+			await physics_frame
+			valid = valid and _formation_valid()
+			if not is_equal_approx(game.hero.position.x, before) and (
+					absf(game.hero.position.x - game.field.LANES[game.lane]) > 5.0):
+				started_in_flight = true
+		valid = valid and absf(game.hero.position.x - game.field.LANES[game.lane]) < 2.0
+	_check(started_in_flight and valid,
+		"All five slots follow commands together, stay in front and keep visual clearance at every sampled step")
+
+
+func _formation_valid() -> bool:
+	# Conservative envelopes include all supplied poses, held weapons and HP bars.
+	var occupied: Array[Rect2] = [Rect2(game.hero.position - Vector2(70, 104), Vector2(140, 116))]
+	for slot in game.army.size():
+		var monkey := game.army[slot]
+		if monkey == null:
+			continue
+		if monkey.slot != slot or monkey.position != game._formation_position(slot) or monkey.position.y >= game.hero.position.y:
+			return false
+		var envelope := Rect2(monkey.position - Vector2(36, 77), Vector2(72, 85))
+		if not game.field.PROTECTED.encloses(envelope):
+			return false
+		for other in occupied:
+			if envelope.intersects(other):
+				return false
+		occupied.append(envelope)
+	return true
+
+
 func _play_full_run() -> void:
 	while game.state in [game.State.RUNNING, game.State.SHOP] and game.elapsed < 330.0:
 		_control_army()
+		_formation_holds = _formation_holds and _formation_valid()
 		if game.state == game.State.SHOP:
 			shops += 1
 			var coins := game.gold
@@ -191,9 +303,17 @@ func _play_full_run() -> void:
 		if game.state == game.State.RUNNING:
 			for foe in game.enemies:
 				seen[foe.kind] = true
+				var id := foe.get_instance_id()
+				var last: Vector2 = _enemy_routes.get(id, Vector2(foe.enemy_lane, foe.position.y))
+				_routes_hold = _routes_hold and foe.enemy_lane == int(last.x) and foe.position.y >= last.y
+				_routes_hold = _routes_hold and game.field.in_lane(foe.position.x, foe.enemy_lane)
+				_enemy_routes[id] = Vector2(foe.enemy_lane, foe.position.y)
 			if capture:
-				if game.elapsed > 119.0 and not shots.has("gameplay") and game.enemies.size() >= 3 and game.enemies[0].position.y > 285.0:
-					await _shot("gameplay")
+				var name: String = FORMATION_SHOTS[game.lane]
+				var settled := absf(game.hero.position.x - game.field.LANES[game.lane]) < 2.0
+				if game.elapsed > 95.0 and game.elapsed < game.BOSS_TIME and (
+						settled and game.army_count() == 5 and not shots.has(name) and game.enemies.size() >= 3):
+					await _shot(name)
 				if is_instance_valid(game.boss) and game.boss.position.y >= 234 and game.boss.hp <= game.boss.max_hp * 0.87 and not shots.has("boss"):
 					await _shot("boss")
 		if int(game.elapsed) / 30 > _seconds_logged / 30:
@@ -202,22 +322,26 @@ func _play_full_run() -> void:
 				game.elapsed, game.hero.hp, game.gold, game.level, game.army_count(),
 				game.kills, str(game.boss.hp) if is_instance_valid(game.boss) else "—"])
 		await process_frame
+	_check(_routes_hold, "All scheduled enemies retained their lane and never moved upward in the full match")
+	_check(_formation_holds, "Live formation stayed in front of Wukong and collision-free throughout the full match")
 	_check(seen.has("slime") and seen.has("boar") and seen.has("boss"), "Scheduled waves spawned slime, boar and Boar King")
 	_check(game.kills > 25 and shops > 3 and spent > 0 and peak_army >= 3,
 		"Natural match progressed through kills, level-up shops, Gold purchases and army growth")
-	_check(game.state == game.State.VICTORY and game.elapsed >= game.BOSS_TIME and game.elapsed <= 330.0,
+	_check(game.state == game.State.VICTORY and game.elapsed >= game.BOSS_TIME and game.elapsed <= 315.0,
 		"Full match reaches Victory through the scheduled Boar King encounter")
 	print("MATCH %.2fs | %d kills | %d shops | peak army %d | %d Gold spent" % [
 		game.elapsed, game.kills, shops, peak_army, spent])
 	if capture and game.state == game.State.VICTORY:
 		await _shot("victory")
-		_check(shots.has("gameplay") and shots.has("shop") and shots.has("boss"),
-			"Gameplay, shop and boss PNGs were captured")
+		_check(FORMATION_SHOTS.all(func(name): return shots.has(name)) and shots.has("shop") and shots.has("boss"),
+			"Formation in all three lanes, shop and boss PNGs were captured")
 	if game.state in [game.State.VICTORY, game.State.DEFEAT]:
 		_click(Vector2(750, 455))
 		await process_frame
 		_check(game.state == game.State.MENU, "Result Main Menu returns to title")
 	if not capture:
+		if game.state != game.State.MENU:
+			game.main_menu()
 		await _play_idle_run()
 	quit(int(failed))
 
@@ -291,10 +415,10 @@ func _shop() -> void:
 			game.buy_weapon(i, preferred)
 
 
-func _control_army() -> void:
+func _control_army(step := -1.0) -> void:
 	if game.state != game.State.RUNNING:
 		return
-	_clock += Engine.time_scale / 60.0
+	_clock += Engine.time_scale / 60.0 if step < 0.0 else step
 	if _clock < 0.12:
 		return
 	_clock = 0.0
@@ -308,17 +432,14 @@ func _control_army() -> void:
 				target = foe
 	if not is_instance_valid(target) or target.position.y < 136.0:
 		return
-	var desired := game.lane
-	var best_score := INF
-	for i in 3:
-		var at := Vector2(game.field.LANES[i], game.hero.position.y)
-		var score: float = absf(at.x - target.position.x) + absf(game.lane - i) * 40.0
-		for foe in game.enemies:
-			if foe.windup > 0.0 and at.distance_to(foe.strike_position) < game._strike_radius(foe) + 17.0:
-				score += 360.0
-		if score < best_score:
-			best_score = score
-			desired = i
+	var desired: int = target.enemy_lane
+	if is_instance_valid(game.boss) and game.boss.windup > 0.0 and not game.boss.strikes_rear_line:
+		if game.lane == game.boss.enemy_lane:
+			desired = 0 if game.boss.strike_position.x >= game.field.LANES[1] else 2
+		else:
+			desired = game.lane
+	if target.position.y > game.hero.position.y and target != game.boss:
+		desired = game.lane
 	if desired != game.lane:
 		_key(KEY_LEFT if desired < game.lane else KEY_RIGHT)
 

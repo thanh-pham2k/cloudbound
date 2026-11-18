@@ -3,6 +3,8 @@ extends Node2D
 const GROUND_SHADER := preload("res://scripts/shaders/terrain_repeat_blend.gdshader")
 const SIZE := Vector2(1280, 720)
 const LANES := [420.0, 640.0, 860.0]
+const LANE_HALF_WIDTH := 110.0
+const REAR_LINE_Y := 673.0
 const PROTECTED := Rect2(306, 0, 668, 720)
 const SCROLL_SPEED := 84.0
 const PROP_PERIOD := 1140.0
@@ -19,6 +21,7 @@ const PROPS := [
 ]
 
 var distance := 0.0
+var command_x := 640.0
 var _ground: Polygon2D
 var _decoration: Array[Sprite2D] = []
 var _warning := -1
@@ -65,6 +68,11 @@ func scroll(delta: float) -> void:
 	queue_redraw()
 
 
+static func in_lane(x: float, lane: int) -> bool:
+	var left: float = LANES[lane] - LANE_HALF_WIDTH
+	return x >= left and x < left + 2.0 * LANE_HALF_WIDTH
+
+
 func warn(lane: int) -> void:
 	_warning = lane
 	_warning_time = 0.52
@@ -76,6 +84,12 @@ func _draw() -> void:
 		draw_rect(Rect2(x - 96.0, 0, 192, 720), Color(0.98, 1.0, 0.76, 0.115))
 		draw_rect(Rect2(x - 106.0, 0, 10, 720), Color(0.98, 1.0, 0.76, 0.054))
 		draw_rect(Rect2(x + 96.0, 0, 10, 720), Color(0.98, 1.0, 0.76, 0.054))
+		# Each lane ends at the rear defense line.
+		draw_line(Vector2(x - 99.0, REAR_LINE_Y), Vector2(x + 99.0, REAR_LINE_Y),
+			Color(0.30, 0.42, 0.19, 0.46), 2.0, true)
+	# Gold bracket follows the command anchor through a lane change.
+	draw_line(Vector2(command_x - 85.0, REAR_LINE_Y), Vector2(command_x + 85.0, REAR_LINE_Y),
+		Color("#eed083"), 4.0, true)
 	# Offset pairs of small grass marks convey motion and preserve clear silhouettes.
 	for i in 24:
 		var x := 300.0 + float((i * 137) % 681)

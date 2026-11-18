@@ -30,6 +30,8 @@ var strike_position := Vector2.ZERO
 var gold_reward := 0
 var xp_reward := 0
 var slot := -1
+var enemy_lane := -1
+var strikes_rear_line := false
 
 var _sprite := Sprite2D.new()
 var _equipment := Sprite2D.new()

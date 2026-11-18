@@ -57,7 +57,8 @@ func _ready() -> void:
 	_pic(_boss_card, "boss_alert", Rect2(9, 6, 47, 44))
 	_label(_boss_card, Rect2(60, 4, 241, 25), "BOAR KING", 16, INK)
 	_boss_health = _bar(_boss_card, Rect2(60, 34, 241, 10), Color("#cc5347"))
-	_label(_status, Rect2(26, 681, 340, 25), "A / D or  ← / →   Move     ·     Esc   Pause", 15, LIGHT)
+	_label(_status, Rect2(26, 685, 400, 25), "A / D or  ← / →   Command     ·     Esc   Pause", 15, LIGHT)
+	_label(_status, Rect2(990, 685, 265, 25), "Rear line breaches cost HP", 15, LIGHT, HORIZONTAL_ALIGNMENT_RIGHT)
 
 
 func update_stats() -> void:
@@ -107,7 +108,7 @@ func show_menu() -> void:
 	_label(panel, Rect2(29, 20, 454, 34), "HOA QUẢ SƠN", 25, INK, HORIZONTAL_ALIGNMENT_CENTER)
 	_label(panel, Rect2(16, 111, 480, 56), "Monkey Army Survivor", 36, INK, HORIZONTAL_ALIGNMENT_CENTER)
 	_pic(panel, "hero_00", Rect2(183, 183, 146, 131))
-	_label(panel, Rect2(18, 327, 476, 31), "Raise your army and defeat the Boar King.", 19, MUTED, HORIZONTAL_ALIGNMENT_CENTER)
+	_label(panel, Rect2(18, 327, 476, 31), "Command your army and defend the rear line.", 19, MUTED, HORIZONTAL_ALIGNMENT_CENTER)
 	var play := _button(panel, Rect2(126, 381, 260, 51), "Start Game", game.start_game, true)
 	play.grab_focus()
 

@@ -5,10 +5,10 @@ const Battlefield := preload("res://scripts/survivor/battlefield.gd")
 const Hud := preload("res://scripts/survivor/hud.gd")
 const DamageText := preload("res://scripts/ui/floating_text.gd")
 const ART := "res://assets/survivor/"
-const HERO_HOME := Vector2(640, 438)
+const COMMANDER_Y := 638.0
 const FORMATION := [
-	Vector2(-85, 97), Vector2(85, 97), Vector2(-160, 155),
-	Vector2(160, 155), Vector2(0, 179),
+	Vector2(0, -226), Vector2(-75, -226), Vector2(75, -226),
+	Vector2(-45, -114), Vector2(45, -114),
 ]
 const RECRUIT_COST := 19
 const BOSS_TIME := 278.0
@@ -22,11 +22,11 @@ const WEAPONS := {
 	"magic": {"name": "Magic Staff", "art": "magic", "damage": 27, "range": 270.0,
 		"cooldown": 1.18, "kind": "area", "cost": 23, "blast": 120.0},
 }
-# health, chase speed, range, damage, gold, XP, foot radius
+# Health, advance speed, strike reach, damage, gold, XP, foot radius.
 const ENEMIES := {
-	"slime": [51, 82.0, 47.0, 9, 5, 10, 23.0],
-	"boar": [91, 101.0, 53.0, 15, 8, 16, 30.0],
-	"boss": [2460, 91.0, 120.0, 40, 45, 65, 56.0],
+	"slime": [51, 82.0, 79.0, 9, 5, 10, 23.0],
+	"boar": [91, 101.0, 88.0, 15, 8, 16, 30.0],
+	"boss": [1150, 91.0, 120.0, 40, 45, 65, 56.0],
 }
 const LANE_ORDER := [1, 0, 2, 1, 2, 0, 2, 1, 0]
 
@@ -64,7 +64,7 @@ func _ready() -> void:
 	hud.game = self
 	add_child(hud)
 	_reset_field()
-	hud.show_menu()
+	_enter(State.MENU)
 
 
 func _reset_field() -> void:
@@ -84,7 +84,7 @@ func _reset_field() -> void:
 	_effects = Node2D.new()
 	_effects.z_index = 3
 	_play.add_child(_effects)
-	hero = _new_actor("hero", 210, 26.0, HERO_HOME)
+	hero = _new_actor("hero", 210, 26.0, Vector2(Battlefield.LANES[1], COMMANDER_Y))
 	hero.weapon_id = "hero"
 	boss = null
 	army.clear()
@@ -133,7 +133,9 @@ func _enter(next: State) -> void:
 	state = next
 	get_tree().paused = state in [State.SHOP, State.PAUSED]
 	match state:
-		State.MENU: hud.show_menu()
+		State.MENU:
+			hero.hide()
+			hud.show_menu()
 		State.RUNNING:
 			hud.hide_overlay()
 			for at in _pending_summons:
@@ -177,10 +179,19 @@ func _physics_process(delta: float) -> void:
 	for monkey in army:
 		if is_instance_valid(monkey):
 			_attack(monkey, delta)
-	for enemy in enemies.duplicate():
+	var allies := _allies()
+	var leaders: Array[Actor] = [null, null, null]
+	for enemy in enemies:
 		if state != State.RUNNING:
 			break
-		_update_enemy(enemy, delta)
+		var column := enemy.enemy_lane
+		_update_enemy(enemy, allies, leaders[column], delta)
+		if enemy.hp > 0:
+			leaders[column] = enemy
+	# Breached units are retired without kills or rewards.
+	for i in range(enemies.size() - 1, -1, -1):
+		if enemies[i].hp == 0:
+			enemies.remove_at(i)
 	if state == State.RUNNING and _queued_shops > 0:
 		_queued_shops -= 1
 		_enter(State.SHOP)
@@ -188,24 +199,22 @@ func _physics_process(delta: float) -> void:
 
 
 func _move_army(delta: float) -> void:
-	var dx := float(Battlefield.LANES[lane]) - hero.position.x
+	var target_x: float = Battlefield.LANES[lane]
+	var dx := target_x - hero.position.x
 	hero.face(dx)
-	hero.position.x = lerpf(hero.position.x, Battlefield.LANES[lane], 1.0 - exp(-14.0 * delta))
-	hero.move_pose(true)
-	for i in army.size():
-		var monkey := army[i]
+	hero.position.x = lerpf(hero.position.x, target_x, 1.0 - exp(-14.0 * delta))
+	hero.move_pose(absf(dx) > 2.0)
+	field.command_x = hero.position.x
+	for monkey in army:
 		if not is_instance_valid(monkey):
 			continue
-		var target := _formation_position(i)
-		monkey.face(target.x - monkey.position.x)
-		monkey.position = monkey.position.lerp(target, 1.0 - exp(-7.0 * delta))
-		monkey.move_pose(true)
-
+		monkey.face(dx)
+		monkey.position = _formation_position(monkey.slot)
+		monkey.move_pose(absf(dx) > 2.0)
 
 
 func _formation_position(slot: int) -> Vector2:
-	var center := clampf(hero.position.x, 498.0, 782.0)
-	return Vector2(center, hero.position.y) + FORMATION[slot]
+	return hero.position + FORMATION[slot]
 
 
 func _spawn_waves(delta: float) -> void:
@@ -244,6 +253,7 @@ func _spawn_enemy(kind: String, column: int) -> Actor:
 	if kind != "boss":
 		hardening = (wave - 1) * (13 if kind == "boar" else 8)
 	var enemy := _new_actor(kind, int(data[0]) + hardening, data[6], position_on_entry)
+	enemy.enemy_lane = column
 	enemy.speed = data[1]
 	enemy.attack_range = data[2]
 	enemy.attack_damage = data[3]
@@ -261,58 +271,84 @@ func _new_actor(kind: String, hp: int, radius: float, at: Vector2) -> Actor:
 	return unit
 
 
-func _update_enemy(enemy: Actor, delta: float) -> void:
-	if enemy.hp <= 0:
-		return
+func _update_enemy(enemy: Actor, allies: Array[Actor], leader: Actor, delta: float) -> void:
 	enemy.cooldown = maxf(0.0, enemy.cooldown - delta)
-	var target := _closest(enemy.position, _allies(), INF)
-	if target == null:
-		return
+	var column := enemy.enemy_lane
+	var center: float = Battlefield.LANES[column]
 	var is_boss := enemy.kind == "boss"
 	if enemy.windup > 0.0:
 		enemy.windup = maxf(0.0, enemy.windup - delta)
-		enemy.move_pose(false)
 		if enemy.windup == 0.0:
-			_enemy_strike(enemy)
+			_enemy_strike(enemy, allies)
 		return
-	var diff := target.position - enemy.position
-	if diff.length() <= enemy.attack_range:
-		enemy.move_pose(false)
-		enemy.face(diff.x)
-		if enemy.cooldown == 0.0:
-			enemy.windup = 0.87 if is_boss else 0.41
-			enemy.strike_position = enemy.position.move_toward(target.position, enemy.attack_range * 0.76)
-			enemy.attack_pose(enemy.windup + 0.17)
-			_telegraph(enemy.strike_position, _strike_radius(enemy), enemy.windup)
-		return
-	var path := Vector2.DOWN if enemy.position.y < 230.0 else diff.normalized()
-	for other in enemies:
-		if other == enemy:
+
+	var target: Actor
+	var nearest := INF
+	for ally in allies:
+		var depth := ally.position.y - enemy.position.y
+		if ally.hp <= 0 or depth < 0.0 or depth > enemy.attack_range:
 			continue
-		var offset := enemy.position - other.position
-		var separation := (enemy.radius + other.radius) * 0.92
-		var dist := offset.length()
-		if dist > 0.1 and dist < separation:
-			path += offset / dist * ((separation - dist) / separation)
-	enemy.move_pose(true)
-	enemy.face(path.x)
+		if not Battlefield.in_lane(ally.position.x, column):
+			continue
+		var distance := enemy.position.distance_squared_to(ally.position)
+		if distance < nearest:
+			nearest = distance
+			target = ally
+	if target != null:
+		enemy.move_pose(false)
+		if enemy.cooldown == 0.0:
+			enemy.face(target.position.x - enemy.position.x)
+			_begin_enemy_strike(enemy, target.position, false)
+		return
+
+	if enemy.position.y >= Battlefield.REAR_LINE_Y:
+		enemy.move_pose(false)
+		if is_boss:
+			if enemy.cooldown == 0.0:
+				_begin_enemy_strike(enemy, Vector2(center, Battlefield.REAR_LINE_Y), true)
+		else:
+			_fx("ground_hit", Vector2(center, Battlefield.REAR_LINE_Y - 10), 84.0, 0.48)
+			_damage(hero, enemy.attack_damage)
+			enemy.hurt(enemy.hp)
+		return
+
 	var rage := 1.24 if is_boss and enemy.hp * 2 < enemy.max_hp else 1.0
-	enemy.position += path.limit_length() * enemy.speed * rage * delta
-	var art_margin := 101.0 if is_boss else 53.0
-	enemy.position.x = clampf(enemy.position.x, Battlefield.PROTECTED.position.x + art_margin,
-		Battlefield.PROTECTED.end.x - art_margin)
+	var next_y := minf(enemy.position.y + enemy.speed * rage * delta, Battlefield.REAR_LINE_Y)
+	var preferred_x := center
+	if leader != null:
+		var spacing := 149.0 if leader.kind == "boss" else 75.0
+		next_y = minf(next_y, maxf(enemy.position.y, leader.position.y - spacing))
+		if leader.position.y - enemy.position.y < spacing + 30.0:
+			preferred_x += -22.0 if leader.position.x >= center else 22.0
+	var lane_drift := 8.0 if is_boss else 24.0
+	enemy.position.x = move_toward(enemy.position.x,
+		clampf(preferred_x, center - lane_drift, center + lane_drift), 48.0 * delta)
+	enemy.move_pose(next_y > enemy.position.y)
+	enemy.position.y = next_y
+
+
+func _begin_enemy_strike(enemy: Actor, at: Vector2, rear_line: bool) -> void:
+	enemy.windup = 0.87 if enemy.kind == "boss" else 0.41
+	enemy.strike_position = at
+	enemy.strikes_rear_line = rear_line
+	enemy.attack_pose(enemy.windup + 0.17)
+	_telegraph(at, _strike_radius(enemy), enemy.enemy_lane, enemy.windup)
 
 
 func _strike_radius(enemy: Actor) -> float:
 	return 105.0 if enemy.kind == "boss" else 48.0
 
 
-func _enemy_strike(enemy: Actor) -> void:
+func _enemy_strike(enemy: Actor, allies: Array[Actor]) -> void:
 	var is_boss := enemy.kind == "boss"
 	enemy.cooldown = 1.16 if is_boss and enemy.hp * 2 < enemy.max_hp else (1.63 if is_boss else 1.00)
 	_fx("ground_hit" if is_boss else "impact", enemy.strike_position, 148.0 if is_boss else 43.0, 0.33)
-	for ally in _allies():
-		if ally.position.distance_to(enemy.strike_position) <= _strike_radius(enemy) + ally.radius * 0.28:
+	if enemy.strikes_rear_line:
+		_damage(hero, enemy.attack_damage)
+		return
+	for ally in allies:
+		if Battlefield.in_lane(ally.position.x, enemy.enemy_lane) and (
+				ally.position.distance_to(enemy.strike_position) <= _strike_radius(enemy) + ally.radius * 0.28):
 			_damage(ally, enemy.attack_damage)
 			if state == State.DEFEAT:
 				return
@@ -442,6 +478,11 @@ func buy_monkey() -> bool:
 	if not can_recruit():
 		return false
 	var slot := army.find(null)
+	# A shop can open while a fallen monkey is still fading at this slot.
+	for unit: Actor in _actors.get_children():
+		if unit.slot == slot and unit.hp == 0:
+			unit.hide()
+			unit.queue_free()
 	var at := _formation_position(slot)
 	var monkey := _new_actor("monkey", 86 + mini(level, 10) * 4, 16.0, at)
 	monkey.slot = slot
@@ -495,15 +536,19 @@ func _fx(id: String, at: Vector2, width: float, life: float, drift := Vector2.ZE
 	return sprite
 
 
-func _telegraph(at: Vector2, radius: float, life: float) -> void:
+func _telegraph(at: Vector2, radius: float, column: int, life: float) -> void:
 	var ring := Line2D.new()
 	ring.position = at
 	ring.width = 2.5
 	ring.default_color = Color("#b94132")
 	ring.antialiased = true
 	var shape := PackedVector2Array()
+	var lane_center: float = Battlefield.LANES[column] - at.x
 	for step in 48:
-		shape.append(Vector2.from_angle(TAU * float(step) / 48.0) * radius)
+		var point := Vector2.from_angle(TAU * float(step) / 48.0) * radius
+		point.x = clampf(point.x, lane_center - Battlefield.LANE_HALF_WIDTH,
+			lane_center + Battlefield.LANE_HALF_WIDTH)
+		shape.append(point)
 	ring.points = shape
 	ring.closed = true
 	_effects.add_child(ring)
