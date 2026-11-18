@@ -1,14 +1,7 @@
-# Adapted source sheets
+# Asset archive
 
-`adapted/` contains 14 original sheets already extracted into `assets/sprites/`.
-The reference concept remains in `assets/inbox/` for active design work.
+The previous sprite set and its archived source sheets have been removed at the user's request, pending a replacement asset set.
 
-The originals are byte-preserved. `adapted/manifest.json` records their original path,
-archive path and SHA256. Godot import sidecars are removed because these source-only
-masters are excluded from engine import by `.gdignore`.
+Blueprints, the semantic palette, project rules and integration code are retained. Runtime image paths still refer to the previous set and must be mapped when the replacement assets arrive.
 
-Both extraction scripts search inbox first, then `assets/archive/adapted/`:
-- `scripts/tools/extract_batches.py`
-- `scripts/tools/extract_concept_batches.py`
-
-Runtime sprites and their resource paths are unaffected by this move.
+Place new source sheets in `assets/inbox/`. Archive them here after extraction and validation. The previous set remains recoverable from Git history.

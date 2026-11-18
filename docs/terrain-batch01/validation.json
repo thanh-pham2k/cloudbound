@@ -1,0 +1,120 @@
+{
+  "overall_terrain_status": "PASS",
+  "checks": [
+    {
+      "check": "Approved source identity",
+      "status": "PASS",
+      "detail": "Source image SHA256 matches normalized-mask provenance."
+    },
+    {
+      "check": "Island silhouette",
+      "status": "PASS",
+      "detail": "0 changed silhouette pixels; no contour smoothing/resampling."
+    },
+    {
+      "check": "Main S-route mask",
+      "status": "PASS",
+      "detail": "Only 539 isolated class-fringe pixels were removed; houses restored to plaza dirt."
+    },
+    {
+      "check": "Terrain layer coverage",
+      "status": "PASS",
+      "detail": "Terrain classes only: background, grass, dirt, cliff; opaque grass underlay covers every island pixel."
+    },
+    {
+      "check": "Cliff boundary continuity",
+      "status": "PASS",
+      "detail": "0 unrepresented boundary pixels; flat rim stays inside silhouette."
+    },
+    {
+      "check": "No gameplay placeholders",
+      "status": "PASS",
+      "detail": "Approved house/tree markers replaced with their underlying dirt/grass; no props or actors instantiated."
+    },
+    {
+      "check": "Main S-route connectivity",
+      "status": "PASS",
+      "detail": "Village \u2192 forest \u2192 clearing \u2192 boss approach share one dirt component after radius-8px erosion."
+    },
+    {
+      "check": "Secret Nook connectivity",
+      "status": "PASS",
+      "detail": "Branch endpoint shares main dirt component; Nook reachable with radius-8px clearance; 66 touching dirt/nook pixels."
+    },
+    {
+      "check": "Nine native reusable assets",
+      "status": "PASS",
+      "detail": "3\u00d73 \u00d7 418px cells; 2px gutters excluded, 414\u00d7414 native content; no resize or deformation."
+    },
+    {
+      "check": "Rendered gaps/overlaps",
+      "status": "PASS",
+      "detail": "0 clear-color holes inside island; 0 foreground pixels outside approved silhouette. Material underlays overlap intentionally."
+    },
+    {
+      "check": "Rendered texture joins",
+      "status": "PASS",
+      "detail": "GPU mean color jump at 207px wrap joins: 0.777/255; control: 0.980; acceptance limit: 3.000. Crossfade, not geometric warp."
+    }
+  ],
+  "raw_atlas_seamlessness": {
+    "status": "FAIL",
+    "reason": "Opposite edges are not identical; unblended tiling is not approved.",
+    "metrics": {
+      "grass_fill": {
+        "horizontal": 3.987,
+        "vertical": 2.149
+      },
+      "dirt_fill": {
+        "horizontal": 2.7,
+        "vertical": 2.608
+      },
+      "grass_dirt_edge": {
+        "horizontal": 4.957,
+        "vertical": 50.585
+      },
+      "path_corner": {
+        "horizontal": 17.26,
+        "vertical": 19.693
+      },
+      "path_t_junction": {
+        "horizontal": 3.339,
+        "vertical": 15.906
+      },
+      "cliff_straight": {
+        "horizontal": 8.632,
+        "vertical": 103.459
+      },
+      "cliff_outer_corner": {
+        "horizontal": 98.753,
+        "vertical": 93.884
+      },
+      "cliff_inner_corner": {
+        "horizontal": 62.835,
+        "vertical": 61.447
+      },
+      "stone_fill": {
+        "horizontal": 4.519,
+        "vertical": 4.34
+      }
+    }
+  },
+  "complete_raised_cliff_tile_kit": {
+    "status": "FAIL",
+    "reason": "Missing a coherent directional/corner/end-cap set for raised organic cliffs. Current scene uses flat rock boundary regions plus a native clipped shallow rim, with no invented height/extrusion."
+  },
+  "seam_diagnostics": {
+    "gpu_wrap_mean": 0.7766535506839048,
+    "gpu_control_mean": 0.9800561430996212,
+    "threshold": 3.0
+  },
+  "holes": 0,
+  "outside_silhouette": 0,
+  "limitations": [
+    "Segmentation block steps are preserved, not smoothed away.",
+    "No stretched corner/T-junction sprites: five incompatible fixed-shape tiles are extracted but reserved.",
+    "Half-period sample crossfades soften a small band at texture wraps and repeat motifs remain visible.",
+    "Connectivity is raster/free-space validation at 8px agent radius, not a player/controller or full gameplay test.",
+    "Purple regions retain their approved footprints as rock material; this is not a fully extruded 3D cliff scene."
+  ]
+}
