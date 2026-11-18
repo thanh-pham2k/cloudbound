@@ -1,0 +1,288 @@
+{
+  "source": "assets/inbox/002-tao-asset-theo-prompt-vua-cung-cap (1).png",
+  "sha256": "663078f8dc7895d5298c89546d4ebbf2af5a4e5693847f14913c97547544145b",
+  "source_size": [
+    1774,
+    887
+  ],
+  "source_mode": "RGB",
+  "scale": 0.26,
+  "assets": [
+    {
+      "name": "hut_main",
+      "cell": [
+        0,
+        0,
+        444,
+        444
+      ],
+      "crop_within_cell": [
+        27,
+        24,
+        423,
+        419
+      ],
+      "size": [
+        396,
+        395
+      ],
+      "anchor_in_sprite": [
+        176.51043841336116,
+        335.0
+      ],
+      "position": [
+        247,
+        1050
+      ],
+      "footprint_half_size": [
+        42,
+        26
+      ],
+      "approach": [
+        225,
+        1094
+      ]
+    },
+    {
+      "name": "hut_small",
+      "cell": [
+        444,
+        0,
+        887,
+        444
+      ],
+      "crop_within_cell": [
+        57,
+        92,
+        398,
+        402
+      ],
+      "size": [
+        341,
+        310
+      ],
+      "anchor_in_sprite": [
+        141.53125,
+        245.3846153846154
+      ],
+      "position": [
+        491,
+        1069
+      ],
+      "footprint_half_size": [
+        40,
+        28
+      ],
+      "approach": [
+        472,
+        1115
+      ]
+    },
+    {
+      "name": "hut_storage",
+      "cell": [
+        887,
+        0,
+        1331,
+        444
+      ],
+      "crop_within_cell": [
+        40,
+        88,
+        401,
+        392
+      ],
+      "size": [
+        361,
+        304
+      ],
+      "anchor_in_sprite": [
+        214.70091324200914,
+        244.0
+      ],
+      "position": [
+        366,
+        1139
+      ],
+      "footprint_half_size": [
+        43,
+        26
+      ],
+      "approach": [
+        361,
+        1183
+      ]
+    },
+    {
+      "name": "well_stone",
+      "cell": [
+        1331,
+        0,
+        1774,
+        444
+      ],
+      "crop_within_cell": [
+        65,
+        61,
+        377,
+        402
+      ],
+      "size": [
+        312,
+        341
+      ],
+      "anchor_in_sprite": [
+        161.97069271758437,
+        315.61538461538464
+      ],
+      "position": [
+        352,
+        1050
+      ],
+      "footprint_half_size": [
+        15,
+        11
+      ],
+      "approach": null
+    },
+    {
+      "name": "signpost_wood",
+      "cell": [
+        0,
+        444,
+        444,
+        887
+      ],
+      "crop_within_cell": [
+        125,
+        84,
+        334,
+        376
+      ],
+      "size": [
+        209,
+        292
+      ],
+      "anchor_in_sprite": [
+        105.5,
+        292
+      ],
+      "position": [
+        427,
+        979
+      ],
+      "footprint_half_size": [
+        4,
+        4
+      ],
+      "approach": null
+    },
+    {
+      "name": "fence_wood",
+      "cell": [
+        444,
+        444,
+        887,
+        887
+      ],
+      "crop_within_cell": [
+        58,
+        173,
+        394,
+        331
+      ],
+      "size": [
+        336,
+        158
+      ],
+      "anchor_in_sprite": [
+        166.2108603667137,
+        158
+      ],
+      "position": [
+        221,
+        1125
+      ],
+      "footprint_half_size": [
+        40,
+        5
+      ],
+      "approach": null
+    },
+    {
+      "name": "lantern_post",
+      "cell": [
+        887,
+        444,
+        1331,
+        887
+      ],
+      "crop_within_cell": [
+        119,
+        57,
+        320,
+        380
+      ],
+      "size": [
+        201,
+        323
+      ],
+      "anchor_in_sprite": [
+        49.39736842105263,
+        323
+      ],
+      "position": [
+        223,
+        971
+      ],
+      "footprint_half_size": [
+        7,
+        5
+      ],
+      "approach": null
+    },
+    {
+      "name": "wooden_crate",
+      "cell": [
+        1331,
+        444,
+        1774,
+        887
+      ],
+      "crop_within_cell": [
+        102,
+        138,
+        335,
+        365
+      ],
+      "size": [
+        233,
+        227
+      ],
+      "anchor_in_sprite": [
+        128.22146118721463,
+        227
+      ],
+      "position": [
+        535,
+        1138
+      ],
+      "footprint_half_size": [
+        13,
+        10
+      ],
+      "approach": null
+    }
+  ],
+  "agent_radius": 8,
+  "route_components": {
+    "village": 1,
+    "forest": 1,
+    "clearing": 1,
+    "boss_approach": 1,
+    "secret_nook": 1,
+    "hut_main": 1,
+    "hut_small": 1,
+    "hut_storage": 1
+  }
+}
