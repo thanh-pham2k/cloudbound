@@ -10,9 +10,9 @@ config_version=5
 
 [application]
 
-config/name="Hoa Qua Son"
-config/description="Phase 2 Playable Semantic Layout Prototype - 2.5D Isometric Mini Action RPG"
-run/main_scene="res://scenes/hoa_qua_son_terrain.tscn"
+config/name="Hoa Qua Son — Monkey Army Survivor"
+config/description="Three-lane 2.5D monkey army auto-combat"
+run/main_scene="res://scenes/monkey_army_survivor.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 
 [display]
@@ -20,7 +20,7 @@ config/features=PackedStringArray("4.7", "GL Compatibility")
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
+window/stretch/aspect="keep"
 
 [input]
 

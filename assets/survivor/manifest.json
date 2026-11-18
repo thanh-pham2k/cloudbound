@@ -1,0 +1,1421 @@
+{
+  "001": {
+    "source": "assets/inbox/001-create-one-3-3-terrain-tile-atlas-for-hoa-qua-son-monkey-arm.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "sha256": "2fc054877fa506b820236c2b5efd94a38fdeb907c4affcc6c65388361638891c",
+    "frames": [
+      {
+        "name": "grass",
+        "source_rect": [
+          6,
+          6,
+          406,
+          406
+        ]
+      },
+      {
+        "name": "grass_light",
+        "source_rect": [
+          424,
+          6,
+          406,
+          406
+        ]
+      },
+      {
+        "name": "grass_dark",
+        "source_rect": [
+          842,
+          6,
+          406,
+          406
+        ]
+      },
+      {
+        "name": "clearing",
+        "source_rect": [
+          6,
+          424,
+          406,
+          406
+        ]
+      },
+      {
+        "name": "clearing_light",
+        "source_rect": [
+          424,
+          424,
+          406,
+          406
+        ]
+      },
+      {
+        "name": "clearing_dark",
+        "source_rect": [
+          842,
+          424,
+          406,
+          406
+        ]
+      },
+      {
+        "name": "meadow",
+        "source_rect": [
+          6,
+          842,
+          406,
+          406
+        ]
+      },
+      {
+        "name": "meadow_flowers",
+        "source_rect": [
+          424,
+          842,
+          406,
+          406
+        ]
+      },
+      {
+        "name": "meadow_sparse",
+        "source_rect": [
+          842,
+          842,
+          406,
+          406
+        ]
+      }
+    ]
+  },
+  "002": {
+    "source": "assets/inbox/002-create-one-4-2-sprite-sheet-containing-8-nature-assets-for-t.png",
+    "size": [
+      1774,
+      887
+    ],
+    "sha256": "fba999ba59cbb5fa52bfc16d5ee199a41799f485a0d9255632d42cbce3d45685",
+    "frames": [
+      {
+        "name": "peach_tree",
+        "source_rect": [
+          19,
+          16,
+          488,
+          432
+        ]
+      },
+      {
+        "name": "peach_small",
+        "source_rect": [
+          547,
+          161,
+          295,
+          281
+        ]
+      },
+      {
+        "name": "green_tree",
+        "source_rect": [
+          907,
+          31,
+          409,
+          421
+        ]
+      },
+      {
+        "name": "green_small",
+        "source_rect": [
+          1404,
+          147,
+          268,
+          295
+        ]
+      },
+      {
+        "name": "bush",
+        "source_rect": [
+          62,
+          572,
+          332,
+          205
+        ]
+      },
+      {
+        "name": "flower_bush",
+        "source_rect": [
+          502,
+          563,
+          333,
+          213
+        ]
+      },
+      {
+        "name": "rock",
+        "source_rect": [
+          930,
+          597,
+          334,
+          174
+        ]
+      },
+      {
+        "name": "flowers",
+        "source_rect": [
+          1368,
+          576,
+          358,
+          200
+        ]
+      }
+    ]
+  },
+  "003": {
+    "source": "assets/inbox/003-create-one-4-3-character-sprite-sheet-for-sun-wukong-charact.png",
+    "size": [
+      1448,
+      1086
+    ],
+    "sha256": "142490d21a9b752be54ee146c1d882a61eb7440abe581be5c2e366cb8c509621",
+    "frames": [
+      {
+        "name": "hero_00",
+        "source_rect": [
+          34,
+          20,
+          289,
+          277
+        ]
+      },
+      {
+        "name": "hero_01",
+        "source_rect": [
+          398,
+          20,
+          286,
+          277
+        ]
+      },
+      {
+        "name": "hero_02",
+        "source_rect": [
+          758,
+          21,
+          288,
+          276
+        ]
+      },
+      {
+        "name": "hero_03",
+        "source_rect": [
+          1121,
+          24,
+          288,
+          273
+        ]
+      },
+      {
+        "name": "hero_04",
+        "source_rect": [
+          43,
+          391,
+          280,
+          272
+        ]
+      },
+      {
+        "name": "hero_05",
+        "source_rect": [
+          403,
+          388,
+          283,
+          273
+        ]
+      },
+      {
+        "name": "hero_06",
+        "source_rect": [
+          768,
+          392,
+          283,
+          273
+        ]
+      },
+      {
+        "name": "hero_07",
+        "source_rect": [
+          1138,
+          392,
+          276,
+          273
+        ]
+      },
+      {
+        "name": "hero_08",
+        "source_rect": [
+          18,
+          757,
+          285,
+          282
+        ]
+      },
+      {
+        "name": "hero_09",
+        "source_rect": [
+          373,
+          764,
+          336,
+          264
+        ]
+      },
+      {
+        "name": "hero_10",
+        "source_rect": [
+          746,
+          767,
+          327,
+          263
+        ]
+      },
+      {
+        "name": "hero_11",
+        "source_rect": [
+          1132,
+          766,
+          299,
+          263
+        ]
+      }
+    ]
+  },
+  "004": {
+    "source": "assets/inbox/004-create-one-4-3-sprite-sheet-for-one-reusable-baby-monkey-cha.png",
+    "size": [
+      1448,
+      1086
+    ],
+    "sha256": "0ff772e735b43612220f8a5dc20d2a2036c44596b4cc403b18a833e69a4536f3",
+    "frames": [
+      {
+        "name": "monkey_00",
+        "source_rect": [
+          88,
+          49,
+          208,
+          266
+        ]
+      },
+      {
+        "name": "monkey_01",
+        "source_rect": [
+          437,
+          45,
+          207,
+          270
+        ]
+      },
+      {
+        "name": "monkey_02",
+        "source_rect": [
+          789,
+          50,
+          211,
+          265
+        ]
+      },
+      {
+        "name": "monkey_03",
+        "source_rect": [
+          1140,
+          50,
+          210,
+          265
+        ]
+      },
+      {
+        "name": "monkey_04",
+        "source_rect": [
+          74,
+          407,
+          227,
+          261
+        ]
+      },
+      {
+        "name": "monkey_05",
+        "source_rect": [
+          442,
+          403,
+          218,
+          252
+        ]
+      },
+      {
+        "name": "monkey_06",
+        "source_rect": [
+          789,
+          408,
+          220,
+          263
+        ]
+      },
+      {
+        "name": "monkey_07",
+        "source_rect": [
+          1143,
+          412,
+          226,
+          256
+        ]
+      },
+      {
+        "name": "monkey_08",
+        "source_rect": [
+          70,
+          766,
+          223,
+          264
+        ]
+      },
+      {
+        "name": "monkey_09",
+        "source_rect": [
+          425,
+          767,
+          254,
+          262
+        ]
+      },
+      {
+        "name": "monkey_10",
+        "source_rect": [
+          778,
+          769,
+          228,
+          263
+        ]
+      },
+      {
+        "name": "monkey_11",
+        "source_rect": [
+          1129,
+          834,
+          274,
+          182
+        ]
+      }
+    ]
+  },
+  "005": {
+    "source": "assets/inbox/005-create-one-4-3-sprite-sheet-of-modular-monkey-weapons-and-pr.png",
+    "size": [
+      1448,
+      1086
+    ],
+    "sha256": "43b9198b100a08017aa9e594f2743b7d144040fc77b1c753d3e83eb8df6a9faa",
+    "frames": [
+      {
+        "name": "hero_staff",
+        "source_rect": [
+          40,
+          46,
+          314,
+          330
+        ]
+      },
+      {
+        "name": "staff",
+        "source_rect": [
+          441,
+          74,
+          253,
+          286
+        ]
+      },
+      {
+        "name": "bow",
+        "source_rect": [
+          819,
+          37,
+          216,
+          346
+        ]
+      },
+      {
+        "name": "magic",
+        "source_rect": [
+          1143,
+          39,
+          288,
+          334
+        ]
+      },
+      {
+        "name": "shield",
+        "source_rect": [
+          51,
+          423,
+          290,
+          287
+        ]
+      },
+      {
+        "name": "peach_bomb",
+        "source_rect": [
+          409,
+          390,
+          305,
+          335
+        ]
+      },
+      {
+        "name": "spear",
+        "source_rect": [
+          757,
+          397,
+          303,
+          331
+        ]
+      },
+      {
+        "name": "sword",
+        "source_rect": [
+          1127,
+          413,
+          292,
+          296
+        ]
+      },
+      {
+        "name": "arrow",
+        "source_rect": [
+          53,
+          777,
+          270,
+          262
+        ]
+      },
+      {
+        "name": "magic_bolt",
+        "source_rect": [
+          403,
+          792,
+          319,
+          213
+        ]
+      },
+      {
+        "name": "golden_bolt",
+        "source_rect": [
+          738,
+          769,
+          348,
+          230
+        ]
+      },
+      {
+        "name": "peach_bolt",
+        "source_rect": [
+          1086,
+          783,
+          362,
+          226
+        ]
+      }
+    ]
+  },
+  "006": {
+    "source": "assets/inbox/006-create-one-4-2-animation-sprite-sheet-for-a-purple-slime-ene.png",
+    "size": [
+      1774,
+      887
+    ],
+    "sha256": "3fced5d62ba7fb6a6db1af5ee4d3f27fcbb79d8be2ec79567a1a8ff0de8c2573",
+    "frames": [
+      {
+        "name": "slime_00",
+        "source_rect": [
+          73,
+          95,
+          307,
+          272
+        ]
+      },
+      {
+        "name": "slime_01",
+        "source_rect": [
+          510,
+          127,
+          303,
+          245
+        ]
+      },
+      {
+        "name": "slime_02",
+        "source_rect": [
+          936,
+          117,
+          323,
+          258
+        ]
+      },
+      {
+        "name": "slime_03",
+        "source_rect": [
+          1364,
+          117,
+          339,
+          259
+        ]
+      },
+      {
+        "name": "slime_04",
+        "source_rect": [
+          72,
+          521,
+          332,
+          272
+        ]
+      },
+      {
+        "name": "slime_05",
+        "source_rect": [
+          464,
+          519,
+          383,
+          278
+        ]
+      },
+      {
+        "name": "slime_06",
+        "source_rect": [
+          933,
+          530,
+          345,
+          264
+        ]
+      },
+      {
+        "name": "slime_07",
+        "source_rect": [
+          1363,
+          640,
+          358,
+          157
+        ]
+      }
+    ]
+  },
+  "007": {
+    "source": "assets/inbox/007-create-one-4-2-animation-sprite-sheet-for-a-cute-wild-boar-e.png",
+    "size": [
+      1774,
+      887
+    ],
+    "sha256": "0b38cf505c4d4e2aa60ad0386408bdf091902759fea5ead6d494d099ca4d1825",
+    "frames": [
+      {
+        "name": "boar_00",
+        "source_rect": [
+          60,
+          97,
+          313,
+          267
+        ]
+      },
+      {
+        "name": "boar_01",
+        "source_rect": [
+          505,
+          97,
+          310,
+          267
+        ]
+      },
+      {
+        "name": "boar_02",
+        "source_rect": [
+          945,
+          88,
+          318,
+          284
+        ]
+      },
+      {
+        "name": "boar_03",
+        "source_rect": [
+          1384,
+          81,
+          330,
+          278
+        ]
+      },
+      {
+        "name": "boar_04",
+        "source_rect": [
+          54,
+          521,
+          361,
+          282
+        ]
+      },
+      {
+        "name": "boar_05",
+        "source_rect": [
+          507,
+          528,
+          321,
+          278
+        ]
+      },
+      {
+        "name": "boar_06",
+        "source_rect": [
+          931,
+          508,
+          385,
+          265
+        ]
+      },
+      {
+        "name": "boar_07",
+        "source_rect": [
+          1377,
+          595,
+          356,
+          211
+        ]
+      }
+    ]
+  },
+  "008": {
+    "source": "assets/inbox/008-create-one-4-2-animation-sprite-sheet-for-the-boar-king-boss.png",
+    "size": [
+      1774,
+      887
+    ],
+    "sha256": "118dd104ebc0fb28dfae2d524005ad773062e973dc9ebf29cdb8a812f8ba73d9",
+    "frames": [
+      {
+        "name": "boss_00",
+        "source_rect": [
+          29,
+          43,
+          388,
+          323
+        ]
+      },
+      {
+        "name": "boss_01",
+        "source_rect": [
+          474,
+          38,
+          384,
+          321
+        ]
+      },
+      {
+        "name": "boss_02",
+        "source_rect": [
+          915,
+          43,
+          394,
+          319
+        ]
+      },
+      {
+        "name": "boss_03",
+        "source_rect": [
+          1367,
+          55,
+          383,
+          304
+        ]
+      },
+      {
+        "name": "boss_04",
+        "source_rect": [
+          24,
+          478,
+          397,
+          315
+        ]
+      },
+      {
+        "name": "boss_05",
+        "source_rect": [
+          473,
+          494,
+          396,
+          306
+        ]
+      },
+      {
+        "name": "boss_06",
+        "source_rect": [
+          912,
+          492,
+          396,
+          302
+        ]
+      },
+      {
+        "name": "boss_07",
+        "source_rect": [
+          1346,
+          579,
+          417,
+          220
+        ]
+      }
+    ]
+  },
+  "009": {
+    "source": "assets/inbox/009-create-one-4-2-collectible-item-sprite-sheet-style-cozy-fant.png",
+    "size": [
+      1774,
+      887
+    ],
+    "sha256": "e78e257bef6fff7f4f23a4297a428271a155e8d5edf9381aa0e5733df504cd03",
+    "frames": [
+      {
+        "name": "gold",
+        "source_rect": [
+          123,
+          135,
+          244,
+          233
+        ]
+      },
+      {
+        "name": "gold_stack",
+        "source_rect": [
+          482,
+          94,
+          353,
+          308
+        ]
+      },
+      {
+        "name": "xp",
+        "source_rect": [
+          988,
+          148,
+          212,
+          204
+        ]
+      },
+      {
+        "name": "xp_large",
+        "source_rect": [
+          1351,
+          91,
+          318,
+          318
+        ]
+      },
+      {
+        "name": "heart",
+        "source_rect": [
+          86,
+          536,
+          303,
+          252
+        ]
+      },
+      {
+        "name": "peach",
+        "source_rect": [
+          502,
+          496,
+          302,
+          318
+        ]
+      },
+      {
+        "name": "chest",
+        "source_rect": [
+          909,
+          510,
+          357,
+          289
+        ]
+      },
+      {
+        "name": "crystal",
+        "source_rect": [
+          1361,
+          472,
+          303,
+          330
+        ]
+      }
+    ]
+  },
+  "010": {
+    "source": "assets/inbox/010-create-one-4-2-sprite-sheet-of-simple-combat-vfx-style-minim.png",
+    "size": [
+      1774,
+      887
+    ],
+    "sha256": "686a99bd19277964a3d039795cbeb70fe485e35b489a374d9f847d8505042420",
+    "frames": [
+      {
+        "name": "slash_small",
+        "source_rect": [
+          98,
+          161,
+          287,
+          258
+        ]
+      },
+      {
+        "name": "slash",
+        "source_rect": [
+          449,
+          98,
+          415,
+          343
+        ]
+      },
+      {
+        "name": "slash_large",
+        "source_rect": [
+          864,
+          72,
+          498,
+          406
+        ]
+      },
+      {
+        "name": "impact",
+        "source_rect": [
+          1362,
+          100,
+          383,
+          330
+        ]
+      },
+      {
+        "name": "velocity",
+        "source_rect": [
+          74,
+          575,
+          369,
+          187
+        ]
+      },
+      {
+        "name": "ground_hit",
+        "source_rect": [
+          497,
+          519,
+          322,
+          270
+        ]
+      },
+      {
+        "name": "dust",
+        "source_rect": [
+          916,
+          573,
+          314,
+          225
+        ]
+      },
+      {
+        "name": "dust_large",
+        "source_rect": [
+          1325,
+          494,
+          391,
+          328
+        ]
+      }
+    ]
+  },
+  "011": {
+    "source": "assets/inbox/011-create-one-4-2-sprite-sheet-of-fantasy-magic-effects-style-c.png",
+    "size": [
+      1774,
+      887
+    ],
+    "sha256": "1526ab347af4e36c83e3eef1aeb57cf2f8da5758438a9bc42ef8183d62833910",
+    "frames": [
+      {
+        "name": "mana",
+        "source_rect": [
+          110,
+          157,
+          222,
+          209
+        ]
+      },
+      {
+        "name": "magic_hit",
+        "source_rect": [
+          464,
+          106,
+          385,
+          293
+        ]
+      },
+      {
+        "name": "curse",
+        "source_rect": [
+          925,
+          170,
+          352,
+          194
+        ]
+      },
+      {
+        "name": "curse_hit",
+        "source_rect": [
+          1355,
+          139,
+          360,
+          242
+        ]
+      },
+      {
+        "name": "rune",
+        "source_rect": [
+          38,
+          517,
+          384,
+          290
+        ]
+      },
+      {
+        "name": "summon",
+        "source_rect": [
+          483,
+          504,
+          326,
+          294
+        ]
+      },
+      {
+        "name": "magic_burst",
+        "source_rect": [
+          902,
+          499,
+          375,
+          303
+        ]
+      },
+      {
+        "name": "enchant",
+        "source_rect": [
+          1358,
+          539,
+          350,
+          237
+        ]
+      }
+    ]
+  },
+  "012": {
+    "source": "assets/inbox/012-create-one-4-3-game-ui-asset-sprite-sheet-for-hoa-qua-son-mo.png",
+    "size": [
+      1448,
+      1086
+    ],
+    "sha256": "ea9c635f7da210a24e3e51f2c0112680dca60c20f00c135edc0c56fa0c3c0b82",
+    "frames": [
+      {
+        "name": "hp_frame",
+        "source_rect": [
+          13,
+          107,
+          421,
+          192
+        ]
+      },
+      {
+        "name": "xp_frame",
+        "source_rect": [
+          442,
+          112,
+          417,
+          181
+        ]
+      },
+      {
+        "name": "gold_icon",
+        "source_rect": [
+          901,
+          101,
+          190,
+          198
+        ]
+      },
+      {
+        "name": "army_icon",
+        "source_rect": [
+          1118,
+          90,
+          323,
+          215
+        ]
+      },
+      {
+        "name": "timer_frame",
+        "source_rect": [
+          23,
+          426,
+          430,
+          213
+        ]
+      },
+      {
+        "name": "level_badge",
+        "source_rect": [
+          479,
+          395,
+          345,
+          265
+        ]
+      },
+      {
+        "name": "pause_icon",
+        "source_rect": [
+          875,
+          430,
+          225,
+          230
+        ]
+      },
+      {
+        "name": "shop_icon",
+        "source_rect": [
+          1154,
+          419,
+          250,
+          241
+        ]
+      },
+      {
+        "name": "boss_hp",
+        "source_rect": [
+          8,
+          754,
+          657,
+          238
+        ]
+      },
+      {
+        "name": "danger_dot",
+        "source_rect": [
+          697,
+          784,
+          163,
+          165
+        ]
+      },
+      {
+        "name": "settings_icon",
+        "source_rect": [
+          908,
+          761,
+          200,
+          203
+        ]
+      },
+      {
+        "name": "start_icon",
+        "source_rect": [
+          1167,
+          748,
+          242,
+          236
+        ]
+      }
+    ]
+  },
+  "013": {
+    "source": "assets/inbox/013-create-one-4-3-sprite-sheet-of-shop-ui-components-style-cozy.png",
+    "size": [
+      1448,
+      1086
+    ],
+    "sha256": "7c6fd50030e79356a83462bb22a352b5a093914492be00ed2d909aa57d65ad9f",
+    "frames": [
+      {
+        "name": "shop_banner",
+        "source_rect": [
+          16,
+          30,
+          451,
+          382
+        ]
+      },
+      {
+        "name": "card",
+        "source_rect": [
+          487,
+          70,
+          282,
+          335
+        ]
+      },
+      {
+        "name": "card_active",
+        "source_rect": [
+          799,
+          35,
+          309,
+          380
+        ]
+      },
+      {
+        "name": "card_locked",
+        "source_rect": [
+          1134,
+          71,
+          292,
+          335
+        ]
+      },
+      {
+        "name": "buy",
+        "source_rect": [
+          27,
+          501,
+          398,
+          167
+        ]
+      },
+      {
+        "name": "buy_disabled",
+        "source_rect": [
+          454,
+          503,
+          401,
+          165
+        ]
+      },
+      {
+        "name": "cancel",
+        "source_rect": [
+          892,
+          477,
+          203,
+          210
+        ]
+      },
+      {
+        "name": "refresh",
+        "source_rect": [
+          1164,
+          474,
+          225,
+          213
+        ]
+      },
+      {
+        "name": "recruit",
+        "source_rect": [
+          14,
+          736,
+          345,
+          316
+        ]
+      },
+      {
+        "name": "upgrade",
+        "source_rect": [
+          392,
+          734,
+          305,
+          313
+        ]
+      },
+      {
+        "name": "confirm",
+        "source_rect": [
+          745,
+          748,
+          249,
+          280
+        ]
+      },
+      {
+        "name": "price",
+        "source_rect": [
+          1039,
+          808,
+          380,
+          158
+        ]
+      }
+    ]
+  },
+  "014": {
+    "source": "assets/inbox/014-create-one-4-2-sprite-sheet-of-menu-and-result-ui-elements-s.png",
+    "size": [
+      1774,
+      887
+    ],
+    "sha256": "81d9b848f4160cbb41b64520ed8d7c94f751b2a508d74134f9eedbec73a6a344",
+    "frames": [
+      {
+        "name": "title",
+        "source_rect": [
+          16,
+          75,
+          562,
+          329
+        ]
+      },
+      {
+        "name": "play",
+        "source_rect": [
+          592,
+          188,
+          443,
+          177
+        ]
+      },
+      {
+        "name": "pause_banner",
+        "source_rect": [
+          1056,
+          30,
+          387,
+          407
+        ]
+      },
+      {
+        "name": "settings",
+        "source_rect": [
+          1484,
+          157,
+          247,
+          240
+        ]
+      },
+      {
+        "name": "victory",
+        "source_rect": [
+          20,
+          469,
+          542,
+          346
+        ]
+      },
+      {
+        "name": "defeat",
+        "source_rect": [
+          577,
+          482,
+          440,
+          333
+        ]
+      },
+      {
+        "name": "restart",
+        "source_rect": [
+          1052,
+          580,
+          349,
+          192
+        ]
+      },
+      {
+        "name": "home",
+        "source_rect": [
+          1416,
+          580,
+          344,
+          193
+        ]
+      }
+    ]
+  },
+  "015": {
+    "source": "assets/inbox/015-create-one-4-2-sprite-sheet-of-lane-and-enemy-spawn-indicato.png",
+    "size": [
+      1774,
+      887
+    ],
+    "sha256": "5642129f2ff1ef877f803a65bc5e047c831aa351b256cd8455b965ff9dba8de6",
+    "frames": [
+      {
+        "name": "lane_green",
+        "source_rect": [
+          78,
+          113,
+          332,
+          290
+        ]
+      },
+      {
+        "name": "lane_gold",
+        "source_rect": [
+          494,
+          79,
+          366,
+          330
+        ]
+      },
+      {
+        "name": "lane_alt",
+        "source_rect": [
+          941,
+          109,
+          338,
+          294
+        ]
+      },
+      {
+        "name": "spawn",
+        "source_rect": [
+          1364,
+          117,
+          341,
+          311
+        ]
+      },
+      {
+        "name": "alert",
+        "source_rect": [
+          92,
+          566,
+          258,
+          219
+        ]
+      },
+      {
+        "name": "alert_large",
+        "source_rect": [
+          463,
+          513,
+          424,
+          300
+        ]
+      },
+      {
+        "name": "boss_alert",
+        "source_rect": [
+          887,
+          464,
+          391,
+          375
+        ]
+      },
+      {
+        "name": "dash",
+        "source_rect": [
+          1349,
+          546,
+          354,
+          231
+        ]
+      }
+    ]
+  }
+}
