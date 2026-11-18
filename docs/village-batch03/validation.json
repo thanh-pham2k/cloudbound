@@ -1,277 +1,380 @@
 {
-  "source": "assets/inbox/002-tao-asset-theo-prompt-vua-cung-cap (1).png",
-  "sha256": "663078f8dc7895d5298c89546d4ebbf2af5a4e5693847f14913c97547544145b",
+  "source": "assets/inbox/001-tao-asset-cho-prompt-vua-mo-ta.png",
+  "sha256": "60532f13c6f258bd31268bafabb40fcefe6a677fcb810105aed2ae1ab67629c7",
   "source_size": [
-    1774,
-    887
+    1448,
+    1086
   ],
   "source_mode": "RGB",
   "scale": 0.26,
   "assets": [
     {
-      "name": "hut_main",
+      "name": "hut_main_left",
       "cell": [
         0,
         0,
-        444,
-        444
+        385,
+        362
       ],
       "crop_within_cell": [
-        27,
-        24,
-        423,
-        419
+        53,
+        16,
+        363,
+        347
       ],
       "size": [
-        396,
-        395
+        310,
+        331
+      ]
+    },
+    {
+      "name": "hut_main_right",
+      "cell": [
+        385,
+        0,
+        740,
+        362
+      ],
+      "crop_within_cell": [
+        33,
+        16,
+        346,
+        348
+      ],
+      "size": [
+        313,
+        332
+      ]
+    },
+    {
+      "name": "hut_small_left",
+      "cell": [
+        740,
+        0,
+        1090,
+        362
+      ],
+      "crop_within_cell": [
+        35,
+        72,
+        322,
+        337
+      ],
+      "size": [
+        287,
+        265
+      ]
+    },
+    {
+      "name": "hut_small_right",
+      "cell": [
+        1090,
+        0,
+        1448,
+        362
+      ],
+      "crop_within_cell": [
+        23,
+        73,
+        309,
+        338
+      ],
+      "size": [
+        286,
+        265
+      ]
+    },
+    {
+      "name": "hut_storage_front",
+      "cell": [
+        0,
+        362,
+        385,
+        724
+      ],
+      "crop_within_cell": [
+        28,
+        29,
+        365,
+        332
+      ],
+      "size": [
+        337,
+        303
+      ]
+    },
+    {
+      "name": "well_centerpiece",
+      "cell": [
+        385,
+        362,
+        740,
+        724
+      ],
+      "crop_within_cell": [
+        18,
+        22,
+        311,
+        331
+      ],
+      "size": [
+        293,
+        309
+      ]
+    },
+    {
+      "name": "stall_small_front",
+      "cell": [
+        740,
+        362,
+        1090,
+        724
+      ],
+      "crop_within_cell": [
+        11,
+        39,
+        324,
+        325
+      ],
+      "size": [
+        313,
+        286
+      ]
+    },
+    {
+      "name": "signpost_front",
+      "cell": [
+        1090,
+        362,
+        1448,
+        724
+      ],
+      "crop_within_cell": [
+        73,
+        34,
+        286,
+        324
+      ],
+      "size": [
+        213,
+        290
+      ]
+    },
+    {
+      "name": "lantern_post_front",
+      "cell": [
+        0,
+        724,
+        385,
+        1086
+      ],
+      "crop_within_cell": [
+        96,
+        13,
+        284,
+        323
+      ],
+      "size": [
+        188,
+        310
+      ]
+    },
+    {
+      "name": "fence_segment_straight",
+      "cell": [
+        385,
+        724,
+        740,
+        1086
+      ],
+      "crop_within_cell": [
+        17,
+        111,
+        305,
+        270
+      ],
+      "size": [
+        288,
+        159
+      ]
+    },
+    {
+      "name": "fence_segment_corner",
+      "cell": [
+        740,
+        724,
+        1090,
+        1086
+      ],
+      "crop_within_cell": [
+        28,
+        96,
+        294,
+        296
+      ],
+      "size": [
+        266,
+        200
+      ]
+    },
+    {
+      "name": "crate_stack_small",
+      "cell": [
+        1090,
+        724,
+        1448,
+        1086
+      ],
+      "crop_within_cell": [
+        30,
+        69,
+        308,
+        305
+      ],
+      "size": [
+        278,
+        236
+      ]
+    }
+  ],
+  "placements": [
+    {
+      "name": "hut_main_left",
+      "cell": [
+        0,
+        0,
+        385,
+        362
+      ],
+      "crop_within_cell": [
+        53,
+        16,
+        363,
+        347
+      ],
+      "size": [
+        310,
+        331
       ],
       "anchor_in_sprite": [
-        176.51043841336116,
-        335.0
+        189.55925925925925,
+        282.53846153846155
       ],
       "position": [
         247,
         1050
       ],
       "footprint_half_size": [
-        42,
-        26
+        35,
+        21
       ],
       "approach": [
-        225,
-        1094
-      ]
+        275,
+        1091
+      ],
+      "scale": 0.26
     },
     {
-      "name": "hut_small",
+      "name": "hut_small_right",
       "cell": [
-        444,
+        1090,
         0,
-        887,
-        444
+        1448,
+        362
       ],
       "crop_within_cell": [
-        57,
-        92,
-        398,
-        402
+        23,
+        73,
+        309,
+        338
       ],
       "size": [
-        341,
-        310
+        286,
+        265
       ],
       "anchor_in_sprite": [
-        141.53125,
-        245.3846153846154
+        100.40196078431373,
+        214.23076923076923
       ],
       "position": [
         491,
         1069
       ],
       "footprint_half_size": [
-        40,
-        28
+        32,
+        22
       ],
       "approach": [
-        472,
-        1115
-      ]
+        471,
+        1109
+      ],
+      "scale": 0.26
     },
     {
-      "name": "hut_storage",
+      "name": "well_centerpiece",
       "cell": [
-        887,
-        0,
-        1331,
-        444
+        385,
+        362,
+        740,
+        724
       ],
       "crop_within_cell": [
-        40,
-        88,
-        401,
-        392
-      ],
-      "size": [
-        361,
-        304
-      ],
-      "anchor_in_sprite": [
-        214.70091324200914,
-        244.0
-      ],
-      "position": [
-        366,
-        1139
-      ],
-      "footprint_half_size": [
-        43,
-        26
-      ],
-      "approach": [
-        361,
-        1183
-      ]
-    },
-    {
-      "name": "well_stone",
-      "cell": [
-        1331,
-        0,
-        1774,
-        444
-      ],
-      "crop_within_cell": [
-        65,
-        61,
-        377,
-        402
-      ],
-      "size": [
-        312,
-        341
-      ],
-      "anchor_in_sprite": [
-        161.97069271758437,
-        315.61538461538464
-      ],
-      "position": [
-        352,
-        1050
-      ],
-      "footprint_half_size": [
-        15,
-        11
-      ],
-      "approach": null
-    },
-    {
-      "name": "signpost_wood",
-      "cell": [
-        0,
-        444,
-        444,
-        887
-      ],
-      "crop_within_cell": [
-        125,
-        84,
-        334,
-        376
-      ],
-      "size": [
-        209,
-        292
-      ],
-      "anchor_in_sprite": [
-        105.5,
-        292
-      ],
-      "position": [
-        427,
-        979
-      ],
-      "footprint_half_size": [
-        4,
-        4
-      ],
-      "approach": null
-    },
-    {
-      "name": "fence_wood",
-      "cell": [
-        444,
-        444,
-        887,
-        887
-      ],
-      "crop_within_cell": [
-        58,
-        173,
-        394,
+        18,
+        22,
+        311,
         331
       ],
       "size": [
-        336,
-        158
+        293,
+        309
       ],
       "anchor_in_sprite": [
-        166.2108603667137,
-        158
+        149.0863309352518,
+        281.3076923076923
       ],
       "position": [
-        221,
-        1125
+        404,
+        1068
       ],
       "footprint_half_size": [
-        40,
-        5
+        24,
+        12
       ],
-      "approach": null
+      "approach": null,
+      "scale": 0.26
     },
     {
-      "name": "lantern_post",
+      "name": "signpost_front",
       "cell": [
-        887,
-        444,
-        1331,
-        887
+        1090,
+        362,
+        1448,
+        724
       ],
       "crop_within_cell": [
-        119,
-        57,
-        320,
-        380
+        73,
+        34,
+        286,
+        324
       ],
       "size": [
-        201,
-        323
+        213,
+        290
       ],
       "anchor_in_sprite": [
-        49.39736842105263,
-        323
+        99.29764705882353,
+        290
       ],
       "position": [
-        223,
-        971
+        459,
+        975
       ],
       "footprint_half_size": [
         7,
         5
       ],
-      "approach": null
-    },
-    {
-      "name": "wooden_crate",
-      "cell": [
-        1331,
-        444,
-        1774,
-        887
-      ],
-      "crop_within_cell": [
-        102,
-        138,
-        335,
-        365
-      ],
-      "size": [
-        233,
-        227
-      ],
-      "anchor_in_sprite": [
-        128.22146118721463,
-        227
-      ],
-      "position": [
-        535,
-        1138
-      ],
-      "footprint_half_size": [
-        13,
-        10
-      ],
-      "approach": null
+      "approach": null,
+      "scale": 0.26
     }
   ],
   "agent_radius": 8,
@@ -281,8 +384,7 @@
     "clearing": 1,
     "boss_approach": 1,
     "secret_nook": 1,
-    "hut_main": 1,
-    "hut_small": 1,
-    "hut_storage": 1
+    "hut_main_left": 1,
+    "hut_small_right": 1
   }
 }

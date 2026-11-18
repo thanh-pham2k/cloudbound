@@ -1,158 +1,82 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=9 format=3]
 
-[ext_resource type="Texture2D" path="res://assets/sprites/batch03/hut_main.png" id="1"]
-[ext_resource type="Texture2D" path="res://assets/sprites/batch03/hut_small.png" id="2"]
-[ext_resource type="Texture2D" path="res://assets/sprites/batch03/hut_storage.png" id="3"]
-[ext_resource type="Texture2D" path="res://assets/sprites/batch03/well_stone.png" id="4"]
-[ext_resource type="Texture2D" path="res://assets/sprites/batch03/signpost_wood.png" id="5"]
-[ext_resource type="Texture2D" path="res://assets/sprites/batch03/fence_wood.png" id="6"]
-[ext_resource type="Texture2D" path="res://assets/sprites/batch03/lantern_post.png" id="7"]
-[ext_resource type="Texture2D" path="res://assets/sprites/batch03/wooden_crate.png" id="8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/batch03_v2/hut_main_left.png" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/batch03_v2/hut_small_right.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/batch03_v2/well_centerpiece.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/batch03_v2/signpost_front.png" id="4"]
 
 [sub_resource type="RectangleShape2D" id="Foot1"]
-size = Vector2(84, 52)
+size = Vector2(70, 42)
 
 [sub_resource type="RectangleShape2D" id="Foot2"]
-size = Vector2(80, 56)
+size = Vector2(64, 44)
 
 [sub_resource type="RectangleShape2D" id="Foot3"]
-size = Vector2(86, 52)
+size = Vector2(48, 24)
 
 [sub_resource type="RectangleShape2D" id="Foot4"]
-size = Vector2(30, 22)
-
-[sub_resource type="RectangleShape2D" id="Foot5"]
-size = Vector2(8, 8)
-
-[sub_resource type="RectangleShape2D" id="Foot6"]
-size = Vector2(80, 10)
-
-[sub_resource type="RectangleShape2D" id="Foot7"]
 size = Vector2(14, 10)
-
-[sub_resource type="RectangleShape2D" id="Foot8"]
-size = Vector2(26, 20)
 
 [node name="Village" type="Node2D"]
 y_sort_enabled = true
 z_index = 1
 
-[node name="hut_main" type="StaticBody2D" parent="."]
+[node name="hut_main_left" type="StaticBody2D" parent="."]
 position = Vector2(247, 1050)
 collision_layer = 2
 collision_mask = 0
 
-[node name="Footprint" type="CollisionShape2D" parent="hut_main"]
+[node name="Footprint" type="CollisionShape2D" parent="hut_main_left"]
 shape = SubResource("Foot1")
 
-[node name="Sprite" type="Sprite2D" parent="hut_main"]
+[node name="Sprite" type="Sprite2D" parent="hut_main_left"]
 texture = ExtResource("1")
 texture_filter = 2
 centered = false
-offset = Vector2(-176.510, -335.000)
+offset = Vector2(-189.559, -282.538)
 scale = Vector2(0.26, 0.26)
 
-[node name="hut_small" type="StaticBody2D" parent="."]
+[node name="hut_small_right" type="StaticBody2D" parent="."]
 position = Vector2(491, 1069)
 collision_layer = 2
 collision_mask = 0
 
-[node name="Footprint" type="CollisionShape2D" parent="hut_small"]
+[node name="Footprint" type="CollisionShape2D" parent="hut_small_right"]
 shape = SubResource("Foot2")
 
-[node name="Sprite" type="Sprite2D" parent="hut_small"]
+[node name="Sprite" type="Sprite2D" parent="hut_small_right"]
 texture = ExtResource("2")
 texture_filter = 2
 centered = false
-offset = Vector2(-141.531, -245.385)
+offset = Vector2(-100.402, -214.231)
 scale = Vector2(0.26, 0.26)
 
-[node name="hut_storage" type="StaticBody2D" parent="."]
-position = Vector2(366, 1139)
+[node name="well_centerpiece" type="StaticBody2D" parent="."]
+position = Vector2(404, 1068)
 collision_layer = 2
 collision_mask = 0
 
-[node name="Footprint" type="CollisionShape2D" parent="hut_storage"]
+[node name="Footprint" type="CollisionShape2D" parent="well_centerpiece"]
 shape = SubResource("Foot3")
 
-[node name="Sprite" type="Sprite2D" parent="hut_storage"]
+[node name="Sprite" type="Sprite2D" parent="well_centerpiece"]
 texture = ExtResource("3")
 texture_filter = 2
 centered = false
-offset = Vector2(-214.701, -244.000)
+offset = Vector2(-149.086, -281.308)
 scale = Vector2(0.26, 0.26)
 
-[node name="well_stone" type="StaticBody2D" parent="."]
-position = Vector2(352, 1050)
+[node name="signpost_front" type="StaticBody2D" parent="."]
+position = Vector2(459, 975)
 collision_layer = 2
 collision_mask = 0
 
-[node name="Footprint" type="CollisionShape2D" parent="well_stone"]
+[node name="Footprint" type="CollisionShape2D" parent="signpost_front"]
 shape = SubResource("Foot4")
 
-[node name="Sprite" type="Sprite2D" parent="well_stone"]
+[node name="Sprite" type="Sprite2D" parent="signpost_front"]
 texture = ExtResource("4")
 texture_filter = 2
 centered = false
-offset = Vector2(-161.971, -315.615)
-scale = Vector2(0.26, 0.26)
-
-[node name="signpost_wood" type="StaticBody2D" parent="."]
-position = Vector2(427, 979)
-collision_layer = 2
-collision_mask = 0
-
-[node name="Footprint" type="CollisionShape2D" parent="signpost_wood"]
-shape = SubResource("Foot5")
-
-[node name="Sprite" type="Sprite2D" parent="signpost_wood"]
-texture = ExtResource("5")
-texture_filter = 2
-centered = false
-offset = Vector2(-105.500, -292.000)
-scale = Vector2(0.26, 0.26)
-
-[node name="fence_wood" type="StaticBody2D" parent="."]
-position = Vector2(221, 1125)
-collision_layer = 2
-collision_mask = 0
-
-[node name="Footprint" type="CollisionShape2D" parent="fence_wood"]
-shape = SubResource("Foot6")
-
-[node name="Sprite" type="Sprite2D" parent="fence_wood"]
-texture = ExtResource("6")
-texture_filter = 2
-centered = false
-offset = Vector2(-166.211, -158.000)
-scale = Vector2(0.26, 0.26)
-
-[node name="lantern_post" type="StaticBody2D" parent="."]
-position = Vector2(223, 971)
-collision_layer = 2
-collision_mask = 0
-
-[node name="Footprint" type="CollisionShape2D" parent="lantern_post"]
-shape = SubResource("Foot7")
-
-[node name="Sprite" type="Sprite2D" parent="lantern_post"]
-texture = ExtResource("7")
-texture_filter = 2
-centered = false
-offset = Vector2(-49.397, -323.000)
-scale = Vector2(0.26, 0.26)
-
-[node name="wooden_crate" type="StaticBody2D" parent="."]
-position = Vector2(535, 1138)
-collision_layer = 2
-collision_mask = 0
-
-[node name="Footprint" type="CollisionShape2D" parent="wooden_crate"]
-shape = SubResource("Foot8")
-
-[node name="Sprite" type="Sprite2D" parent="wooden_crate"]
-texture = ExtResource("8")
-texture_filter = 2
-centered = false
-offset = Vector2(-128.221, -227.000)
+offset = Vector2(-99.298, -290.000)
 scale = Vector2(0.26, 0.26)
