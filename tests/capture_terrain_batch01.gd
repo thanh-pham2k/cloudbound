@@ -15,6 +15,7 @@ func frame_image(viewport: Viewport, path: String) -> void:
 
 func capture() -> void:
 	var scene := SCENE.instantiate()
+	scene.get_node("Nature").free()
 	root.add_child(scene)
 	await process_frame
 	assert(scene.get_child_count() == 6, "Terrain should contain five material layers + one camera only")
@@ -38,6 +39,7 @@ func capture() -> void:
 	native.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	root.add_child(native)
 	var exact := SCENE.instantiate()
+	exact.get_node("Nature").free()
 	native.add_child(exact)
 	await process_frame
 	exact.camera.zoom = Vector2.ONE
