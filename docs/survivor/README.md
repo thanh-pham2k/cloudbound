@@ -4,6 +4,8 @@ Open `project.godot` in Godot 4.7.2, press **F5**, and choose **Start Game**. Us
 
 [Left formation](formation-left.png) · [Center formation](gameplay.png) · [Right formation](formation-right.png) · [Army Shop](shop.png) · [Boar King](boss.png) · [Victory](victory.png) · [Terrain plan](semantic-plan.png)
 
+[Animation polish, sprite-sheet manifest and new QA captures](polish/README.md) · [Bộ 27 quái và boss mới](enemies/README.md)
+
 ## Gameplay decisions
 
 - Enemy routes start at X = 420, 640 or 860. Slimes, boars and the Boar King advance down their assigned lane. A same-lane follower can offset slightly and queue behind its leader. Enemy attack warnings are fixed in place and limited to the enemy's lane.

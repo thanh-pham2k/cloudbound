@@ -1,5 +1,7 @@
 extends Node2D
 
+const EnemyLooks := preload("res://scripts/survivor/enemy_looks.gd")
+const Polish := preload("res://scripts/survivor/polish.gd")
 const Actor := preload("res://scripts/survivor/actor.gd")
 const Battlefield := preload("res://scripts/survivor/battlefield.gd")
 const Hud := preload("res://scripts/survivor/hud.gd")
@@ -32,6 +34,10 @@ const LANE_ORDER := [1, 0, 2, 1, 2, 0, 2, 1, 0]
 
 enum State { MENU, RUNNING, SHOP, PAUSED, VICTORY, DEFEAT }
 
+## Select another finale using the same boss rules and timing.
+@export_enum("boar_king", "ancient_treant", "nine_tailed_fox", "bull_demon_king", "golden_dragon")
+var boss_appearance: String = "boar_king"
+
 var state := State.MENU
 var elapsed := 0.0
 var gold := 0
@@ -53,8 +59,13 @@ var _spawn_in := 0.82
 var _spawn_count := 0
 var _escort_in := 3.5
 var _boss_sent := false
+var _light_looks := 0
+var _heavy_looks := 0
+var _elite_looks := 0
 var _queued_shops := 0
-var _pending_summons: Array[Vector2] = []
+var _pending_summons: Array[Actor] = []
+var _shown_command_lane := 1
+var _next_command_fx := 0.0
 var _projectiles: Array[Dictionary] = []
 
 
@@ -68,6 +79,7 @@ func _ready() -> void:
 
 
 func _reset_field() -> void:
+	hud.clear_match_fx()
 	# Dispose the previous round immediately so its tweens and effects cannot
 	# continue behind a restarted round.
 	if is_instance_valid(_play):
@@ -92,6 +104,8 @@ func _reset_field() -> void:
 	enemies.clear()
 	_projectiles.clear()
 	_pending_summons.clear()
+	_shown_command_lane = 1
+	_next_command_fx = 0.0
 	elapsed = 0.0
 	gold = 0
 	xp = 0
@@ -103,6 +117,9 @@ func _reset_field() -> void:
 	_spawn_count = 0
 	_escort_in = 3.5
 	_boss_sent = false
+	_light_looks = 0
+	_heavy_looks = 0
+	_elite_looks = 0
 	_queued_shops = 0
 
 
@@ -130,6 +147,7 @@ func pause_game() -> void:
 
 
 func _enter(next: State) -> void:
+	var previous := state
 	state = next
 	get_tree().paused = state in [State.SHOP, State.PAUSED]
 	match state:
@@ -138,12 +156,36 @@ func _enter(next: State) -> void:
 			hud.show_menu()
 		State.RUNNING:
 			hud.hide_overlay()
-			for at in _pending_summons:
-				_fx("summon", at + Vector2(0, -19), 108.0, 0.64)
+			var arrived := 0
+			for monkey in _pending_summons:
+				if not is_instance_valid(monkey) or monkey.hp <= 0:
+					continue
+				monkey.arrive()
+				var ring := Polish.summon_sequence(_effects, "summon", monkey.position, 86.0)
+				ring.z_as_relative = false
+				ring.z_index = -1
+				arrived += 1
+			if arrived > 1:
+				_fx("stand_together", hero.position + Vector2(0, 29), 45.0, 0.54)
+				_fx("rally_beam", hero.position + Vector2(-76, -22), 37.0, 0.62, Vector2.ZERO, 0.55)
+			elif arrived == 1:
+				_fx("rally_ring", hero.position + Vector2(0, 1), 92.0, 0.55, Vector2.ZERO, 0.49)
+				_fx("reinforcement", hero.position + Vector2(0, 29), 39.0, 0.74)
+				_fx("command_spark", hero.position + Vector2(-52, -22), 30.0, 0.51)
 			_pending_summons.clear()
-		State.SHOP: hud.show_shop()
+			if previous == State.SHOP:
+				hud.shop_closed()
+				if arrived == 0:
+					_fx("level_beam", hero.position + Vector2(0, -22), 58.0, 0.47, Vector2.ZERO, 0.5)
+		State.SHOP: hud.show_shop(-1, "level")
 		State.PAUSED: hud.show_pause()
-		State.VICTORY, State.DEFEAT: hud.show_result(state == State.VICTORY)
+		State.VICTORY, State.DEFEAT:
+			if state == State.VICTORY:
+				hero.celebrate()
+				for monkey in army:
+					if is_instance_valid(monkey):
+						monkey.celebrate()
+			hud.show_result(state == State.VICTORY)
 	hud.update_stats()
 
 
@@ -200,6 +242,20 @@ func _physics_process(delta: float) -> void:
 
 func _move_army(delta: float) -> void:
 	var target_x: float = Battlefield.LANES[lane]
+	if lane != _shown_command_lane:
+		_shown_command_lane = lane
+		if elapsed >= _next_command_fx:
+			_next_command_fx = elapsed + 0.36
+			hero.command_pose()
+			var flag := "command_standard" if army_count() >= 3 else "warning_flag"
+			_fx(flag, Vector2(target_x, 647), 34.0, 0.42, Vector2(0, -7), 0.76)
+			var direction := signf(target_x - hero.position.x)
+			var arrow := _fx("command_arrow", hero.position + Vector2(0, 18), 42.0, 0.30,
+				Vector2(direction * 70.0, 0), 0.72)
+			arrow.flip_h = direction < 0.0
+			var dust := _fx("shift_dust" if army_count() > 0 else "move_dust", hero.position, 45.0, 0.33,
+				Vector2(-direction * 19, 0), 0.54)
+			dust.flip_h = direction < 0.0
 	var dx := target_x - hero.position.x
 	hero.face(dx)
 	hero.position.x = lerpf(hero.position.x, target_x, 1.0 - exp(-14.0 * delta))
@@ -223,8 +279,7 @@ func _spawn_waves(delta: float) -> void:
 		if not _boss_sent:
 			_boss_sent = true
 			boss = _spawn_enemy("boss", 1)
-			field.warn(1)
-			_fx("boss_alert", Vector2(640, 174), 92.0, 1.15)
+
 		_escort_in -= delta
 		if _escort_in <= 0.0:
 			_spawn_enemy("boar", 0)
@@ -237,7 +292,6 @@ func _spawn_waves(delta: float) -> void:
 	var column: int = LANE_ORDER[_spawn_count % LANE_ORDER.size()]
 	var boar := wave > 1 and (_spawn_count % maxi(2, 6 - wave)) == 0
 	_spawn_enemy("boar" if boar else "slime", column)
-	field.warn(column)
 	if wave >= 3 and _spawn_count % (8 - wave) == 0:
 		_spawn_enemy("boar" if wave >= 4 else "slime", (column + 1) % 3)
 		if wave == 5 and _spawn_count % 6 == 0:
@@ -252,7 +306,8 @@ func _spawn_enemy(kind: String, column: int) -> Actor:
 	var hardening := 0
 	if kind != "boss":
 		hardening = (wave - 1) * (13 if kind == "boar" else 8)
-	var enemy := _new_actor(kind, int(data[0]) + hardening, data[6], position_on_entry)
+	var look := _next_enemy_look(kind)
+	var enemy := _new_actor(kind, int(data[0]) + hardening, data[6], position_on_entry, look)
 	enemy.enemy_lane = column
 	enemy.speed = data[1]
 	enemy.attack_range = data[2]
@@ -260,13 +315,36 @@ func _spawn_enemy(kind: String, column: int) -> Actor:
 	enemy.gold_reward = data[4]
 	enemy.xp_reward = data[5]
 	enemies.append(enemy)
+	field.warn(column, ("warning_boss" if look.is_empty() else "warning_red") if kind == "boss" else (
+		"warning_orange" if kind == "boar" else ("warning_gold" if wave >= 3 else "warning_green")))
 	return enemy
 
 
-func _new_actor(kind: String, hp: int, radius: float, at: Vector2) -> Actor:
+func _next_enemy_look(kind: String) -> String:
+	match kind:
+		"boss":
+			return boss_appearance if EnemyLooks.BOSSES.has(boss_appearance) else ""
+		"slime":
+			var look: String = EnemyLooks.LIGHT[_light_looks % EnemyLooks.LIGHT.size()]
+			_light_looks += 1
+			return look
+	if wave >= 4:
+		var look: String = EnemyLooks.ELITES[_elite_looks % EnemyLooks.ELITES.size()]
+		_elite_looks += 1
+		return look
+	var look: String = EnemyLooks.HEAVY[_heavy_looks % EnemyLooks.HEAVY.size()]
+	_heavy_looks += 1
+	return look
+
+
+func boss_display_name() -> String:
+	return EnemyLooks.BOSSES.get(boss_appearance, "Boar King")
+
+
+func _new_actor(kind: String, hp: int, radius: float, at: Vector2, look := "") -> Actor:
 	var unit := Actor.new()
 	unit.position = at
-	unit.setup(kind, hp, radius)
+	unit.setup(kind, hp, radius, look)
 	_actors.add_child(unit)
 	return unit
 
@@ -307,7 +385,8 @@ func _update_enemy(enemy: Actor, allies: Array[Actor], leader: Actor, delta: flo
 			if enemy.cooldown == 0.0:
 				_begin_enemy_strike(enemy, Vector2(center, Battlefield.REAR_LINE_Y), true)
 		else:
-			_fx("ground_hit", Vector2(center, Battlefield.REAR_LINE_Y - 10), 84.0, 0.48)
+			_fx("warning_breach", Vector2(center, Battlefield.REAR_LINE_Y - 14), 57.0, 0.54)
+			_fx("staff_dust", Vector2(center, Battlefield.REAR_LINE_Y), 70.0, 0.35, Vector2.ZERO, 0.54)
 			_damage(hero, enemy.attack_damage)
 			enemy.hurt(enemy.hp)
 		return
@@ -324,6 +403,13 @@ func _update_enemy(enemy: Actor, allies: Array[Actor], leader: Actor, delta: flo
 	enemy.position.x = move_toward(enemy.position.x,
 		clampf(preferred_x, center - lane_drift, center + lane_drift), 48.0 * delta)
 	enemy.move_pose(next_y > enemy.position.y)
+	if enemy.position.y < 103.0 and next_y >= 103.0:
+		var entry := {"boss": "boss_entry", "boar": "enemy_entry" if wave <= 2 else "boar_entry", "slime": "slime_entry"}
+		_fx(entry[enemy.kind], Vector2(enemy.position.x, next_y), 108.0 if is_boss else 70.0,
+			0.49, Vector2(0, 14), 0.7)
+	if enemy.position.y < 580.0 and next_y >= 580.0:
+		field.warn(column, "warning_red")
+		_fx("danger_ping", Vector2(center, 650), 45.0, 0.55, Vector2.ZERO, 0.68)
 	enemy.position.y = next_y
 
 
@@ -333,6 +419,10 @@ func _begin_enemy_strike(enemy: Actor, at: Vector2, rear_line: bool) -> void:
 	enemy.strikes_rear_line = rear_line
 	enemy.attack_pose(enemy.windup + 0.17)
 	_telegraph(at, _strike_radius(enemy), enemy.enemy_lane, enemy.windup)
+	if enemy.kind == "boss":
+		var warning := _fx("boss_warning", at, 86.0, enemy.windup, Vector2.ZERO, 0.62)
+		warning.z_as_relative = false
+		warning.z_index = -1
 
 
 func _strike_radius(enemy: Actor) -> float:
@@ -342,7 +432,13 @@ func _strike_radius(enemy: Actor) -> float:
 func _enemy_strike(enemy: Actor, allies: Array[Actor]) -> void:
 	var is_boss := enemy.kind == "boss"
 	enemy.cooldown = 1.16 if is_boss and enemy.hp * 2 < enemy.max_hp else (1.63 if is_boss else 1.00)
-	_fx("ground_hit" if is_boss else "impact", enemy.strike_position, 148.0 if is_boss else 43.0, 0.33)
+	if is_boss:
+		var effect := "boss_slam" if enemy.hp * 2 < enemy.max_hp else "boss_impact"
+		_fx(effect, enemy.strike_position + Vector2(0, -12), 131.0, 0.44, Vector2.ZERO, 0.78)
+		_fx("boss_shockwave", enemy.strike_position, 170.0, 0.40, Vector2.ZERO, 0.54)
+	else:
+		_fx("impact_dust" if enemy.kind == "boar" else "hit_chip",
+			enemy.strike_position, 36.0, 0.27, Vector2.ZERO, 0.74)
 	if enemy.strikes_rear_line:
 		_damage(hero, enemy.attack_damage)
 		return
@@ -392,20 +488,31 @@ func _attack(unit: Actor, delta: float) -> void:
 	match weapon.kind:
 		"melee":
 			var slash_pos := unit.position.lerp(target.position, 0.64) + Vector2(0, -37)
-			var slash := _fx("slash_large" if unit == hero else "slash_small", slash_pos,
-				105.0 if unit == hero else 69.0, 0.27)
+			var slash := _fx("ruyi_arc" if unit == hero else "staff_arc", slash_pos,
+				92.0 if unit == hero else 61.0, 0.27)
 			slash.flip_h = target.position.x < unit.position.x
-			_damage(target, damage)
+			if unit == hero:
+				var swish := _fx("attack_swish", unit.position + Vector2(0, -30), 58.0, 0.22,
+					Vector2.ZERO, 0.52)
+				swish.flip_h = slash.flip_h
+			_damage(target, damage, "staff_contact")
 		"ranged":
-			var arrow := _sprite("arrow", unit.position + Vector2(0, -32), 38.0)
+			var origin := unit.position + Vector2(0, -32)
+			var release := _fx("bow_release", origin, 31.0, 0.19, Vector2.ZERO, 0.66)
+			release.rotation = (target.position - unit.position).angle()
+			var arrow := Polish.sprite(_effects, "arrow_streak", origin, 34.0)
 			_projectiles.append({"sprite": arrow, "target": target, "damage": damage,
 				"destination": target.position + Vector2(0, -28)})
 		"area":
 			var impact := target.position
-			_fx("magic_hit", impact + Vector2(0, -33), weapon.blast * 1.43, 0.47)
+			_fx("magic_cast", unit.position + Vector2(0, -12), 46.0, 0.31, Vector2.ZERO, 0.65)
+			var span := impact - unit.position
+			var bolt := _fx("magic_bolt", unit.position + Vector2(0, -34), 43.0, 0.19, span, 0.76)
+			bolt.rotation = span.angle() + PI * 0.30
+			_fx("magic_area", impact + Vector2(0, -20), weapon.blast * 1.13, 0.44, Vector2.ZERO, 0.75)
 			for enemy in enemies.duplicate():
 				if state == State.RUNNING and enemy.position.distance_to(impact) <= weapon.blast + enemy.radius * 0.3:
-					_damage(enemy, damage)
+					_damage(enemy, damage, "magic_contact" if enemy != target else "enemy_hit")
 
 
 func _move_projectiles(delta: float) -> void:
@@ -417,19 +524,33 @@ func _move_projectiles(delta: float) -> void:
 		if is_instance_valid(arrow.target) and arrow.target.hp > 0:
 			arrow.destination = arrow.target.position + Vector2(0, -28)
 		var destination: Vector2 = arrow.destination
-		sprite.rotation = (destination - sprite.position).angle() + PI * 0.25
+		sprite.rotation = (destination - sprite.position).angle()
 		sprite.position = sprite.position.move_toward(destination, delta * 660.0)
 		if sprite.position.is_equal_approx(destination):
 			_projectiles.remove_at(i)
 			sprite.queue_free()
 			if is_instance_valid(arrow.target) and arrow.target.hp > 0:
-				_damage(arrow.target, arrow.damage)
+				_damage(arrow.target, arrow.damage, "arrow_contact")
+			else:
+				_fx("arrow_ground", destination + Vector2(0, 18), 35.0, 0.26, Vector2.ZERO, 0.55)
 
 
-func _damage(unit: Actor, amount: int) -> void:
+func _damage(unit: Actor, amount: int, effect := "enemy_hit") -> void:
 	if unit.hp <= 0:
 		return
+	var fresh_hit := not unit.has_hit_flash()
+	var was_calm := unit.hp * 2 >= unit.max_hp
 	unit.hurt(amount)
+	if fresh_hit and effect != "":
+		if unit.gold_reward == 0:
+			effect = "hit_heavy" if amount >= 30 else "hit_flash"
+		elif effect == "enemy_hit" and unit.kind == "slime":
+			effect = "enemy_chip"
+		_fx(effect, unit.position + Vector2(0, -28 if unit.kind != "boss" else -81),
+			35.0 if unit.kind != "boss" else 48.0, 0.25, Vector2(0, -7), 0.76)
+	if unit.kind == "boss" and was_calm and unit.hp > 0 and unit.hp * 2 < unit.max_hp:
+		_fx("boss_rage", unit.position + Vector2(0, -17), 115.0, 0.72, Vector2.ZERO, 0.75)
+		_fx("boss_charge", unit.position + Vector2(0, 8), 100.0, 0.46, Vector2(0, 25), 0.6)
 	var number := DamageText.new()
 	number.setup(str(amount), Color("#ffedb3") if unit.gold_reward > 0 else Color("#ff9785"))
 	number.position = unit.position + Vector2(0, -146 if unit.kind == "boss" else -62)
@@ -439,16 +560,32 @@ func _damage(unit: Actor, amount: int) -> void:
 	if unit == hero:
 		_enter(State.DEFEAT)
 	elif unit.slot >= 0:
+		_fx("enemy_death", unit.position, 47.0, 0.38, Vector2(0, -8), 0.63)
 		army[unit.slot] = null
 	else:
 		enemies.erase(unit)
 		kills += 1
 		award(unit.gold_reward, unit.xp_reward)
-		_fx("gold", unit.position + Vector2(-12, -28), 23.0, 0.49, Vector2(-10, -45))
-		_fx("xp", unit.position + Vector2(12, -26), 19.0, 0.51, Vector2(10, -50))
+		_fx(unit.kind + "_death", unit.position + Vector2(0, -11),
+			142.0 if unit.kind == "boss" else 72.0, 0.53, Vector2(0, -11), 0.79)
+		_reward_fx(unit.position + Vector2(-12, -28), true)
+		_reward_fx(unit.position + Vector2(12, -26), false)
 		if unit.kind == "boss":
 			boss = null
 			_enter(State.VICTORY)
+
+
+func _reward_fx(at: Vector2, coins: bool) -> void:
+	var reward := "gold" if coins else "xp"
+	var width := 21.0 if coins else 18.0
+	var node := Polish.sprite(_effects, reward + "_drop", at, width)
+	var fly := node.create_tween()
+	fly.tween_property(node, "position", at + Vector2(0, -20), 0.18).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	fly.tween_callback(Polish.swap.bind(node, reward + "_trail", width * 1.6))
+	var destination := Vector2(980, 52) if coins else Vector2(232, 89)
+	fly.tween_property(node, "position", destination, 0.43).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	fly.tween_callback(hud.reward_received.bind(coins))
+	fly.tween_callback(node.queue_free)
 
 
 func xp_needed() -> int:
@@ -488,10 +625,10 @@ func buy_monkey() -> bool:
 	monkey.slot = slot
 	army[slot] = monkey
 	_equip(monkey, "staff")
-	_pending_summons.append(at)
+	_pending_summons.append(monkey)
 	gold -= RECRUIT_COST
 	hud.update_stats()
-	hud.show_shop(slot)
+	hud.show_shop(slot, "recruit")
 	return true
 
 
@@ -508,7 +645,7 @@ func buy_weapon(slot: int, id: String) -> bool:
 	_equip(army[slot], id)
 	gold -= WEAPONS[id].cost
 	hud.update_stats()
-	hud.show_shop(slot)
+	hud.show_shop(slot, "equip")
 	return true
 
 
@@ -517,23 +654,9 @@ func _equip(monkey: Actor, id: String) -> void:
 	monkey.equip(id, load(ART + WEAPONS[id].art + ".png"))
 
 
-func _sprite(id: String, at: Vector2, width: float) -> Sprite2D:
-	var sprite := Sprite2D.new()
-	sprite.texture = load(ART + id + ".png")
-	sprite.position = at
-	sprite.scale = Vector2.ONE * (width / sprite.texture.get_width())
-	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
-	_effects.add_child(sprite)
-	return sprite
-
-
-func _fx(id: String, at: Vector2, width: float, life: float, drift := Vector2.ZERO) -> Sprite2D:
-	var sprite := _sprite(id, at, width)
-	var fade := sprite.create_tween().set_parallel()
-	fade.tween_property(sprite, "modulate:a", 0.0, life)
-	fade.tween_property(sprite, "position", at + drift, life)
-	fade.chain().tween_callback(sprite.queue_free)
-	return sprite
+func _fx(id: String, at: Vector2, width: float, life: float, drift := Vector2.ZERO,
+		opacity := 1.0) -> Sprite2D:
+	return Polish.burst(_effects, id, at, width, life, drift, opacity)
 
 
 func _telegraph(at: Vector2, radius: float, column: int, life: float) -> void:

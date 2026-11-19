@@ -1,0 +1,5039 @@
+{
+  "forest_goblin": {
+    "sheet": 1,
+    "source": "assets/inbox/001-create-one-4-2-animation-sprite-sheet-for-forest-goblin-char.png",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGBA",
+    "source_alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "3eeefb93e1c01f343982c39ce41c35610a62c3a543aa030e6d525ada847f986b",
+    "atlas_size": [
+      752,
+      304
+    ],
+    "tier": "light",
+    "pivot": [
+      88.0,
+      140
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        1,
+        2,
+        3
+      ],
+      "attack": [
+        4,
+        5
+      ],
+      "hurt": [
+        6
+      ],
+      "dead": [
+        7
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          73,
+          65,
+          305,
+          304
+        ],
+        "region": [
+          6,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          517,
+          58,
+          304,
+          315
+        ],
+        "region": [
+          194,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          957,
+          61,
+          308,
+          316
+        ],
+        "region": [
+          382,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1400,
+          60,
+          311,
+          323
+        ],
+        "region": [
+          570,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          90,
+          479,
+          310,
+          343
+        ],
+        "region": [
+          6,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          514,
+          517,
+          338,
+          302
+        ],
+        "region": [
+          194,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          953,
+          511,
+          300,
+          310
+        ],
+        "region": [
+          382,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1371,
+          589,
+          367,
+          242
+        ],
+        "region": [
+          570,
+          158,
+          176,
+          140
+        ]
+      }
+    ]
+  },
+  "shadow_wolf": {
+    "sheet": 2,
+    "source": "assets/inbox/002-create-one-4-2-animation-sprite-sheet-for-shadow-wolf-charac.png",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGBA",
+    "source_alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "021d78c7892817cc8852f6bebfbc6da6d3313a3f822de83b6db0367292ee9cf7",
+    "atlas_size": [
+      752,
+      304
+    ],
+    "tier": "light",
+    "pivot": [
+      88.0,
+      140
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        1,
+        2,
+        3
+      ],
+      "attack": [
+        4,
+        5
+      ],
+      "hurt": [
+        6
+      ],
+      "dead": [
+        7
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          98,
+          80,
+          279,
+          314
+        ],
+        "region": [
+          6,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          530,
+          80,
+          281,
+          314
+        ],
+        "region": [
+          194,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          961,
+          69,
+          268,
+          342
+        ],
+        "region": [
+          382,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1392,
+          64,
+          289,
+          338
+        ],
+        "region": [
+          570,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          100,
+          492,
+          292,
+          331
+        ],
+        "region": [
+          6,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          525,
+          494,
+          316,
+          329
+        ],
+        "region": [
+          194,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          939,
+          488,
+          334,
+          315
+        ],
+        "region": [
+          382,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1363,
+          569,
+          362,
+          229
+        ],
+        "region": [
+          570,
+          158,
+          176,
+          140
+        ]
+      }
+    ]
+  },
+  "stone_golem": {
+    "sheet": 3,
+    "source": "assets/inbox/003-create-one-4-2-animation-sprite-sheet-for-stone-golem-charac.png",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGBA",
+    "source_alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "5170ae928387c66b0f28150ccad067a5abc319f39167ad16eefe7d2b5cf8ccb8",
+    "atlas_size": [
+      928,
+      324
+    ],
+    "tier": "heavy",
+    "pivot": [
+      110.0,
+      150
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        1,
+        2,
+        3
+      ],
+      "attack": [
+        4,
+        5
+      ],
+      "hurt": [
+        6
+      ],
+      "dead": [
+        7
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          55,
+          92,
+          353,
+          285
+        ],
+        "region": [
+          6,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          483,
+          73,
+          344,
+          303
+        ],
+        "region": [
+          238,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          918,
+          95,
+          331,
+          294
+        ],
+        "region": [
+          470,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1353,
+          98,
+          359,
+          289
+        ],
+        "region": [
+          702,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          56,
+          503,
+          352,
+          314
+        ],
+        "region": [
+          6,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          488,
+          551,
+          339,
+          268
+        ],
+        "region": [
+          238,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          895,
+          518,
+          368,
+          302
+        ],
+        "region": [
+          470,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1335,
+          576,
+          397,
+          240
+        ],
+        "region": [
+          702,
+          168,
+          220,
+          150
+        ]
+      }
+    ]
+  },
+  "goblin_archer": {
+    "sheet": 4,
+    "source": "assets/inbox/004-create-one-4-2-animation-sprite-sheet-for-goblin-archer-char.png",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGBA",
+    "source_alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "00416c4084b39c82c8c4066f1ac4f9f5038de920115f427eec0f9024f523a562",
+    "atlas_size": [
+      752,
+      304
+    ],
+    "tier": "light",
+    "pivot": [
+      88.0,
+      140
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        1,
+        2,
+        3
+      ],
+      "attack": [
+        4,
+        5
+      ],
+      "hurt": [
+        6
+      ],
+      "dead": [
+        7
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          63,
+          40,
+          314,
+          344
+        ],
+        "region": [
+          6,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          509,
+          40,
+          311,
+          344
+        ],
+        "region": [
+          194,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          949,
+          41,
+          313,
+          353
+        ],
+        "region": [
+          382,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1392,
+          41,
+          317,
+          353
+        ],
+        "region": [
+          570,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          62,
+          484,
+          309,
+          347
+        ],
+        "region": [
+          6,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          505,
+          484,
+          307,
+          347
+        ],
+        "region": [
+          194,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          940,
+          492,
+          319,
+          338
+        ],
+        "region": [
+          382,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1374,
+          596,
+          351,
+          250
+        ],
+        "region": [
+          570,
+          158,
+          176,
+          140
+        ]
+      }
+    ]
+  },
+  "mushroom_monster": {
+    "sheet": 5,
+    "source": "assets/inbox/005-create-one-4-2-sprite-sheet-for-mushroom-monster-character-c.png",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGBA",
+    "source_alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "47250dccef0ad97b076433bf1d6ea7563d645ad88a71e2260b2a7cff575dd361",
+    "atlas_size": [
+      752,
+      304
+    ],
+    "tier": "light",
+    "pivot": [
+      88.0,
+      140
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        1,
+        2,
+        3
+      ],
+      "attack": [
+        4,
+        5
+      ],
+      "hurt": [
+        6
+      ],
+      "dead": [
+        7
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          64,
+          83,
+          313,
+          295
+        ],
+        "region": [
+          6,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          508,
+          83,
+          312,
+          295
+        ],
+        "region": [
+          194,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          952,
+          83,
+          312,
+          295
+        ],
+        "region": [
+          382,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1395,
+          83,
+          312,
+          300
+        ],
+        "region": [
+          570,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          65,
+          528,
+          317,
+          289
+        ],
+        "region": [
+          6,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          500,
+          518,
+          329,
+          299
+        ],
+        "region": [
+          194,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          966,
+          541,
+          304,
+          289
+        ],
+        "region": [
+          382,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1379,
+          608,
+          338,
+          226
+        ],
+        "region": [
+          570,
+          158,
+          176,
+          140
+        ]
+      }
+    ]
+  },
+  "cave_bat": {
+    "sheet": 6,
+    "source": "assets/inbox/006-create-one-4-2-sprite-sheet-for-cave-bat-character-cute-tiny.png",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGBA",
+    "source_alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "c41290b90a4e3663137476c981e8ccece13152338b619f0fac412e1e455a587a",
+    "atlas_size": [
+      752,
+      304
+    ],
+    "tier": "light",
+    "pivot": [
+      88.0,
+      140
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        1,
+        2,
+        3
+      ],
+      "attack": [
+        4,
+        5
+      ],
+      "hurt": [
+        6
+      ],
+      "dead": [
+        7
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          36,
+          94,
+          370,
+          229
+        ],
+        "region": [
+          6,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          479,
+          85,
+          375,
+          228
+        ],
+        "region": [
+          194,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          953,
+          100,
+          310,
+          269
+        ],
+        "region": [
+          382,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1359,
+          86,
+          381,
+          232
+        ],
+        "region": [
+          570,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          89,
+          531,
+          274,
+          258
+        ],
+        "region": [
+          6,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          507,
+          549,
+          309,
+          258
+        ],
+        "region": [
+          194,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          917,
+          524,
+          355,
+          254
+        ],
+        "region": [
+          382,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1352,
+          598,
+          388,
+          190
+        ],
+        "region": [
+          570,
+          158,
+          176,
+          140
+        ]
+      }
+    ]
+  },
+  "bamboo_snake": {
+    "sheet": 7,
+    "source": "assets/inbox/007-create-one-4-2-sprite-sheet-for-bamboo-snake-character-cute-.png",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGBA",
+    "source_alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "9342f08a5e14785ae044e51d21650e7f980706e56f8217cd1bbb84bd4dc81936",
+    "atlas_size": [
+      752,
+      304
+    ],
+    "tier": "light",
+    "pivot": [
+      88.0,
+      140
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        1,
+        2,
+        3
+      ],
+      "attack": [
+        4,
+        5
+      ],
+      "hurt": [
+        6
+      ],
+      "dead": [
+        7
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          94,
+          31,
+          256,
+          350
+        ],
+        "region": [
+          6,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          538,
+          52,
+          258,
+          331
+        ],
+        "region": [
+          194,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          931,
+          76,
+          325,
+          306
+        ],
+        "region": [
+          382,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1410,
+          55,
+          314,
+          332
+        ],
+        "region": [
+          570,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          58,
+          564,
+          316,
+          260
+        ],
+        "region": [
+          6,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          476,
+          582,
+          347,
+          242
+        ],
+        "region": [
+          194,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          944,
+          527,
+          321,
+          302
+        ],
+        "region": [
+          382,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1367,
+          615,
+          352,
+          234
+        ],
+        "region": [
+          570,
+          158,
+          176,
+          140
+        ]
+      }
+    ]
+  },
+  "demon_rabbit": {
+    "sheet": 8,
+    "source": "assets/inbox/008-create-one-4-2-sprite-sheet-for-demon-rabbit-character-cute-.png",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGBA",
+    "source_alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "4265cad947dc9556c26bb123dfddbc037bd0f1938abbd65571987d31977cd83f",
+    "atlas_size": [
+      752,
+      304
+    ],
+    "tier": "light",
+    "pivot": [
+      88.0,
+      140
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        1,
+        2,
+        3
+      ],
+      "attack": [
+        4,
+        5
+      ],
+      "hurt": [
+        6
+      ],
+      "dead": [
+        7
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          90,
+          10,
+          257,
+          391
+        ],
+        "region": [
+          6,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          534,
+          29,
+          276,
+          372
+        ],
+        "region": [
+          194,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          970,
+          70,
+          294,
+          331
+        ],
+        "region": [
+          382,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1422,
+          28,
+          265,
+          370
+        ],
+        "region": [
+          570,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          83,
+          490,
+          271,
+          342
+        ],
+        "region": [
+          6,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          491,
+          460,
+          318,
+          329
+        ],
+        "region": [
+          194,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          939,
+          496,
+          338,
+          344
+        ],
+        "region": [
+          382,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1351,
+          584,
+          399,
+          220
+        ],
+        "region": [
+          570,
+          158,
+          176,
+          140
+        ]
+      }
+    ]
+  },
+  "armored_turtle": {
+    "sheet": 9,
+    "source": "assets/inbox/009-create-one-4-2-sprite-sheet-for-armored-turtle-character-cut.png",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGBA",
+    "source_alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "e6d6e9735d53137bd1a6de2629987d68ea664d763f77de9f764c5d2885f43de9",
+    "atlas_size": [
+      928,
+      324
+    ],
+    "tier": "heavy",
+    "pivot": [
+      110.0,
+      150
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        1,
+        2,
+        3
+      ],
+      "attack": [
+        4,
+        5
+      ],
+      "hurt": [
+        6
+      ],
+      "dead": [
+        7
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          66,
+          73,
+          324,
+          297
+        ],
+        "region": [
+          6,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          510,
+          73,
+          323,
+          296
+        ],
+        "region": [
+          238,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          953,
+          73,
+          324,
+          297
+        ],
+        "region": [
+          470,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1397,
+          73,
+          324,
+          299
+        ],
+        "region": [
+          702,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          63,
+          539,
+          329,
+          257
+        ],
+        "region": [
+          6,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          499,
+          553,
+          344,
+          249
+        ],
+        "region": [
+          238,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          956,
+          516,
+          325,
+          293
+        ],
+        "region": [
+          470,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1377,
+          556,
+          357,
+          255
+        ],
+        "region": [
+          702,
+          168,
+          220,
+          150
+        ]
+      }
+    ]
+  },
+  "stone_beetle": {
+    "sheet": 10,
+    "source": "assets/inbox/010-create-one-4-2-sprite-sheet-for-stone-beetle-character-cute-.png",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGBA",
+    "source_alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "74a6be37cbb29622df12947e76498d92b80db93c39d1bb6ebe3de73aafa9ba60",
+    "atlas_size": [
+      928,
+      324
+    ],
+    "tier": "heavy",
+    "pivot": [
+      110.0,
+      150
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        1,
+        2,
+        3
+      ],
+      "attack": [
+        4,
+        5
+      ],
+      "hurt": [
+        6
+      ],
+      "dead": [
+        7
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          63,
+          65,
+          327,
+          309
+        ],
+        "region": [
+          6,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          508,
+          66,
+          325,
+          308
+        ],
+        "region": [
+          238,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          940,
+          72,
+          335,
+          317
+        ],
+        "region": [
+          470,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1382,
+          73,
+          338,
+          316
+        ],
+        "region": [
+          702,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          56,
+          523,
+          337,
+          298
+        ],
+        "region": [
+          6,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          492,
+          521,
+          341,
+          307
+        ],
+        "region": [
+          238,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          933,
+          521,
+          352,
+          296
+        ],
+        "region": [
+          470,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1373,
+          570,
+          359,
+          254
+        ],
+        "region": [
+          702,
+          168,
+          220,
+          150
+        ]
+      }
+    ]
+  },
+  "wooden_treant": {
+    "sheet": 11,
+    "source": "assets/inbox/011-create-one-4-2-sprite-sheet-for-wooden-treant-character-cute.png",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGB",
+    "source_alpha_range": null,
+    "sha256": "ebe62fc57f1be3a1e2f715e212adb2ae13573051b1350f2a4c73eec6b8cb6bf2",
+    "atlas_size": [
+      928,
+      324
+    ],
+    "tier": "heavy",
+    "pivot": [
+      110.0,
+      150
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        1,
+        2,
+        3
+      ],
+      "attack": [
+        4,
+        5
+      ],
+      "hurt": [
+        6
+      ],
+      "dead": [
+        7
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          58,
+          35,
+          331,
+          344
+        ],
+        "region": [
+          6,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          504,
+          35,
+          327,
+          344
+        ],
+        "region": [
+          238,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          945,
+          36,
+          324,
+          354
+        ],
+        "region": [
+          470,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1389,
+          35,
+          323,
+          355
+        ],
+        "region": [
+          702,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          60,
+          478,
+          329,
+          340
+        ],
+        "region": [
+          6,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          469,
+          479,
+          387,
+          332
+        ],
+        "region": [
+          238,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          943,
+          485,
+          337,
+          346
+        ],
+        "region": [
+          470,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1363,
+          536,
+          378,
+          280
+        ],
+        "region": [
+          702,
+          168,
+          220,
+          150
+        ]
+      }
+    ]
+  },
+  "fire_imp": {
+    "sheet": 12,
+    "source": "assets/inbox/012-create-one-4-2-sprite-sheet-for-fire-imp-character-cute-tiny.png",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGBA",
+    "source_alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "9d63a9d3583b2a14c7aa21476dbf0ee6c71871caa6a59aaf8cfbe313f3b14f6d",
+    "atlas_size": [
+      752,
+      304
+    ],
+    "tier": "light",
+    "pivot": [
+      88.0,
+      140
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        1,
+        2,
+        3
+      ],
+      "attack": [
+        4,
+        5
+      ],
+      "hurt": [
+        6
+      ],
+      "dead": [
+        7
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          62,
+          27,
+          301,
+          352
+        ],
+        "region": [
+          6,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          508,
+          27,
+          299,
+          352
+        ],
+        "region": [
+          194,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          939,
+          36,
+          313,
+          348
+        ],
+        "region": [
+          382,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1389,
+          33,
+          303,
+          355
+        ],
+        "region": [
+          570,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          58,
+          472,
+          307,
+          351
+        ],
+        "region": [
+          6,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          502,
+          471,
+          305,
+          352
+        ],
+        "region": [
+          194,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          973,
+          489,
+          294,
+          335
+        ],
+        "region": [
+          382,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1364,
+          593,
+          355,
+          246
+        ],
+        "region": [
+          570,
+          158,
+          176,
+          140
+        ]
+      }
+    ]
+  },
+  "poison_toad": {
+    "sheet": 13,
+    "source": "assets/inbox/013-create-one-4-2-sprite-sheet-for-poison-toad-character-cute-r.png",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGB",
+    "source_alpha_range": null,
+    "sha256": "d8bf452603c5b2aef677e5fd3d9c4e7210ffb7f670f3b7974ae7d191fd1576d2",
+    "atlas_size": [
+      752,
+      304
+    ],
+    "tier": "light",
+    "pivot": [
+      88.0,
+      140
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        1,
+        2,
+        3
+      ],
+      "attack": [
+        4,
+        5
+      ],
+      "hurt": [
+        6
+      ],
+      "dead": [
+        7
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          59,
+          73,
+          331,
+          291
+        ],
+        "region": [
+          6,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          503,
+          72,
+          329,
+          292
+        ],
+        "region": [
+          194,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          941,
+          39,
+          319,
+          277
+        ],
+        "region": [
+          382,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1368,
+          89,
+          347,
+          281
+        ],
+        "region": [
+          570,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          48,
+          504,
+          349,
+          303
+        ],
+        "region": [
+          6,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          502,
+          504,
+          341,
+          299
+        ],
+        "region": [
+          194,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          937,
+          520,
+          328,
+          281
+        ],
+        "region": [
+          382,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1335,
+          573,
+          403,
+          239
+        ],
+        "region": [
+          570,
+          158,
+          176,
+          140
+        ]
+      }
+    ]
+  },
+  "ice_spirit": {
+    "sheet": 14,
+    "source": "assets/inbox/014-create-one-4-2-sprite-sheet-for-ice-spirit-character-cute-fl.png",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGB",
+    "source_alpha_range": null,
+    "sha256": "09ea4a8501d1ff46ee1e52f5dc9acef35ecedf4dcd7353f91ac92302f852eb39",
+    "atlas_size": [
+      752,
+      304
+    ],
+    "tier": "light",
+    "pivot": [
+      88.0,
+      140
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        1,
+        2,
+        3
+      ],
+      "attack": [
+        4,
+        5
+      ],
+      "hurt": [
+        6
+      ],
+      "dead": [
+        7
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          71,
+          23,
+          317,
+          356
+        ],
+        "region": [
+          6,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          507,
+          23,
+          313,
+          354
+        ],
+        "region": [
+          194,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          959,
+          22,
+          301,
+          338
+        ],
+        "region": [
+          382,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1379,
+          22,
+          326,
+          338
+        ],
+        "region": [
+          570,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          72,
+          462,
+          311,
+          352
+        ],
+        "region": [
+          6,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          497,
+          462,
+          340,
+          351
+        ],
+        "region": [
+          194,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          950,
+          471,
+          323,
+          336
+        ],
+        "region": [
+          382,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1391,
+          483,
+          304,
+          323
+        ],
+        "region": [
+          570,
+          158,
+          176,
+          140
+        ]
+      }
+    ]
+  },
+  "mini_slime": {
+    "sheet": 15,
+    "source": "assets/inbox/015-create-one-4-2-sprite-sheet-for-mini-slime-character-very-sm.png",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGBA",
+    "source_alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "63bdd9fb4aa7d9465d0a97c399c79576b716163becf27af0afe56567d6c4304d",
+    "atlas_size": [
+      752,
+      304
+    ],
+    "tier": "light",
+    "pivot": [
+      88.0,
+      140
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        1,
+        2,
+        3
+      ],
+      "attack": [
+        4,
+        5
+      ],
+      "hurt": [
+        6
+      ],
+      "dead": [
+        7
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          93,
+          118,
+          275,
+          246
+        ],
+        "region": [
+          6,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          536,
+          118,
+          273,
+          246
+        ],
+        "region": [
+          194,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          970,
+          70,
+          271,
+          266
+        ],
+        "region": [
+          382,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1403,
+          118,
+          293,
+          246
+        ],
+        "region": [
+          570,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          89,
+          605,
+          287,
+          202
+        ],
+        "region": [
+          6,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          518,
+          503,
+          301,
+          265
+        ],
+        "region": [
+          194,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          962,
+          575,
+          288,
+          233
+        ],
+        "region": [
+          382,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1383,
+          646,
+          328,
+          163
+        ],
+        "region": [
+          570,
+          158,
+          176,
+          140
+        ]
+      }
+    ]
+  },
+  "slime_splitter": {
+    "sheet": 16,
+    "source": "assets/inbox/016-create-one-4-2-sprite-sheet-for-slime-splitter-character-lar.png",
+    "source_size": [
+      1536,
+      1024
+    ],
+    "source_mode": "RGB",
+    "source_alpha_range": null,
+    "sha256": "d64bfa363bd40d2269b8934d5c36853100b27a833b9ad18698418380174987ec",
+    "atlas_size": [
+      928,
+      324
+    ],
+    "tier": "heavy",
+    "pivot": [
+      110.0,
+      150
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        1,
+        2,
+        3
+      ],
+      "attack": [
+        4,
+        5
+      ],
+      "hurt": [
+        6
+      ],
+      "dead": [
+        7
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          36,
+          119,
+          318,
+          266
+        ],
+        "region": [
+          6,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          423,
+          115,
+          312,
+          270
+        ],
+        "region": [
+          238,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          783,
+          121,
+          334,
+          268
+        ],
+        "region": [
+          470,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1167,
+          130,
+          338,
+          253
+        ],
+        "region": [
+          702,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          26,
+          605,
+          352,
+          283
+        ],
+        "region": [
+          6,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          407,
+          593,
+          368,
+          299
+        ],
+        "region": [
+          238,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          800,
+          620,
+          322,
+          271
+        ],
+        "region": [
+          470,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1161,
+          720,
+          365,
+          163
+        ],
+        "region": [
+          702,
+          168,
+          220,
+          150
+        ]
+      }
+    ]
+  },
+  "shaman_goblin": {
+    "sheet": 17,
+    "source": "assets/inbox/017-create-one-4-2-sprite-sheet-for-shaman-goblin-character-cute.png",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGBA",
+    "source_alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "82c3f915c86634b606d7b769ce990f67f91c157899015ab96e98cf4d76fdd4f7",
+    "atlas_size": [
+      752,
+      304
+    ],
+    "tier": "light",
+    "pivot": [
+      88.0,
+      140
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        1,
+        2,
+        3
+      ],
+      "attack": [
+        4,
+        5
+      ],
+      "hurt": [
+        6
+      ],
+      "dead": [
+        7
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          57,
+          23,
+          327,
+          373
+        ],
+        "region": [
+          6,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          486,
+          30,
+          334,
+          366
+        ],
+        "region": [
+          194,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          923,
+          21,
+          327,
+          375
+        ],
+        "region": [
+          382,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1355,
+          22,
+          334,
+          368
+        ],
+        "region": [
+          570,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          63,
+          456,
+          342,
+          377
+        ],
+        "region": [
+          6,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          481,
+          478,
+          343,
+          356
+        ],
+        "region": [
+          194,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          916,
+          500,
+          349,
+          326
+        ],
+        "region": [
+          382,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1327,
+          559,
+          415,
+          275
+        ],
+        "region": [
+          570,
+          158,
+          176,
+          140
+        ]
+      }
+    ]
+  },
+  "ghost_lantern": {
+    "sheet": 18,
+    "source": "assets/inbox/018-create-one-4-2-sprite-sheet-for-ghost-lantern-character-cute.png",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGBA",
+    "source_alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "2bc05910ccff35818e21ac0c9ee8ea7aafa959db544d1a1d888ca6682d39cf60",
+    "atlas_size": [
+      752,
+      304
+    ],
+    "tier": "light",
+    "pivot": [
+      88.0,
+      140
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        1,
+        2,
+        3
+      ],
+      "attack": [
+        4,
+        5
+      ],
+      "hurt": [
+        6
+      ],
+      "dead": [
+        7
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          92,
+          18,
+          272,
+          385
+        ],
+        "region": [
+          6,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          514,
+          18,
+          281,
+          385
+        ],
+        "region": [
+          194,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          926,
+          16,
+          299,
+          346
+        ],
+        "region": [
+          382,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1380,
+          19,
+          275,
+          340
+        ],
+        "region": [
+          570,
+          6,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          64,
+          450,
+          310,
+          376
+        ],
+        "region": [
+          6,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          486,
+          450,
+          344,
+          364
+        ],
+        "region": [
+          194,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          934,
+          458,
+          323,
+          366
+        ],
+        "region": [
+          382,
+          158,
+          176,
+          140
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1344,
+          544,
+          378,
+          291
+        ],
+        "region": [
+          570,
+          158,
+          176,
+          140
+        ]
+      }
+    ]
+  },
+  "armored_goblin_captain": {
+    "sheet": 19,
+    "source": "assets/inbox/019-create-one-4-3-sprite-sheet-for-armored-goblin-captain-chara.png",
+    "source_size": [
+      1448,
+      1086
+    ],
+    "source_mode": "RGBA",
+    "source_alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "521c89906f2ac8112333f2fa5ab1da9602a848fb77e8701adce9d6ce37594033",
+    "atlas_size": [
+      928,
+      486
+    ],
+    "tier": "heavy",
+    "pivot": [
+      110.0,
+      150
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        2,
+        3
+      ],
+      "attack": [
+        1,
+        4,
+        5,
+        8,
+        6,
+        7
+      ],
+      "hurt": [
+        9,
+        10
+      ],
+      "dead": [
+        11
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          37,
+          20,
+          280,
+          312
+        ],
+        "region": [
+          6,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          400,
+          20,
+          273,
+          312
+        ],
+        "region": [
+          238,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          758,
+          25,
+          297,
+          298
+        ],
+        "region": [
+          470,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1116,
+          25,
+          305,
+          305
+        ],
+        "region": [
+          702,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          33,
+          388,
+          302,
+          302
+        ],
+        "region": [
+          6,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          400,
+          380,
+          276,
+          313
+        ],
+        "region": [
+          238,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          716,
+          388,
+          349,
+          305
+        ],
+        "region": [
+          470,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1098,
+          384,
+          323,
+          311
+        ],
+        "region": [
+          702,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 8,
+        "crop": [
+          25,
+          747,
+          284,
+          316
+        ],
+        "region": [
+          6,
+          330,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 9,
+        "crop": [
+          381,
+          742,
+          323,
+          313
+        ],
+        "region": [
+          238,
+          330,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 10,
+        "crop": [
+          739,
+          777,
+          308,
+          278
+        ],
+        "region": [
+          470,
+          330,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 11,
+        "crop": [
+          1088,
+          837,
+          359,
+          219
+        ],
+        "region": [
+          702,
+          330,
+          220,
+          150
+        ]
+      }
+    ]
+  },
+  "giant_slime": {
+    "sheet": 20,
+    "source": "assets/inbox/020-create-one-4-3-sprite-sheet-for-giant-slime-elite-character-.png",
+    "source_size": [
+      1448,
+      1086
+    ],
+    "source_mode": "RGB",
+    "source_alpha_range": null,
+    "sha256": "068104e743328fefea23750c49ba9873f88d9bd46b3284d7efb21e8076a8dd33",
+    "atlas_size": [
+      928,
+      486
+    ],
+    "tier": "heavy",
+    "pivot": [
+      110.0,
+      150
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        2,
+        3
+      ],
+      "attack": [
+        1,
+        4,
+        5,
+        8,
+        9,
+        7
+      ],
+      "hurt": [
+        6,
+        10
+      ],
+      "dead": [
+        11
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          36,
+          76,
+          293,
+          265
+        ],
+        "region": [
+          6,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          392,
+          77,
+          299,
+          260
+        ],
+        "region": [
+          238,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          744,
+          43,
+          303,
+          284
+        ],
+        "region": [
+          470,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1075,
+          99,
+          363,
+          243
+        ],
+        "region": [
+          702,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          16,
+          400,
+          330,
+          288
+        ],
+        "region": [
+          6,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          387,
+          439,
+          320,
+          246
+        ],
+        "region": [
+          238,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          723,
+          491,
+          350,
+          193
+        ],
+        "region": [
+          470,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1106,
+          416,
+          314,
+          267
+        ],
+        "region": [
+          702,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 8,
+        "crop": [
+          29,
+          763,
+          317,
+          268
+        ],
+        "region": [
+          6,
+          330,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 9,
+        "crop": [
+          375,
+          768,
+          343,
+          262
+        ],
+        "region": [
+          238,
+          330,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 10,
+        "crop": [
+          740,
+          768,
+          310,
+          264
+        ],
+        "region": [
+          470,
+          330,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 11,
+        "crop": [
+          1082,
+          852,
+          356,
+          179
+        ],
+        "region": [
+          702,
+          330,
+          220,
+          150
+        ]
+      }
+    ]
+  },
+  "fire_fox_spirit": {
+    "sheet": 21,
+    "source": "assets/inbox/021-create-one-4-3-sprite-sheet-for-fire-fox-spirit-elite-charac.png",
+    "source_size": [
+      1448,
+      1086
+    ],
+    "source_mode": "RGBA",
+    "source_alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "4bf34f982fc9154d3ab28277e5b78e023f548c0183fb9aa7238fe31afb9f98fa",
+    "atlas_size": [
+      928,
+      486
+    ],
+    "tier": "heavy",
+    "pivot": [
+      110.0,
+      150
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        2,
+        3
+      ],
+      "attack": [
+        1,
+        4,
+        5,
+        8,
+        6,
+        7
+      ],
+      "hurt": [
+        9,
+        10
+      ],
+      "dead": [
+        11
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          18,
+          56,
+          322,
+          274
+        ],
+        "region": [
+          6,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          378,
+          31,
+          322,
+          300
+        ],
+        "region": [
+          238,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          734,
+          49,
+          325,
+          281
+        ],
+        "region": [
+          470,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1096,
+          57,
+          339,
+          271
+        ],
+        "region": [
+          702,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          39,
+          407,
+          304,
+          270
+        ],
+        "region": [
+          6,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          383,
+          405,
+          323,
+          272
+        ],
+        "region": [
+          238,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          733,
+          412,
+          323,
+          268
+        ],
+        "region": [
+          470,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1108,
+          406,
+          328,
+          277
+        ],
+        "region": [
+          702,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 8,
+        "crop": [
+          16,
+          755,
+          338,
+          283
+        ],
+        "region": [
+          6,
+          330,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 9,
+        "crop": [
+          374,
+          751,
+          320,
+          289
+        ],
+        "region": [
+          238,
+          330,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 10,
+        "crop": [
+          736,
+          787,
+          318,
+          244
+        ],
+        "region": [
+          470,
+          330,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 11,
+        "crop": [
+          1083,
+          826,
+          349,
+          208
+        ],
+        "region": [
+          702,
+          330,
+          220,
+          150
+        ]
+      }
+    ]
+  },
+  "iron_beetle": {
+    "sheet": 22,
+    "source": "assets/inbox/022-create-one-4-3-sprite-sheet-for-iron-beetle-elite-character-.png",
+    "source_size": [
+      1448,
+      1086
+    ],
+    "source_mode": "RGB",
+    "source_alpha_range": null,
+    "sha256": "65f7761d142606daa4a4e3d07d78628c3ac88737dd556463c77e110a80cfc53c",
+    "atlas_size": [
+      928,
+      486
+    ],
+    "tier": "heavy",
+    "pivot": [
+      110.0,
+      150
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        2,
+        3
+      ],
+      "attack": [
+        1,
+        4,
+        5,
+        8,
+        6,
+        7
+      ],
+      "hurt": [
+        9,
+        10
+      ],
+      "dead": [
+        11
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          26,
+          74,
+          319,
+          247
+        ],
+        "region": [
+          6,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          390,
+          45,
+          309,
+          276
+        ],
+        "region": [
+          238,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          752,
+          74,
+          313,
+          246
+        ],
+        "region": [
+          470,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1102,
+          74,
+          320,
+          247
+        ],
+        "region": [
+          702,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          12,
+          426,
+          332,
+          242
+        ],
+        "region": [
+          6,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          388,
+          404,
+          314,
+          266
+        ],
+        "region": [
+          238,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          731,
+          403,
+          320,
+          264
+        ],
+        "region": [
+          470,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1080,
+          427,
+          355,
+          244
+        ],
+        "region": [
+          702,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 8,
+        "crop": [
+          28,
+          774,
+          314,
+          259
+        ],
+        "region": [
+          6,
+          330,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 9,
+        "crop": [
+          386,
+          770,
+          319,
+          264
+        ],
+        "region": [
+          238,
+          330,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 10,
+        "crop": [
+          738,
+          779,
+          321,
+          252
+        ],
+        "region": [
+          470,
+          330,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 11,
+        "crop": [
+          1080,
+          837,
+          357,
+          205
+        ],
+        "region": [
+          702,
+          330,
+          220,
+          150
+        ]
+      }
+    ]
+  },
+  "phantom_wolf": {
+    "sheet": 23,
+    "source": "assets/inbox/023-create-one-4-3-sprite-sheet-for-phantom-wolf-elite-character.png",
+    "source_size": [
+      1448,
+      1086
+    ],
+    "source_mode": "RGBA",
+    "source_alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "edcf4f2d6199427456e4720e473573960d31ece683fe897beda15a1de0edf67d",
+    "atlas_size": [
+      928,
+      486
+    ],
+    "tier": "heavy",
+    "pivot": [
+      110.0,
+      150
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        2,
+        3
+      ],
+      "attack": [
+        1,
+        4,
+        5,
+        8,
+        6,
+        7
+      ],
+      "hurt": [
+        9,
+        10
+      ],
+      "dead": [
+        11
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          21,
+          52,
+          336,
+          276
+        ],
+        "region": [
+          6,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          377,
+          29,
+          341,
+          297
+        ],
+        "region": [
+          238,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          731,
+          70,
+          341,
+          257
+        ],
+        "region": [
+          470,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1083,
+          70,
+          356,
+          255
+        ],
+        "region": [
+          702,
+          6,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          16,
+          422,
+          338,
+          242
+        ],
+        "region": [
+          6,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          377,
+          414,
+          345,
+          265
+        ],
+        "region": [
+          238,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          730,
+          395,
+          347,
+          269
+        ],
+        "region": [
+          470,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1087,
+          406,
+          348,
+          257
+        ],
+        "region": [
+          702,
+          168,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 8,
+        "crop": [
+          25,
+          740,
+          336,
+          283
+        ],
+        "region": [
+          6,
+          330,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 9,
+        "crop": [
+          376,
+          746,
+          337,
+          278
+        ],
+        "region": [
+          238,
+          330,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 10,
+        "crop": [
+          734,
+          772,
+          343,
+          246
+        ],
+        "region": [
+          470,
+          330,
+          220,
+          150
+        ]
+      },
+      {
+        "index": 11,
+        "crop": [
+          1077,
+          835,
+          364,
+          188
+        ],
+        "region": [
+          702,
+          330,
+          220,
+          150
+        ]
+      }
+    ]
+  },
+  "ancient_treant": {
+    "sheet": 24,
+    "source": "assets/inbox/024-create-one-4-3-animation-sprite-sheet-for-ancient-treant-bos.png",
+    "source_size": [
+      1448,
+      1086
+    ],
+    "source_mode": "RGBA",
+    "source_alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "4828206f3b9f53579d33c3284dd7bdc4c63a8da18dddf5d665a3eebaad51d1a2",
+    "atlas_size": [
+      1592,
+      930
+    ],
+    "tier": "boss",
+    "pivot": [
+      193.0,
+      298
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        2,
+        3
+      ],
+      "attack": [
+        1,
+        4,
+        5,
+        8,
+        6,
+        7
+      ],
+      "hurt": [
+        9,
+        10
+      ],
+      "dead": [
+        11
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          29,
+          20,
+          314,
+          310
+        ],
+        "region": [
+          6,
+          6,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          370,
+          22,
+          330,
+          308
+        ],
+        "region": [
+          404,
+          6,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          741,
+          15,
+          320,
+          318
+        ],
+        "region": [
+          802,
+          6,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1104,
+          15,
+          311,
+          313
+        ],
+        "region": [
+          1200,
+          6,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          13,
+          373,
+          324,
+          294
+        ],
+        "region": [
+          6,
+          316,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          351,
+          366,
+          355,
+          303
+        ],
+        "region": [
+          404,
+          316,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          727,
+          370,
+          346,
+          300
+        ],
+        "region": [
+          802,
+          316,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1098,
+          395,
+          336,
+          275
+        ],
+        "region": [
+          1200,
+          316,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 8,
+        "crop": [
+          10,
+          715,
+          350,
+          328
+        ],
+        "region": [
+          6,
+          626,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 9,
+        "crop": [
+          375,
+          728,
+          331,
+          314
+        ],
+        "region": [
+          404,
+          626,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 10,
+        "crop": [
+          735,
+          742,
+          327,
+          300
+        ],
+        "region": [
+          802,
+          626,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 11,
+        "crop": [
+          1078,
+          791,
+          362,
+          247
+        ],
+        "region": [
+          1200,
+          626,
+          386,
+          298
+        ]
+      }
+    ]
+  },
+  "nine_tailed_fox": {
+    "sheet": 25,
+    "source": "assets/inbox/025-create-one-4-3-animation-sprite-sheet-for-nine-tailed-fox-bo.png",
+    "source_size": [
+      1448,
+      1086
+    ],
+    "source_mode": "RGB",
+    "source_alpha_range": null,
+    "sha256": "55aec8332c1193dc1d70a708f22c2f3910074f3b71d8c9fb50f7b3cc7277cfc9",
+    "atlas_size": [
+      1592,
+      930
+    ],
+    "tier": "boss",
+    "pivot": [
+      193.0,
+      298
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        2,
+        3
+      ],
+      "attack": [
+        1,
+        4,
+        5,
+        8,
+        6,
+        7
+      ],
+      "hurt": [
+        9,
+        10
+      ],
+      "dead": [
+        11
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          30,
+          31,
+          325,
+          305
+        ],
+        "region": [
+          6,
+          6,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          373,
+          33,
+          333,
+          303
+        ],
+        "region": [
+          404,
+          6,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          732,
+          35,
+          337,
+          301
+        ],
+        "region": [
+          802,
+          6,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1088,
+          37,
+          347,
+          299
+        ],
+        "region": [
+          1200,
+          6,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          8,
+          383,
+          350,
+          304
+        ],
+        "region": [
+          6,
+          316,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          375,
+          382,
+          338,
+          306
+        ],
+        "region": [
+          404,
+          316,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          713,
+          385,
+          353,
+          303
+        ],
+        "region": [
+          802,
+          316,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1068,
+          387,
+          372,
+          301
+        ],
+        "region": [
+          1200,
+          316,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 8,
+        "crop": [
+          7,
+          737,
+          356,
+          302
+        ],
+        "region": [
+          6,
+          626,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 9,
+        "crop": [
+          370,
+          740,
+          351,
+          300
+        ],
+        "region": [
+          404,
+          626,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 10,
+        "crop": [
+          729,
+          744,
+          339,
+          300
+        ],
+        "region": [
+          802,
+          626,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 11,
+        "crop": [
+          1068,
+          768,
+          370,
+          278
+        ],
+        "region": [
+          1200,
+          626,
+          386,
+          298
+        ]
+      }
+    ]
+  },
+  "bull_demon_king": {
+    "sheet": 26,
+    "source": "assets/inbox/026-create-one-4-3-sprite-sheet-for-bull-demon-king-boss-charact.png",
+    "source_size": [
+      1448,
+      1086
+    ],
+    "source_mode": "RGBA",
+    "source_alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "e290086f17996063617810f8a62adb229c594faf355b2be7355de6ae4ab3c573",
+    "atlas_size": [
+      1592,
+      930
+    ],
+    "tier": "boss",
+    "pivot": [
+      193.0,
+      298
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        2,
+        3
+      ],
+      "attack": [
+        1,
+        4,
+        5,
+        8,
+        6,
+        7
+      ],
+      "hurt": [
+        9,
+        10
+      ],
+      "dead": [
+        11
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          47,
+          27,
+          321,
+          316
+        ],
+        "region": [
+          6,
+          6,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          353,
+          11,
+          346,
+          333
+        ],
+        "region": [
+          404,
+          6,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          737,
+          35,
+          337,
+          311
+        ],
+        "region": [
+          802,
+          6,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1103,
+          38,
+          331,
+          309
+        ],
+        "region": [
+          1200,
+          6,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          22,
+          396,
+          333,
+          269
+        ],
+        "region": [
+          6,
+          316,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          360,
+          389,
+          346,
+          279
+        ],
+        "region": [
+          404,
+          316,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          720,
+          378,
+          338,
+          293
+        ],
+        "region": [
+          802,
+          316,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1078,
+          401,
+          358,
+          274
+        ],
+        "region": [
+          1200,
+          316,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 8,
+        "crop": [
+          10,
+          727,
+          340,
+          314
+        ],
+        "region": [
+          6,
+          626,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 9,
+        "crop": [
+          359,
+          727,
+          339,
+          313
+        ],
+        "region": [
+          404,
+          626,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 10,
+        "crop": [
+          699,
+          743,
+          356,
+          298
+        ],
+        "region": [
+          802,
+          626,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 11,
+        "crop": [
+          1060,
+          814,
+          377,
+          219
+        ],
+        "region": [
+          1200,
+          626,
+          386,
+          298
+        ]
+      }
+    ]
+  },
+  "golden_dragon": {
+    "sheet": 27,
+    "source": "assets/inbox/027-create-one-4-3-sprite-sheet-for-golden-dragon-final-boss-cha.png",
+    "source_size": [
+      1448,
+      1086
+    ],
+    "source_mode": "RGBA",
+    "source_alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "42fb860ca509f18e7f379fc5c002f074d27cc5bfff4894f0318e9f3b4cc62772",
+    "atlas_size": [
+      1592,
+      930
+    ],
+    "tier": "boss",
+    "pivot": [
+      193.0,
+      298
+    ],
+    "gameplay_scale": 0.5,
+    "clips": {
+      "idle": [
+        0
+      ],
+      "move": [
+        2,
+        3
+      ],
+      "attack": [
+        1,
+        4,
+        5,
+        8,
+        6,
+        7
+      ],
+      "hurt": [
+        9,
+        10
+      ],
+      "dead": [
+        11
+      ]
+    },
+    "frames": [
+      {
+        "index": 0,
+        "crop": [
+          14,
+          29,
+          324,
+          303
+        ],
+        "region": [
+          6,
+          6,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 1,
+        "crop": [
+          365,
+          27,
+          324,
+          305
+        ],
+        "region": [
+          404,
+          6,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 2,
+        "crop": [
+          713,
+          58,
+          359,
+          272
+        ],
+        "region": [
+          802,
+          6,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 3,
+        "crop": [
+          1072,
+          71,
+          365,
+          255
+        ],
+        "region": [
+          1200,
+          6,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 4,
+        "crop": [
+          11,
+          378,
+          336,
+          286
+        ],
+        "region": [
+          6,
+          316,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 5,
+        "crop": [
+          361,
+          380,
+          345,
+          288
+        ],
+        "region": [
+          404,
+          316,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 6,
+        "crop": [
+          718,
+          417,
+          358,
+          247
+        ],
+        "region": [
+          802,
+          316,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 7,
+        "crop": [
+          1077,
+          431,
+          359,
+          234
+        ],
+        "region": [
+          1200,
+          316,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 8,
+        "crop": [
+          9,
+          725,
+          343,
+          310
+        ],
+        "region": [
+          6,
+          626,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 9,
+        "crop": [
+          356,
+          743,
+          351,
+          286
+        ],
+        "region": [
+          404,
+          626,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 10,
+        "crop": [
+          717,
+          759,
+          352,
+          271
+        ],
+        "region": [
+          802,
+          626,
+          386,
+          298
+        ]
+      },
+      {
+        "index": 11,
+        "crop": [
+          1072,
+          802,
+          368,
+          219
+        ],
+        "region": [
+          1200,
+          626,
+          386,
+          298
+        ]
+      }
+    ]
+  }
+}

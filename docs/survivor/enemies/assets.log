@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS  All five clips, their order and all 252 atlas regions match the 27-sheet manifest
+PASS  Existing waves reach all 23 regular and elite looks without changing enemy lane or profile
+PASS  Scheduled Boar King finale uses the boss profile, title, reward and Victory
+PASS  Scheduled Ancient Treant finale uses the boss profile, title, reward and Victory
+PASS  Scheduled Nine-Tailed Fox finale uses the boss profile, title, reward and Victory
+PASS  Scheduled Bull Demon King finale uses the boss profile, title, reward and Victory
+PASS  Scheduled Golden Dragon finale uses the boss profile, title, reward and Victory

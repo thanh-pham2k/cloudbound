@@ -1,5 +1,6 @@
 extends CanvasLayer
 
+const Polish := preload("res://scripts/survivor/polish.gd")
 const ART := "res://assets/survivor/"
 const INK := Color("#382a20")
 const CREAM := Color("#fff1ce")
@@ -15,6 +16,9 @@ var _health: ProgressBar
 var _experience: ProgressBar
 var _boss_health: ProgressBar
 var _boss_card: Panel
+var _boss_portrait: TextureRect
+var _boss_name: Label
+var _boss_portrait_look := "default"
 var _health_text: Label
 var _xp_text: Label
 var _time_text: Label
@@ -22,6 +26,8 @@ var _wave_text: Label
 var _gold_text: Label
 var _army_text: Label
 var _selected := 0
+var _gold_receipt: Sprite2D
+var _xp_receipt: Sprite2D
 
 
 func _ready() -> void:
@@ -54,8 +60,8 @@ func _ready() -> void:
 	_pic(pause, "pause_icon", Rect2(2, 2, 43, 43))
 
 	_boss_card = _panel(_status, Rect2(937, 97, 316, 57), CREAM, Color("#a6553a"), 15)
-	_pic(_boss_card, "boss_alert", Rect2(9, 6, 47, 44))
-	_label(_boss_card, Rect2(60, 4, 241, 25), "BOAR KING", 16, INK)
+	_boss_portrait = _pic(_boss_card, "boss_alert", Rect2(9, 6, 47, 44))
+	_boss_name = _label(_boss_card, Rect2(60, 4, 241, 25), "BOAR KING", 16, INK)
 	_boss_health = _bar(_boss_card, Rect2(60, 34, 241, 10), Color("#cc5347"))
 	_label(_status, Rect2(26, 685, 400, 25), "A / D or  ← / →   Command     ·     Esc   Pause", 15, LIGHT)
 	_label(_status, Rect2(990, 685, 265, 25), "Rear line breaches cost HP", 15, LIGHT, HORIZONTAL_ALIGNMENT_RIGHT)
@@ -75,8 +81,37 @@ func update_stats() -> void:
 	_army_text.text = "%d / 5" % game.army_count()
 	_boss_card.visible = is_instance_valid(game.boss)
 	if _boss_card.visible:
+		var look: String = game.boss.appearance
+		if look != _boss_portrait_look:
+			_boss_portrait_look = look
+			_boss_name.text = game.boss_display_name().to_upper()
+			_boss_portrait.texture = load(ART + "boss_alert.png") if look.is_empty() else (
+				game.boss._enemy_clips.get_frame_texture("idle", 0))
 		_boss_health.max_value = game.boss.max_hp
 		_boss_health.value = game.boss.hp
+
+
+func clear_match_fx() -> void:
+	for child in _status.get_children():
+		if child is Sprite2D:
+			_status.remove_child(child)
+			child.queue_free()
+	_gold_receipt = null
+	_xp_receipt = null
+
+
+func reward_received(coins: bool) -> void:
+	if not _status.visible:
+		return
+	if coins:
+		if not is_instance_valid(_gold_receipt):
+			_gold_receipt = Polish.burst(_status, "gold_collect", Vector2(967, 50), 28.0, 0.36, Vector2(0, -11), 0.83)
+	elif not is_instance_valid(_xp_receipt):
+		_xp_receipt = Polish.burst(_status, "xp_collect", Vector2(216, 89), 24.0, 0.38, Vector2(0, -8), 0.8)
+
+
+func shop_closed() -> void:
+	Polish.burst(_status, "shop_closed", Vector2(904, 54), 33.0, 0.44, Vector2(0, 11), 0.64)
 
 
 func _time() -> String:
@@ -107,7 +142,7 @@ func show_menu() -> void:
 	_pic(panel, "title", Rect2(105, -76, 302, 179))
 	_label(panel, Rect2(29, 20, 454, 34), "HOA QUẢ SƠN", 25, INK, HORIZONTAL_ALIGNMENT_CENTER)
 	_label(panel, Rect2(16, 111, 480, 56), "Monkey Army Survivor", 36, INK, HORIZONTAL_ALIGNMENT_CENTER)
-	_pic(panel, "hero_00", Rect2(183, 183, 146, 131))
+	_pic(panel, "polish/wukong_00", Rect2(183, 183, 146, 131))
 	_label(panel, Rect2(18, 327, 476, 31), "Command your army and defend the rear line.", 19, MUTED, HORIZONTAL_ALIGNMENT_CENTER)
 	var play := _button(panel, Rect2(126, 381, 260, 51), "Start Game", game.start_game, true)
 	play.grab_focus()
@@ -127,7 +162,13 @@ func show_result(won: bool) -> void:
 	var panel := _modal(Rect2(374, 209, 532, 304))
 	_pic(panel, "victory" if won else "defeat", Rect2(168, -85, 196, 126))
 	_label(panel, Rect2(14, 43, 504, 67), "Victory" if won else "Defeat", 49, INK, HORIZONTAL_ALIGNMENT_CENTER)
-	var summary := "Boar King defeated" if won else "Sun Wukong fell"
+	var effects := ["victory_burst", "victory_petals", "victory_spark", "victory_flare"] if won else (
+		["defeat_break", "defeat_smoke", "defeat_beam", "defeat_petals"])
+	var positions := [Vector2(-48, 78), Vector2(594, 104), Vector2(-29, 245), Vector2(561, 245)]
+	for i in effects.size():
+		var drift := Vector2(-14 if i % 2 == 0 else 14, -32 if won else 20)
+		Polish.burst(panel, effects[i], positions[i], 82.0 - i * 6, 1.55 + i * 0.13, drift, 0.86)
+	var summary: String = "%s defeated" % game.boss_display_name() if won else "Sun Wukong fell"
 	_label(panel, Rect2(14, 115, 504, 29), summary, 22, MUTED, HORIZONTAL_ALIGNMENT_CENTER)
 	_label(panel, Rect2(14, 159, 504, 29), "%s   ·   %d enemies defeated   ·   Level %d" % [_time(), game.kills, game.level],
 		18, MUTED, HORIZONTAL_ALIGNMENT_CENTER)
@@ -136,7 +177,7 @@ func show_result(won: bool) -> void:
 	restart.grab_focus()
 
 
-func show_shop(slot := -1) -> void:
+func show_shop(slot := -1, feedback := "") -> void:
 	if slot >= 0:
 		_selected = slot
 	elif game.army[_selected] == null:
@@ -149,7 +190,18 @@ func show_shop(slot := -1) -> void:
 	_label(panel, Rect2(100, 18, 552, 41), "Level %d · Army Shop" % game.level, 32)
 	_label(panel, Rect2(101, 63, 600, 24), "Recruit a monkey or equip a weapon on the selected ally.", 17, MUTED)
 	var wallet := _panel(panel, Rect2(740, 30, 167, 44), Color("#f4dda4"), Color("#cfaa64"), 12)
-	_pic(wallet, "gold_icon", Rect2(10, 7, 28, 29))
+	var coin := "polish/shop_low_gold" if game.gold < game.RECRUIT_COST and game.army_count() < 5 else "gold_icon"
+	_pic(wallet, coin, Rect2(8, 6, 31, 31))
+	match feedback:
+		"level":
+			Polish.burst(panel, "level_glint", Vector2(677, 48), 52.0, 0.86, Vector2(0, -9), 0.86)
+			Polish.burst(panel, "reward_flash", Vector2(86, 69), 25.0, 0.64, Vector2(0, -12), 0.75)
+		"recruit", "equip":
+			var event := "shop_recruit" if feedback == "recruit" else "shop_equip"
+			Polish.burst(panel, event, Vector2(675, 49), 62.0, 0.78, Vector2(0, -6))
+			Polish.burst(wallet, "shop_coin", Vector2(24, 12), 32.0, 0.54, Vector2(0, -12), 0.83)
+			var receipt := "shop_success" if feedback == "recruit" else "shop_confirm"
+			Polish.burst(panel, receipt, Vector2(217 + _selected * 143, 113), 30.0, 0.73, Vector2(0, -17), 0.89)
 	_label(wallet, Rect2(49, 0, 112, 44), "%d Gold" % game.gold, 18)
 
 	_label(panel, Rect2(31, 109, 167, 42), "Army  %d / 5" % game.army_count(), 19)
@@ -163,7 +215,7 @@ func show_shop(slot := -1) -> void:
 		button.disabled = ally == null
 		button.add_theme_font_size_override("font_size", 14)
 
-	_shop_card(panel, 0, "monkey_00", "Recruit Monkey", "Comes with a\nWooden Staff", game.RECRUIT_COST,
+	_shop_card(panel, 0, "polish/soldier_00", "Recruit Monkey", "Comes with a\nWooden Staff", game.RECRUIT_COST,
 		game.can_recruit(), game.buy_monkey, "Army full" if game.army_count() == 5 else "Need more Gold")
 	_shop_card(panel, 1, "staff", "Wooden Staff", "Quick melee strikes", game.WEAPONS.staff.cost,
 		game.can_equip(_selected, "staff"), game.buy_weapon.bind(_selected, "staff"), _weapon_status("staff"))
@@ -256,7 +308,7 @@ func _label(parent: Control, rect: Rect2, text: String, fontsize: int, color := 
 	return label
 
 
-func _pic(parent: Control, art: String, rect: Rect2) -> void:
+func _pic(parent: Control, art: String, rect: Rect2) -> TextureRect:
 	var img := TextureRect.new()
 	img.texture = load(ART + art + ".png")
 	img.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
@@ -265,6 +317,7 @@ func _pic(parent: Control, art: String, rect: Rect2) -> void:
 	img.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_place(img, rect)
 	parent.add_child(img)
+	return img
 
 
 func _bar(parent: Control, rect: Rect2, fill: Color) -> ProgressBar:

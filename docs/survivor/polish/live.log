@@ -1,0 +1,58 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 4.1 Metal - 90.5 - Compatibility - Using Device: Apple - Apple M5 Pro
+
+PASS  Start Game opens the live battlefield
+CAPTURE  /Users/thanhpv/Documents/Work/cloudbound/docs/survivor/polish/live/000s.png at 0.000s
+STATE 000s | game=0.000s | HP=210/210 | Gold=0 | XP=0/29 | Level=1 | Monkeys=0/5 | Lane=2 | Kills=0 | Boss=—
+LIVE  5.0× | macOS | 300 physics ticks/s | 0.01667 simulated seconds/tick
+SHOP  12.417s | level=2 | gold=15→15 | recruited=0 | equipped=0 | army=0
+SHOP  22.617s | level=3 | gold=35→0 | recruited=1 | equipped=1 | army=1
+STATE 030s | game=30.017s | HP=216/216 | Gold=10 | XP=20/53 | Level=3 | Monkeys=1/5 | Lane=2 | Kills=9 | Boss=—
+SHOP  38.750s | level=4 | gold=30→11 | recruited=1 | equipped=0 | army=2
+SHOP  50.767s | level=5 | gold=41→6 | recruited=1 | equipped=1 | army=3
+STATE 060s | game=60.017s | HP=222/222 | Gold=26 | XP=42/77 | Level=5 | Monkeys=3/5 | Lane=3 | Kills=23 | Boss=—
+CAPTURE  /Users/thanhpv/Documents/Work/cloudbound/docs/survivor/polish/live/060s.png at 60.067s
+SHOP  66.617s | level=6 | gold=44→2 | recruited=1 | equipped=1 | army=4
+SHOP  84.083s | level=7 | gold=48→6 | recruited=1 | equipped=1 | army=5
+STATE 090s | game=90.017s | HP=228/228 | Gold=16 | XP=24/101 | Level=7 | Monkeys=5/5 | Lane=2 | Kills=36 | Boss=—
+SHOP  104.350s | level=8 | gold=57→41 | recruited=0 | equipped=1 | army=5
+STATE 120s | game=120.017s | HP=231/231 | Gold=82 | XP=87/113 | Level=8 | Monkeys=5/5 | Lane=3 | Kills=50 | Boss=—
+CAPTURE  /Users/thanhpv/Documents/Work/cloudbound/docs/survivor/polish/live/120s.png at 120.067s
+SHOP  123.900s | level=9 | gold=100→100 | recruited=0 | equipped=0 | army=5
+SHOP  142.550s | level=10 | gold=164→164 | recruited=0 | equipped=0 | army=5
+STATE 150s | game=150.000s | HP=237/237 | Gold=187 | XP=59/137 | Level=10 | Monkeys=5/5 | Lane=1 | Kills=68 | Boss=—
+SHOP  160.367s | level=11 | gold=228→228 | recruited=0 | equipped=0 | army=5
+SHOP  179.083s | level=12 | gold=306→271 | recruited=1 | equipped=1 | army=5
+STATE 180s | game=180.000s | HP=243/243 | Gold=271 | XP=11/161 | Level=12 | Monkeys=5/5 | Lane=1 | Kills=87 | Boss=—
+CAPTURE  /Users/thanhpv/Documents/Work/cloudbound/docs/survivor/polish/live/180s.png at 180.033s
+SHOP  193.800s | level=13 | gold=347→347 | recruited=0 | equipped=0 | army=5
+STATE 210s | game=210.000s | HP=246/246 | Gold=420 | XP=148/173 | Level=13 | Monkeys=5/5 | Lane=1 | Kills=109 | Boss=—
+SHOP  211.700s | level=14 | gold=433→433 | recruited=0 | equipped=0 | army=5
+SHOP  230.367s | level=15 | gold=530→530 | recruited=0 | equipped=0 | army=5
+STATE 240s | game=240.000s | HP=252/252 | Gold=587 | XP=124/197 | Level=15 | Monkeys=4/5 | Lane=1 | Kills=134 | Boss=—
+CAPTURE  /Users/thanhpv/Documents/Work/cloudbound/docs/survivor/polish/live/240s.png at 240.017s
+SHOP  246.917s | level=16 | gold=626→591 | recruited=1 | equipped=1 | army=5
+SHOP  260.850s | level=17 | gold=693→658 | recruited=1 | equipped=1 | army=5
+STATE 270s | game=270.000s | HP=258/258 | Gold=705 | XP=94/221 | Level=17 | Monkeys=3/5 | Lane=3 | Kills=162 | Boss=—
+SHOP  285.050s | level=18 | gold=776→657 | recruited=3 | equipped=3 | army=5
+CAPTURE  /Users/thanhpv/Documents/Work/cloudbound/docs/survivor/polish/live/boss.png at 285.333s
+STATE 300s | game=300.000s | HP=176/261 | Gold=681 | XP=63/233 | Level=18 | Monkeys=5/5 | Lane=3 | Kills=175 | Boss=24
+CAPTURE  /Users/thanhpv/Documents/Work/cloudbound/docs/survivor/polish/live/300s.png at 300.033s
+STATE 300s | game=300.783s | HP=176/261 | Gold=726 | XP=128/233 | Level=18 | Monkeys=5/5 | Lane=2 | Kills=176 | Boss=—
+RESULT  VICTORY | game=300.783s | wall=61.017s | effective=4.930x | kills=176 | shops=17 | recruits=11 | replacements=6 | weapon purchases=11
+PASS  Reached 300 seconds and the game resolved its own result
+PASS  Commands reached all lanes with a spaced five-slot formation ahead of Wukong
+PASS  Scheduled slimes, boars and boss kept their assigned lanes
+PASS  Boss appeared, took damage and the fight resolved
+PASS  Gold and XP match killed enemies and level thresholds
+PASS  Shop resumes, charges exact prices, equips weapons and refills fallen slots
+PASS  Engine.time_scale restored to 1.0
+CAPTURE  /Users/thanhpv/Documents/Work/cloudbound/docs/survivor/polish/live/result.png at 300.783s
+PASS  Saved rendered screenshot 000s
+PASS  Saved rendered screenshot 060s
+PASS  Saved rendered screenshot 120s
+PASS  Saved rendered screenshot 180s
+PASS  Saved rendered screenshot 240s
+PASS  Saved rendered screenshot 300s
+PASS  Saved rendered screenshot boss
+PASS  Saved rendered screenshot result
