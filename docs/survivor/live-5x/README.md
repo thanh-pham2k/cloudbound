@@ -1,5 +1,7 @@
 # Visible 5× gameplay QA
 
+This report records the earlier player-commanded formation. For the current game and reproduction commands, see the [commander report](../commander/README.md).
+
 **Victory at 300.783 in-game seconds.** The Godot window ran the match at `Engine.time_scale = 5.0` and reached the result in **60.950 wall-clock seconds** from battle start. At the 300-second checkpoint the Boar King had 24 HP. The runner continued for 0.783 game seconds so the game could resolve the fight itself.
 
 The run ended with Wukong at **176/261 HP**, **Level 18**, **726 Gold**, and **5/5 monkeys**. The runner cleared 17 level-up shops, recruited 11 monkeys including six replacements, equipped 11 weapons, and defeated 176 enemies.

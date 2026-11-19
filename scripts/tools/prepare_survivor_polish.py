@@ -100,7 +100,7 @@ def main(check=False):
         DEST.mkdir(exist_ok=True)
     manifest = {}
     for sheet, (hint, names, rows, role) in SHEETS.items():
-        source, = (ROOT / "assets/inbox").glob(f"{sheet:03d}-*{hint}*.png")
+        source, = (ROOT / "assets/archive/adapted/survivor/polish").glob(f"{sheet:03d}-*{hint}*.png")
         original = Image.open(source)
         art = original.convert("RGBA")
         ys = ROW_CUTS.get(sheet, [round(i * art.height / rows) for i in range(rows + 1)])

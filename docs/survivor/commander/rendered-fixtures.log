@@ -1,0 +1,20 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 4.1 Metal - 90.5 - Compatibility - Using Device: Apple - Apple M5 Pro
+
+PASS  All 141 extracted cells import at their recorded native sizes
+PASS  All 104 sprites from the ten summon sheets import at their recorded size
+PASS  GPU capture: available-shop
+PASS  Graphical shop buys five roles during combat
+PASS  GPU capture: summoning-all
+PASS  Graphical train button upgrades the army
+PASS  GPU capture: training-all
+PASS  Live guard and healer events reduce net damage
+PASS  Guard and heal sprites are present in the rendered battlefield
+PASS  GPU capture: heal-and-guard
+PASS  Formation keeps its ranks while reinforcing
+PASS  GPU capture: reinforce-right
+PASS  GPU capture: boss-windup
+PASS  GPU capture: victory
+PASS  Boss death triggers Victory
+PASS  GPU capture: defeat
+PASS  Fatal damage after Restart triggers Defeat

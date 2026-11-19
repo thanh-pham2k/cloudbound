@@ -76,7 +76,7 @@ def main():
     DEST.mkdir(exist_ok=True)
     manifest = {}
     for sheet, entries in NAMES.items():
-        source, = (ROOT / "assets/inbox").glob(f"{sheet:03d}-*.png")
+        source, = (ROOT / "assets/archive/adapted/survivor/base").glob(f"{sheet:03d}-*.png")
         art = Image.open(source)
         rows = ROWS.get(sheet, 2)
         cols = 3 if sheet == 1 else 4

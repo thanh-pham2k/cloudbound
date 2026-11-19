@@ -4,25 +4,35 @@ const EnemyLooks := preload("res://scripts/survivor/enemy_looks.gd")
 const Polish := preload("res://scripts/survivor/polish.gd")
 const Actor := preload("res://scripts/survivor/actor.gd")
 const Battlefield := preload("res://scripts/survivor/battlefield.gd")
+const Army := preload("res://scripts/survivor/army_formation.gd")
 const Hud := preload("res://scripts/survivor/hud.gd")
 const DamageText := preload("res://scripts/ui/floating_text.gd")
 const ART := "res://assets/survivor/"
-const COMMANDER_Y := 638.0
-const FORMATION := [
-	Vector2(0, -226), Vector2(-75, -226), Vector2(75, -226),
-	Vector2(-45, -114), Vector2(45, -114),
-]
-const RECRUIT_COST := 19
-const BOSS_TIME := 278.0
+const COMMANDER_Y := 632.0
+# A full army must fit on one rank if every recruit shares a role.
+const ARMY_CAP := 8
+const START_GOLD := 44
+const MAX_TRAINING := 3
+const ROLE_ORDER := ["staff", "archer", "mage", "tank", "healer"]
+const ROLES := {
+	"staff": {"name":"Staff", "cost":15, "hp":112, "rank":0, "weapon":"staff", "hint":"Frontline melee"},
+	"archer": {"name":"Archer", "cost":22, "hp":96, "rank":1, "weapon":"bow", "hint":"Long-range arrows"},
+	"mage": {"name":"Mage", "cost":26, "hp":98, "rank":1, "weapon":"magic", "hint":"Area damage"},
+	"tank": {"name":"Tank", "cost":20, "hp":168, "rank":0, "weapon":"shield", "hint":"Frontline guard, 35% damage reduction"},
+	"healer": {"name":"Healer", "cost":21, "hp":100, "rank":2, "weapon":"heal", "hint":"Restores injured monkeys"},
+}
+const BOSS_TIME := 289.0
 const WEAPONS := {
-	"hero": {"name": "Ruyi Staff", "art": "hero_staff", "damage": 33, "range": 147.0,
-		"cooldown": 0.54, "kind": "melee", "cost": 0},
-	"staff": {"name": "Wooden Staff", "art": "staff", "damage": 16, "range": 136.0,
-		"cooldown": 0.86, "kind": "melee", "cost": 5},
-	"bow": {"name": "Wooden Bow", "art": "bow", "damage": 16, "range": 324.0,
-		"cooldown": 0.79, "kind": "ranged", "cost": 16},
-	"magic": {"name": "Magic Staff", "art": "magic", "damage": 27, "range": 270.0,
-		"cooldown": 1.18, "kind": "area", "cost": 23, "blast": 120.0},
+	"staff": {"art":"staff", "elite":"staff", "damage":16, "range":136.0,
+		"cooldown":0.86, "kind":"melee"},
+	"bow": {"art":"bow", "elite":"elite_bow", "damage":16, "range":324.0,
+		"cooldown":0.79, "kind":"ranged"},
+	"magic": {"art":"mage_staff", "elite":"elite_staff", "damage":27, "range":270.0,
+		"cooldown":1.18, "kind":"area", "blast":120.0},
+	"shield": {"art":"shield", "elite":"elite_shield", "damage":12, "range":126.0,
+		"cooldown":0.97, "kind":"melee"},
+	"heal": {"art":"healer_staff", "elite":"healer_staff", "damage":22, "range":322.0,
+		"cooldown":1.05, "kind":"heal"},
 }
 # Health, advance speed, strike reach, damage, gold, XP, foot radius.
 const ENEMIES := {
@@ -32,7 +42,7 @@ const ENEMIES := {
 }
 const LANE_ORDER := [1, 0, 2, 1, 2, 0, 2, 1, 0]
 
-enum State { MENU, RUNNING, SHOP, PAUSED, VICTORY, DEFEAT }
+enum State { MENU, RUNNING, PAUSED, VICTORY, DEFEAT }
 
 ## Select another finale using the same boss rules and timing.
 @export_enum("boar_king", "ancient_treant", "nine_tailed_fox", "bull_demon_king", "golden_dragon")
@@ -43,7 +53,7 @@ var elapsed := 0.0
 var gold := 0
 var xp := 0
 var level := 1
-var lane := 1
+var training := 0
 var wave := 1
 var kills := 0
 var hero: Actor
@@ -62,10 +72,7 @@ var _boss_sent := false
 var _light_looks := 0
 var _heavy_looks := 0
 var _elite_looks := 0
-var _queued_shops := 0
-var _pending_summons: Array[Actor] = []
-var _shown_command_lane := 1
-var _next_command_fx := 0.0
+var _next_plan := 0.0
 var _projectiles: Array[Dictionary] = []
 
 
@@ -97,22 +104,19 @@ func _reset_field() -> void:
 	_effects.z_index = 3
 	_play.add_child(_effects)
 	hero = _new_actor("hero", 210, 26.0, Vector2(Battlefield.LANES[1], COMMANDER_Y))
-	hero.weapon_id = "hero"
 	boss = null
 	army.clear()
-	army.resize(FORMATION.size())
+	army.resize(ARMY_CAP)
 	enemies.clear()
 	_projectiles.clear()
-	_pending_summons.clear()
-	_shown_command_lane = 1
-	_next_command_fx = 0.0
+	_next_plan = 0.0
 	elapsed = 0.0
-	gold = 0
+	gold = START_GOLD
 	xp = 0
 	level = 1
 	wave = 1
 	kills = 0
-	lane = 1
+	training = 0
 	_spawn_in = 0.82
 	_spawn_count = 0
 	_escort_in = 3.5
@@ -120,7 +124,6 @@ func _reset_field() -> void:
 	_light_looks = 0
 	_heavy_looks = 0
 	_elite_looks = 0
-	_queued_shops = 0
 
 
 func start_game() -> void:
@@ -134,10 +137,7 @@ func main_menu() -> void:
 
 
 func resume() -> void:
-	if state == State.SHOP and _queued_shops > 0:
-		_queued_shops -= 1
-		hud.show_shop()
-	elif state in [State.PAUSED, State.SHOP]:
+	if state == State.PAUSED:
 		_enter(State.RUNNING)
 
 
@@ -147,37 +147,13 @@ func pause_game() -> void:
 
 
 func _enter(next: State) -> void:
-	var previous := state
 	state = next
-	get_tree().paused = state in [State.SHOP, State.PAUSED]
+	get_tree().paused = state == State.PAUSED
 	match state:
 		State.MENU:
 			hero.hide()
 			hud.show_menu()
-		State.RUNNING:
-			hud.hide_overlay()
-			var arrived := 0
-			for monkey in _pending_summons:
-				if not is_instance_valid(monkey) or monkey.hp <= 0:
-					continue
-				monkey.arrive()
-				var ring := Polish.summon_sequence(_effects, "summon", monkey.position, 86.0)
-				ring.z_as_relative = false
-				ring.z_index = -1
-				arrived += 1
-			if arrived > 1:
-				_fx("stand_together", hero.position + Vector2(0, 29), 45.0, 0.54)
-				_fx("rally_beam", hero.position + Vector2(-76, -22), 37.0, 0.62, Vector2.ZERO, 0.55)
-			elif arrived == 1:
-				_fx("rally_ring", hero.position + Vector2(0, 1), 92.0, 0.55, Vector2.ZERO, 0.49)
-				_fx("reinforcement", hero.position + Vector2(0, 29), 39.0, 0.74)
-				_fx("command_spark", hero.position + Vector2(-52, -22), 30.0, 0.51)
-			_pending_summons.clear()
-			if previous == State.SHOP:
-				hud.shop_closed()
-				if arrived == 0:
-					_fx("level_beam", hero.position + Vector2(0, -22), 58.0, 0.47, Vector2.ZERO, 0.5)
-		State.SHOP: hud.show_shop(-1, "level")
+		State.RUNNING: hud.hide_overlay()
 		State.PAUSED: hud.show_pause()
 		State.VICTORY, State.DEFEAT:
 			if state == State.VICTORY:
@@ -197,16 +173,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		if state == State.RUNNING:
 			pause_game()
-		elif state in [State.SHOP, State.PAUSED]:
+		elif state == State.PAUSED:
 			resume()
 		get_viewport().set_input_as_handled()
-	elif state == State.RUNNING:
-		if event.is_action_pressed("move_left") or event.is_action_pressed("ui_left"):
-			lane = maxi(0, lane - 1)
-			get_viewport().set_input_as_handled()
-		elif event.is_action_pressed("move_right") or event.is_action_pressed("ui_right"):
-			lane = mini(2, lane + 1)
-			get_viewport().set_input_as_handled()
 
 
 func _physics_process(delta: float) -> void:
@@ -214,10 +183,9 @@ func _physics_process(delta: float) -> void:
 		return
 	elapsed += delta
 	field.scroll(delta)
-	_move_army(delta)
 	_spawn_waves(delta)
+	_move_army(delta)
 	_move_projectiles(delta)
-	_attack(hero, delta)
 	for monkey in army:
 		if is_instance_valid(monkey):
 			_attack(monkey, delta)
@@ -234,43 +202,24 @@ func _physics_process(delta: float) -> void:
 	for i in range(enemies.size() - 1, -1, -1):
 		if enemies[i].hp == 0:
 			enemies.remove_at(i)
-	if state == State.RUNNING and _queued_shops > 0:
-		_queued_shops -= 1
-		_enter(State.SHOP)
 	hud.update_stats()
 
 
 func _move_army(delta: float) -> void:
-	var target_x: float = Battlefield.LANES[lane]
-	if lane != _shown_command_lane:
-		_shown_command_lane = lane
-		if elapsed >= _next_command_fx:
-			_next_command_fx = elapsed + 0.36
-			hero.command_pose()
-			var flag := "command_standard" if army_count() >= 3 else "warning_flag"
-			_fx(flag, Vector2(target_x, 647), 34.0, 0.42, Vector2(0, -7), 0.76)
-			var direction := signf(target_x - hero.position.x)
-			var arrow := _fx("command_arrow", hero.position + Vector2(0, 18), 42.0, 0.30,
-				Vector2(direction * 70.0, 0), 0.72)
-			arrow.flip_h = direction < 0.0
-			var dust := _fx("shift_dust" if army_count() > 0 else "move_dust", hero.position, 45.0, 0.33,
-				Vector2(-direction * 19, 0), 0.54)
-			dust.flip_h = direction < 0.0
-	var dx := target_x - hero.position.x
-	hero.face(dx)
-	hero.position.x = lerpf(hero.position.x, target_x, 1.0 - exp(-14.0 * delta))
-	hero.move_pose(absf(dx) > 2.0)
-	field.command_x = hero.position.x
+	if elapsed >= _next_plan:
+		_next_plan = elapsed + Army.REVIEW_SECONDS
+		var reinforced := Army.plan(army, Army.pressure(enemies))
+		for column: int in reinforced:
+			_fx("summon/ai_reinforce", Vector2(Battlefield.LANES[column], 582), 36.0, 0.48,
+				Vector2(0, -13), 0.7)
+	var weight := 1.0 - exp(-5.8 * delta)
 	for monkey in army:
 		if not is_instance_valid(monkey):
 			continue
+		var dx := monkey.goal_x - monkey.position.x
 		monkey.face(dx)
-		monkey.position = _formation_position(monkey.slot)
+		monkey.position.x = lerpf(monkey.position.x, monkey.goal_x, weight)
 		monkey.move_pose(absf(dx) > 2.0)
-
-
-func _formation_position(slot: int) -> Vector2:
-	return hero.position + FORMATION[slot]
 
 
 func _spawn_waves(delta: float) -> void:
@@ -478,24 +427,24 @@ func _attack(unit: Actor, delta: float) -> void:
 	if unit.cooldown > 0.0:
 		return
 	var weapon: Dictionary = WEAPONS[unit.weapon_id]
+	if weapon.kind == "heal":
+		_heal(unit, weapon)
+		return
 	var target := _closest(unit.position, enemies, weapon.range)
 	if target == null:
 		return
 	unit.cooldown = weapon.cooldown
-	var damage := int(weapon.damage) + (mini(level - 1, 12) * 2 if unit == hero else 0)
+	var damage := int(weapon.damage) + training * 3
 	unit.face(target.position.x - unit.position.x)
 	unit.attack_pose(0.30)
 	match weapon.kind:
 		"melee":
 			var slash_pos := unit.position.lerp(target.position, 0.64) + Vector2(0, -37)
-			var slash := _fx("ruyi_arc" if unit == hero else "staff_arc", slash_pos,
-				92.0 if unit == hero else 61.0, 0.27)
+			var tank := unit.role == "tank"
+			var slash := _fx("summon/guard_ring" if tank else "staff_arc", slash_pos,
+				54.0 if tank else 61.0, 0.27)
 			slash.flip_h = target.position.x < unit.position.x
-			if unit == hero:
-				var swish := _fx("attack_swish", unit.position + Vector2(0, -30), 58.0, 0.22,
-					Vector2.ZERO, 0.52)
-				swish.flip_h = slash.flip_h
-			_damage(target, damage, "staff_contact")
+			_damage(target, damage, "summon/strike_spark" if tank else "staff_contact")
 		"ranged":
 			var origin := unit.position + Vector2(0, -32)
 			var release := _fx("bow_release", origin, 31.0, 0.19, Vector2.ZERO, 0.66)
@@ -513,6 +462,31 @@ func _attack(unit: Actor, delta: float) -> void:
 			for enemy in enemies.duplicate():
 				if state == State.RUNNING and enemy.position.distance_to(impact) <= weapon.blast + enemy.radius * 0.3:
 					_damage(enemy, damage, "magic_contact" if enemy != target else "enemy_hit")
+
+
+func _heal(unit: Actor, weapon: Dictionary) -> void:
+	var target: Actor
+	var worst := 1.0
+	for ally in army:
+		if not is_instance_valid(ally) or ally.hp <= 0 or ally.position.distance_to(unit.position) > weapon.range:
+			continue
+		var ratio := float(ally.hp) / ally.max_hp
+		if ratio < worst - 0.045:
+			target = ally
+			worst = ratio
+	if target == null:
+		return
+	var amount := mini(target.max_hp - target.hp, int(weapon.damage) + training * 5)
+	target.hp += amount
+	unit.cooldown = weapon.cooldown
+	unit.face(target.position.x - unit.position.x)
+	unit.attack_pose(0.30)
+	_fx("summon/heal_floor", target.position, 75.0, 0.49, Vector2.ZERO, 0.75)
+	_fx("summon/heal_plus", target.position + Vector2(18, -53), 34.0, 0.68, Vector2(0, -21), 0.94)
+	var number := DamageText.new()
+	number.setup("+%d" % amount, Color("#d9ffad"))
+	number.position = target.position + Vector2(0, -69)
+	_effects.add_child(number)
 
 
 func _move_projectiles(delta: float) -> void:
@@ -538,6 +512,10 @@ func _move_projectiles(delta: float) -> void:
 func _damage(unit: Actor, amount: int, effect := "enemy_hit") -> void:
 	if unit.hp <= 0:
 		return
+	if unit.role == "tank":
+		amount = maxi(1, roundi(float(amount) * 0.65))
+		if not unit.has_hit_flash():
+			_fx("summon/guard_dome", unit.position + Vector2(0, -25), 77.0, 0.32, Vector2.ZERO, 0.66)
 	var fresh_hit := not unit.has_hit_flash()
 	var was_calm := unit.hp * 2 >= unit.max_hp
 	unit.hurt(amount)
@@ -562,6 +540,7 @@ func _damage(unit: Actor, amount: int, effect := "enemy_hit") -> void:
 	elif unit.slot >= 0:
 		_fx("enemy_death", unit.position, 47.0, 0.38, Vector2(0, -8), 0.63)
 		army[unit.slot] = null
+		hud.update_stats()
 	else:
 		enemies.erase(unit)
 		kills += 1
@@ -600,58 +579,82 @@ func award(coins: int, experience: int) -> void:
 		level += 1
 		hero.max_hp += 3
 		hero.hp = mini(hero.max_hp, hero.hp + 23)
-		_queued_shops += 1
+		_fx("summon/upgrade_level", hero.position + Vector2(0, -35), 71.0, 0.55, Vector2.ZERO, 0.6)
 
 
 func army_count() -> int:
 	return army.size() - army.count(null)
 
 
-func can_recruit() -> bool:
-	return state == State.SHOP and gold >= RECRUIT_COST and army.has(null)
+func can_summon(role: String) -> bool:
+	return state == State.RUNNING and ROLES.has(role) and army.has(null) and gold >= ROLES[role].cost
 
 
-func buy_monkey() -> bool:
-	if not can_recruit():
+func summon(role: String) -> bool:
+	if not can_summon(role):
 		return false
 	var slot := army.find(null)
-	# A shop can open while a fallen monkey is still fading at this slot.
 	for unit: Actor in _actors.get_children():
 		if unit.slot == slot and unit.hp == 0:
 			unit.hide()
 			unit.queue_free()
-	var at := _formation_position(slot)
-	var monkey := _new_actor("monkey", 86 + mini(level, 10) * 4, 16.0, at)
+	var profile: Dictionary = ROLES[role]
+	var at := Army.arrival(profile.rank, army, Army.pressure(enemies))
+	var monkey := _new_actor("monkey", int(profile.hp) + training * 10, 16.0, at)
 	monkey.slot = slot
+	monkey.role = role
+	monkey.role_icon = Polish.texture("summon/role_" + role)
+	monkey.formation_row = profile.rank
+	monkey.goal_x = at.x
+	for column in Battlefield.LANES.size():
+		if Battlefield.in_lane(at.x, column):
+			monkey.assigned_lane = column
 	army[slot] = monkey
-	_equip(monkey, "staff")
-	_pending_summons.append(monkey)
-	gold -= RECRUIT_COST
+	_equip(monkey, profile.weapon)
+	gold -= int(profile.cost)
+	monkey.arrive()
+	var ring := Polish.summon_sequence(_effects, "summon", at, 85.0)
+	ring.z_as_relative = false
+	ring.z_index = -1
+	_fx("summon/summon_ring", at + Vector2(0, -19), 86.0, 0.49, Vector2.ZERO, 0.67)
+	hero.command_pose()
+	hud.purchase_feedback(role)
 	hud.update_stats()
-	hud.show_shop(slot, "recruit")
 	return true
 
 
-func can_equip(slot: int, id: String) -> bool:
-	if state != State.SHOP or slot < 0 or slot >= army.size() or not WEAPONS.has(id) or id == "hero":
-		return false
-	var monkey := army[slot]
-	return is_instance_valid(monkey) and monkey.hp > 0 and monkey.weapon_id != id and gold >= WEAPONS[id].cost
+func training_cost() -> int:
+	return 32 + 26 * training
 
 
-func buy_weapon(slot: int, id: String) -> bool:
-	if not can_equip(slot, id):
+func can_train() -> bool:
+	return state == State.RUNNING and army_count() > 0 and training < MAX_TRAINING and gold >= training_cost()
+
+
+func train_army() -> bool:
+	if not can_train():
 		return false
-	_equip(army[slot], id)
-	gold -= WEAPONS[id].cost
+	gold -= training_cost()
+	training += 1
+	for soldier in army:
+		if not is_instance_valid(soldier):
+			continue
+		soldier.max_hp += 10
+		soldier.hp = mini(soldier.max_hp, soldier.hp + 15)
+		_equip(soldier, soldier.weapon_id)
+		var effect := "upgrade_heal" if soldier.role == "healer" else (
+			"upgrade_defense" if soldier.role == "tank" else "upgrade_attack")
+		_fx("summon/" + effect, soldier.position + Vector2(0, -20), 71.0, 0.70,
+			Vector2(0, -10), 0.72)
+	_fx("summon/upgrade_burst", hero.position + Vector2(0, -18), 80.0, 0.61, Vector2.ZERO, 0.72)
+	hud.purchase_feedback("training")
 	hud.update_stats()
-	hud.show_shop(slot, "equip")
 	return true
 
 
 func _equip(monkey: Actor, id: String) -> void:
-	monkey.cooldown = 0.0
-	monkey.equip(id, load(ART + WEAPONS[id].art + ".png"))
+	var weapon: Dictionary = WEAPONS[id]
+	monkey.equip(id, Polish.texture("summon/" + (weapon.elite if training >= 2 else weapon.art)))
 
 
 func _fx(id: String, at: Vector2, width: float, life: float, drift := Vector2.ZERO,

@@ -1,0 +1,2722 @@
+{
+  "001": {
+    "source": "assets/archive/adapted/survivor/summon/001-create-one-4-2-sprite-sheet-of-monkey-unit-portraits-for-hoa.png",
+    "sha256": "94764857e88b567d7169919008408f15141ab2ef6119fce4eda8cac6ab042cf6",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGBA",
+    "background": "native alpha",
+    "frames": [
+      {
+        "id": "portrait_staff",
+        "cell": [
+          0,
+          0
+        ],
+        "crop": [
+          43,
+          28,
+          375,
+          400
+        ],
+        "size": [
+          381,
+          406
+        ],
+        "pivot": [
+          190.5,
+          203.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "portrait_archer",
+        "cell": [
+          1,
+          0
+        ],
+        "crop": [
+          487,
+          28,
+          366,
+          401
+        ],
+        "size": [
+          372,
+          407
+        ],
+        "pivot": [
+          186.0,
+          203.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "portrait_mage",
+        "cell": [
+          2,
+          0
+        ],
+        "crop": [
+          931,
+          28,
+          387,
+          396
+        ],
+        "size": [
+          393,
+          402
+        ],
+        "pivot": [
+          196.5,
+          201.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "portrait_tank",
+        "cell": [
+          3,
+          0
+        ],
+        "crop": [
+          1374,
+          28,
+          339,
+          401
+        ],
+        "size": [
+          345,
+          407
+        ],
+        "pivot": [
+          172.5,
+          203.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "portrait_healer",
+        "cell": [
+          0,
+          1
+        ],
+        "crop": [
+          44,
+          472,
+          374,
+          399
+        ],
+        "size": [
+          380,
+          405
+        ],
+        "pivot": [
+          190.0,
+          202.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "portrait_plain",
+        "cell": [
+          1,
+          1
+        ],
+        "crop": [
+          487,
+          472,
+          339,
+          393
+        ],
+        "size": [
+          345,
+          399
+        ],
+        "pivot": [
+          172.5,
+          199.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "portrait_elite",
+        "cell": [
+          2,
+          1
+        ],
+        "crop": [
+          931,
+          472,
+          342,
+          398
+        ],
+        "size": [
+          348,
+          404
+        ],
+        "pivot": [
+          174.0,
+          202.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "portrait_ready",
+        "cell": [
+          3,
+          1
+        ],
+        "crop": [
+          1375,
+          472,
+          340,
+          393
+        ],
+        "size": [
+          346,
+          399
+        ],
+        "pivot": [
+          173.0,
+          199.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      }
+    ]
+  },
+  "002": {
+    "source": "assets/archive/adapted/survivor/summon/002-create-one-4-2-sprite-sheet-of-modular-bottom-summon-panel-u.png",
+    "sha256": "82b3b16e72c7a18f846a497f1b27203ea732e45ecf5f679bceccd30f5960b7af",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGBA",
+    "background": "native alpha",
+    "frames": [
+      {
+        "id": "tray",
+        "cell": [
+          0,
+          0
+        ],
+        "crop": [
+          22,
+          170,
+          471,
+          148
+        ],
+        "size": [
+          477,
+          154
+        ],
+        "pivot": [
+          238.5,
+          77.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "card",
+        "cell": [
+          1,
+          0
+        ],
+        "crop": [
+          549,
+          33,
+          325,
+          388
+        ],
+        "size": [
+          331,
+          394
+        ],
+        "pivot": [
+          165.5,
+          197.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "card_hover",
+        "cell": [
+          2,
+          0
+        ],
+        "crop": [
+          973,
+          34,
+          333,
+          390
+        ],
+        "size": [
+          339,
+          396
+        ],
+        "pivot": [
+          169.5,
+          198.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "card_selected",
+        "cell": [
+          3,
+          0
+        ],
+        "crop": [
+          1398,
+          31,
+          345,
+          399
+        ],
+        "size": [
+          351,
+          405
+        ],
+        "pivot": [
+          175.5,
+          202.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "card_disabled",
+        "cell": [
+          0,
+          1
+        ],
+        "crop": [
+          85,
+          471,
+          329,
+          383
+        ],
+        "size": [
+          335,
+          389
+        ],
+        "pivot": [
+          167.5,
+          194.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "price_plate",
+        "cell": [
+          1,
+          1
+        ],
+        "crop": [
+          507,
+          609,
+          400,
+          142
+        ],
+        "size": [
+          406,
+          148
+        ],
+        "pivot": [
+          203.0,
+          74.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "capacity_plate",
+        "cell": [
+          2,
+          1
+        ],
+        "crop": [
+          970,
+          575,
+          413,
+          187
+        ],
+        "size": [
+          419,
+          193
+        ],
+        "pivot": [
+          209.5,
+          96.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "tier_button",
+        "cell": [
+          3,
+          1
+        ],
+        "crop": [
+          1483,
+          581,
+          205,
+          198
+        ],
+        "size": [
+          211,
+          204
+        ],
+        "pivot": [
+          105.5,
+          102.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      }
+    ]
+  },
+  "003": {
+    "source": "assets/archive/adapted/survivor/summon/003-create-one-4-3-modular-monkey-equipment-sprite-sheet-for-hoa.png",
+    "sha256": "4b8186dd1cfc1f08c101c67d4b989cb05b6f644abc1a518c4c42b081cdbd5f71",
+    "source_size": [
+      1448,
+      1086
+    ],
+    "source_mode": "RGB",
+    "background": "light matte keyed",
+    "frames": [
+      {
+        "id": "staff",
+        "cell": [
+          0,
+          0
+        ],
+        "crop": [
+          90,
+          41,
+          257,
+          319
+        ],
+        "size": [
+          263,
+          325
+        ],
+        "pivot": [
+          131.5,
+          162.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "bow",
+        "cell": [
+          1,
+          0
+        ],
+        "crop": [
+          433,
+          40,
+          251,
+          324
+        ],
+        "size": [
+          257,
+          330
+        ],
+        "pivot": [
+          128.5,
+          165.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "mage_staff",
+        "cell": [
+          2,
+          0
+        ],
+        "crop": [
+          770,
+          36,
+          245,
+          324
+        ],
+        "size": [
+          251,
+          330
+        ],
+        "pivot": [
+          125.5,
+          165.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "shield",
+        "cell": [
+          3,
+          0
+        ],
+        "crop": [
+          1097,
+          70,
+          271,
+          282
+        ],
+        "size": [
+          277,
+          288
+        ],
+        "pivot": [
+          138.5,
+          144.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "healer_staff",
+        "cell": [
+          0,
+          1
+        ],
+        "crop": [
+          100,
+          380,
+          242,
+          327
+        ],
+        "size": [
+          248,
+          333
+        ],
+        "pivot": [
+          124.0,
+          166.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "elite_shield",
+        "cell": [
+          1,
+          1
+        ],
+        "crop": [
+          412,
+          399,
+          276,
+          310
+        ],
+        "size": [
+          282,
+          316
+        ],
+        "pivot": [
+          141.0,
+          158.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "elite_bow",
+        "cell": [
+          2,
+          1
+        ],
+        "crop": [
+          744,
+          395,
+          288,
+          314
+        ],
+        "size": [
+          294,
+          320
+        ],
+        "pivot": [
+          147.0,
+          160.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "elite_staff",
+        "cell": [
+          3,
+          1
+        ],
+        "crop": [
+          1102,
+          383,
+          288,
+          321
+        ],
+        "size": [
+          294,
+          327
+        ],
+        "pivot": [
+          147.0,
+          163.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "medicine",
+        "cell": [
+          0,
+          2
+        ],
+        "crop": [
+          59,
+          758,
+          252,
+          267
+        ],
+        "size": [
+          258,
+          273
+        ],
+        "pivot": [
+          129.0,
+          136.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "armor",
+        "cell": [
+          1,
+          2
+        ],
+        "crop": [
+          374,
+          762,
+          310,
+          264
+        ],
+        "size": [
+          316,
+          270
+        ],
+        "pivot": [
+          158.0,
+          135.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "horn",
+        "cell": [
+          2,
+          2
+        ],
+        "crop": [
+          734,
+          754,
+          298,
+          271
+        ],
+        "size": [
+          304,
+          277
+        ],
+        "pivot": [
+          152.0,
+          138.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "beads",
+        "cell": [
+          3,
+          2
+        ],
+        "crop": [
+          1097,
+          751,
+          274,
+          285
+        ],
+        "size": [
+          280,
+          291
+        ],
+        "pivot": [
+          140.0,
+          145.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      }
+    ]
+  },
+  "004": {
+    "source": "assets/archive/adapted/survivor/summon/004-create-one-4-3-animation-sprite-sheet-for-the-existing-hoa-q.png",
+    "sha256": "2930281d9be917a1191fa72cfb79da53f43b75552c8b17050bf9f88a73a7a780",
+    "source_size": [
+      1448,
+      1086
+    ],
+    "source_mode": "RGBA",
+    "background": "native alpha",
+    "frames": [
+      {
+        "id": "unit_00",
+        "cell": [
+          0,
+          0
+        ],
+        "crop": [
+          74,
+          27,
+          242,
+          310
+        ],
+        "size": [
+          248,
+          316
+        ],
+        "pivot": [
+          124.0,
+          313
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "unit_01",
+        "cell": [
+          1,
+          0
+        ],
+        "crop": [
+          387,
+          25,
+          298,
+          312
+        ],
+        "size": [
+          304,
+          318
+        ],
+        "pivot": [
+          152.0,
+          315
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "unit_02",
+        "cell": [
+          2,
+          0
+        ],
+        "crop": [
+          770,
+          35,
+          268,
+          302
+        ],
+        "size": [
+          274,
+          308
+        ],
+        "pivot": [
+          137.0,
+          305
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "unit_03",
+        "cell": [
+          3,
+          0
+        ],
+        "crop": [
+          1121,
+          27,
+          277,
+          311
+        ],
+        "size": [
+          283,
+          317
+        ],
+        "pivot": [
+          141.5,
+          314
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "unit_04",
+        "cell": [
+          0,
+          1
+        ],
+        "crop": [
+          67,
+          380,
+          251,
+          309
+        ],
+        "size": [
+          257,
+          315
+        ],
+        "pivot": [
+          128.5,
+          312
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "unit_05",
+        "cell": [
+          1,
+          1
+        ],
+        "crop": [
+          401,
+          383,
+          270,
+          302
+        ],
+        "size": [
+          276,
+          308
+        ],
+        "pivot": [
+          138.0,
+          305
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "unit_06",
+        "cell": [
+          2,
+          1
+        ],
+        "crop": [
+          751,
+          385,
+          277,
+          302
+        ],
+        "size": [
+          283,
+          308
+        ],
+        "pivot": [
+          141.5,
+          305
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "unit_07",
+        "cell": [
+          3,
+          1
+        ],
+        "crop": [
+          1143,
+          389,
+          258,
+          300
+        ],
+        "size": [
+          264,
+          306
+        ],
+        "pivot": [
+          132.0,
+          303
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "unit_08",
+        "cell": [
+          0,
+          2
+        ],
+        "crop": [
+          26,
+          743,
+          305,
+          316
+        ],
+        "size": [
+          311,
+          322
+        ],
+        "pivot": [
+          155.5,
+          319
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "unit_09",
+        "cell": [
+          1,
+          2
+        ],
+        "crop": [
+          381,
+          745,
+          303,
+          311
+        ],
+        "size": [
+          309,
+          317
+        ],
+        "pivot": [
+          154.5,
+          314
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "unit_10",
+        "cell": [
+          2,
+          2
+        ],
+        "crop": [
+          757,
+          760,
+          292,
+          298
+        ],
+        "size": [
+          298,
+          304
+        ],
+        "pivot": [
+          149.0,
+          301
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "unit_11",
+        "cell": [
+          3,
+          2
+        ],
+        "crop": [
+          1108,
+          745,
+          301,
+          314
+        ],
+        "size": [
+          307,
+          320
+        ],
+        "pivot": [
+          153.5,
+          317
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      }
+    ]
+  },
+  "005": {
+    "source": "assets/archive/adapted/survivor/summon/005-create-one-4-2-sprite-sheet-of-monkey-purchase-and-summoning.png",
+    "sha256": "ea90288d336a9f570df452274ea3e53d5df2df88f95a530da219fe99a9e1f86d",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGB",
+    "background": "black matte keyed",
+    "frames": [
+      {
+        "id": "purchase_flash",
+        "cell": [
+          0,
+          0
+        ],
+        "crop": [
+          27,
+          59,
+          397,
+          330
+        ],
+        "size": [
+          403,
+          336
+        ],
+        "pivot": [
+          201.5,
+          168.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "purchase_gold",
+        "cell": [
+          1,
+          0
+        ],
+        "crop": [
+          472,
+          77,
+          359,
+          327
+        ],
+        "size": [
+          365,
+          333
+        ],
+        "pivot": [
+          182.5,
+          166.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "purchase_success",
+        "cell": [
+          2,
+          0
+        ],
+        "crop": [
+          900,
+          23,
+          366,
+          377
+        ],
+        "size": [
+          372,
+          383
+        ],
+        "pivot": [
+          186.0,
+          191.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "summon_ring",
+        "cell": [
+          3,
+          0
+        ],
+        "crop": [
+          1346,
+          0,
+          414,
+          403
+        ],
+        "size": [
+          420,
+          409
+        ],
+        "pivot": [
+          210.0,
+          204.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "summon_column",
+        "cell": [
+          0,
+          1
+        ],
+        "crop": [
+          28,
+          460,
+          384,
+          369
+        ],
+        "size": [
+          390,
+          375
+        ],
+        "pivot": [
+          195.0,
+          187.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "redeploy",
+        "cell": [
+          1,
+          1
+        ],
+        "crop": [
+          457,
+          528,
+          395,
+          292
+        ],
+        "size": [
+          401,
+          298
+        ],
+        "pivot": [
+          200.5,
+          149.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "roster_full",
+        "cell": [
+          2,
+          1
+        ],
+        "crop": [
+          907,
+          515,
+          404,
+          293
+        ],
+        "size": [
+          410,
+          299
+        ],
+        "pivot": [
+          205.0,
+          149.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "rejected",
+        "cell": [
+          3,
+          1
+        ],
+        "crop": [
+          1340,
+          483,
+          400,
+          331
+        ],
+        "size": [
+          406,
+          337
+        ],
+        "pivot": [
+          203.0,
+          168.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      }
+    ]
+  },
+  "006": {
+    "source": "assets/archive/adapted/survivor/summon/006-create-one-4-3-sprite-sheet-of-defense-and-healing-combat-vf.png",
+    "sha256": "ef80ff902a008dcfc8e60e68d000c74f3d9443eb1a395b6e772f1af63c5202a8",
+    "source_size": [
+      1448,
+      1086
+    ],
+    "source_mode": "RGBA",
+    "background": "native alpha",
+    "frames": [
+      {
+        "id": "strike_spark",
+        "cell": [
+          0,
+          0
+        ],
+        "crop": [
+          75,
+          76,
+          219,
+          211
+        ],
+        "size": [
+          225,
+          217
+        ],
+        "pivot": [
+          112.5,
+          108.5
+        ],
+        "alpha_range": [
+          0,
+          254
+        ]
+      },
+      {
+        "id": "impact_star",
+        "cell": [
+          1,
+          0
+        ],
+        "crop": [
+          368,
+          23,
+          336,
+          301
+        ],
+        "size": [
+          342,
+          307
+        ],
+        "pivot": [
+          171.0,
+          153.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "guard_ring",
+        "cell": [
+          2,
+          0
+        ],
+        "crop": [
+          736,
+          69,
+          331,
+          240
+        ],
+        "size": [
+          337,
+          246
+        ],
+        "pivot": [
+          168.5,
+          123.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "guard_dome",
+        "cell": [
+          3,
+          0
+        ],
+        "crop": [
+          1105,
+          72,
+          318,
+          234
+        ],
+        "size": [
+          324,
+          240
+        ],
+        "pivot": [
+          162.0,
+          120.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "heal_sparks",
+        "cell": [
+          0,
+          1
+        ],
+        "crop": [
+          73,
+          430,
+          195,
+          191
+        ],
+        "size": [
+          201,
+          197
+        ],
+        "pivot": [
+          100.5,
+          98.5
+        ],
+        "alpha_range": [
+          0,
+          253
+        ]
+      },
+      {
+        "id": "heal_floor",
+        "cell": [
+          1,
+          1
+        ],
+        "crop": [
+          390,
+          404,
+          302,
+          270
+        ],
+        "size": [
+          308,
+          276
+        ],
+        "pivot": [
+          154.0,
+          138.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "heal_column",
+        "cell": [
+          2,
+          1
+        ],
+        "crop": [
+          736,
+          412,
+          334,
+          239
+        ],
+        "size": [
+          340,
+          245
+        ],
+        "pivot": [
+          170.0,
+          122.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "heal_plus",
+        "cell": [
+          3,
+          1
+        ],
+        "crop": [
+          1142,
+          422,
+          239,
+          217
+        ],
+        "size": [
+          245,
+          223
+        ],
+        "pivot": [
+          122.5,
+          111.5
+        ],
+        "alpha_range": [
+          0,
+          253
+        ]
+      },
+      {
+        "id": "guard_upgrade",
+        "cell": [
+          0,
+          2
+        ],
+        "crop": [
+          27,
+          753,
+          309,
+          256
+        ],
+        "size": [
+          315,
+          262
+        ],
+        "pivot": [
+          157.5,
+          131.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "heal_upgrade",
+        "cell": [
+          1,
+          2
+        ],
+        "crop": [
+          392,
+          754,
+          311,
+          254
+        ],
+        "size": [
+          317,
+          260
+        ],
+        "pivot": [
+          158.5,
+          130.0
+        ],
+        "alpha_range": [
+          0,
+          253
+        ]
+      },
+      {
+        "id": "guard_break",
+        "cell": [
+          2,
+          2
+        ],
+        "crop": [
+          750,
+          729,
+          300,
+          269
+        ],
+        "size": [
+          306,
+          275
+        ],
+        "pivot": [
+          153.0,
+          137.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "heal_swirl",
+        "cell": [
+          3,
+          2
+        ],
+        "crop": [
+          1114,
+          745,
+          305,
+          240
+        ],
+        "size": [
+          311,
+          246
+        ],
+        "pivot": [
+          155.5,
+          123.0
+        ],
+        "alpha_range": [
+          0,
+          254
+        ]
+      }
+    ]
+  },
+  "007": {
+    "source": "assets/archive/adapted/survivor/summon/007-create-one-4-3-sprite-sheet-of-monkey-unit-status-and-combat.png",
+    "sha256": "7119c2a469324f74010b8c80068b84c919066ae38e280f87de792c2f3d1de075",
+    "source_size": [
+      1448,
+      1086
+    ],
+    "source_mode": "RGBA",
+    "background": "native alpha",
+    "frames": [
+      {
+        "id": "role_staff",
+        "cell": [
+          0,
+          0
+        ],
+        "crop": [
+          78,
+          67,
+          255,
+          269
+        ],
+        "size": [
+          261,
+          275
+        ],
+        "pivot": [
+          130.5,
+          137.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "role_archer",
+        "cell": [
+          1,
+          0
+        ],
+        "crop": [
+          402,
+          30,
+          292,
+          295
+        ],
+        "size": [
+          298,
+          301
+        ],
+        "pivot": [
+          149.0,
+          150.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "role_mage",
+        "cell": [
+          2,
+          0
+        ],
+        "crop": [
+          767,
+          30,
+          250,
+          301
+        ],
+        "size": [
+          256,
+          307
+        ],
+        "pivot": [
+          128.0,
+          153.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "role_tank",
+        "cell": [
+          3,
+          0
+        ],
+        "crop": [
+          1121,
+          33,
+          249,
+          303
+        ],
+        "size": [
+          255,
+          309
+        ],
+        "pivot": [
+          127.5,
+          154.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "role_healer",
+        "cell": [
+          0,
+          1
+        ],
+        "crop": [
+          56,
+          400,
+          292,
+          262
+        ],
+        "size": [
+          298,
+          268
+        ],
+        "pivot": [
+          149.0,
+          134.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "status_damage",
+        "cell": [
+          1,
+          1
+        ],
+        "crop": [
+          401,
+          395,
+          294,
+          241
+        ],
+        "size": [
+          300,
+          247
+        ],
+        "pivot": [
+          150.0,
+          123.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "status_speed",
+        "cell": [
+          2,
+          1
+        ],
+        "crop": [
+          759,
+          406,
+          283,
+          241
+        ],
+        "size": [
+          289,
+          247
+        ],
+        "pivot": [
+          144.5,
+          123.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "status_target",
+        "cell": [
+          3,
+          1
+        ],
+        "crop": [
+          1116,
+          395,
+          261,
+          254
+        ],
+        "size": [
+          267,
+          260
+        ],
+        "pivot": [
+          133.5,
+          130.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "status_hp",
+        "cell": [
+          0,
+          2
+        ],
+        "crop": [
+          55,
+          746,
+          280,
+          258
+        ],
+        "size": [
+          286,
+          264
+        ],
+        "pivot": [
+          143.0,
+          132.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "status_defense",
+        "cell": [
+          1,
+          2
+        ],
+        "crop": [
+          403,
+          728,
+          276,
+          274
+        ],
+        "size": [
+          282,
+          280
+        ],
+        "pivot": [
+          141.0,
+          140.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "status_upgrade",
+        "cell": [
+          2,
+          2
+        ],
+        "crop": [
+          743,
+          729,
+          301,
+          249
+        ],
+        "size": [
+          307,
+          255
+        ],
+        "pivot": [
+          153.5,
+          127.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "status_army",
+        "cell": [
+          3,
+          2
+        ],
+        "crop": [
+          1096,
+          740,
+          296,
+          231
+        ],
+        "size": [
+          302,
+          237
+        ],
+        "pivot": [
+          151.0,
+          118.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      }
+    ]
+  },
+  "008": {
+    "source": "assets/archive/adapted/survivor/summon/008-create-one-4-2-sprite-sheet-of-smart-army-ai-behavior-indica.png",
+    "sha256": "4f8692ecbf9f3d4944249bb56f0657fcf7352a198c36512f88513df3d7db87d1",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGB",
+    "background": "light matte keyed",
+    "frames": [
+      {
+        "id": "ai_advance",
+        "cell": [
+          0,
+          0
+        ],
+        "crop": [
+          26,
+          142,
+          409,
+          251
+        ],
+        "size": [
+          415,
+          257
+        ],
+        "pivot": [
+          207.5,
+          128.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "ai_guard",
+        "cell": [
+          1,
+          0
+        ],
+        "crop": [
+          484,
+          33,
+          367,
+          376
+        ],
+        "size": [
+          373,
+          382
+        ],
+        "pivot": [
+          186.5,
+          191.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "ai_attack",
+        "cell": [
+          2,
+          0
+        ],
+        "crop": [
+          906,
+          50,
+          404,
+          353
+        ],
+        "size": [
+          410,
+          359
+        ],
+        "pivot": [
+          205.0,
+          179.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "ai_reinforce",
+        "cell": [
+          3,
+          0
+        ],
+        "crop": [
+          1374,
+          46,
+          361,
+          338
+        ],
+        "size": [
+          367,
+          344
+        ],
+        "pivot": [
+          183.5,
+          172.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "ai_retreat",
+        "cell": [
+          0,
+          1
+        ],
+        "crop": [
+          43,
+          473,
+          373,
+          360
+        ],
+        "size": [
+          379,
+          366
+        ],
+        "pivot": [
+          189.5,
+          183.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "ai_danger",
+        "cell": [
+          1,
+          1
+        ],
+        "crop": [
+          488,
+          487,
+          365,
+          351
+        ],
+        "size": [
+          371,
+          357
+        ],
+        "pivot": [
+          185.5,
+          178.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "ai_heal",
+        "cell": [
+          2,
+          1
+        ],
+        "crop": [
+          918,
+          488,
+          362,
+          339
+        ],
+        "size": [
+          368,
+          345
+        ],
+        "pivot": [
+          184.0,
+          172.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "ai_breach",
+        "cell": [
+          3,
+          1
+        ],
+        "crop": [
+          1361,
+          446,
+          370,
+          391
+        ],
+        "size": [
+          376,
+          397
+        ],
+        "pivot": [
+          188.0,
+          198.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      }
+    ]
+  },
+  "009": {
+    "source": "assets/archive/adapted/survivor/summon/009-create-one-4-3-sprite-sheet-of-monkey-unit-upgrade-and-evolu.png",
+    "sha256": "f042d66c38ec04e6b1fca3671534f766d4b54e4ac4134db32cd1eb234a953703",
+    "source_size": [
+      1448,
+      1086
+    ],
+    "source_mode": "RGBA",
+    "background": "native alpha",
+    "frames": [
+      {
+        "id": "upgrade_spark",
+        "cell": [
+          0,
+          0
+        ],
+        "crop": [
+          53,
+          71,
+          283,
+          239
+        ],
+        "size": [
+          289,
+          245
+        ],
+        "pivot": [
+          144.5,
+          122.5
+        ],
+        "alpha_range": [
+          0,
+          253
+        ]
+      },
+      {
+        "id": "upgrade_burst",
+        "cell": [
+          1,
+          0
+        ],
+        "crop": [
+          393,
+          66,
+          298,
+          257
+        ],
+        "size": [
+          304,
+          263
+        ],
+        "pivot": [
+          152.0,
+          131.5
+        ],
+        "alpha_range": [
+          0,
+          252
+        ]
+      },
+      {
+        "id": "upgrade_spiral",
+        "cell": [
+          2,
+          0
+        ],
+        "crop": [
+          762,
+          45,
+          288,
+          297
+        ],
+        "size": [
+          294,
+          303
+        ],
+        "pivot": [
+          147.0,
+          151.5
+        ],
+        "alpha_range": [
+          0,
+          253
+        ]
+      },
+      {
+        "id": "upgrade_star",
+        "cell": [
+          3,
+          0
+        ],
+        "crop": [
+          1095,
+          21,
+          331,
+          324
+        ],
+        "size": [
+          337,
+          330
+        ],
+        "pivot": [
+          168.5,
+          165.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "upgrade_attack",
+        "cell": [
+          0,
+          1
+        ],
+        "crop": [
+          33,
+          400,
+          316,
+          324
+        ],
+        "size": [
+          322,
+          330
+        ],
+        "pivot": [
+          161.0,
+          165.0
+        ],
+        "alpha_range": [
+          0,
+          253
+        ]
+      },
+      {
+        "id": "upgrade_defense",
+        "cell": [
+          1,
+          1
+        ],
+        "crop": [
+          387,
+          380,
+          317,
+          344
+        ],
+        "size": [
+          323,
+          350
+        ],
+        "pivot": [
+          161.5,
+          175.0
+        ],
+        "alpha_range": [
+          0,
+          253
+        ]
+      },
+      {
+        "id": "upgrade_heal",
+        "cell": [
+          2,
+          1
+        ],
+        "crop": [
+          744,
+          407,
+          313,
+          268
+        ],
+        "size": [
+          319,
+          274
+        ],
+        "pivot": [
+          159.5,
+          137.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "upgrade_speed",
+        "cell": [
+          3,
+          1
+        ],
+        "crop": [
+          1091,
+          403,
+          340,
+          272
+        ],
+        "size": [
+          346,
+          278
+        ],
+        "pivot": [
+          173.0,
+          139.0
+        ],
+        "alpha_range": [
+          0,
+          253
+        ]
+      },
+      {
+        "id": "upgrade_level",
+        "cell": [
+          0,
+          2
+        ],
+        "crop": [
+          37,
+          724,
+          297,
+          302
+        ],
+        "size": [
+          303,
+          308
+        ],
+        "pivot": [
+          151.5,
+          154.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "upgrade_crown",
+        "cell": [
+          1,
+          2
+        ],
+        "crop": [
+          385,
+          724,
+          318,
+          306
+        ],
+        "size": [
+          324,
+          312
+        ],
+        "pivot": [
+          162.0,
+          156.0
+        ],
+        "alpha_range": [
+          0,
+          253
+        ]
+      },
+      {
+        "id": "upgrade_evolve",
+        "cell": [
+          2,
+          2
+        ],
+        "crop": [
+          741,
+          727,
+          335,
+          295
+        ],
+        "size": [
+          341,
+          301
+        ],
+        "pivot": [
+          170.5,
+          150.5
+        ],
+        "alpha_range": [
+          0,
+          254
+        ]
+      },
+      {
+        "id": "upgrade_confirm",
+        "cell": [
+          3,
+          2
+        ],
+        "crop": [
+          1093,
+          739,
+          328,
+          284
+        ],
+        "size": [
+          334,
+          290
+        ],
+        "pivot": [
+          167.0,
+          145.0
+        ],
+        "alpha_range": [
+          0,
+          253
+        ]
+      }
+    ]
+  },
+  "010": {
+    "source": "assets/archive/adapted/survivor/summon/010-create-one-4-3-sprite-sheet-of-expandable-monkey-summon-shop.png",
+    "sha256": "2e41a2ad7e565a4047c1f68ecf85993a270f8f1329334b0de24b7817f2af4482",
+    "source_size": [
+      1448,
+      1086
+    ],
+    "source_mode": "RGBA",
+    "background": "native alpha",
+    "frames": [
+      {
+        "id": "shop_tab",
+        "cell": [
+          0,
+          0
+        ],
+        "crop": [
+          27,
+          128,
+          321,
+          227
+        ],
+        "size": [
+          327,
+          233
+        ],
+        "pivot": [
+          163.5,
+          116.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "shop_tab_active",
+        "cell": [
+          1,
+          0
+        ],
+        "crop": [
+          373,
+          30,
+          346,
+          325
+        ],
+        "size": [
+          352,
+          331
+        ],
+        "pivot": [
+          176.0,
+          165.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "card_rare",
+        "cell": [
+          2,
+          0
+        ],
+        "crop": [
+          744,
+          33,
+          325,
+          326
+        ],
+        "size": [
+          331,
+          332
+        ],
+        "pivot": [
+          165.5,
+          166.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "card_legend",
+        "cell": [
+          3,
+          0
+        ],
+        "crop": [
+          1087,
+          10,
+          354,
+          348
+        ],
+        "size": [
+          360,
+          354
+        ],
+        "pivot": [
+          180.0,
+          177.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "train_button",
+        "cell": [
+          0,
+          1
+        ],
+        "crop": [
+          26,
+          469,
+          353,
+          176
+        ],
+        "size": [
+          359,
+          182
+        ],
+        "pivot": [
+          179.5,
+          91.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "info_button",
+        "cell": [
+          1,
+          1
+        ],
+        "crop": [
+          392,
+          456,
+          322,
+          188
+        ],
+        "size": [
+          328,
+          194
+        ],
+        "pivot": [
+          164.0,
+          97.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "confirm_badge",
+        "cell": [
+          2,
+          1
+        ],
+        "crop": [
+          738,
+          410,
+          332,
+          270
+        ],
+        "size": [
+          338,
+          276
+        ],
+        "pivot": [
+          169.0,
+          138.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "sale_badge",
+        "cell": [
+          3,
+          1
+        ],
+        "crop": [
+          1070,
+          412,
+          340,
+          264
+        ],
+        "size": [
+          346,
+          270
+        ],
+        "pivot": [
+          173.0,
+          135.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "locked_badge",
+        "cell": [
+          0,
+          2
+        ],
+        "crop": [
+          22,
+          713,
+          330,
+          323
+        ],
+        "size": [
+          336,
+          329
+        ],
+        "pivot": [
+          168.0,
+          164.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "close_badge",
+        "cell": [
+          1,
+          2
+        ],
+        "crop": [
+          387,
+          711,
+          329,
+          326
+        ],
+        "size": [
+          335,
+          332
+        ],
+        "pivot": [
+          167.5,
+          166.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      },
+      {
+        "id": "selection_glow",
+        "cell": [
+          2,
+          2
+        ],
+        "crop": [
+          716,
+          707,
+          378,
+          351
+        ],
+        "size": [
+          384,
+          357
+        ],
+        "pivot": [
+          192.0,
+          178.5
+        ],
+        "alpha_range": [
+          0,
+          254
+        ]
+      },
+      {
+        "id": "reroll_badge",
+        "cell": [
+          3,
+          2
+        ],
+        "crop": [
+          1120,
+          736,
+          299,
+          301
+        ],
+        "size": [
+          305,
+          307
+        ],
+        "pivot": [
+          152.5,
+          153.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ]
+      }
+    ]
+  }
+}

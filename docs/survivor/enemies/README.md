@@ -1,6 +1,6 @@
 # Bộ quái mới — Hoa Quả Sơn
 
-Đã adapt **27 sprite sheet thành 27 atlas và 252 frame** cho Godot. Có 18 quái thường, 5 elite và 4 boss. Ảnh gốc được giữ trong `assets/inbox/`.
+Đã adapt **27 sprite sheet thành 27 atlas và 252 frame** cho Godot. Có 18 quái thường, 5 elite và 4 boss. Ảnh gốc được giữ trong `assets/archive/adapted/survivor/enemies/`.
 
 [Manifest nguồn, frame và điểm neo](../../../assets/survivor/enemies/manifest.json) · [Quái thường 1](roster-1.png) · [Quái thường 2](roster-2.png) · [Elite và boss](roster-3.png) · [Tư thế tấn công elite và boss](actions-3.png)
 

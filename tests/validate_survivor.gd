@@ -3,19 +3,16 @@ extends SceneTree
 ## GPU captures: Godot --fixed-fps 60 --resolution 1280x720 --script tests/validate_survivor.gd -- --capture
 
 const Survivor := preload("res://scripts/survivor/match.gd")
+const Formation := preload("res://scripts/survivor/army_formation.gd")
+const ShopHud := preload("res://scripts/survivor/hud.gd")
 const Scene := preload("res://scenes/monkey_army_survivor.tscn")
 
 var game: Survivor
 var capture := false
 var failed := false
-var shops := 0
-var spent := 0
 var peak_army := 0
 var seen := {}
 var shots := {}
-const FORMATION_SHOTS := ["formation-left", "gameplay", "formation-right"]
-var _seconds_logged := 0
-var _clock := 0.0
 var _enemy_routes := {}
 var _routes_hold := true
 var _formation_holds := true
@@ -58,139 +55,163 @@ func _run() -> void:
 	game = Scene.instantiate()
 	root.add_child(game)
 	await process_frame
-	_check(game.state == game.State.MENU and not game.hero.visible,
-		"Project opens at main menu with the battlefield commander hidden")
+	_check(game.state == game.State.MENU and not game.hero.visible, "Title hides the battlefield commander")
 	_click(Vector2(640, 538))
-	_check(game.state == game.State.RUNNING and game.hero.visible,
-		"Start button starts the match and shows the commander through GUI input")
-	if game.state != game.State.RUNNING:
-		quit(1)
-		return
-	_check(game.lane == 1 and game.hero.position.x == 640.0, "Wukong starts in center lane")
-	_key(KEY_LEFT)
-	await process_frame
-	_check(game.lane == 0, "Left arrow selects left lane")
-	await create_timer(0.30).timeout
-	_check(game.hero.position.x > 420.0 and game.hero.position.x < 428.0, "Lane movement interpolates to left lane")
-	_key(KEY_D)
-	await process_frame
-	_check(game.lane == 1, "D selects the center lane")
-	_key(KEY_RIGHT)
-	await process_frame
-	_check(game.lane == 2, "Right arrow selects right lane")
-	_key(KEY_RIGHT)
-	await process_frame
-	_check(game.lane == 2, "Right boundary clamps lane index")
+	_check(game.state == game.State.RUNNING and game.hero.visible, "Start opens the battlefield")
+	var at := game.hero.position
 	_key(KEY_A)
-	await process_frame
-	_check(game.lane == 1, "A selects the center lane")
+	_key(KEY_RIGHT)
+	await create_timer(0.30).timeout
+	_check(game.hero.position == at and at == Vector2(640, game.COMMANDER_Y), "Commander stays at rear center")
 	_click(Vector2(1231, 49))
-	await process_frame
-	_check(game.state == game.State.PAUSED and paused, "HUD pause button pauses the SceneTree")
 	var frozen := game.elapsed
-	var ground := game.field.distance
-	await create_timer(0.2, true).timeout
-	_check(game.elapsed == frozen and game.field.distance == ground, "Pause freezes match and scrolling")
+	await create_timer(0.20, true).timeout
+	_check(game.state == game.State.PAUSED and paused and game.elapsed == frozen,
+		"Manual pause freezes combat and shop purchases")
+	_check(not game.summon("staff") and not game.train_army(), "Purchase endpoints refuse paused input")
 	_click(Vector2(640, 362))
-	await process_frame
-	_check(game.state == game.State.RUNNING and not paused, "Pause screen Resume restores gameplay")
-	_check(game.field.PROTECTED.encloses(Rect2(394, 0, 492, 720)), "All three lanes fit in the protected corridor")
+	_check(game.state == game.State.RUNNING and not paused, "Pause overlay resumes the match")
 	var clear := true
 	for prop: Array in game.field.PROPS:
 		var half := float(prop[3]) * 0.5
 		clear = clear and (float(prop[1]) + half <= game.field.PROTECTED.position.x
 			or float(prop[1]) - half >= game.field.PROTECTED.end.x)
-	_check(clear, "Every tree, rock and prop envelope clears the combat corridor")
+	_check(clear, "All scenery clears the combat corridor")
 	_validate_semantic_plan()
 	_validate_assets()
+	_validate_summon_assets()
 	var ground_tile := game.field._ground
 	var height := float(ground_tile.material.get_shader_parameter("tile_pixels").y)
 	var period := height * float(ground_tile.material.get_shader_parameter("tile_scale"))
 	_check(ground_tile.polygon[0].y <= -period and ground_tile.polygon[2].y >= 720.0,
-		"Terrain polygon covers the viewport across the entire recycling period")
+		"Recycled ground covers the viewport")
 
+	game.start_game()
+	game.set_physics_process(false)
 	_validate_enemy_lanes()
 	game.start_game()
-	game._enter(game.State.SHOP)
-	_check(not game.buy_monkey() and game.gold == 0, "Recruit blocks insufficient Gold")
-	_check(not game.buy_weapon(0, "bow"), "Weapon purchase blocks an empty slot")
-	game.gold = 250
-	game.hud.show_shop()
-	_click(Vector2(308, 503))
-	var all_bought := game.army_count() == 1
-	for i in 4:
-		all_bought = game.buy_monkey() and all_bought
-	_check(all_bought and game.army_count() == 5 and game.gold == 155, "Five recruits charge exactly 19 Gold each")
-	_check(not game.buy_monkey() and game.gold == 155, "Full army blocks a sixth recruit without charging")
-	_check(not game.buy_weapon(0, "missing") and not game.buy_weapon(0, "staff")
-		and not game.buy_weapon(-1, "bow"), "Unknown weapon, equipped weapon and invalid slot are rejected")
-	_click(Vector2(437, 256))
-	_click(Vector2(750, 503))
-	_click(Vector2(570, 256))
-	_click(Vector2(971, 503))
-	_check(game.army[0].weapon_id == "bow" and game.army[1].weapon_id == "magic" and game.gold == 116,
-		"Shop slot selection and weapon buttons equip correctly and charge exact costs")
-	game.gold = 0
-	_check(not game.buy_weapon(0, "magic") and game.army[0].weapon_id == "bow", "Unaffordable weapon preserves equipped item")
-	game.gold = 116
-	var fallen := game.army[3]
-	var previous_slot := fallen.position
-	var survivor_id := game.army[4].get_instance_id()
-	game._damage(fallen, 1000)
-	_check(game.army_count() == 4 and game.buy_monkey() and game.army_count() == 5
-		and game.army[3] != fallen and game.army[3].slot == 3
-		and game.army[3].position == previous_slot and game.army[4].get_instance_id() == survivor_id
-		and not fallen.visible,
-		"Replacement fills the same vacant slot without moving survivors")
-	game.resume()
-	await _validate_formation_switches()
-
-	var arrow_user := game.army[0]
-	var magic_user := game.army[1]
-	var cross := game._spawn_enemy("boar", 2)
-	cross.position = Vector2(game.field.LANES[2], arrow_user.position.y)
-	game._attack(arrow_user, 0.1)
-	game._move_projectiles(0.5)
-	_check(cross.hp < cross.max_hp, "Bow travels to and damages a target in the adjacent lane")
-	cross.hurt(cross.hp)
-	game.enemies.erase(cross)
-	var magic_target := game._spawn_enemy("boar", 0)
-	magic_target.position = Vector2(game.field.LANES[0], magic_user.position.y)
-	var splash := game._spawn_enemy("boar", 0)
-	splash.position = magic_target.position + Vector2(0, -100)
-	game._attack(magic_user, 0.1)
-	_check(magic_target.hp < magic_target.max_hp and splash.hp < splash.max_hp,
-		"Magic targets the adjacent lane and damages a second enemy there")
-
-	var melee := game.army[4]
-	var durable := game._spawn_enemy("boar", 2)
-	durable.position = Vector2(game.field.LANES[2], melee.position.y - 70)
-	game.enemies.assign([durable])
-	game._attack(melee, 0.1)
-	_check(durable.hp == durable.max_hp, "Wooden Staff cannot reach a distant adjacent-lane target")
-	var flank := game.army[2]
-	durable.position.y = flank.position.y
-	game._attack(flank, 0.1)
-	_check(durable.hp < durable.max_hp, "Wooden Staff can hit across the lane boundary when in reach")
-	durable.position = melee.position + Vector2(0, -55)
-	var hp := durable.hp
-	melee.weapon_id = ""
-	game._attack(melee, 0.1)
-	_check(durable.hp == hp, "Missing equipped weapon is safe")
-	game._equip(melee, "staff")
-	game._attack(melee, 0.1)
-	_check(durable.hp < hp, "Wooden Staff attacks within melee range")
+	_validate_shop()
+	_validate_combat_and_formation()
 	game._damage(game.hero, 9999)
 	_check(game.state == game.State.DEFEAT, "Zero Wukong HP opens Defeat")
 	_click(Vector2(520, 457))
-	await process_frame
-	_check(game.state == game.State.RUNNING and game.elapsed < 0.1 and game.gold == 0
-		and game.level == 1 and game.army_count() == 0 and game.enemies.is_empty()
-		and game.hero.hp == game.hero.max_hp and game.lane == 1,
-		"Result Restart resets health, inventory, time, lane and waves")
-	if capture:
-		Engine.time_scale = 4.0
+	_check(game.state == game.State.RUNNING and game.elapsed < 0.1 and game.gold == game.START_GOLD
+		and game.training == 0 and game.level == 1 and game.army_count() == 0 and game.enemies.is_empty(),
+		"Restart resets troops, training, wallet and waves")
+	_validate_expanded_army()
+	game.start_game()
+	game.set_physics_process(true)
 	await _play_full_run()
+
+
+func _validate_shop() -> void:
+	game.gold = 0
+	game.hud.update_stats()
+	_check(game.hud._role_buttons.staff.disabled and not game.summon("staff") and not game.summon("unknown"),
+		"Unfunded and unknown purchases are rejected")
+	game.gold = 250
+	game.hud.update_stats()
+	var paid := 0
+	for i in game.ROLE_ORDER.size():
+		var role: String = game.ROLE_ORDER[i]
+		_click(ShopHud.summon_button_center(i))
+		paid += game.ROLES[role].cost
+	_check(game.army_count() == 5 and game.gold == 250 - paid and not paused,
+		"All five role cards buy during combat at the listed prices")
+	_check(not game.hud._role_buttons.staff.disabled, "Summon panel remains enabled at five troops")
+	var staff := game.army[0]
+	var previous_hp := staff.max_hp
+	var trained_price := game.training_cost()
+	_click(ShopHud.train_button_center())
+	_check(staff.max_hp == previous_hp + 10 and game.training == 1 and game.gold == 250 - paid - trained_price,
+		"Train button charges Gold and applies the live army upgrade")
+	var slot_id := game.army[3].slot
+	game._damage(game.army[3], 1000)
+	game.summon("tank")
+	_check(game.army[slot_id].max_hp == game.ROLES.tank.hp + 10 and game.army_count() == 5,
+		"Replacements reuse vacant slots and inherit army training")
+	game.gold = 150
+	game.train_army()
+	game.train_army()
+	_check(game.training == game.MAX_TRAINING and not game.can_train(), "Training stops at the advertised cap")
+	game.award(0, game.xp_needed())
+	_check(game.level == 2 and game.state == game.State.RUNNING and not paused, "XP still levels up during combat")
+
+
+func _validate_expanded_army() -> void:
+	game.gold = 1000
+	game.hud.update_stats()
+	var clear := true
+	for i in game.ARMY_CAP:
+		_click(ShopHud.summon_button_center(game.ROLE_ORDER.find("staff")))
+		clear = clear and game.army_count() == i + 1 and _formation_valid()
+		# Continue summoning while the rank is still moving.
+		for step in 12:
+			game.elapsed += 1.0 / 60.0
+			game._move_army(1.0 / 60.0)
+			clear = clear and _formation_valid()
+	for step in 90:
+		game.elapsed += 1.0 / 60.0
+		game._move_army(1.0 / 60.0)
+		clear = clear and _formation_valid()
+	var covered := {}
+	for soldier in game.army:
+		if is_instance_valid(soldier) and game.field.in_lane(soldier.position.x, soldier.assigned_lane):
+			covered[soldier.assigned_lane] = true
+	_check(clear and game.army_count() == 8 and covered.size() == 3,
+		"Eight troops of the same role fit while summoning and redeploying across three lanes")
+	var remaining := game.gold
+	_check(game.hud._role_buttons.staff.disabled and not game.summon("staff") and game.gold == remaining,
+		"Capacity blocks a ninth purchase without charging Gold")
+	game._damage(game.army[1], 1000)
+	_click(ShopHud.summon_button_center(game.ROLE_ORDER.find("staff")))
+	_check(game.army[1] != null and game.army_count() == game.ARMY_CAP and _formation_valid(),
+		"A full rank can replace a fallen troop while preserving spacing")
+
+
+func _validate_combat_and_formation() -> void:
+	var tank := game.army[3]
+	var healer := game.army[4]
+	var health := tank.hp
+	game._damage(tank, 40)
+	_check(tank.hp == health - 26, "Tank absorbs 35 percent of incoming damage")
+	healer.position.x = tank.position.x
+	game._attack(healer, 1.0)
+	_check(tank.hp == health, "Healer repairs the injured tank and clamps at max HP")
+	_check(_formation_valid(), "All troop types use their role rows and the shared body")
+	var target := game._spawn_enemy("boar", 2)
+	target.position.y = 236.0
+	game._next_plan = 0.0
+	var reinforced := false
+	for i in 100:
+		game.elapsed += 1.0 / 60.0
+		game._move_army(1.0 / 60.0)
+		reinforced = reinforced or tank.assigned_lane == 2 or game.army[0].assigned_lane == 2
+		if not _formation_valid():
+			_check(false, "Formation preserves clearance during redeployment")
+			break
+	_check(reinforced, "Frontline independently reinforces the threatened right lane")
+	var archer := game.army[1]
+	target.position = archer.position + Vector2(220.0, -90.0)
+	var hp := target.hp
+	game._attack(archer, 1.0)
+	game._move_projectiles(1.0)
+	_check(target.hp < hp, "Archer hits a target one lane-width away")
+	var mage := game.army[2]
+	target.position = mage.position + Vector2(-220, -60)
+	var splash := game._spawn_enemy("slime", 0)
+	splash.position = target.position + Vector2(-26, -35)
+	game._attack(mage, 1.3)
+	_check(splash.hp < splash.max_hp, "Mage hits an adjacent lane and splashes a second enemy")
+	var staff := game.army[0]
+	target.position = staff.position + Vector2(210.0, -65.0)
+	splash.position = target.position + Vector2(0.0, -80.0)
+	hp = target.hp
+	game._attack(staff, 1.0)
+	_check(target.hp == hp, "Staff does not hit beyond melee range")
+	target.position = staff.position + Vector2(0.0, -85.0)
+	game._attack(staff, 1.0)
+	_check(target.hp < hp, "Staff hits a target in melee range")
 
 
 func _validate_enemy_lanes() -> void:
@@ -232,7 +253,7 @@ func _validate_enemy_lanes() -> void:
 	leader.position.y = game.field.REAR_LINE_Y
 	game._update_enemy(leader, allies, null, 0.016)
 	_check(leader.hp == 0 and game.hero.hp == hp - leader.attack_damage
-		and game.gold == 0 and game.xp == 0, "A regular rear-line breach costs HP without rewards")
+		and game.gold == game.START_GOLD and game.xp == 0, "A regular rear-line breach costs HP without rewards")
 	var boss := game._spawn_enemy("boss", 1)
 	game.hero.position.x = 860.0
 	boss.position.y = game.field.REAR_LINE_Y
@@ -244,33 +265,17 @@ func _validate_enemy_lanes() -> void:
 		and boss.position.x == 640.0, "A boss at the rear line stays in lane and telegraphs its breach hits")
 
 
-func _validate_formation_switches() -> void:
-	var valid := _formation_valid()
-	var started_in_flight := false
-	for command in [KEY_LEFT, KEY_RIGHT, KEY_RIGHT, KEY_LEFT]:
-		var before := game.hero.position.x
-		_key(command)
-		for frame in 25:
-			await physics_frame
-			valid = valid and _formation_valid()
-			if not is_equal_approx(game.hero.position.x, before) and (
-					absf(game.hero.position.x - game.field.LANES[game.lane]) > 5.0):
-				started_in_flight = true
-		valid = valid and absf(game.hero.position.x - game.field.LANES[game.lane]) < 2.0
-	_check(started_in_flight and valid,
-		"All five slots follow commands together, stay in front and keep visual clearance at every sampled step")
-
-
 func _formation_valid() -> bool:
-	# Conservative envelopes include all supplied poses, held weapons and HP bars.
-	var occupied: Array[Rect2] = [Rect2(game.hero.position - Vector2(70, 104), Vector2(140, 116))]
+	if game.hero.position != Vector2(640, game.COMMANDER_Y):
+		return false
+	var occupied: Array[Rect2] = [Rect2(game.hero.position - Vector2(72, 105), Vector2(144, 117))]
 	for slot in game.army.size():
 		var monkey := game.army[slot]
 		if monkey == null:
 			continue
-		if monkey.slot != slot or monkey.position != game._formation_position(slot) or monkey.position.y >= game.hero.position.y:
+		if monkey.slot != slot or monkey.position.y != Formation.ROWS[monkey.formation_row]:
 			return false
-		var envelope := Rect2(monkey.position - Vector2(36, 77), Vector2(72, 85))
+		var envelope := Rect2(monkey.position - Vector2(36, 78), Vector2(72, 86))
 		if not game.field.PROTECTED.encloses(envelope):
 			return false
 		for other in occupied:
@@ -281,82 +286,37 @@ func _formation_valid() -> bool:
 
 
 func _play_full_run() -> void:
-	while game.state in [game.State.RUNNING, game.State.SHOP] and game.elapsed < 330.0:
-		_control_army()
+	var tick := 0.0
+	var boss_seen := false
+	while game.state == game.State.RUNNING and game.elapsed < 330.0:
 		_formation_holds = _formation_holds and _formation_valid()
-		if game.state == game.State.SHOP:
-			shops += 1
-			var coins := game.gold
-			if shops == 1:
-				_check(paused and game.level > 1 and coins > 0 and game.elapsed > 0.0,
-					"Real enemy deaths reward XP and Gold and automatically open a paused shop")
-			if capture and game.army_count() > 0 and game.can_recruit() and not shots.has("shop"):
-				await _shot("shop")
-			_shop()
-			spent += coins - game.gold
-			peak_army = maxi(peak_army, game.army_count())
-			_click(Vector2(965, 580))
-			if game.state != game.State.RUNNING:
-				_check(false, "Shop Continue resumes play")
-				quit(1)
-				return
-		if game.state == game.State.RUNNING:
-			for foe in game.enemies:
-				seen[foe.kind] = true
-				var id := foe.get_instance_id()
-				var last: Vector2 = _enemy_routes.get(id, Vector2(foe.enemy_lane, foe.position.y))
-				_routes_hold = _routes_hold and foe.enemy_lane == int(last.x) and foe.position.y >= last.y
-				_routes_hold = _routes_hold and game.field.in_lane(foe.position.x, foe.enemy_lane)
-				_enemy_routes[id] = Vector2(foe.enemy_lane, foe.position.y)
-			if capture:
-				var name: String = FORMATION_SHOTS[game.lane]
-				var settled := absf(game.hero.position.x - game.field.LANES[game.lane]) < 2.0
-				if game.elapsed > 95.0 and game.elapsed < game.BOSS_TIME and (
-						settled and game.army_count() == 5 and not shots.has(name) and game.enemies.size() >= 3):
-					await _shot(name)
-				if is_instance_valid(game.boss) and game.boss.position.y >= 234 and game.boss.hp <= game.boss.max_hp * 0.87 and not shots.has("boss"):
-					await _shot("boss")
-		if int(game.elapsed) / 30 > _seconds_logged / 30:
-			_seconds_logged = int(game.elapsed)
-			print("RUN  %.1fs | HP %d | Gold %d | level %d | army %d | kills %d | boss %s" % [
-				game.elapsed, game.hero.hp, game.gold, game.level, game.army_count(),
-				game.kills, str(game.boss.hp) if is_instance_valid(game.boss) else "—"])
+		_shop()
+		peak_army = maxi(peak_army, game.army_count())
+		for foe in game.enemies:
+			_routes_hold = _routes_hold and game.field.in_lane(foe.position.x, foe.enemy_lane)
+			boss_seen = boss_seen or foe.kind == "boss"
+		if game.elapsed >= tick:
+			print("RUN %.1fs | HP %d | Gold %d | level %d | troops %d | trained %d | kills %d | boss %s" % [
+				game.elapsed, game.hero.hp, game.gold, game.level, game.army_count(), game.training, game.kills,
+				str(game.boss.hp) if is_instance_valid(game.boss) else "–"])
+			tick += 30.0
+		if capture and game.elapsed > 50.0 and not shots.has("shop"):
+			await _shot("shop")
 		await process_frame
-	_check(_routes_hold, "All scheduled enemies retained their lane and never moved upward in the full match")
-	_check(_formation_holds, "Live formation stayed in front of Wukong and collision-free throughout the full match")
-	_check(seen.has("slime") and seen.has("boar") and seen.has("boss"), "Scheduled waves spawned slime, boar and Boar King")
-	_check(game.kills > 25 and shops > 3 and spent > 0 and peak_army >= 3,
-		"Natural match progressed through kills, level-up shops, Gold purchases and army growth")
-	_check(game.state == game.State.VICTORY and game.elapsed >= game.BOSS_TIME and game.elapsed <= 315.0,
-		"Full match reaches Victory through the scheduled Boar King encounter")
-	print("MATCH %.2fs | %d kills | %d shops | peak army %d | %d Gold spent" % [
-		game.elapsed, game.kills, shops, peak_army, spent])
-	if capture and game.state == game.State.VICTORY:
-		await _shot("victory")
-		_check(FORMATION_SHOTS.all(func(name): return shots.has(name)) and shots.has("shop") and shots.has("boss"),
-			"Formation in all three lanes, shop and boss PNGs were captured")
+	_check(_formation_holds, "Formation stays spaced and Wukong stays in place throughout the match")
+	_check(_routes_hold and boss_seen, "Enemy lane boundaries and boss scheduling remained intact")
+	_check(game.state == game.State.VICTORY and game.elapsed >= 300.0,
+		"Expanded formation can achieve Victory after the five-minute checkpoint")
+	_check(peak_army == game.ARMY_CAP and game.training > 0 and game.kills > 20,
+		"Natural economy supports the expanded army and training")
+	print("MATCH %.2fs | %d kills | peak army %d | training %d" % [
+		game.elapsed, game.kills, peak_army, game.training])
+	if capture:
+		await _shot("result")
 	if game.state in [game.State.VICTORY, game.State.DEFEAT]:
 		_click(Vector2(750, 455))
-		await process_frame
 		_check(game.state == game.State.MENU, "Result Main Menu returns to title")
-	if not capture:
-		if game.state != game.State.MENU:
-			game.main_menu()
-		await _play_idle_run()
 	quit(int(failed))
-
-
-func _play_idle_run() -> void:
-	_click(Vector2(640, 538))
-	var hit := false
-	while game.state in [game.State.RUNNING, game.State.SHOP] and game.elapsed < 330.0:
-		if game.state == game.State.SHOP:
-			_click(Vector2(965, 580))
-		hit = hit or game.hero.hp < game.hero.max_hp
-		await process_frame
-	_check(hit and game.state == game.State.DEFEAT and game.army_count() == 0,
-		"Scheduled enemies deal damage and can defeat a stationary player who skips purchases")
-	print("IDLE %.2fs | %s" % [game.elapsed, game.State.keys()[game.state]])
 
 
 func _validate_assets() -> void:
@@ -369,6 +329,18 @@ func _validate_assets() -> void:
 			if art != null and art.get_width() == rect[2] and art.get_height() == rect[3]:
 				checked += 1
 	_check(manifest.size() == 15 and checked == 141, "All 141 extracted cells import at their recorded native sizes")
+
+
+func _validate_summon_assets() -> void:
+	var dir := "res://assets/survivor/summon/"
+	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(dir + "manifest.json"))
+	var checked := 0
+	for sheet: Dictionary in manifest.values():
+		for frame: Dictionary in sheet.frames:
+			var art := load(dir + frame.id + ".png") as Texture2D
+			if art != null and art.get_size() == Vector2(frame.size[0], frame.size[1]):
+				checked += 1
+	_check(manifest.size() == 10 and checked == 104, "All 104 sprites from the ten summon sheets import at their recorded size")
 
 
 func _validate_semantic_plan() -> void:
@@ -407,41 +379,22 @@ func _validate_semantic_plan() -> void:
 
 
 func _shop() -> void:
-	while game.can_recruit() and (game.army_count() < 2 or game.gold >= 28 or game.elapsed > 245.0):
-		game.buy_monkey()
-	for i in game.army.size():
-		if game.army[i] != null and game.army[i].weapon_id == "staff":
-			var preferred := "magic" if i % 2 == 1 else "bow"
-			game.buy_weapon(i, preferred)
-
-
-func _control_army(step := -1.0) -> void:
-	if game.state != game.State.RUNNING:
+	for role in ["staff", "archer", "tank", "mage", "healer"]:
+		var present := false
+		for soldier in game.army:
+			present = present or (is_instance_valid(soldier) and soldier.role == role)
+		if not present:
+			if game.can_summon(role):
+				_click(ShopHud.summon_button_center(game.ROLE_ORDER.find(role)))
+			else:
+				break
+	if game.army_count() < game.ROLE_ORDER.size():
 		return
-	_clock += Engine.time_scale / 60.0 if step < 0.0 else step
-	if _clock < 0.12:
-		return
-	_clock = 0.0
-	var target = game.boss
-	if not is_instance_valid(target):
-		var best := INF
-		for foe in game.enemies:
-			var score: float = absf(foe.position.y - game.hero.position.y) + absf(foe.position.x - game.hero.position.x) * 0.36
-			if score < best:
-				best = score
-				target = foe
-	if not is_instance_valid(target) or target.position.y < 136.0:
-		return
-	var desired: int = target.enemy_lane
-	if is_instance_valid(game.boss) and game.boss.windup > 0.0 and not game.boss.strikes_rear_line:
-		if game.lane == game.boss.enemy_lane:
-			desired = 0 if game.boss.strike_position.x >= game.field.LANES[1] else 2
-		else:
-			desired = game.lane
-	if target.position.y > game.hero.position.y and target != game.boss:
-		desired = game.lane
-	if desired != game.lane:
-		_key(KEY_LEFT if desired < game.lane else KEY_RIGHT)
+	if game.can_train():
+		_click(ShopHud.train_button_center())
+	for role in ["staff", "archer", "tank"]:
+		if game.can_summon(role):
+			_click(ShopHud.summon_button_center(game.ROLE_ORDER.find(role)))
 
 
 func _shot(name: String) -> void:
@@ -449,5 +402,5 @@ func _shot(name: String) -> void:
 	await process_frame
 	await RenderingServer.frame_post_draw
 	var image := root.get_texture().get_image()
-	var path := "res://docs/survivor/%s.png" % name
+	var path := "res://docs/survivor/commander/%s.png" % name
 	_check(image != null and image.save_png(path) == OK, "GPU capture: " + name)

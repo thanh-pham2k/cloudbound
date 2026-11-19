@@ -130,7 +130,7 @@ def build(check: bool) -> None:
     manifest = {}
     for index, id_ in enumerate(IDS, 1):
         prefix = id_.replace("_", "-")
-        source, = (ROOT / "assets/inbox").glob(f"{index:03d}-*for-{prefix}-*.png")
+        source, = (ROOT / "assets/archive/adapted/survivor/enemies").glob(f"{index:03d}-*for-{prefix}-*.png")
         original = Image.open(source)
         art = original.convert("RGBA")
         native_alpha = "A" in original.mode

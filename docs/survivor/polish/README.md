@@ -1,5 +1,7 @@
 # Monkey Army Defense animation polish
 
+This report records the earlier player-commanded formation. For the current game and reproduction commands, see the [commander report](../commander/README.md).
+
 Open `project.godot` in Godot 4.7.2 and press **F5**. Use **A/D** or **←/→** to command the formation. The polished art uses the existing lane, combat, shop, reward and result logic.
 
 [Integration manifest](../../../assets/survivor/polish/manifest.json) · [Per-sprite render coverage](rendered-coverage.json) · [Asset check](assets.log) · [Rendered checks](visual.log) · [Gameplay regression](regression.log) · [Visible 5× match](live.log)
@@ -55,7 +57,7 @@ The focused images use scripted gameplay events at normal animation speed. The l
 
 | Path | Change |
 |---|---|
-| `assets/inbox/` | Fourteen original source sheets. |
+| `assets/archive/adapted/survivor/polish/` | Fourteen original source sheets. |
 | `assets/survivor/polish/` | Extracted PNGs, Godot import metadata and source-to-cell manifest. |
 | `scripts/tools/prepare_survivor_polish.py` | Deterministic extraction and read-only verification. |
 | `scripts/survivor/actor.gd` | Commander and soldier poses, attachments and visual arrival. |

@@ -1,0 +1,55 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+OpenGL API 4.1 Metal - 90.5 - Compatibility - Using Device: Apple - Apple M5 Pro
+
+PASS  Start Game opens the live battlefield
+CAPTURE  /Users/thanhpv/Documents/Work/cloudbound/docs/survivor/commander/live/000s.png at 0.000s
+STATE 000s | game=0.000s | HP=210/210 | Gold=44 | XP=0/29 | Level=1 | Monkeys=0/8 | Training=0 | Kills=0 | Boss=—
+LIVE  5.0× | macOS | 300 physics ticks/s | 0.01667 simulated seconds/tick
+SHOP  0.000s | gold=44→7 | summoned=2 | training=0 | army=2
+CAPTURE  /Users/thanhpv/Documents/Work/cloudbound/docs/survivor/commander/live/summon.png at 0.500s
+SHOP  10.417s | gold=22→2 | summoned=1 | training=0 | army=3
+SHOP  22.233s | gold=27→1 | summoned=1 | training=0 | army=4
+STATE 030s | game=30.017s | HP=216/216 | Gold=16 | XP=40/53 | Level=3 | Monkeys=4/8 | Training=0 | Kills=11 | Boss=—
+SHOP  32.783s | gold=21→0 | summoned=1 | training=0 | army=5
+SHOP  39.367s | gold=15→0 | summoned=1 | training=0 | army=6
+SHOP  47.017s | gold=15→0 | summoned=1 | training=0 | army=7
+SHOP  55.733s | gold=15→0 | summoned=1 | training=0 | army=8
+STATE 060s | game=60.017s | HP=222/222 | Gold=5 | XP=32/77 | Level=5 | Monkeys=8/8 | Training=0 | Kills=22 | Boss=—
+CAPTURE  /Users/thanhpv/Documents/Work/cloudbound/docs/survivor/commander/live/060s.png at 60.050s
+SHOP  68.967s | gold=33→1 | summoned=0 | training=1 | army=8
+CAPTURE  /Users/thanhpv/Documents/Work/cloudbound/docs/survivor/commander/live/upgrade.png at 68.983s
+STATE 090s | game=90.017s | HP=228/228 | Gold=52 | XP=24/101 | Level=7 | Monkeys=8/8 | Training=1 | Kills=36 | Boss=—
+SHOP  90.817s | gold=60→2 | summoned=0 | training=2 | army=8
+STATE 120s | game=120.017s | HP=231/231 | Gold=71 | XP=77/113 | Level=8 | Monkeys=8/8 | Training=2 | Kills=49 | Boss=—
+CAPTURE  /Users/thanhpv/Documents/Work/cloudbound/docs/survivor/commander/live/120s.png at 120.033s
+SHOP  121.800s | gold=86→2 | summoned=0 | training=3 | army=8
+STATE 150s | game=150.000s | HP=237/237 | Gold=97 | XP=59/137 | Level=10 | Monkeys=8/8 | Training=3 | Kills=68 | Boss=—
+STATE 180s | game=180.000s | HP=243/243 | Gold=224 | XP=27/161 | Level=12 | Monkeys=8/8 | Training=3 | Kills=88 | Boss=—
+CAPTURE  /Users/thanhpv/Documents/Work/cloudbound/docs/survivor/commander/live/180s.png at 180.050s
+STATE 210s | game=210.000s | HP=246/246 | Gold=365 | XP=148/173 | Level=13 | Monkeys=8/8 | Training=3 | Kills=109 | Boss=—
+STATE 240s | game=240.000s | HP=252/252 | Gold=545 | XP=150/197 | Level=15 | Monkeys=8/8 | Training=3 | Kills=136 | Boss=—
+CAPTURE  /Users/thanhpv/Documents/Work/cloudbound/docs/survivor/commander/live/240s.png at 240.033s
+STATE 270s | game=270.000s | HP=258/258 | Gold=741 | XP=136/221 | Level=17 | Monkeys=8/8 | Training=3 | Kills=165 | Boss=—
+CAPTURE  /Users/thanhpv/Documents/Work/cloudbound/docs/survivor/commander/live/boss.png at 291.000s
+STATE 300s | game=300.000s | HP=264/264 | Gold=908 | XP=16/245 | Level=19 | Monkeys=8/8 | Training=3 | Kills=190 | Boss=87
+CAPTURE  /Users/thanhpv/Documents/Work/cloudbound/docs/survivor/commander/live/300s.png at 300.033s
+STATE 300s | game=300.733s | HP=264/264 | Gold=953 | XP=81/245 | Level=19 | Monkeys=8/8 | Training=3 | Kills=191 | Boss=—
+RESULT  VICTORY | game=300.733s | wall=61.169s | effective=4.916x | kills=191 | transactions=10 | recruits=8 | replacements=0 | upgrades=3
+PASS  Reached 300 seconds and earned Victory
+PASS  Smart AI covered all lanes with clear spacing, rate-limited orders and a fixed commander
+PASS  Scheduled slimes, boars and boss spawned across three lanes and kept their routes
+PASS  Boss appeared, took damage and the fight resolved
+PASS  Gold and XP match killed enemies and level thresholds
+PASS  Bottom shop charges exact prices for all five roles and all training tiers
+PASS  Engine.time_scale restored to 1.0
+CAPTURE  /Users/thanhpv/Documents/Work/cloudbound/docs/survivor/commander/live/result.png at 300.733s
+PASS  Saved rendered screenshot 000s
+PASS  Saved rendered screenshot 060s
+PASS  Saved rendered screenshot 120s
+PASS  Saved rendered screenshot 180s
+PASS  Saved rendered screenshot 240s
+PASS  Saved rendered screenshot 300s
+PASS  Saved rendered screenshot summon
+PASS  Saved rendered screenshot upgrade
+PASS  Saved rendered screenshot boss
+PASS  Saved rendered screenshot result

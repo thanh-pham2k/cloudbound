@@ -25,7 +25,20 @@ var _time_text: Label
 var _wave_text: Label
 var _gold_text: Label
 var _army_text: Label
-var _selected := 0
+const SUMMON_PANEL := Rect2(22, 646, 1236, 68)
+const CARD_START := 174.0
+const CARD_SPACING := 165.0
+const CARD_WIDTH := 156.0
+const TRAIN_X := 1004.0
+
+var _summon_panel: Panel
+var _summon_capacity: Label
+var _role_buttons := {}
+var _role_frames := {}
+var _train_button: Button
+var _train_label: Label
+var _train_price: Label
+var _receipt: Sprite2D
 var _gold_receipt: Sprite2D
 var _xp_receipt: Sprite2D
 
@@ -63,8 +76,7 @@ func _ready() -> void:
 	_boss_portrait = _pic(_boss_card, "boss_alert", Rect2(9, 6, 47, 44))
 	_boss_name = _label(_boss_card, Rect2(60, 4, 241, 25), "BOAR KING", 16, INK)
 	_boss_health = _bar(_boss_card, Rect2(60, 34, 241, 10), Color("#cc5347"))
-	_label(_status, Rect2(26, 685, 400, 25), "A / D or  ← / →   Command     ·     Esc   Pause", 15, LIGHT)
-	_label(_status, Rect2(990, 685, 265, 25), "Rear line breaches cost HP", 15, LIGHT, HORIZONTAL_ALIGNMENT_RIGHT)
+	_build_summon_panel()
 
 
 func update_stats() -> void:
@@ -78,7 +90,8 @@ func update_stats() -> void:
 	_time_text.text = _time()
 	_wave_text.text = "BOSS ENCOUNTER" if game.elapsed >= game.BOSS_TIME else "WAVE %d / 5" % game.wave
 	_gold_text.text = str(game.gold)
-	_army_text.text = "%d / 5" % game.army_count()
+	_army_text.text = "%d / %d" % [game.army_count(), game.ARMY_CAP]
+	_update_summon_panel()
 	_boss_card.visible = is_instance_valid(game.boss)
 	if _boss_card.visible:
 		var look: String = game.boss.appearance
@@ -98,6 +111,10 @@ func clear_match_fx() -> void:
 			child.queue_free()
 	_gold_receipt = null
 	_xp_receipt = null
+	if is_instance_valid(_receipt):
+		_receipt.hide()
+		_receipt.queue_free()
+	_receipt = null
 
 
 func reward_received(coins: bool) -> void:
@@ -110,8 +127,68 @@ func reward_received(coins: bool) -> void:
 		_xp_receipt = Polish.burst(_status, "xp_collect", Vector2(216, 89), 24.0, 0.38, Vector2(0, -8), 0.8)
 
 
-func shop_closed() -> void:
-	Polish.burst(_status, "shop_closed", Vector2(904, 54), 33.0, 0.44, Vector2(0, 11), 0.64)
+func purchase_feedback(role: String) -> void:
+	if is_instance_valid(_receipt):
+		_receipt.hide()
+		_receipt.queue_free()
+	var training_purchase := role == "training"
+	var index: int = game.ROLE_ORDER.find(role)
+	var x := TRAIN_X + 175.0 if training_purchase else CARD_START + CARD_SPACING * index + 130.0
+	var icon := "upgrade_confirm" if training_purchase else "purchase_success"
+	_receipt = Polish.burst(_summon_panel, "summon/" + icon, Vector2(x, 13), 39.0, 0.62,
+		Vector2(0, -25), 0.96)
+
+
+static func summon_button_center(index: int) -> Vector2:
+	return SUMMON_PANEL.position + Vector2(CARD_START + index * CARD_SPACING + CARD_WIDTH * 0.5, 34)
+
+
+static func train_button_center() -> Vector2:
+	return SUMMON_PANEL.position + Vector2(TRAIN_X + 112, 34)
+
+
+func _build_summon_panel() -> void:
+	_summon_panel = _panel(_status, SUMMON_PANEL, Color("#fff1ce"), Color("#9b703c"), 15)
+	_pic(_summon_panel, "summon/tray", Rect2(10, 5, 149, 44))
+	_label(_summon_panel, Rect2(17, 13, 133, 23), "Summon", 18, INK, HORIZONTAL_ALIGNMENT_CENTER)
+	_summon_capacity = _label(_summon_panel, Rect2(30, 42, 110, 17), "", 13, MUTED)
+	_summon_capacity.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_pic(_summon_panel, "summon/status_army", Rect2(15, 42, 20, 17))
+	for index in game.ROLE_ORDER.size():
+		var role: String = game.ROLE_ORDER[index]
+		var profile: Dictionary = game.ROLES[role]
+		var at := Rect2(CARD_START + index * CARD_SPACING, 7, CARD_WIDTH, 54)
+		var button := _button(_summon_panel, at, "", game.summon.bind(role), true)
+		button.tooltip_text = profile.hint
+		_role_buttons[role] = button
+		_role_frames[role] = _pic(button, "summon/card", Rect2(4, 3, 43, 48))
+		_pic(button, "summon/portrait_" + role, Rect2(7, 5, 38, 43))
+		_label(button, Rect2(51, 5, 96, 22), profile.name, 16)
+		_label(button, Rect2(51, 29, 94, 18), "%d Gold" % profile.cost, 13, MUTED)
+		_pic(button, "summon/role_" + role, Rect2(125, 31, 20, 18))
+	_train_button = _button(_summon_panel, Rect2(TRAIN_X, 7, 223, 54), "", game.train_army, true)
+	_train_button.tooltip_text = "Train all current and future monkeys"
+	_pic(_train_button, "summon/train_button", Rect2(7, 8, 49, 38))
+	_train_label = _label(_train_button, Rect2(61, 5, 155, 22), "", 16)
+	_train_price = _label(_train_button, Rect2(61, 29, 155, 18), "", 13, MUTED)
+
+
+func _update_summon_panel() -> void:
+	_summon_panel.visible = game.state in [game.State.RUNNING, game.State.PAUSED]
+	var full: bool = game.army_count() >= game.ARMY_CAP
+	_summon_capacity.text = "Army full" if full else "%d / %d slots" % [game.army_count(), game.ARMY_CAP]
+	for role in _role_buttons:
+		var button: Button = _role_buttons[role]
+		var enabled: bool = game.can_summon(role)
+		var frame: TextureRect = _role_frames[role]
+		button.disabled = not enabled
+		frame.texture = Polish.texture("summon/card" if enabled else "summon/card_disabled")
+		for child in button.get_children():
+			if child is TextureRect and child != frame:
+				child.modulate.a = 1.0 if enabled else 0.61
+	_train_button.disabled = not game.can_train()
+	_train_label.text = "Train army · %d/%d" % [game.training, game.MAX_TRAINING]
+	_train_price.text = "Fully trained" if game.training >= game.MAX_TRAINING else "%d Gold" % game.training_cost()
 
 
 func _time() -> String:
@@ -143,7 +220,7 @@ func show_menu() -> void:
 	_label(panel, Rect2(29, 20, 454, 34), "HOA QUẢ SƠN", 25, INK, HORIZONTAL_ALIGNMENT_CENTER)
 	_label(panel, Rect2(16, 111, 480, 56), "Monkey Army Survivor", 36, INK, HORIZONTAL_ALIGNMENT_CENTER)
 	_pic(panel, "polish/wukong_00", Rect2(183, 183, 146, 131))
-	_label(panel, Rect2(18, 327, 476, 31), "Command your army and defend the rear line.", 19, MUTED, HORIZONTAL_ALIGNMENT_CENTER)
+	_label(panel, Rect2(18, 327, 476, 31), "Summon monkeys to defend all three lanes.", 19, MUTED, HORIZONTAL_ALIGNMENT_CENTER)
 	var play := _button(panel, Rect2(126, 381, 260, 51), "Start Game", game.start_game, true)
 	play.grab_focus()
 
@@ -175,76 +252,6 @@ func show_result(won: bool) -> void:
 	var restart := _button(panel, Rect2(51, 222, 204, 49), "Restart", game.start_game, true)
 	_button(panel, Rect2(277, 222, 204, 49), "Main Menu", game.main_menu)
 	restart.grab_focus()
-
-
-func show_shop(slot := -1, feedback := "") -> void:
-	if slot >= 0:
-		_selected = slot
-	elif game.army[_selected] == null:
-		for i in game.army.size():
-			if game.army[i] != null:
-				_selected = i
-				break
-	var panel := _modal(Rect2(171, 128, 938, 496))
-	_pic(panel, "shop_icon", Rect2(29, 19, 56, 56))
-	_label(panel, Rect2(100, 18, 552, 41), "Level %d · Army Shop" % game.level, 32)
-	_label(panel, Rect2(101, 63, 600, 24), "Recruit a monkey or equip a weapon on the selected ally.", 17, MUTED)
-	var wallet := _panel(panel, Rect2(740, 30, 167, 44), Color("#f4dda4"), Color("#cfaa64"), 12)
-	var coin := "polish/shop_low_gold" if game.gold < game.RECRUIT_COST and game.army_count() < 5 else "gold_icon"
-	_pic(wallet, coin, Rect2(8, 6, 31, 31))
-	match feedback:
-		"level":
-			Polish.burst(panel, "level_glint", Vector2(677, 48), 52.0, 0.86, Vector2(0, -9), 0.86)
-			Polish.burst(panel, "reward_flash", Vector2(86, 69), 25.0, 0.64, Vector2(0, -12), 0.75)
-		"recruit", "equip":
-			var event := "shop_recruit" if feedback == "recruit" else "shop_equip"
-			Polish.burst(panel, event, Vector2(675, 49), 62.0, 0.78, Vector2(0, -6))
-			Polish.burst(wallet, "shop_coin", Vector2(24, 12), 32.0, 0.54, Vector2(0, -12), 0.83)
-			var receipt := "shop_success" if feedback == "recruit" else "shop_confirm"
-			Polish.burst(panel, receipt, Vector2(217 + _selected * 143, 113), 30.0, 0.73, Vector2(0, -17), 0.89)
-	_label(wallet, Rect2(49, 0, 112, 44), "%d Gold" % game.gold, 18)
-
-	_label(panel, Rect2(31, 109, 167, 42), "Army  %d / 5" % game.army_count(), 19)
-	for i in game.army.size():
-		var ally = game.army[i]
-		var text := "Slot %d\nEmpty" % (i + 1)
-		if ally != null:
-			text = "Slot %d\n%s" % [i + 1, game.WEAPONS.get(ally.weapon_id, {}).get("name", "Unarmed")]
-		var button := _button(panel, Rect2(200 + i * 143, 105, 133, 51), text, show_shop.bind(i),
-			i == _selected and ally != null)
-		button.disabled = ally == null
-		button.add_theme_font_size_override("font_size", 14)
-
-	_shop_card(panel, 0, "polish/soldier_00", "Recruit Monkey", "Comes with a\nWooden Staff", game.RECRUIT_COST,
-		game.can_recruit(), game.buy_monkey, "Army full" if game.army_count() == 5 else "Need more Gold")
-	_shop_card(panel, 1, "staff", "Wooden Staff", "Quick melee strikes", game.WEAPONS.staff.cost,
-		game.can_equip(_selected, "staff"), game.buy_weapon.bind(_selected, "staff"), _weapon_status("staff"))
-	_shop_card(panel, 2, "bow", "Wooden Bow", "Long-range arrows", game.WEAPONS.bow.cost,
-		game.can_equip(_selected, "bow"), game.buy_weapon.bind(_selected, "bow"), _weapon_status("bow"))
-	_shop_card(panel, 3, "magic", "Magic Staff", "Area damage", game.WEAPONS.magic.cost,
-		game.can_equip(_selected, "magic"), game.buy_weapon.bind(_selected, "magic"), _weapon_status("magic"))
-	var next := _button(panel, Rect2(681, 428, 226, 47), "Continue", game.resume, true)
-	_label(panel, Rect2(32, 428, 596, 47), "Unspent Gold carries forward. Weapons replace the selected ally’s gear.", 15, MUTED)
-	next.grab_focus()
-
-
-func _weapon_status(id: String) -> String:
-	var monkey = game.army[_selected]
-	if monkey == null:
-		return "Recruit an ally"
-	return "Equipped" if monkey.weapon_id == id else "Need more Gold"
-
-
-func _shop_card(parent: Control, index: int, image: String, title: String, detail: String,
-		cost: int, available: bool, action: Callable, unavailable: String) -> void:
-	var card := _panel(parent, Rect2(30 + index * 222, 174, 211, 235), Color("#fff7df"), Color("#d7b57b"), 17)
-	_pic(card, image, Rect2(62, 14, 87, 87))
-	_label(card, Rect2(5, 101, 201, 31), title, 19, INK, HORIZONTAL_ALIGNMENT_CENTER)
-	_label(card, Rect2(5, 135, 201, 44), detail, 15, MUTED, HORIZONTAL_ALIGNMENT_CENTER)
-	var buy := _button(card, Rect2(12, 181, 187, 40), "Buy · %d Gold" % cost if available else "%s · %d" % [unavailable, cost],
-		action, available)
-	buy.disabled = not available
-	buy.add_theme_font_size_override("font_size", 14)
 
 
 func _panel(parent: Control, rect: Rect2, color: Color, border: Color, corner: int) -> Panel:

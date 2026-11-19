@@ -1,7 +1,7 @@
 {
   "forest_goblin": {
     "sheet": 1,
-    "source": "assets/inbox/001-create-one-4-2-animation-sprite-sheet-for-forest-goblin-char.png",
+    "source": "assets/archive/adapted/survivor/enemies/001-create-one-4-2-animation-sprite-sheet-for-forest-goblin-char.png",
     "source_size": [
       1774,
       887
@@ -167,7 +167,7 @@
   },
   "shadow_wolf": {
     "sheet": 2,
-    "source": "assets/inbox/002-create-one-4-2-animation-sprite-sheet-for-shadow-wolf-charac.png",
+    "source": "assets/archive/adapted/survivor/enemies/002-create-one-4-2-animation-sprite-sheet-for-shadow-wolf-charac.png",
     "source_size": [
       1774,
       887
@@ -333,7 +333,7 @@
   },
   "stone_golem": {
     "sheet": 3,
-    "source": "assets/inbox/003-create-one-4-2-animation-sprite-sheet-for-stone-golem-charac.png",
+    "source": "assets/archive/adapted/survivor/enemies/003-create-one-4-2-animation-sprite-sheet-for-stone-golem-charac.png",
     "source_size": [
       1774,
       887
@@ -499,7 +499,7 @@
   },
   "goblin_archer": {
     "sheet": 4,
-    "source": "assets/inbox/004-create-one-4-2-animation-sprite-sheet-for-goblin-archer-char.png",
+    "source": "assets/archive/adapted/survivor/enemies/004-create-one-4-2-animation-sprite-sheet-for-goblin-archer-char.png",
     "source_size": [
       1774,
       887
@@ -665,7 +665,7 @@
   },
   "mushroom_monster": {
     "sheet": 5,
-    "source": "assets/inbox/005-create-one-4-2-sprite-sheet-for-mushroom-monster-character-c.png",
+    "source": "assets/archive/adapted/survivor/enemies/005-create-one-4-2-sprite-sheet-for-mushroom-monster-character-c.png",
     "source_size": [
       1774,
       887
@@ -831,7 +831,7 @@
   },
   "cave_bat": {
     "sheet": 6,
-    "source": "assets/inbox/006-create-one-4-2-sprite-sheet-for-cave-bat-character-cute-tiny.png",
+    "source": "assets/archive/adapted/survivor/enemies/006-create-one-4-2-sprite-sheet-for-cave-bat-character-cute-tiny.png",
     "source_size": [
       1774,
       887
@@ -997,7 +997,7 @@
   },
   "bamboo_snake": {
     "sheet": 7,
-    "source": "assets/inbox/007-create-one-4-2-sprite-sheet-for-bamboo-snake-character-cute-.png",
+    "source": "assets/archive/adapted/survivor/enemies/007-create-one-4-2-sprite-sheet-for-bamboo-snake-character-cute-.png",
     "source_size": [
       1774,
       887
@@ -1163,7 +1163,7 @@
   },
   "demon_rabbit": {
     "sheet": 8,
-    "source": "assets/inbox/008-create-one-4-2-sprite-sheet-for-demon-rabbit-character-cute-.png",
+    "source": "assets/archive/adapted/survivor/enemies/008-create-one-4-2-sprite-sheet-for-demon-rabbit-character-cute-.png",
     "source_size": [
       1774,
       887
@@ -1329,7 +1329,7 @@
   },
   "armored_turtle": {
     "sheet": 9,
-    "source": "assets/inbox/009-create-one-4-2-sprite-sheet-for-armored-turtle-character-cut.png",
+    "source": "assets/archive/adapted/survivor/enemies/009-create-one-4-2-sprite-sheet-for-armored-turtle-character-cut.png",
     "source_size": [
       1774,
       887
@@ -1495,7 +1495,7 @@
   },
   "stone_beetle": {
     "sheet": 10,
-    "source": "assets/inbox/010-create-one-4-2-sprite-sheet-for-stone-beetle-character-cute-.png",
+    "source": "assets/archive/adapted/survivor/enemies/010-create-one-4-2-sprite-sheet-for-stone-beetle-character-cute-.png",
     "source_size": [
       1774,
       887
@@ -1661,7 +1661,7 @@
   },
   "wooden_treant": {
     "sheet": 11,
-    "source": "assets/inbox/011-create-one-4-2-sprite-sheet-for-wooden-treant-character-cute.png",
+    "source": "assets/archive/adapted/survivor/enemies/011-create-one-4-2-sprite-sheet-for-wooden-treant-character-cute.png",
     "source_size": [
       1774,
       887
@@ -1824,7 +1824,7 @@
   },
   "fire_imp": {
     "sheet": 12,
-    "source": "assets/inbox/012-create-one-4-2-sprite-sheet-for-fire-imp-character-cute-tiny.png",
+    "source": "assets/archive/adapted/survivor/enemies/012-create-one-4-2-sprite-sheet-for-fire-imp-character-cute-tiny.png",
     "source_size": [
       1774,
       887
@@ -1990,7 +1990,7 @@
   },
   "poison_toad": {
     "sheet": 13,
-    "source": "assets/inbox/013-create-one-4-2-sprite-sheet-for-poison-toad-character-cute-r.png",
+    "source": "assets/archive/adapted/survivor/enemies/013-create-one-4-2-sprite-sheet-for-poison-toad-character-cute-r.png",
     "source_size": [
       1774,
       887
@@ -2153,7 +2153,7 @@
   },
   "ice_spirit": {
     "sheet": 14,
-    "source": "assets/inbox/014-create-one-4-2-sprite-sheet-for-ice-spirit-character-cute-fl.png",
+    "source": "assets/archive/adapted/survivor/enemies/014-create-one-4-2-sprite-sheet-for-ice-spirit-character-cute-fl.png",
     "source_size": [
       1774,
       887
@@ -2316,7 +2316,7 @@
   },
   "mini_slime": {
     "sheet": 15,
-    "source": "assets/inbox/015-create-one-4-2-sprite-sheet-for-mini-slime-character-very-sm.png",
+    "source": "assets/archive/adapted/survivor/enemies/015-create-one-4-2-sprite-sheet-for-mini-slime-character-very-sm.png",
     "source_size": [
       1774,
       887
@@ -2482,7 +2482,7 @@
   },
   "slime_splitter": {
     "sheet": 16,
-    "source": "assets/inbox/016-create-one-4-2-sprite-sheet-for-slime-splitter-character-lar.png",
+    "source": "assets/archive/adapted/survivor/enemies/016-create-one-4-2-sprite-sheet-for-slime-splitter-character-lar.png",
     "source_size": [
       1536,
       1024
@@ -2645,7 +2645,7 @@
   },
   "shaman_goblin": {
     "sheet": 17,
-    "source": "assets/inbox/017-create-one-4-2-sprite-sheet-for-shaman-goblin-character-cute.png",
+    "source": "assets/archive/adapted/survivor/enemies/017-create-one-4-2-sprite-sheet-for-shaman-goblin-character-cute.png",
     "source_size": [
       1774,
       887
@@ -2811,7 +2811,7 @@
   },
   "ghost_lantern": {
     "sheet": 18,
-    "source": "assets/inbox/018-create-one-4-2-sprite-sheet-for-ghost-lantern-character-cute.png",
+    "source": "assets/archive/adapted/survivor/enemies/018-create-one-4-2-sprite-sheet-for-ghost-lantern-character-cute.png",
     "source_size": [
       1774,
       887
@@ -2977,7 +2977,7 @@
   },
   "armored_goblin_captain": {
     "sheet": 19,
-    "source": "assets/inbox/019-create-one-4-3-sprite-sheet-for-armored-goblin-captain-chara.png",
+    "source": "assets/archive/adapted/survivor/enemies/019-create-one-4-3-sprite-sheet-for-armored-goblin-captain-chara.png",
     "source_size": [
       1448,
       1086
@@ -3207,7 +3207,7 @@
   },
   "giant_slime": {
     "sheet": 20,
-    "source": "assets/inbox/020-create-one-4-3-sprite-sheet-for-giant-slime-elite-character-.png",
+    "source": "assets/archive/adapted/survivor/enemies/020-create-one-4-3-sprite-sheet-for-giant-slime-elite-character-.png",
     "source_size": [
       1448,
       1086
@@ -3434,7 +3434,7 @@
   },
   "fire_fox_spirit": {
     "sheet": 21,
-    "source": "assets/inbox/021-create-one-4-3-sprite-sheet-for-fire-fox-spirit-elite-charac.png",
+    "source": "assets/archive/adapted/survivor/enemies/021-create-one-4-3-sprite-sheet-for-fire-fox-spirit-elite-charac.png",
     "source_size": [
       1448,
       1086
@@ -3664,7 +3664,7 @@
   },
   "iron_beetle": {
     "sheet": 22,
-    "source": "assets/inbox/022-create-one-4-3-sprite-sheet-for-iron-beetle-elite-character-.png",
+    "source": "assets/archive/adapted/survivor/enemies/022-create-one-4-3-sprite-sheet-for-iron-beetle-elite-character-.png",
     "source_size": [
       1448,
       1086
@@ -3891,7 +3891,7 @@
   },
   "phantom_wolf": {
     "sheet": 23,
-    "source": "assets/inbox/023-create-one-4-3-sprite-sheet-for-phantom-wolf-elite-character.png",
+    "source": "assets/archive/adapted/survivor/enemies/023-create-one-4-3-sprite-sheet-for-phantom-wolf-elite-character.png",
     "source_size": [
       1448,
       1086
@@ -4121,7 +4121,7 @@
   },
   "ancient_treant": {
     "sheet": 24,
-    "source": "assets/inbox/024-create-one-4-3-animation-sprite-sheet-for-ancient-treant-bos.png",
+    "source": "assets/archive/adapted/survivor/enemies/024-create-one-4-3-animation-sprite-sheet-for-ancient-treant-bos.png",
     "source_size": [
       1448,
       1086
@@ -4351,7 +4351,7 @@
   },
   "nine_tailed_fox": {
     "sheet": 25,
-    "source": "assets/inbox/025-create-one-4-3-animation-sprite-sheet-for-nine-tailed-fox-bo.png",
+    "source": "assets/archive/adapted/survivor/enemies/025-create-one-4-3-animation-sprite-sheet-for-nine-tailed-fox-bo.png",
     "source_size": [
       1448,
       1086
@@ -4578,7 +4578,7 @@
   },
   "bull_demon_king": {
     "sheet": 26,
-    "source": "assets/inbox/026-create-one-4-3-sprite-sheet-for-bull-demon-king-boss-charact.png",
+    "source": "assets/archive/adapted/survivor/enemies/026-create-one-4-3-sprite-sheet-for-bull-demon-king-boss-charact.png",
     "source_size": [
       1448,
       1086
@@ -4808,7 +4808,7 @@
   },
   "golden_dragon": {
     "sheet": 27,
-    "source": "assets/inbox/027-create-one-4-3-sprite-sheet-for-golden-dragon-final-boss-cha.png",
+    "source": "assets/archive/adapted/survivor/enemies/027-create-one-4-3-sprite-sheet-for-golden-dragon-final-boss-cha.png",
     "source_size": [
       1448,
       1086

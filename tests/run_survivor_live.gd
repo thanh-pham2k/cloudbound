@@ -6,11 +6,10 @@ const MIN_DURATION := 300.0
 const WATCHDOG_SECONDS := 330.0
 const SAMPLE_RATE := 15.0
 
-var _output := "res://docs/survivor/live-5x"
+var _output := "res://docs/survivor/commander/live"
 var _frames_dir := ""
 var _requested: Array[String] = []
 var _wall_ms := 0
-var _last_elapsed := 0.0
 var _next_log := 30
 var _next_shot := 60
 var _video_frame := 0
@@ -23,9 +22,14 @@ var _economy_ok := true
 var _shop_ok := true
 var _recruits := 0
 var _replacements := 0
-var _weapons_bought := 0
+var _upgrades := 0
+var _roles_seen := {}
+var _transactions := 0
 var _occupied_slots := {}
-var _commanded := {}
+var _defended := {}
+var _enemy_lanes := {}
+var _last_orders := {}
+var _order_cadence_ok := true
 var _boss_seen := false
 var _boss_damaged := false
 var _original_ticks: int
@@ -70,22 +74,21 @@ func _run() -> void:
 	Engine.time_scale = SPEED
 	_wall_ms = Time.get_ticks_msec()
 	RenderingServer.frame_post_draw.connect(_capture_frame)
+	_gold_before = game.gold
 	_print_state(0)
 	print("LIVE  %.1f× | %s | %d physics ticks/s | %.5f simulated seconds/tick" % [
 		Engine.time_scale, DisplayServer.get_name(), Engine.physics_ticks_per_second,
 		Engine.time_scale / Engine.physics_ticks_per_second])
 	game.set_physics_process(true)
 
-	while game.state in [game.State.RUNNING, game.State.SHOP, game.State.PAUSED] and (
+	while game.state in [game.State.RUNNING, game.State.PAUSED] and (
 			game.elapsed < WATCHDOG_SECONDS and Time.get_ticks_msec() - _wall_ms < 90000):
 		await physics_frame
 		_observe_step()
-		if game.state == game.State.SHOP:
-			_handle_shop()
-		elif game.state == game.State.PAUSED:
+		if game.state == game.State.PAUSED:
 			game.resume()
-		_control_army(game.elapsed - _last_elapsed)
-		_last_elapsed = game.elapsed
+		if game.state == game.State.RUNNING:
+			_handle_shop()
 
 	var wall := float(Time.get_ticks_msec() - _wall_ms) / 1000.0
 	var resolved := game.state in [game.State.VICTORY, game.State.DEFEAT]
@@ -96,21 +99,22 @@ func _run() -> void:
 	Engine.max_physics_steps_per_frame = _original_max_steps
 	root.title = "Hoa Qua Son — Live QA Result"
 	_print_state(int(game.elapsed))
-	print("RESULT  %s | game=%.3fs | wall=%.3fs | effective=%.3fx | kills=%d | shops=%d | recruits=%d | replacements=%d | weapon purchases=%d" % [
+	print("RESULT  %s | game=%.3fs | wall=%.3fs | effective=%.3fx | kills=%d | transactions=%d | recruits=%d | replacements=%d | upgrades=%d" % [
 		game.State.keys()[game.state], game.elapsed, wall, game.elapsed / wall,
-		game.kills, shops, _recruits, _replacements, _weapons_bought])
-	_check(resolved and game.elapsed >= MIN_DURATION, "Reached 300 seconds and the game resolved its own result")
-	_check(_commanded.size() == 3 and _formation_holds and peak_army == 5,
-		"Commands reached all lanes with a spaced five-slot formation ahead of Wukong")
-	_check(_routes_hold and seen.size() == 3, "Scheduled slimes, boars and boss kept their assigned lanes")
+		game.kills, _transactions, _recruits, _replacements, _upgrades])
+	_check(game.state == game.State.VICTORY and game.elapsed >= MIN_DURATION, "Reached 300 seconds and earned Victory")
+	_check(_defended.size() == 3 and _formation_holds and peak_army == game.ARMY_CAP and _order_cadence_ok,
+		"Smart AI covered all lanes with clear spacing, rate-limited orders and a fixed commander")
+	_check(_routes_hold and seen.size() == 3 and _enemy_lanes.size() == 3,
+		"Scheduled slimes, boars and boss spawned across three lanes and kept their routes")
 	_check(_boss_seen and _boss_damaged and resolved, "Boss appeared, took damage and the fight resolved")
 	_check(_economy_ok and game.kills > 0 and game.level > 1, "Gold and XP match killed enemies and level thresholds")
-	_check(_shop_ok and shops > 0 and _weapons_bought > 0 and _replacements > 0,
-		"Shop resumes, charges exact prices, equips weapons and refills fallen slots")
+	_check(_shop_ok and _roles_seen.size() == 5 and _upgrades == game.MAX_TRAINING,
+		"Bottom shop charges exact prices for all five roles and all training tiers")
 	_check(Engine.time_scale == 1.0, "Engine.time_scale restored to 1.0")
 	await create_timer(2.0, true, false, true).timeout
 	RenderingServer.frame_post_draw.disconnect(_capture_frame)
-	for name in ["000s", "060s", "120s", "180s", "240s", "300s", "boss", "result"]:
+	for name in ["000s", "060s", "120s", "180s", "240s", "300s", "summon", "upgrade", "boss", "result"]:
 		_check(shots.has(name), "Saved rendered screenshot " + name)
 	if not _frames_dir.is_empty():
 		_check(_video_ok and _video_frame > 0, "Recorded %d frames of the live window at %.0f FPS" % [
@@ -118,17 +122,24 @@ func _run() -> void:
 	quit(int(failed))
 
 
-func _key(code: int) -> void:
-	super._key(KEY_A if code == KEY_LEFT else KEY_D)
-
-
 func _observe_step() -> void:
-	_commanded[game.lane] = true
+	for unit in game.army:
+		if not is_instance_valid(unit):
+			continue
+		if unit.assigned_lane >= 0 and game.field.in_lane(unit.position.x, unit.assigned_lane):
+			_defended[unit.assigned_lane] = true
+		var troop_id := unit.get_instance_id()
+		var last: Array = _last_orders.get(troop_id, [unit.assigned_lane, -INF])
+		if unit.assigned_lane != last[0]:
+			_order_cadence_ok = _order_cadence_ok and game.elapsed - last[1] >= Formation.REVIEW_SECONDS - 0.02
+			last = [unit.assigned_lane, game.elapsed]
+		_last_orders[troop_id] = last
 	_formation_holds = _formation_holds and _formation_valid()
 	var active := {}
 	for foe in game.enemies:
 		var id := foe.get_instance_id()
 		seen[foe.kind] = true
+		_enemy_lanes[foe.enemy_lane] = true
 		if _known_enemies.has(id):
 			var previous: Array = _known_enemies[id]
 			_routes_hold = _routes_hold and foe.enemy_lane == previous[0] and foe.position.y >= previous[1]
@@ -182,45 +193,43 @@ func _validate_rewards(active: Dictionary) -> void:
 
 
 func _handle_shop() -> void:
-	shops += 1
 	var before_gold := game.gold
-	var before_gear: Array[String] = []
-	_shop_ok = _shop_ok and paused
-	for monkey in game.army:
-		before_gear.append(monkey.weapon_id if monkey != null else "")
+	var before_training := game.training
+	var before_slots := game.army.duplicate()
 	_shop()
-	var cost := 0
-	var recruit_count := 0
-	var buy_count := 0
+	var recruited := 0
+	var expected := 0
+	if game.training > before_training:
+		expected += 32 + 26 * before_training
+		_upgrades += 1
+		if _upgrades == 1:
+			_requested.append("upgrade")
 	for slot in game.army.size():
-		var monkey := game.army[slot]
-		if monkey == null:
+		var soldier := game.army[slot]
+		if soldier == null or soldier == before_slots[slot]:
 			continue
-		var before := before_gear[slot]
-		if before.is_empty():
-			cost += game.RECRUIT_COST
-			recruit_count += 1
-			_replacements += int(_occupied_slots.has(slot))
-			_occupied_slots[slot] = true
-			before = "staff"
-		if monkey.weapon_id != before:
-			cost += game.WEAPONS[monkey.weapon_id].cost
-			buy_count += 1
-	_recruits += recruit_count
-	_weapons_bought += buy_count
+		expected += game.ROLES[soldier.role].cost
+		_roles_seen[soldier.role] = true
+		recruited += 1
+		_replacements += int(_occupied_slots.has(slot))
+		_occupied_slots[slot] = true
+	if expected == 0:
+		return
+	_recruits += recruited
+	if _recruits == recruited:
+		_requested.append("summon")
+	_transactions += 1
 	peak_army = maxi(peak_army, game.army_count())
-	_shop_ok = _shop_ok and before_gold - game.gold == cost and _formation_valid()
+	_shop_ok = _shop_ok and before_gold - game.gold == expected and _formation_valid() and not paused
 	_gold_before = game.gold
-	print("SHOP  %.3fs | level=%d | gold=%d→%d | recruited=%d | equipped=%d | army=%d" % [
-		game.elapsed, game.level, before_gold, game.gold, recruit_count, buy_count, game.army_count()])
-	_click(Vector2(965, 580))
-	_shop_ok = _shop_ok and (game.state == game.State.SHOP or (game.state == game.State.RUNNING and not paused))
+	print("SHOP  %.3fs | gold=%d→%d | summoned=%d | training=%d | army=%d" % [
+		game.elapsed, before_gold, game.gold, recruited, game.training, game.army_count()])
 
 
 func _print_state(mark: int) -> void:
-	print("STATE %03ds | game=%.3fs | HP=%d/%d | Gold=%d | XP=%d/%d | Level=%d | Monkeys=%d/5 | Lane=%d | Kills=%d | Boss=%s" % [
+	print("STATE %03ds | game=%.3fs | HP=%d/%d | Gold=%d | XP=%d/%d | Level=%d | Monkeys=%d/%d | Training=%d | Kills=%d | Boss=%s" % [
 		mark, game.elapsed, game.hero.hp, game.hero.max_hp, game.gold, game.xp, game.xp_needed(),
-		game.level, game.army_count(), game.lane + 1, game.kills,
+		game.level, game.army_count(), game.ARMY_CAP, game.training, game.kills,
 		str(game.boss.hp) if is_instance_valid(game.boss) else "—"])
 
 

@@ -9,7 +9,8 @@ static var _textures := {}
 
 static func texture(id: String) -> Texture2D:
 	if not _textures.has(id):
-		_textures[id] = load(ART + id + ".png")
+		var path := "res://assets/survivor/" + id if id.begins_with("summon/") else ART + id
+		_textures[id] = load(path + ".png")
 	return _textures[id] as Texture2D
 
 

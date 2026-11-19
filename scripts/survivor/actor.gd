@@ -2,13 +2,14 @@ extends Node2D
 
 const EnemyLooks := preload("res://scripts/survivor/enemy_looks.gd")
 const Polish := preload("res://scripts/survivor/polish.gd")
+const SUMMON_ART := "res://assets/survivor/summon/"
 const ART := "res://assets/survivor/"
 # Frame indexes follow the supplied sheets in row-major order.
 const POSES := {
 	"hero": {"idle": [0, 3, 8], "move": [4, 7], "attack": [1, 2, 3],
 		"command": [5, 6], "cheer": [10], "hurt": [9], "dead": [11]},
-	"monkey": {"idle": [0, 3, 8], "move": [1, 2, 4], "attack": [9, 5, 6],
-		"release": [4, 7, 6], "cast": [4, 9, 7], "cheer": [11], "hurt": [10], "dead": [12]},
+	"monkey": {"idle": [0, 7], "move": [0, 7], "attack": [2, 9, 7],
+		"release": [2, 9, 7], "cast": [4, 5, 8], "cheer": [6, 11], "hurt": [1, 10], "dead": [3]},
 	"slime": {"idle": [0, 1], "move": [0, 1, 2, 3],
 		"attack": [4, 5], "hurt": [6], "dead": [7]},
 	"boar": {"idle": [0, 1], "move": [0, 1, 2, 3],
@@ -33,6 +34,11 @@ var strike_position := Vector2.ZERO
 var gold_reward := 0
 var xp_reward := 0
 var slot := -1
+var role := ""
+var role_icon: Texture2D
+var formation_row := -1
+var goal_x := 0.0
+var assigned_lane := -1
 var enemy_lane := -1
 var strikes_rear_line := false
 
@@ -71,11 +77,8 @@ func setup(actor_kind: String, health: int, foot_radius: float, look := "") -> v
 		for i in count:
 			match kind:
 				"hero": _frames.append(Polish.texture("wukong_%02d" % i))
-				"monkey": _frames.append(Polish.texture("soldier_%02d" % i))
+				"monkey": _frames.append(load(SUMMON_ART + "unit_%02d.png" % i))
 				_: _frames.append(load(ART + "%s_%02d.png" % [kind, i]))
-		if kind == "monkey":
-			# The unified new soldier sheet has no downed pose.
-			_frames.append(load(ART + "monkey_11.png"))
 		_size_scale = HEIGHTS[kind] / _frames[0].get_height()
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	add_child(_sprite)
@@ -87,7 +90,7 @@ func setup(actor_kind: String, health: int, foot_radius: float, look := "") -> v
 func equip(id: String, art: Texture2D) -> void:
 	weapon_id = id
 	_equipment.texture = art
-	_equipment.scale = Vector2.ONE * 31.0 / art.get_height()
+	_equipment.scale = Vector2.ONE * minf(31.0 / art.get_height(), 31.0 / art.get_width())
 	_equipment.show()
 
 
@@ -106,7 +109,7 @@ func attack_pose(duration: float) -> void:
 	if kind == "monkey":
 		if weapon_id == "bow":
 			pose = "release"
-		elif weapon_id == "magic":
+		elif weapon_id in ["magic", "heal"]:
 			pose = "cast"
 	_set_pose(pose, true)
 
@@ -196,11 +199,15 @@ func _render_frame() -> void:
 		_entry.flip_h = _faces_left
 		_entry.modulate.a = 0.70 * _entry_time / Polish.SUMMON_TIME
 	var lift := _lift if hp > 0 else 0.0
+	if kind == "monkey":
+		lift -= 3.0 * _size_scale
+		if _pose == "move":
+			lift += absf(sin(_pose_time * 19.0)) * 3.0
 	_sprite.position = Vector2(0.0, -size.y * 0.5 - (1.0 - reveal) * 8.0 - lift)
 	_sprite.modulate = Color("#ffb6a0") if _hit_time > 0.0 else Color.WHITE
 	_sprite.modulate.a = lerpf(0.15, 1.0, reveal)
 	_equipment.flip_h = _faces_left
-	var hands := Vector2(22, -29) if _pose in ["attack", "release", "cast"] else Vector2(20, -21)
+	var hands := Vector2(19, -29) if _pose in ["attack", "release", "cast"] else Vector2(20, -21)
 	_equipment.position = Vector2(hands.x * direction, hands.y)
 	_equipment.modulate.a = reveal
 	_equipment.visible = _equipment.texture != null and hp > 0 and reveal > 0.25
@@ -210,6 +217,8 @@ func _draw() -> void:
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, 0.40))
 	draw_circle(Vector2.ZERO, radius * 1.28, Color(0.13, 0.24, 0.12, 0.26), true, -1, true)
 	draw_set_transform(Vector2.ZERO)
+	if role_icon != null and hp > 0:
+		draw_texture_rect(role_icon, Rect2(17, -79, 16, 16), false, Color(1, 1, 1, 0.86))
 	if hp > 0 and (kind == "monkey" or (kind in ["slime", "boar"] and hp < max_hp)):
 		var width := radius * 2.0
 		var top := -float(HEIGHTS[kind]) - 9.0

@@ -81,7 +81,7 @@ func _validate_bosses() -> void:
 		correct = correct and king.enemy_lane == 1 and king.position.x == 640.0 and king.hp == 1150
 		correct = correct and game.hud._boss_name.text == game.boss_display_name().to_upper()
 		game._damage(king, king.hp)
-		_check(correct and game.state == game.State.VICTORY and game.gold == 45,
+		_check(correct and game.state == game.State.VICTORY and game.gold == game.START_GOLD + 45,
 			"Scheduled %s finale uses the boss profile, title, reward and Victory" % game.boss_display_name())
 	game.boss_appearance = "boar_king"
 
