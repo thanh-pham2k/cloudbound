@@ -10,10 +10,11 @@ const DamageText := preload("res://scripts/ui/floating_text.gd")
 const ART := "res://assets/survivor/"
 const COMMANDER_Y := 632.0
 const DEFAULT_SPEED := 2.0
-# A full army must fit on one rank if every recruit shares a role.
-const ARMY_CAP := 8
 const START_GOLD := 44
 const MAX_TRAINING := 3
+const WAVE_DURATION := 45.0
+const BOSS_INTERVAL_WAVES := 5
+const BOSS_ROTATION := ["boar_king", "ancient_treant", "nine_tailed_fox", "bull_demon_king", "golden_dragon"]
 const ROLE_ORDER := ["staff", "archer", "mage", "tank", "healer"]
 const ROLES := {
 	"staff": {"name":"Staff", "cost":15, "hp":112, "rank":0, "weapon":"staff", "hint":"Frontline melee"},
@@ -22,7 +23,6 @@ const ROLES := {
 	"tank": {"name":"Tank", "cost":20, "hp":168, "rank":0, "weapon":"shield", "hint":"Frontline guard, 35% damage reduction"},
 	"healer": {"name":"Healer", "cost":21, "hp":100, "rank":2, "weapon":"heal", "hint":"Restores injured monkeys"},
 }
-const BOSS_TIME := 289.0
 const WEAPONS := {
 	"staff": {"art":"staff", "elite":"staff", "damage":16, "range":136.0,
 		"cooldown":0.86, "kind":"melee", "windup":0.14, "strike":0.11, "recovery":0.12},
@@ -35,18 +35,35 @@ const WEAPONS := {
 	"heal": {"art":"healer_staff", "elite":"healer_staff", "damage":22, "range":322.0,
 		"cooldown":1.05, "kind":"heal", "windup":0.18, "strike":0.12, "recovery":0.14},
 }
-const SLASH_FRAMES := [
-	"combat/slash_00", "combat/slash_01", "combat/slash_02", "combat/slash_03",
-	"combat/slash_04", "combat/slash_05", "combat/slash_06", "combat/slash_07",
+const MELEE_SLASH_FRAMES := [
+	"vfx/melee_spark_00", "vfx/melee_arc_01", "vfx/melee_arc_02", "vfx/melee_arc_03",
+]
+const MELEE_SLAM_FRAMES := [
+	"vfx/melee_slam_00", "vfx/melee_heavy_arc", "vfx/melee_impact_star",
+]
+const MELEE_COMBO_FRAMES := [
+	"vfx/melee_thrust", "vfx/melee_cross_slash", "vfx/melee_combo_burst",
+]
+const MAGIC_CHARGE_FRAMES := [
+	"vfx/magic_charge_00", "vfx/magic_charge_01", "vfx/magic_charge_02",
 ]
 const MAGIC_IMPACT_FRAMES := [
-	"combat/magic_impact_00", "combat/magic_impact_01", "combat/magic_impact_02", "combat/magic_impact_03",
+	"vfx/magic_aoe_00", "vfx/magic_aoe_01", "vfx/magic_aoe_02", "vfx/magic_aoe_03",
+]
+const BOSS_TELEGRAPH_FRAMES := [
+	"vfx/boss_ring_00", "vfx/boss_ring_01", "vfx/boss_pillar_charge",
+]
+const ENEMY_DEFEAT_FRAMES := [
+	"vfx/enemy_defeat_puff_00", "vfx/enemy_defeat_puff_01",
+]
+const HEAL_CAST_FRAMES := [
+	"vfx/heal_ring_rise", "vfx/heal_cross_leaf", "vfx/heal_burst_cross",
 ]
 # Health, advance speed, strike reach, damage, gold, XP, foot radius.
 const ENEMIES := {
-	"slime": [51, 82.0, 79.0, 9, 5, 10, 23.0],
-	"boar": [91, 101.0, 88.0, 15, 8, 16, 30.0],
-	"boss": [1150, 91.0, 120.0, 40, 45, 65, 56.0],
+	"slime": [55, 86.0, 92.0, 10, 5, 10, 23.0],
+	"boar": [98, 105.0, 104.0, 16, 8, 16, 30.0],
+	"boss": [1250, 94.0, 132.0, 42, 45, 65, 56.0],
 }
 const LANE_ORDER := [1, 0, 2, 1, 2, 0, 2, 1, 0]
 
@@ -64,6 +81,8 @@ var level := 1
 var training := 0
 var wave := 1
 var kills := 0
+var bosses_defeated := 0
+var peak_army := 0
 var hero: Actor
 var boss: Actor
 var army: Array[Actor] = []
@@ -76,7 +95,7 @@ var _play: Node2D
 var _spawn_in := 0.82
 var _spawn_count := 0
 var _escort_in := 3.5
-var _boss_sent := false
+var _last_boss_wave := 0
 var _light_looks := 0
 var _heavy_looks := 0
 var _elite_looks := 0
@@ -115,7 +134,6 @@ func _reset_field() -> void:
 	hero = _new_actor("hero", 210, 26.0, Vector2(Battlefield.LANES[1], COMMANDER_Y))
 	boss = null
 	army.clear()
-	army.resize(ARMY_CAP)
 	enemies.clear()
 	_projectiles.clear()
 	_next_plan = 0.0
@@ -125,11 +143,13 @@ func _reset_field() -> void:
 	level = 1
 	wave = 1
 	kills = 0
+	bosses_defeated = 0
+	peak_army = 0
 	training = 0
 	_spawn_in = 0.82
 	_spawn_count = 0
 	_escort_in = 3.5
-	_boss_sent = false
+	_last_boss_wave = 0
 	_light_looks = 0
 	_heavy_looks = 0
 	_elite_looks = 0
@@ -200,14 +220,14 @@ func _physics_process(delta: float) -> void:
 		if is_instance_valid(monkey):
 			_attack(monkey, delta)
 	var allies := _allies()
-	var leaders: Array[Actor] = [null, null, null]
+	var lane_enemies: Array = [[], [], []]
 	for enemy in enemies:
 		if state != State.RUNNING:
 			break
 		var column := enemy.enemy_lane
-		_update_enemy(enemy, allies, leaders[column], delta)
+		_update_enemy(enemy, allies, lane_enemies[column], delta)
 		if enemy.hp > 0:
-			leaders[column] = enemy
+			lane_enemies[column].append(enemy)
 	# Breached units are retired without kills or rewards.
 	for i in range(enemies.size() - 1, -1, -1):
 		if enemies[i].hp == 0:
@@ -222,6 +242,8 @@ func _move_army(delta: float) -> void:
 		for column: int in reinforced:
 			_fx("summon/ai_reinforce", Vector2(Battlefield.LANES[column], 582), 36.0, 0.48,
 				Vector2(0, -13), 0.7)
+			_fx("vfx/dust_redeploy", Vector2(Battlefield.LANES[column], 545), 54.0, 0.34,
+				Vector2(0, -4), 0.65)
 	var weight := 1.0 - exp(-5.8 * delta)
 	for monkey in army:
 		if not is_instance_valid(monkey):
@@ -233,46 +255,84 @@ func _move_army(delta: float) -> void:
 
 
 func _spawn_waves(delta: float) -> void:
-	wave = mini(5, 1 + int(elapsed / 55.0))
-	if elapsed >= BOSS_TIME:
-		if not _boss_sent:
-			_boss_sent = true
-			boss = _spawn_enemy("boss", 1)
+	wave = 1 + int(elapsed / WAVE_DURATION)
+	if wave % BOSS_INTERVAL_WAVES == 0 and wave > _last_boss_wave and not is_instance_valid(boss):
+		_last_boss_wave = wave
+		var boss_tier := maxi(1, wave / BOSS_INTERVAL_WAVES)
+		boss_appearance = BOSS_ROTATION[(boss_tier - 1) % BOSS_ROTATION.size()]
+		boss = _spawn_enemy("boss", 1)
+		_escort_in = 2.2
 
+	if is_instance_valid(boss):
 		_escort_in -= delta
 		if _escort_in <= 0.0:
-			_spawn_enemy("boar", 0)
-			_spawn_enemy("boar", 2)
-			_escort_in += 8.0
+			var tier := maxi(1, wave / BOSS_INTERVAL_WAVES)
+			var escort_pack := mini(8, 2 + tier * 2)
+			_spawn_pack(0, escort_pack, true)
+			_spawn_pack(2, escort_pack, true)
+			if tier >= 2:
+				_spawn_pack(1, mini(6, tier * 2), true)
+			_escort_in += maxf(2.0, 4.8 - float(tier) * 0.5)
 		return
+
 	_spawn_in -= delta
 	if _spawn_in > 0.0:
 		return
 	var column: int = LANE_ORDER[_spawn_count % LANE_ORDER.size()]
-	var boar := wave > 1 and (_spawn_count % maxi(2, 6 - wave)) == 0
-	_spawn_enemy("boar" if boar else "slime", column)
-	if wave >= 3 and _spawn_count % (8 - wave) == 0:
-		_spawn_enemy("boar" if wave >= 4 else "slime", (column + 1) % 3)
-		if wave == 5 and _spawn_count % 6 == 0:
-			_spawn_enemy("slime", (column + 2) % 3)
+	# Escalate pack sizes and multi-lane pressure rapidly across Endless Waves.
+	var primary_pack := mini(12, 2 + wave)
+	var heavy_pack := wave >= 2 and (_spawn_count % maxi(1, 4 - mini(wave, 3))) == 0
+	_spawn_pack(column, primary_pack, heavy_pack)
+	if wave >= 2:
+		var side_pack := mini(10, 1 + int(float(wave) * 0.85))
+		_spawn_pack((column + 1) % 3, side_pack, wave >= 3)
+	if wave >= 3:
+		var third_pack := mini(9, 1 + int(float(wave - 1) * 0.75))
+		_spawn_pack((column + 2) % 3, third_pack, wave >= 4)
 	_spawn_count += 1
-	_spawn_in += [2.55, 2.25, 1.96, 1.72, 1.49][wave - 1]
+	_spawn_in += maxf(0.85, 2.85 - float(wave - 1) * 0.22)
 
 
-func _spawn_enemy(kind: String, column: int) -> Actor:
+func _spawn_pack(column: int, count: int, include_boars: bool) -> void:
+	var offsets := [-78.0, -39.0, 0.0, 39.0, 78.0]
+	for i in count:
+		if enemies.size() >= 90:
+			return
+		var boar_chance := include_boars and (i == 0 or (wave >= 3 and i % 2 == 0) or (wave >= 7 and i % 3 != 1))
+		var kind := "boar" if boar_chance else "slime"
+		var spread_x: float = offsets[i % offsets.size()] if count > 1 else 0.0
+		var stagger_y := -8.0 - float(int(i / 5.0)) * 30.0
+		_spawn_enemy(kind, column, spread_x, stagger_y)
+
+
+func _spawn_enemy(kind: String, column: int, offset_x := 0.0, start_y := -8.0) -> Actor:
 	var data: Array = ENEMIES[kind]
-	var position_on_entry := Vector2(Battlefield.LANES[column], -8.0)
-	var hardening := 0
-	if kind != "boss":
-		hardening = (wave - 1) * (13 if kind == "boar" else 8)
+	var center: float = Battlefield.LANES[column]
+	var clamped_x := clampf(center + offset_x, center - Battlefield.LANE_HALF_WIDTH + 18.0,
+		center + Battlefield.LANE_HALF_WIDTH - 18.0)
+	var position_on_entry := Vector2(clamped_x, start_y)
+	var hp_bonus := 0
+	var dmg_bonus := 0
+	var gold_bonus := 0
+	var xp_bonus := 0
+	if kind == "boss":
+		var tier := maxi(1, wave / BOSS_INTERVAL_WAVES)
+		hp_bonus = roundi(float(data[0]) * 0.75 * float(tier - 1))
+		dmg_bonus = (tier - 1) * 12
+		gold_bonus = (tier - 1) * 20
+		xp_bonus = (tier - 1) * 30
+	else:
+		var late := maxf(0.0, float(wave - 3))
+		hp_bonus = (wave - 1) * (24 if kind == "boar" else 14) + int(pow(late, 1.65) * 14.0)
+		dmg_bonus = int(float(wave - 1) * 0.85)
 	var look := _next_enemy_look(kind)
-	var enemy := _new_actor(kind, int(data[0]) + hardening, data[6], position_on_entry, look)
+	var enemy := _new_actor(kind, int(data[0]) + hp_bonus, data[6], position_on_entry, look)
 	enemy.enemy_lane = column
-	enemy.speed = data[1]
+	enemy.speed = float(data[1]) * minf(1.75, 1.0 + maxf(0.0, float(wave - 2)) * 0.06)
 	enemy.attack_range = data[2]
-	enemy.attack_damage = data[3]
-	enemy.gold_reward = data[4]
-	enemy.xp_reward = data[5]
+	enemy.attack_damage = int(data[3]) + dmg_bonus
+	enemy.gold_reward = int(data[4]) + gold_bonus
+	enemy.xp_reward = int(data[5]) + xp_bonus
 	enemies.append(enemy)
 	field.warn(column, ("warning_boss" if look.is_empty() else "warning_red") if kind == "boss" else (
 		"warning_orange" if kind == "boar" else ("warning_gold" if wave >= 3 else "warning_green")))
@@ -308,7 +368,7 @@ func _new_actor(kind: String, hp: int, radius: float, at: Vector2, look := "") -
 	return unit
 
 
-func _update_enemy(enemy: Actor, allies: Array[Actor], leader: Actor, delta: float) -> void:
+func _update_enemy(enemy: Actor, allies: Array[Actor], ahead_in_lane, delta: float) -> void:
 	enemy.cooldown = maxf(0.0, enemy.cooldown - delta)
 	var column := enemy.enemy_lane
 	var center: float = Battlefield.LANES[column]
@@ -352,15 +412,25 @@ func _update_enemy(enemy: Actor, allies: Array[Actor], leader: Actor, delta: flo
 
 	var rage := 1.24 if is_boss and enemy.hp * 2 < enemy.max_hp else 1.0
 	var next_y := minf(enemy.position.y + enemy.speed * rage * delta, Battlefield.REAR_LINE_Y)
-	var preferred_x := center
-	if leader != null:
-		var spacing := 149.0 if leader.kind == "boss" else 75.0
-		next_y = minf(next_y, maxf(enemy.position.y, leader.position.y - spacing))
-		if leader.position.y - enemy.position.y < spacing + 30.0:
-			preferred_x += -22.0 if leader.position.x >= center else 22.0
-	var lane_drift := 8.0 if is_boss else 24.0
+	var preferred_x := enemy.position.x if not is_boss else center
+	var peers: Array = []
+	if ahead_in_lane is Array:
+		peers = ahead_in_lane
+	elif ahead_in_lane != null:
+		peers = [ahead_in_lane]
+	for other: Actor in peers:
+		if not is_instance_valid(other) or other.hp <= 0:
+			continue
+		var dx := enemy.position.x - other.position.x
+		var dy := other.position.y - enemy.position.y
+		var min_y_gap := 125.0 if other.kind == "boss" else 38.0
+		if absf(dx) < 42.0 and dy >= 0.0:
+			next_y = minf(next_y, maxf(enemy.position.y, other.position.y - min_y_gap))
+			if dy < min_y_gap + 28.0 and not is_boss:
+				preferred_x += -28.0 if other.position.x >= center else 28.0
+	var lane_drift := 8.0 if is_boss else 76.0
 	enemy.position.x = move_toward(enemy.position.x,
-		clampf(preferred_x, center - lane_drift, center + lane_drift), 48.0 * delta)
+		clampf(preferred_x, center - lane_drift, center + lane_drift), 62.0 * delta)
 	enemy.move_pose(next_y > enemy.position.y)
 	if enemy.position.y < 103.0 and next_y >= 103.0:
 		var entry := {"boss": "boss_entry", "boar": "enemy_entry" if wave <= 2 else "boar_entry", "slime": "slime_entry"}
@@ -379,9 +449,12 @@ func _begin_enemy_strike(enemy: Actor, at: Vector2, rear_line: bool) -> void:
 	enemy.attack_pose(enemy.windup + 0.17)
 	_telegraph(at, _strike_radius(enemy), enemy.enemy_lane, enemy.windup)
 	if enemy.kind == "boss":
-		var warning := _fx("combat/boss_telegraph_ring", at, 148.0, enemy.windup, Vector2.ZERO, 0.78)
+		var warning := Polish.sequence(_effects, BOSS_TELEGRAPH_FRAMES, at, 154.0, enemy.windup,
+			Vector2.ZERO, 0.84, 0.0, false, 0.88, 1.12)
 		warning.z_as_relative = false
 		warning.z_index = -1
+		_fx("vfx/boss_danger_alert", at + Vector2(0, -42), 78.0, enemy.windup * 0.85,
+			Vector2(0, -10), 0.90)
 
 
 func _strike_radius(enemy: Actor) -> float:
@@ -395,18 +468,18 @@ func _enemy_strike(enemy: Actor, allies: Array[Actor]) -> void:
 	if is_boss:
 		enemy.hit_stop(0.05)
 		if enraged:
-			_fx("combat/boss_flame_wave", enemy.strike_position + Vector2(0, -14), 168.0, 0.44, Vector2.ZERO, 0.86)
-			_fx("combat/boss_rock_debris", enemy.strike_position + Vector2(0, -18), 152.0, 0.48, Vector2(0, -6), 0.84)
-			var crack := _fx("combat/boss_ground_crack", enemy.strike_position + Vector2(0, 4), 156.0, 0.65, Vector2.ZERO, 0.72)
+			_fx("vfx/boss_flame_sweep", enemy.strike_position + Vector2(0, -16), 174.0, 0.44, Vector2.ZERO, 0.90)
+			_fx("vfx/boss_boulder_burst", enemy.strike_position + Vector2(0, -18), 156.0, 0.46, Vector2(0, -8), 0.88)
+			var crack := _fx("vfx/boss_magma_crack", enemy.strike_position + Vector2(0, 4), 160.0, 0.68, Vector2.ZERO, 0.78)
 			crack.z_as_relative = false
 			crack.z_index = -1
 		else:
-			_fx("combat/boss_slam_burst", enemy.strike_position + Vector2(0, -18), 146.0, 0.36, Vector2.ZERO, 0.86)
-			_fx("combat/boss_shock_ring", enemy.strike_position + Vector2(0, 2), 182.0, 0.40, Vector2.ZERO, 0.72)
-			_fx("combat/boss_dust_billow", enemy.strike_position + Vector2(0, 6), 148.0, 0.48, Vector2(0, -6), 0.68)
+			_fx("vfx/boss_slam_spike", enemy.strike_position + Vector2(0, -20), 152.0, 0.36, Vector2.ZERO, 0.90)
+			_fx("vfx/boss_shock_ripple", enemy.strike_position + Vector2(0, 4), 186.0, 0.42, Vector2.ZERO, 0.78)
+			_fx("vfx/boss_dust_cloud", enemy.strike_position + Vector2(0, 8), 150.0, 0.48, Vector2(0, -6), 0.72)
 	else:
-		_fx("combat/dust_small" if enemy.kind == "boar" else "combat/hit_light",
-			enemy.strike_position, 40.0 if enemy.kind == "boar" else 30.0, 0.24, Vector2.ZERO, 0.72)
+		_fx("vfx/dust_land_small" if enemy.kind == "boar" else "combat/hit_light",
+			enemy.strike_position, 44.0 if enemy.kind == "boar" else 30.0, 0.24, Vector2.ZERO, 0.72)
 	if enemy.strikes_rear_line:
 		_damage(hero, enemy.attack_damage, "combat/hit_heavy_crit" if is_boss else "combat/hit_spark", Vector2(0, 10))
 		return
@@ -479,12 +552,14 @@ func _begin_monkey_attack(unit: Actor, weapon: Dictionary, target: Actor, amount
 	unit.pending_variation = variation
 	unit.face(target.position.x - unit.position.x)
 	unit.begin_attack(unit.role, windup_sec, strike_sec, recovery_sec, variation)
-	# Subtle windup telegraph VFX at weapon tip for casters.
+	# Subtle windup telegraph VFX at weapon tip for casters and archers.
 	if weapon.kind == "area":
-		Polish.sequence(_effects, ["combat/magic_charge_00", "combat/magic_charge_01"],
-			unit.weapon_tip_position(), 36.0, windup_sec, Vector2.ZERO, 0.80)
+		Polish.sequence(_effects, MAGIC_CHARGE_FRAMES, unit.weapon_tip_position(), 40.0, windup_sec,
+			Vector2.ZERO, 0.84, 0.0, false, 0.78, 1.14)
 	elif weapon.kind == "heal":
-		_fx("summon/heal_sparks", unit.weapon_tip_position(), 28.0, windup_sec, Vector2(0, -6), 0.72)
+		_fx("vfx/heal_sparkle", unit.weapon_tip_position(), 30.0, windup_sec, Vector2(0, -6), 0.78)
+	elif weapon.kind == "ranged" and training >= 2:
+		_fx("vfx/bow_charge_star", unit.weapon_tip_position(), 26.0, windup_sec, Vector2.ZERO, 0.72)
 
 
 func _execute_monkey_strike(unit: Actor, weapon: Dictionary) -> void:
@@ -517,47 +592,53 @@ func _execute_monkey_strike(unit: Actor, weapon: Dictionary) -> void:
 			var slash_pos := unit.position.lerp(target.position, 0.68) + Vector2(0, -34)
 			var tank := unit.role == "tank"
 			if tank:
-				_fx("summon/guard_ring", slash_pos, 52.0, 0.24, Vector2.ZERO, 0.72)
+				_fx("vfx/dust_ring_impact", target.position + Vector2(0, -2), 58.0, 0.28, Vector2.ZERO, 0.72)
 				var sweep := _fx("combat/hit_sweep", slash_pos + Vector2(0, -4), 60.0, 0.22, Vector2.ZERO, 0.82)
 				sweep.flip_h = target.position.x < unit.position.x
 				unit.hit_stop(0.045)
 				target.hit_stop(0.045)
-				_fx("combat/dust_small", target.position + Vector2(0, -4), 42.0, 0.28, Vector2(0, -4), 0.65)
+				if not target.has_hit_flash():
+					Polish.burst(_effects, "vfx/enemy_stun_stars",
+						target.position + Vector2(0, -56 if target.kind != "boss" else -128),
+						44.0, 0.42, Vector2(0, -8), 0.86, 0.80, 1.05, 0.9)
 				_damage(target, damage, "combat/hit_shards", dir_vec * 14.0)
 			else:
 				var flip := target.position.x < unit.position.x
-				var tilt := 0.0
 				if variation == 1:
-					tilt = -0.82 if flip else 0.82
+					Polish.sequence(_effects, MELEE_SLAM_FRAMES, slash_pos, 84.0, 0.24, Vector2.ZERO, 0.90, 0.0, flip)
+					_fx("vfx/dust_land_heavy", target.position + Vector2(0, -2), 54.0, 0.30, Vector2(0, -4), 0.72)
 				elif variation == 2:
-					tilt = 0.18 if flip else -0.18
-				Polish.sequence(_effects, SLASH_FRAMES, slash_pos, 82.0 if variation == 1 else 74.0,
-					0.24, Vector2.ZERO, 0.88, tilt, flip)
+					Polish.sequence(_effects, MELEE_COMBO_FRAMES, slash_pos, 78.0, 0.24, Vector2.ZERO, 0.90, 0.0, flip)
+				else:
+					Polish.sequence(_effects, MELEE_SLASH_FRAMES, slash_pos, 78.0, 0.22, Vector2.ZERO, 0.88, 0.0, flip)
 				unit.hit_stop(0.035 if variation != 1 else 0.048)
 				target.hit_stop(0.035 if variation != 1 else 0.048)
 				var hit_fx := "combat/hit_burst" if (variation == 1 or training >= 2) else "combat/hit_spark"
-				if variation == 1:
-					_fx("combat/dust_small", target.position + Vector2(0, -2), 40.0, 0.26, Vector2.ZERO, 0.62)
 				_damage(target, damage, hit_fx, dir_vec * (13.0 if variation == 1 else 9.5))
 		"ranged":
 			var origin := unit.weapon_tip_position()
-			var release := _fx("combat/arrow_release", origin, 32.0, 0.14, Vector2.ZERO, 0.82)
+			var release_id := "vfx/bow_power_ring" if training >= 2 else "vfx/bow_release_burst"
+			var release := _fx(release_id, origin, 38.0 if training >= 2 else 34.0, 0.16, Vector2.ZERO, 0.84)
 			release.rotation = (target.position - origin).angle()
-			var arrow := Polish.sprite(_effects, "combat/arrow_fly_00", origin, 34.0)
+			var arrow_id := "vfx/arrow_volley_trail" if (training >= 2 and variation == 1) else "vfx/arrow_trail_00"
+			var arrow := Polish.sprite(_effects, arrow_id, origin, 38.0)
 			_projectiles.append({
 				"kind": "arrow",
 				"sprite": arrow,
 				"target": target,
 				"damage": damage,
 				"destination": target.position + Vector2(0, -28),
-				"speed": 720.0,
+				"speed": 730.0,
 				"age": 0.0,
 				"stage": 0,
 				"trained": training >= 2,
+				"volley": training >= 2 and variation == 1,
 			})
 		"area":
 			var origin := unit.weapon_tip_position()
-			var orb := Polish.sprite(_effects, "combat/magic_orb_00", origin, 42.0)
+			_fx("vfx/magic_cast_pillar", unit.position + Vector2(0, -14), 52.0, 0.24, Vector2(0, -8), 0.72)
+			var orb_id := "vfx/magic_comet_02" if variation == 2 else "vfx/magic_bolt_00"
+			var orb := Polish.sprite(_effects, orb_id, origin, 48.0 if variation == 2 else 42.0)
 			_projectiles.append({
 				"kind": "magic",
 				"sprite": orb,
@@ -565,9 +646,10 @@ func _execute_monkey_strike(unit: Actor, weapon: Dictionary) -> void:
 				"damage": damage,
 				"blast": float(weapon.blast),
 				"destination": target.position + Vector2(0, -22),
-				"speed": 690.0,
+				"speed": 700.0,
 				"age": 0.0,
 				"stage": 0,
+				"comet": variation == 2,
 			})
 
 
@@ -590,8 +672,12 @@ func _apply_heal(unit: Actor, target: Actor, raw_amount: int) -> void:
 		return
 	target.hp += amount
 	unit.face(target.position.x - unit.position.x)
-	_fx("summon/heal_floor", target.position, 75.0, 0.49, Vector2.ZERO, 0.75)
-	_fx("summon/heal_plus", target.position + Vector2(18, -53), 34.0, 0.68, Vector2(0, -21), 0.94)
+	if unit.attack_count % 2 == 0:
+		Polish.sequence(_effects, HEAL_CAST_FRAMES, target.position + Vector2(0, -20), 74.0, 0.44,
+			Vector2(0, -10), 0.86)
+	else:
+		_fx("vfx/heal_wave_plus", target.position + Vector2(0, -10), 76.0, 0.46, Vector2(0, -10), 0.84)
+		_fx("vfx/heal_pillar_leaf", target.position + Vector2(0, -24), 62.0, 0.44, Vector2(0, -14), 0.76)
 	var number := DamageText.new()
 	number.setup("+%d" % amount, Color("#d9ffad"))
 	number.position = target.position + Vector2(0, -69)
@@ -603,6 +689,9 @@ func _move_projectiles(delta: float) -> void:
 		if state != State.RUNNING:
 			break
 		var proj: Dictionary = _projectiles[i]
+		if not is_instance_valid(proj.sprite):
+			_projectiles.remove_at(i)
+			continue
 		var sprite: Sprite2D = proj.sprite
 		var pkind: String = proj.get("kind", "arrow")
 		proj.age = float(proj.age) + delta
@@ -614,14 +703,14 @@ func _move_projectiles(delta: float) -> void:
 		if move_dir == Vector2.ZERO:
 			move_dir = Vector2(0, -1)
 		sprite.rotation = to_dest.angle()
-		if pkind == "arrow":
+		if pkind == "arrow" and not proj.get("volley", false):
 			var desired := 2 if proj.age > 0.11 else (1 if proj.age > 0.045 else 0)
 			if desired != int(proj.stage):
 				proj.stage = desired
-				Polish.swap(sprite, "combat/arrow_fly_%02d" % desired, 42.0 if desired == 2 else 38.0)
-		elif pkind == "magic" and int(proj.stage) == 0 and proj.age > 0.06:
+				Polish.swap(sprite, "vfx/arrow_trail_%02d" % desired, 46.0 if desired == 2 else 40.0)
+		elif pkind == "magic" and not proj.get("comet", false) and int(proj.stage) == 0 and proj.age > 0.06:
 			proj.stage = 1
-			Polish.swap(sprite, "combat/magic_orb_01", 50.0)
+			Polish.swap(sprite, "vfx/magic_lance_01", 52.0)
 		sprite.position = sprite.position.move_toward(destination, delta * float(proj.get("speed", 680.0)))
 		if sprite.position.is_equal_approx(destination):
 			_projectiles.remove_at(i)
@@ -629,7 +718,8 @@ func _move_projectiles(delta: float) -> void:
 			if pkind == "magic":
 				var impact_pt := destination + Vector2(0, 12)
 				var blast := float(proj.get("blast", 120.0))
-				Polish.sequence(_effects, MAGIC_IMPACT_FRAMES, impact_pt, blast * 1.28, 0.34, Vector2.ZERO, 0.86)
+				Polish.sequence(_effects, MAGIC_IMPACT_FRAMES, impact_pt, blast * 1.32, 0.36,
+					Vector2.ZERO, 0.88, 0.0, false, 0.86, 1.14)
 				var damaged := 0
 				for enemy: Actor in enemies.duplicate():
 					if state == State.RUNNING and is_instance_valid(enemy) and enemy.hp > 0 and (
@@ -639,16 +729,19 @@ func _move_projectiles(delta: float) -> void:
 							kb = Vector2(0, -1)
 						if damaged == 0:
 							enemy.hit_stop(0.035)
+							Polish.burst(_effects, "vfx/enemy_daze_swirl",
+								enemy.position + Vector2(0, -52 if enemy.kind != "boss" else -120),
+								40.0, 0.38, Vector2(0, -6), 0.78, 0.82, 1.08, 1.2)
 						_damage(enemy, int(proj.damage), "combat/hit_spark" if damaged == 0 else "combat/hit_light", kb * 10.0)
 						damaged += 1
 			else:
 				if is_instance_valid(proj.target) and proj.target.hp > 0:
-					var hit_seq := ["combat/arrow_spark", "combat/arrow_shatter"] if proj.get("trained", false) else [
-						"combat/arrow_spark", "combat/arrow_burst"]
-					Polish.sequence(_effects, hit_seq, destination, 44.0, 0.20, Vector2.ZERO, 0.86)
+					var hit_seq := ["vfx/arrow_hit_spark", "vfx/arrow_hit_shatter"] if proj.get("trained", false) else [
+						"vfx/arrow_hit_spark", "vfx/arrow_hit_burst"]
+					Polish.sequence(_effects, hit_seq, destination, 46.0, 0.22, Vector2.ZERO, 0.88)
 					_damage(proj.target, int(proj.damage), "", move_dir * 7.5)
 				else:
-					_fx("combat/arrow_ground_dust", destination + Vector2(0, 18), 44.0, 0.28, Vector2.ZERO, 0.72)
+					_fx("vfx/arrow_miss_dust", destination + Vector2(0, 18), 46.0, 0.28, Vector2.ZERO, 0.74)
 
 
 func _damage(unit: Actor, amount: int, effect := "combat/hit_spark", knockback := Vector2.ZERO) -> void:
@@ -657,7 +750,8 @@ func _damage(unit: Actor, amount: int, effect := "combat/hit_spark", knockback :
 	if unit.role == "tank":
 		amount = maxi(1, roundi(float(amount) * 0.65))
 		if not unit.has_hit_flash():
-			_fx("summon/guard_dome", unit.position + Vector2(0, -25), 77.0, 0.32, Vector2.ZERO, 0.66)
+			_fx("vfx/guard_blue_dome", unit.position + Vector2(0, -24), 76.0, 0.32, Vector2.ZERO, 0.74)
+			_fx("vfx/guard_blue_shield", unit.position + Vector2(0, -48), 32.0, 0.34, Vector2(0, -10), 0.84)
 	var fresh_hit := not unit.has_hit_flash()
 	var was_calm := unit.hp * 2 >= unit.max_hp
 	unit.hurt(amount)
@@ -667,14 +761,16 @@ func _damage(unit: Actor, amount: int, effect := "combat/hit_spark", knockback :
 	if fresh_hit and effect != "":
 		var chosen := effect
 		if unit.gold_reward == 0:
-			chosen = "combat/hit_heavy_crit" if amount >= 30 else "combat/hit_spark"
+			chosen = "vfx/enemy_heavy_hurt" if amount >= 30 else "vfx/enemy_hurt_flash"
 		elif chosen == "combat/hit_spark" and amount >= 32:
-			chosen = "combat/hit_burst"
+			chosen = "vfx/enemy_heavy_hurt"
 		_fx(chosen, unit.position + Vector2(0, -28 if unit.kind != "boss" else -81),
-			42.0 if unit.kind != "boss" else 56.0, 0.22, Vector2(0, -6), 0.82)
+			44.0 if unit.kind != "boss" else 60.0, 0.22, Vector2(0, -6), 0.84)
+		if unit.appearance in ["poison_toad", "slime_splitter"]:
+			_fx("vfx/enemy_poison_cloud", unit.position + Vector2(0, -24), 48.0, 0.34, Vector2(0, -10), 0.74)
 	if unit.kind == "boss" and was_calm and unit.hp > 0 and unit.hp * 2 < unit.max_hp:
-		_fx("combat/boss_rage_vortex", unit.position + Vector2(0, -42), 165.0, 0.68, Vector2.ZERO, 0.84)
-		_fx("combat/boss_shock_ring", unit.position + Vector2(0, 6), 190.0, 0.46, Vector2.ZERO, 0.72)
+		_fx("vfx/boss_rage_pillar", unit.position + Vector2(0, -46), 165.0, 0.70, Vector2(0, -12), 0.88)
+		_fx("vfx/boss_nova_burst", unit.position + Vector2(0, -10), 192.0, 0.50, Vector2.ZERO, 0.84)
 	var number := DamageText.new()
 	number.setup(str(amount), Color("#ffedb3") if unit.gold_reward > 0 else Color("#ff9785"))
 	number.position = unit.position + Vector2(0, -146 if unit.kind == "boss" else -62)
@@ -684,20 +780,26 @@ func _damage(unit: Actor, amount: int, effect := "combat/hit_spark", knockback :
 	if unit == hero:
 		_enter(State.DEFEAT)
 	elif unit.slot >= 0:
-		_fx("enemy_death", unit.position, 47.0, 0.38, Vector2(0, -8), 0.63)
+		Polish.sequence(_effects, ENEMY_DEFEAT_FRAMES, unit.position + Vector2(0, -12), 54.0, 0.36, Vector2(0, -8), 0.76)
 		army[unit.slot] = null
 		hud.update_stats()
 	else:
 		enemies.erase(unit)
 		kills += 1
 		award(unit.gold_reward, unit.xp_reward)
-		_fx(unit.kind + "_death", unit.position + Vector2(0, -11),
-			142.0 if unit.kind == "boss" else 72.0, 0.53, Vector2(0, -11), 0.79)
+		Polish.sequence(_effects, ENEMY_DEFEAT_FRAMES, unit.position + Vector2(0, -14),
+			140.0 if unit.kind == "boss" else 74.0, 0.42, Vector2(0, -10), 0.82)
+		if unit.kind in ["boar", "boss"]:
+			_fx("vfx/enemy_defeat_beam", unit.position + Vector2(0, -28),
+				126.0 if unit.kind == "boss" else 56.0, 0.44, Vector2(0, -14), 0.78)
 		_reward_fx(unit.position + Vector2(-12, -28), true)
 		_reward_fx(unit.position + Vector2(12, -26), false)
 		if unit.kind == "boss":
 			boss = null
-			_enter(State.VICTORY)
+			bosses_defeated += 1
+			hero.hp = mini(hero.max_hp, hero.hp + 30)
+			_fx("vfx/boss_nova_burst", unit.position + Vector2(0, -30), 148.0, 0.68, Vector2(0, -16), 0.90)
+			_fx("vfx/support_buff_dome", hero.position + Vector2(0, -24), 92.0, 0.58, Vector2.ZERO, 0.78)
 
 
 func _reward_fx(at: Vector2, coins: bool) -> void:
@@ -733,13 +835,16 @@ func army_count() -> int:
 
 
 func can_summon(role: String) -> bool:
-	return state == State.RUNNING and ROLES.has(role) and army.has(null) and gold >= ROLES[role].cost
+	return state == State.RUNNING and ROLES.has(role) and gold >= ROLES[role].cost
 
 
 func summon(role: String) -> bool:
 	if not can_summon(role):
 		return false
 	var slot := army.find(null)
+	if slot < 0:
+		slot = army.size()
+		army.append(null)
 	for unit: Actor in _actors.get_children():
 		if unit.slot == slot and unit.hp == 0:
 			unit.hide()
@@ -756,13 +861,14 @@ func summon(role: String) -> bool:
 		if Battlefield.in_lane(at.x, column):
 			monkey.assigned_lane = column
 	army[slot] = monkey
+	peak_army = maxi(peak_army, army_count())
 	_equip(monkey, profile.weapon)
 	gold -= int(profile.cost)
 	monkey.arrive()
 	var ring := Polish.summon_sequence(_effects, "summon", at, 85.0)
 	ring.z_as_relative = false
 	ring.z_index = -1
-	_fx("summon/summon_ring", at + Vector2(0, -19), 86.0, 0.49, Vector2.ZERO, 0.67)
+	_fx("vfx/dust_summon_beam", at + Vector2(0, -18), 86.0, 0.48, Vector2.ZERO, 0.72)
 	hero.command_pose()
 	hud.purchase_feedback(role)
 	hud.update_stats()
@@ -770,11 +876,11 @@ func summon(role: String) -> bool:
 
 
 func training_cost() -> int:
-	return 32 + 26 * training
+	return 32 + 28 * training + 5 * training * training
 
 
 func can_train() -> bool:
-	return state == State.RUNNING and army_count() > 0 and training < MAX_TRAINING and gold >= training_cost()
+	return state == State.RUNNING and army_count() > 0 and gold >= training_cost()
 
 
 func train_army() -> bool:
@@ -782,17 +888,19 @@ func train_army() -> bool:
 		return false
 	gold -= training_cost()
 	training += 1
+	var shown := 0
 	for soldier in army:
 		if not is_instance_valid(soldier):
 			continue
 		soldier.max_hp += 10
 		soldier.hp = mini(soldier.max_hp, soldier.hp + 15)
 		_equip(soldier, soldier.weapon_id)
-		var effect := "upgrade_heal" if soldier.role == "healer" else (
-			"upgrade_defense" if soldier.role == "tank" else "upgrade_attack")
-		_fx("summon/" + effect, soldier.position + Vector2(0, -20), 71.0, 0.70,
-			Vector2(0, -10), 0.72)
-	_fx("summon/upgrade_burst", hero.position + Vector2(0, -18), 80.0, 0.61, Vector2.ZERO, 0.72)
+		if shown < 10:
+			var effect := "vfx/heal_sprout_glow" if soldier.role == "healer" else (
+				"vfx/support_shield_up" if soldier.role == "tank" else "vfx/heal_ribbon_rise")
+			_fx(effect, soldier.position + Vector2(0, -20), 66.0, 0.62, Vector2(0, -10), 0.74)
+			shown += 1
+	_fx("vfx/support_buff_dome", hero.position + Vector2(0, -22), 92.0, 0.64, Vector2.ZERO, 0.76)
 	hud.purchase_feedback("training")
 	hud.update_stats()
 	return true

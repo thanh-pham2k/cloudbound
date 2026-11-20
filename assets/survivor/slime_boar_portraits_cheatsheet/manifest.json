@@ -1,0 +1,204 @@
+{
+  "pack": "slime_boar_portraits_cheatsheet_v1",
+  "count": 22,
+  "items": [
+    {
+      "key": "slime_00",
+      "source": "001-create-a-clean-2d-game-character-animation-sprite-sheet-arra.png",
+      "size": [
+        316,
+        254
+      ],
+      "target": "assets/survivor/slime_00.png"
+    },
+    {
+      "key": "slime_01",
+      "source": "001-create-a-clean-2d-game-character-animation-sprite-sheet-arra.png",
+      "size": [
+        356,
+        255
+      ],
+      "target": "assets/survivor/slime_01.png"
+    },
+    {
+      "key": "slime_02",
+      "source": "001-create-a-clean-2d-game-character-animation-sprite-sheet-arra.png",
+      "size": [
+        366,
+        329
+      ],
+      "target": "assets/survivor/slime_02.png"
+    },
+    {
+      "key": "slime_03",
+      "source": "001-create-a-clean-2d-game-character-animation-sprite-sheet-arra.png",
+      "size": [
+        408,
+        220
+      ],
+      "target": "assets/survivor/slime_03.png"
+    },
+    {
+      "key": "slime_04",
+      "source": "001-create-a-clean-2d-game-character-animation-sprite-sheet-arra.png",
+      "size": [
+        327,
+        250
+      ],
+      "target": "assets/survivor/slime_04.png"
+    },
+    {
+      "key": "slime_05",
+      "source": "001-create-a-clean-2d-game-character-animation-sprite-sheet-arra.png",
+      "size": [
+        431,
+        209
+      ],
+      "target": "assets/survivor/slime_05.png"
+    },
+    {
+      "key": "slime_06",
+      "source": "001-create-a-clean-2d-game-character-animation-sprite-sheet-arra.png",
+      "size": [
+        352,
+        241
+      ],
+      "target": "assets/survivor/slime_06.png"
+    },
+    {
+      "key": "slime_07",
+      "source": "001-create-a-clean-2d-game-character-animation-sprite-sheet-arra.png",
+      "size": [
+        394,
+        226
+      ],
+      "target": "assets/survivor/slime_07.png"
+    },
+    {
+      "key": "boar_00",
+      "source": "002-create-a-clean-2d-game-character-animation-sprite-sheet-arra.png",
+      "size": [
+        371,
+        281
+      ],
+      "target": "assets/survivor/boar_00.png"
+    },
+    {
+      "key": "boar_01",
+      "source": "002-create-a-clean-2d-game-character-animation-sprite-sheet-arra.png",
+      "size": [
+        395,
+        264
+      ],
+      "target": "assets/survivor/boar_01.png"
+    },
+    {
+      "key": "boar_02",
+      "source": "002-create-a-clean-2d-game-character-animation-sprite-sheet-arra.png",
+      "size": [
+        370,
+        295
+      ],
+      "target": "assets/survivor/boar_02.png"
+    },
+    {
+      "key": "boar_03",
+      "source": "002-create-a-clean-2d-game-character-animation-sprite-sheet-arra.png",
+      "size": [
+        380,
+        290
+      ],
+      "target": "assets/survivor/boar_03.png"
+    },
+    {
+      "key": "boar_04",
+      "source": "002-create-a-clean-2d-game-character-animation-sprite-sheet-arra.png",
+      "size": [
+        389,
+        261
+      ],
+      "target": "assets/survivor/boar_04.png"
+    },
+    {
+      "key": "boar_05",
+      "source": "002-create-a-clean-2d-game-character-animation-sprite-sheet-arra.png",
+      "size": [
+        419,
+        270
+      ],
+      "target": "assets/survivor/boar_05.png"
+    },
+    {
+      "key": "boar_06",
+      "source": "002-create-a-clean-2d-game-character-animation-sprite-sheet-arra.png",
+      "size": [
+        354,
+        298
+      ],
+      "target": "assets/survivor/boar_06.png"
+    },
+    {
+      "key": "boar_07",
+      "source": "002-create-a-clean-2d-game-character-animation-sprite-sheet-arra.png",
+      "size": [
+        397,
+        276
+      ],
+      "target": "assets/survivor/boar_07.png"
+    },
+    {
+      "key": "portrait_staff",
+      "source": "003-create-a-clean-2d-game-character-portrait-icon-sheet-arrange.png",
+      "size": [
+        428,
+        426
+      ],
+      "target": "assets/survivor/summon/portrait_staff.png"
+    },
+    {
+      "key": "portrait_archer",
+      "source": "003-create-a-clean-2d-game-character-portrait-icon-sheet-arrange.png",
+      "size": [
+        429,
+        426
+      ],
+      "target": "assets/survivor/summon/portrait_archer.png"
+    },
+    {
+      "key": "portrait_mage",
+      "source": "003-create-a-clean-2d-game-character-portrait-icon-sheet-arrange.png",
+      "size": [
+        433,
+        426
+      ],
+      "target": "assets/survivor/summon/portrait_mage.png"
+    },
+    {
+      "key": "portrait_tank",
+      "source": "003-create-a-clean-2d-game-character-portrait-icon-sheet-arrange.png",
+      "size": [
+        431,
+        431
+      ],
+      "target": "assets/survivor/summon/portrait_tank.png"
+    },
+    {
+      "key": "portrait_healer",
+      "source": "003-create-a-clean-2d-game-character-portrait-icon-sheet-arrange.png",
+      "size": [
+        433,
+        431
+      ],
+      "target": "assets/survivor/summon/portrait_healer.png"
+    },
+    {
+      "key": "portrait_elite",
+      "source": "003-create-a-clean-2d-game-character-portrait-icon-sheet-arrange.png",
+      "size": [
+        435,
+        431
+      ],
+      "target": "assets/survivor/summon/portrait_elite.png"
+    }
+  ]
+}

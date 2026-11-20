@@ -1,9 +1,10 @@
 extends RefCounted
 ## Soldiers on each rank keep their horizontal order while responding to threats.
+## Scales seamlessly from small squads (1..8) to unlimited endless armies.
 
 const Actor := preload("res://scripts/survivor/actor.gd")
 const Field := preload("res://scripts/survivor/battlefield.gd")
-const ROWS := [335.0, 425.0, 515.0]
+const ROWS := [395.0, 468.0, 538.0]
 const SOCKETS := [354.0, 428.0, 502.0, 603.0, 677.0, 778.0, 852.0, 926.0]
 const GAP := 74.0
 const LEFT := 342.0
@@ -25,9 +26,19 @@ static func pressure(enemies: Array[Actor]) -> Array[float]:
 
 
 static func arrival(row: int, army: Array[Actor], threats: Array[float]) -> Vector2:
-	var preferred: float = Field.LANES[threats.find(threats.max())]
+	var preferred_lane := threats.find(threats.max())
+	var preferred: float = Field.LANES[preferred_lane]
 	var soldiers := _rank(army, row)
 	var count := soldiers.size()
+	if count >= SOCKETS.size():
+		# Unlimited army mode: place inside the highest-threat lane with gentle sub-row stagger.
+		var lane_center: float = Field.LANES[preferred_lane]
+		var slot_idx := count % 5
+		var offset_x := (float(slot_idx) - 2.0) * 38.0
+		var offset_y: float = [-18.0, 0.0, 18.0][count % 3]
+		var x := clampf(lane_center + offset_x, LEFT, RIGHT)
+		return Vector2(x, ROWS[row] + offset_y)
+
 	var best := INF
 	var chosen := preferred
 	var positions: Array[float] = []
@@ -72,16 +83,51 @@ static func plan(army: Array[Actor], threats: Array[float]) -> Dictionary:
 		var soldiers := _rank(army, row)
 		if soldiers.is_empty():
 			continue
-		var choice := _choose_slots(soldiers, threats, row)
-		for i in soldiers.size():
-			var soldier := soldiers[i]
-			var socket := choice[i]
-			var column := _socket_lane(socket)
-			if soldier.assigned_lane != column and threats[column] >= 1.5:
-				reinforcements[column] = true
-			soldier.goal_x = SOCKETS[socket]
-			soldier.assigned_lane = column
+		if soldiers.size() <= SOCKETS.size():
+			var choice := _choose_slots(soldiers, threats, row)
+			for i in soldiers.size():
+				var soldier := soldiers[i]
+				var socket := choice[i]
+				var column := _socket_lane(socket)
+				if soldier.assigned_lane != column and threats[column] >= 1.5:
+					reinforcements[column] = true
+				soldier.goal_x = SOCKETS[socket]
+				soldier.assigned_lane = column
+		else:
+			_plan_crowded_rank(soldiers, threats, reinforcements)
 	return reinforcements
+
+
+static func _plan_crowded_rank(soldiers: Array[Actor], threats: Array[float], reinforcements: Dictionary) -> void:
+	var total := soldiers.size()
+	var total_threat := threats[0] + threats[1] + threats[2]
+	var counts := [1, 1, 1]
+	var remaining := total - 3
+	for i in remaining:
+		var best_lane := 0
+		var best_ratio := -INF
+		for lane in 3:
+			var weight := threats[lane] / maxf(0.1, total_threat)
+			var ratio := weight / float(counts[lane])
+			if ratio > best_ratio:
+				best_ratio = ratio
+				best_lane = lane
+		counts[best_lane] += 1
+
+	var cursor := 0
+	for lane in 3:
+		var lane_count: int = counts[lane]
+		var center: float = Field.LANES[lane]
+		var span := minf(176.0, float(lane_count - 1) * 44.0)
+		for j in lane_count:
+			var soldier := soldiers[cursor]
+			cursor += 1
+			var frac := 0.5 if lane_count == 1 else float(j) / float(lane_count - 1)
+			var x := clampf(center - span * 0.5 + span * frac, LEFT, RIGHT)
+			if soldier.assigned_lane != lane and threats[lane] >= 1.5:
+				reinforcements[lane] = true
+			soldier.goal_x = x
+			soldier.assigned_lane = lane
 
 
 static func _socket_lane(socket: int) -> int:

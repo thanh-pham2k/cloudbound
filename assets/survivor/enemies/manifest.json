@@ -1,7 +1,7 @@
 {
   "forest_goblin": {
     "sheet": 1,
-    "source": "assets/archive/adapted/survivor/enemies/001-create-one-4-2-animation-sprite-sheet-for-forest-goblin-char.png",
+    "source": "assets/archive/adapted/survivor/enemies_cheatsheet_v1/001-create-a-clean-2d-game-sprite-sheet-arranged-in-a-strict-4x2.png",
     "source_size": [
       1774,
       887
@@ -163,6 +163,57 @@
           140
         ]
       }
+    ],
+    "atlas": "assets/survivor/enemies/forest_goblin.png",
+    "regions": [
+      [
+        6,
+        6,
+        176,
+        140
+      ],
+      [
+        194,
+        6,
+        176,
+        140
+      ],
+      [
+        382,
+        6,
+        176,
+        140
+      ],
+      [
+        570,
+        6,
+        176,
+        140
+      ],
+      [
+        6,
+        158,
+        176,
+        140
+      ],
+      [
+        194,
+        158,
+        176,
+        140
+      ],
+      [
+        382,
+        158,
+        176,
+        140
+      ],
+      [
+        570,
+        158,
+        176,
+        140
+      ]
     ]
   },
   "shadow_wolf": {
@@ -333,7 +384,7 @@
   },
   "stone_golem": {
     "sheet": 3,
-    "source": "assets/archive/adapted/survivor/enemies/003-create-one-4-2-animation-sprite-sheet-for-stone-golem-charac.png",
+    "source": "assets/archive/adapted/survivor/enemies_cheatsheet_v1/002-create-a-clean-2d-game-sprite-sheet-arranged-in-a-strict-4x2.png",
     "source_size": [
       1774,
       887
@@ -495,6 +546,57 @@
           150
         ]
       }
+    ],
+    "atlas": "assets/survivor/enemies/stone_golem.png",
+    "regions": [
+      [
+        6,
+        6,
+        220,
+        150
+      ],
+      [
+        238,
+        6,
+        220,
+        150
+      ],
+      [
+        470,
+        6,
+        220,
+        150
+      ],
+      [
+        702,
+        6,
+        220,
+        150
+      ],
+      [
+        6,
+        168,
+        220,
+        150
+      ],
+      [
+        238,
+        168,
+        220,
+        150
+      ],
+      [
+        470,
+        168,
+        220,
+        150
+      ],
+      [
+        702,
+        168,
+        220,
+        150
+      ]
     ]
   },
   "goblin_archer": {
@@ -831,7 +933,7 @@
   },
   "cave_bat": {
     "sheet": 6,
-    "source": "assets/archive/adapted/survivor/enemies/006-create-one-4-2-sprite-sheet-for-cave-bat-character-cute-tiny.png",
+    "source": "assets/archive/adapted/survivor/enemies_cheatsheet_v1/007-create-a-clean-2d-game-sprite-sheet-arranged-in-a-strict-4x2.png",
     "source_size": [
       1774,
       887
@@ -993,11 +1095,62 @@
           140
         ]
       }
+    ],
+    "atlas": "assets/survivor/enemies/cave_bat.png",
+    "regions": [
+      [
+        6,
+        6,
+        176,
+        140
+      ],
+      [
+        194,
+        6,
+        176,
+        140
+      ],
+      [
+        382,
+        6,
+        176,
+        140
+      ],
+      [
+        570,
+        6,
+        176,
+        140
+      ],
+      [
+        6,
+        158,
+        176,
+        140
+      ],
+      [
+        194,
+        158,
+        176,
+        140
+      ],
+      [
+        382,
+        158,
+        176,
+        140
+      ],
+      [
+        570,
+        158,
+        176,
+        140
+      ]
     ]
   },
   "bamboo_snake": {
     "sheet": 7,
-    "source": "assets/archive/adapted/survivor/enemies/007-create-one-4-2-sprite-sheet-for-bamboo-snake-character-cute-.png",
+    "source": "assets/archive/adapted/survivor/enemies_cheatsheet_v1/008-create-a-clean-2d-game-sprite-sheet-arranged-in-a-strict-4x2.png",
     "source_size": [
       1774,
       887
@@ -1159,6 +1312,57 @@
           140
         ]
       }
+    ],
+    "atlas": "assets/survivor/enemies/bamboo_snake.png",
+    "regions": [
+      [
+        6,
+        6,
+        176,
+        140
+      ],
+      [
+        194,
+        6,
+        176,
+        140
+      ],
+      [
+        382,
+        6,
+        176,
+        140
+      ],
+      [
+        570,
+        6,
+        176,
+        140
+      ],
+      [
+        6,
+        158,
+        176,
+        140
+      ],
+      [
+        194,
+        158,
+        176,
+        140
+      ],
+      [
+        382,
+        158,
+        176,
+        140
+      ],
+      [
+        570,
+        158,
+        176,
+        140
+      ]
     ]
   },
   "demon_rabbit": {
@@ -1661,7 +1865,7 @@
   },
   "wooden_treant": {
     "sheet": 11,
-    "source": "assets/archive/adapted/survivor/enemies/011-create-one-4-2-sprite-sheet-for-wooden-treant-character-cute.png",
+    "source": "assets/archive/adapted/survivor/enemies_cheatsheet_v1/004-create-a-clean-2d-game-sprite-sheet-arranged-in-a-strict-4x2.png",
     "source_size": [
       1774,
       887
@@ -1820,11 +2024,62 @@
           150
         ]
       }
+    ],
+    "atlas": "assets/survivor/enemies/wooden_treant.png",
+    "regions": [
+      [
+        6,
+        6,
+        220,
+        150
+      ],
+      [
+        238,
+        6,
+        220,
+        150
+      ],
+      [
+        470,
+        6,
+        220,
+        150
+      ],
+      [
+        702,
+        6,
+        220,
+        150
+      ],
+      [
+        6,
+        168,
+        220,
+        150
+      ],
+      [
+        238,
+        168,
+        220,
+        150
+      ],
+      [
+        470,
+        168,
+        220,
+        150
+      ],
+      [
+        702,
+        168,
+        220,
+        150
+      ]
     ]
   },
   "fire_imp": {
     "sheet": 12,
-    "source": "assets/archive/adapted/survivor/enemies/012-create-one-4-2-sprite-sheet-for-fire-imp-character-cute-tiny.png",
+    "source": "assets/archive/adapted/survivor/enemies_cheatsheet_v1/003-create-a-clean-2d-game-sprite-sheet-arranged-in-a-strict-4x2.png",
     "source_size": [
       1774,
       887
@@ -1986,6 +2241,57 @@
           140
         ]
       }
+    ],
+    "atlas": "assets/survivor/enemies/fire_imp.png",
+    "regions": [
+      [
+        6,
+        6,
+        176,
+        140
+      ],
+      [
+        194,
+        6,
+        176,
+        140
+      ],
+      [
+        382,
+        6,
+        176,
+        140
+      ],
+      [
+        570,
+        6,
+        176,
+        140
+      ],
+      [
+        6,
+        158,
+        176,
+        140
+      ],
+      [
+        194,
+        158,
+        176,
+        140
+      ],
+      [
+        382,
+        158,
+        176,
+        140
+      ],
+      [
+        570,
+        158,
+        176,
+        140
+      ]
     ]
   },
   "poison_toad": {
@@ -3434,7 +3740,7 @@
   },
   "fire_fox_spirit": {
     "sheet": 21,
-    "source": "assets/archive/adapted/survivor/enemies/021-create-one-4-3-sprite-sheet-for-fire-fox-spirit-elite-charac.png",
+    "source": "assets/archive/adapted/survivor/enemies_cheatsheet_v1/005-create-a-clean-2d-game-sprite-sheet-arranged-in-a-strict-4x3.png",
     "source_size": [
       1448,
       1086
@@ -3660,6 +3966,81 @@
           150
         ]
       }
+    ],
+    "atlas": "assets/survivor/enemies/fire_fox_spirit.png",
+    "regions": [
+      [
+        6,
+        6,
+        220,
+        150
+      ],
+      [
+        238,
+        6,
+        220,
+        150
+      ],
+      [
+        470,
+        6,
+        220,
+        150
+      ],
+      [
+        702,
+        6,
+        220,
+        150
+      ],
+      [
+        6,
+        168,
+        220,
+        150
+      ],
+      [
+        238,
+        168,
+        220,
+        150
+      ],
+      [
+        470,
+        168,
+        220,
+        150
+      ],
+      [
+        702,
+        168,
+        220,
+        150
+      ],
+      [
+        6,
+        330,
+        220,
+        150
+      ],
+      [
+        238,
+        330,
+        220,
+        150
+      ],
+      [
+        470,
+        330,
+        220,
+        150
+      ],
+      [
+        702,
+        330,
+        220,
+        150
+      ]
     ]
   },
   "iron_beetle": {
@@ -4808,7 +5189,7 @@
   },
   "golden_dragon": {
     "sheet": 27,
-    "source": "assets/archive/adapted/survivor/enemies/027-create-one-4-3-sprite-sheet-for-golden-dragon-final-boss-cha.png",
+    "source": "assets/archive/adapted/survivor/enemies_cheatsheet_v1/006-create-a-clean-2d-game-sprite-sheet-arranged-in-a-strict-4x3.png",
     "source_size": [
       1448,
       1086
@@ -5034,6 +5415,81 @@
           298
         ]
       }
+    ],
+    "atlas": "assets/survivor/enemies/golden_dragon.png",
+    "regions": [
+      [
+        6,
+        6,
+        386,
+        298
+      ],
+      [
+        404,
+        6,
+        386,
+        298
+      ],
+      [
+        802,
+        6,
+        386,
+        298
+      ],
+      [
+        1200,
+        6,
+        386,
+        298
+      ],
+      [
+        6,
+        316,
+        386,
+        298
+      ],
+      [
+        404,
+        316,
+        386,
+        298
+      ],
+      [
+        802,
+        316,
+        386,
+        298
+      ],
+      [
+        1200,
+        316,
+        386,
+        298
+      ],
+      [
+        6,
+        626,
+        386,
+        298
+      ],
+      [
+        404,
+        626,
+        386,
+        298
+      ],
+      [
+        802,
+        626,
+        386,
+        298
+      ],
+      [
+        1200,
+        626,
+        386,
+        298
+      ]
     ]
   }
 }

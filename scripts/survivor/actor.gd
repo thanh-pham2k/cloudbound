@@ -17,8 +17,7 @@ const POSES := {
 	"boss": {"idle": [0, 1], "move": [0, 1, 2, 3],
 		"attack": [4, 5], "hurt": [6], "dead": [7]},
 }
-# Shared baby-monkey combat sequences from assets/survivor/combat/ (4 frames: ready, windup, strike, recovery).
-# Archer reuses shared-model draw/aim/release clips so all 5 roles preserve ONE baby monkey model.
+# Role-specific full-costume combat sequences from assets/survivor/combat/ (4 frames: ready, windup, strike, recovery).
 const MONKEY_ATTACKS := {
 	"staff": [
 		["combat/staff_00", "combat/staff_01", "combat/staff_02", "combat/staff_03"],
@@ -26,13 +25,12 @@ const MONKEY_ATTACKS := {
 		["combat/staff_08", "combat/staff_09", "combat/staff_10", "combat/staff_11"],
 	],
 	"archer": [
-		["combat/mage_00", "combat/mage_01", "combat/mage_02", "combat/mage_03"],
-		["combat/staff_08", "combat/staff_09", "combat/staff_10", "combat/staff_11"],
+		["combat/archer_00", "combat/archer_01", "combat/archer_02", "combat/archer_03"],
+		["combat/archer_04", "combat/archer_05", "combat/archer_06", "combat/archer_07"],
 	],
 	"mage": [
 		["combat/mage_00", "combat/mage_01", "combat/mage_02", "combat/mage_03"],
 		["combat/mage_04", "combat/mage_05", "combat/mage_06", "combat/mage_07"],
-		["combat/mage_08", "combat/mage_09", "combat/mage_10", "combat/mage_11"],
 	],
 	"tank": [
 		["combat/tank_04", "combat/tank_05", "combat/tank_06", "combat/tank_07"],
@@ -41,6 +39,43 @@ const MONKEY_ATTACKS := {
 		["combat/healer_00", "combat/healer_01", "combat/healer_02", "combat/healer_03"],
 		["combat/healer_04", "combat/healer_05", "combat/healer_06", "combat/healer_07"],
 	],
+}
+const MONKEY_ROLE_POSES := {
+	"staff": {
+		"idle": ["combat/staff_00", "combat/staff_04"],
+		"move": ["combat/staff_08", "combat/staff_11"],
+		"cheer": ["combat/staff_05"],
+		"hurt": ["combat/staff_01"],
+		"dead": ["combat/staff_01"],
+	},
+	"archer": {
+		"idle": ["combat/archer_00", "combat/archer_08"],
+		"move": ["combat/archer_09", "combat/archer_10"],
+		"cheer": ["combat/archer_11"],
+		"hurt": ["combat/archer_04"],
+		"dead": ["combat/archer_04"],
+	},
+	"mage": {
+		"idle": ["combat/mage_00", "combat/mage_08"],
+		"move": ["combat/mage_10", "combat/mage_09"],
+		"cheer": ["combat/mage_11"],
+		"hurt": ["combat/mage_08"],
+		"dead": ["combat/mage_08"],
+	},
+	"tank": {
+		"idle": ["combat/tank_00", "combat/tank_04"],
+		"move": ["combat/tank_04", "combat/tank_05"],
+		"cheer": ["combat/tank_01"],
+		"hurt": ["combat/tank_02"],
+		"dead": ["combat/tank_02"],
+	},
+	"healer": {
+		"idle": ["combat/healer_00", "combat/healer_04"],
+		"move": ["combat/healer_00", "combat/healer_07"],
+		"cheer": ["combat/healer_03", "combat/healer_06"],
+		"hurt": ["combat/healer_05"],
+		"dead": ["combat/healer_05"],
+	},
 }
 const TANK_GUARD := ["combat/tank_01", "combat/tank_02", "combat/tank_03"]
 const HEIGHTS := {"hero": 102.0, "monkey": 67.0, "slime": 65.0, "boar": 78.0, "boss": 152.0}
@@ -294,17 +329,23 @@ func _current_monkey_combat_texture() -> Texture2D:
 		var p := 1.0 - clampf(_guard_time / 0.28, 0.0, 1.0)
 		var idx := 0 if p < 0.20 else (1 if p < 0.72 else 2)
 		return Polish.texture(TANK_GUARD[idx])
-	if _attack_clip.is_empty() or _action_time <= 0.0:
-		return null
-	if _pose_time < _attack_windup:
-		_attack_phase = "windup"
-		var idx := 0 if _pose_time < _attack_windup * 0.35 else 1
-		return Polish.texture(str(_attack_clip[idx]))
-	elif _pose_time < _attack_windup + _attack_strike:
-		_attack_phase = "strike"
-		return Polish.texture(str(_attack_clip[2]))
-	_attack_phase = "recovery"
-	return Polish.texture(str(_attack_clip[3]))
+	if not _attack_clip.is_empty() and _action_time > 0.0:
+		if _pose_time < _attack_windup:
+			_attack_phase = "windup"
+			var idx := 0 if _pose_time < _attack_windup * 0.35 else 1
+			return Polish.texture(str(_attack_clip[idx]))
+		elif _pose_time < _attack_windup + _attack_strike:
+			_attack_phase = "strike"
+			return Polish.texture(str(_attack_clip[2]))
+		_attack_phase = "recovery"
+		return Polish.texture(str(_attack_clip[3]))
+	if MONKEY_ROLE_POSES.has(role):
+		var role_poses: Dictionary = MONKEY_ROLE_POSES[role]
+		var pose_key := _pose if role_poses.has(_pose) else "idle"
+		var frames: Array = role_poses[pose_key]
+		var rate := 5.0 if pose_key == "idle" else 8.0
+		return Polish.texture(str(frames[_animation_frame(frames.size(), rate, pose_key in ["idle", "move"])]))
+	return null
 
 
 func _weapon_transform() -> Dictionary:
@@ -421,7 +462,7 @@ func _weapon_transform() -> Dictionary:
 func _render_frame() -> void:
 	var art: Texture2D
 	var combat_art: Texture2D
-	if kind == "monkey" and hp > 0:
+	if kind == "monkey":
 		combat_art = _current_monkey_combat_texture()
 	if combat_art != null:
 		art = combat_art
@@ -470,7 +511,8 @@ func _render_frame() -> void:
 		_sprite.modulate = Color.WHITE
 	_sprite.modulate.a = lerpf(0.15, 1.0, reveal)
 
-	if _equipment.texture != null:
+	var has_baked_weapon := kind == "monkey" and MONKEY_ROLE_POSES.has(role)
+	if _equipment.texture != null and not has_baked_weapon:
 		var wt := _weapon_transform()
 		var target_px := 35.0 if weapon_id in ["staff", "magic", "heal"] else 33.0
 		var base_s := minf(target_px / _equipment.texture.get_height(), target_px / _equipment.texture.get_width())

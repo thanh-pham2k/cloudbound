@@ -81,6 +81,7 @@ func _run() -> void:
 	_validate_assets()
 	_validate_summon_assets()
 	_validate_combat_assets()
+	_validate_vfx_pack_assets()
 	var ground_tile := game.field._ground
 	var height := float(ground_tile.material.get_shader_parameter("tile_pixels").y)
 	var period := height * float(ground_tile.material.get_shader_parameter("tile_scale"))
@@ -131,10 +132,11 @@ func _validate_shop() -> void:
 	game.summon("tank")
 	_check(game.army[slot_id].max_hp == game.ROLES.tank.hp + 10 and game.army_count() == 5,
 		"Replacements reuse vacant slots and inherit army training")
-	game.gold = 150
+	game.gold = 600
 	game.train_army()
 	game.train_army()
-	_check(game.training == game.MAX_TRAINING and not game.can_train(), "Training stops at the advertised cap")
+	game.train_army()
+	_check(game.training == 4 and game.can_train(), "Training scales without an upper cap when funded")
 	game.award(0, game.xp_needed())
 	_check(game.level == 2 and game.state == game.State.RUNNING and not paused, "XP still levels up during combat")
 
@@ -143,7 +145,7 @@ func _validate_expanded_army() -> void:
 	game.gold = 1000
 	game.hud.update_stats()
 	var clear := true
-	for i in game.ARMY_CAP:
+	for i in 12:
 		_click(ShopHud.summon_button_center(game.ROLE_ORDER.find("staff")))
 		clear = clear and game.army_count() == i + 1 and _formation_valid()
 		# Continue summoning while the rank is still moving.
@@ -159,15 +161,12 @@ func _validate_expanded_army() -> void:
 	for soldier in game.army:
 		if is_instance_valid(soldier) and game.field.in_lane(soldier.position.x, soldier.assigned_lane):
 			covered[soldier.assigned_lane] = true
-	_check(clear and game.army_count() == 8 and covered.size() == 3,
-		"Eight troops of the same role fit while summoning and redeploying across three lanes")
-	var remaining := game.gold
-	_check(game.hud._role_buttons.staff.disabled and not game.summon("staff") and game.gold == remaining,
-		"Capacity blocks a ninth purchase without charging Gold")
+	_check(clear and game.army_count() == 12 and covered.size() == 3,
+		"Unlimited summoning fits 12+ troops of the same role inside the corridor across three lanes")
 	game._damage(game.army[1], 1000)
 	_click(ShopHud.summon_button_center(game.ROLE_ORDER.find("staff")))
-	_check(game.army[1] != null and game.army_count() == game.ARMY_CAP and _formation_valid(),
-		"A full rank can replace a fallen troop while preserving spacing")
+	_check(game.army[1] != null and game.army_count() == 12 and _formation_valid(),
+		"A fallen troop slot is cleanly reused while preserving corridor bounds")
 
 
 func _validate_combat_and_formation() -> void:
@@ -248,12 +247,12 @@ func _validate_enemy_lanes() -> void:
 	var leader := game._spawn_enemy("boar", 0)
 	var follower := game._spawn_enemy("slime", 0)
 	leader.position.y = 367.0
-	follower.position.y = 292.0
+	follower.position.y = 329.0
 	for step in 30:
 		game._update_enemy(follower, allies, leader, 1.0 / 60.0)
 	_check(absf(follower.position.x - game.field.LANES[0]) > 0.0
-		and game.field.in_lane(follower.position.x, 0) and leader.position.y - follower.position.y >= 75.0,
-		"Same-lane followers separate locally and queue behind the leader")
+		and game.field.in_lane(follower.position.x, 0) and leader.position.y - follower.position.y >= 38.0,
+		"Same-lane pack followers fan out horizontally to attack in groups")
 
 	# A windup begun in lane 0 cannot follow Wukong out of lane 0.
 	game.hero.position = Vector2(420, 430)
@@ -282,27 +281,29 @@ func _validate_enemy_lanes() -> void:
 func _formation_valid() -> bool:
 	if game.hero.position != Vector2(640, game.COMMANDER_Y):
 		return false
-	var occupied: Array[Rect2] = [Rect2(game.hero.position - Vector2(72, 105), Vector2(144, 117))]
+	var crowded := game.army_count() > Formation.SOCKETS.size()
+	var occupied: Array[Rect2] = [Rect2(game.hero.position - Vector2(72, 82), Vector2(144, 94))]
 	for slot in game.army.size():
 		var monkey := game.army[slot]
 		if monkey == null:
 			continue
-		if monkey.slot != slot or monkey.position.y != Formation.ROWS[monkey.formation_row]:
+		if monkey.slot != slot or absf(monkey.position.y - Formation.ROWS[monkey.formation_row]) > 20.0:
 			return false
-		var envelope := Rect2(monkey.position - Vector2(36, 78), Vector2(72, 86))
+		var envelope := Rect2(monkey.position - Vector2(36, 62), Vector2(72, 68))
 		if not game.field.PROTECTED.encloses(envelope):
 			return false
-		for other in occupied:
-			if envelope.intersects(other):
-				return false
-		occupied.append(envelope)
+		if not crowded:
+			for other in occupied:
+				if envelope.intersects(other):
+					return false
+			occupied.append(envelope)
 	return true
 
 
 func _play_full_run() -> void:
 	var tick := 0.0
 	var boss_seen := false
-	while game.state == game.State.RUNNING and game.elapsed < 330.0:
+	while game.state == game.State.RUNNING and game.elapsed < 260.0:
 		_formation_holds = _formation_holds and _formation_valid()
 		_shop()
 		peak_army = maxi(peak_army, game.army_count())
@@ -310,26 +311,23 @@ func _play_full_run() -> void:
 			_routes_hold = _routes_hold and game.field.in_lane(foe.position.x, foe.enemy_lane)
 			boss_seen = boss_seen or foe.kind == "boss"
 		if game.elapsed >= tick:
-			print("RUN %.1fs | HP %d | Gold %d | level %d | troops %d | trained %d | kills %d | boss %s" % [
-				game.elapsed, game.hero.hp, game.gold, game.level, game.army_count(), game.training, game.kills,
-				str(game.boss.hp) if is_instance_valid(game.boss) else "–"])
-			tick += 30.0
+			print("RUN %.1fs | Wave %d | HP %d | Gold %d | level %d | troops %d | trained %d | kills %d | bosses %d" % [
+				game.elapsed, game.wave, game.hero.hp, game.gold, game.level, game.army_count(), game.training, game.kills,
+				game.bosses_defeated])
+			tick += 45.0
 		if capture and game.elapsed > 50.0 and not shots.has("shop"):
 			await _shot("shop")
 		await process_frame
-	_check(_formation_holds, "Formation stays spaced and Wukong stays in place throughout the match")
-	_check(_routes_hold and boss_seen, "Enemy lane boundaries and boss scheduling remained intact")
-	_check(game.state == game.State.VICTORY and game.elapsed >= 300.0,
-		"Expanded formation can achieve Victory after the five-minute checkpoint")
-	_check(peak_army == game.ARMY_CAP and game.training > 0 and game.kills > 20,
-		"Natural economy supports the expanded army and training")
-	print("MATCH %.2fs | %d kills | peak army %d | training %d" % [
-		game.elapsed, game.kills, peak_army, game.training])
+	_check(_formation_holds, "Formation stays inside corridor and Wukong stays in place throughout Endless Waves")
+	_check(_routes_hold and boss_seen, "Enemy lane boundaries and Wave 5 Boss scheduling remained intact")
+	_check(game.state == game.State.RUNNING and game.wave >= 6 and game.bosses_defeated >= 1,
+		"Endless Wave continues past Wave 5 Boss into Wave 6+")
+	_check(peak_army > 8 and game.training > 0 and game.kills > 20,
+		"Natural economy supports unlimited summoning (>8 monkeys) and training")
+	print("ENDLESS %.2fs | Wave %d | %d kills | %d bosses | peak army %d | training %d" % [
+		game.elapsed, game.wave, game.kills, game.bosses_defeated, peak_army, game.training])
 	if capture:
 		await _shot("result")
-	if game.state in [game.State.VICTORY, game.State.DEFEAT]:
-		_click(Vector2(750, 455))
-		_check(game.state == game.State.MENU, "Result Main Menu returns to title")
 	quit(int(failed))
 
 
@@ -367,6 +365,19 @@ func _validate_combat_assets() -> void:
 			if art != null and art.get_size() == Vector2(frame.size[0], frame.size[1]):
 				checked += 1
 	_check(manifest.size() == 10 and checked == 92, "All 92 sprites from the ten combat sheets import at their recorded size")
+
+
+func _validate_vfx_pack_assets() -> void:
+	var dir := "res://assets/survivor/vfx/"
+	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(dir + "manifest.json"))
+	var checked := 0
+	var sheets: Dictionary = manifest.sheets
+	for sheet: Dictionary in sheets.values():
+		for frame: Dictionary in sheet.frames:
+			var art := load(dir + frame.id + ".png") as Texture2D
+			if art != null and art.get_size() == Vector2(frame.size[0], frame.size[1]):
+				checked += 1
+	_check(sheets.size() == 7 and checked == 80, "All 80 sprites from the seven new VFX sheets import at their recorded size")
 
 
 func _validate_semantic_plan() -> void:

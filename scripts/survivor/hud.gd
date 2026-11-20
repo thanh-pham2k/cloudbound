@@ -50,32 +50,34 @@ func _ready() -> void:
 	_root.add_child(_status)
 	_status.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-	var hero_card := _panel(_status, Rect2(24, 22, 328, 83), CREAM, Color("#bd8c4b"), 17)
-	_pic(hero_card, "heart", Rect2(13, 13, 29, 29))
-	_health = _bar(hero_card, Rect2(52, 41, 258, 13), Color("#dc7354"))
-	_health_text = _label(hero_card, Rect2(52, 12, 258, 24), "", 17)
-	_experience = _bar(hero_card, Rect2(52, 63, 258, 7), Color("#72a954"))
-	_xp_text = _label(hero_card, Rect2(52, 12, 258, 24), "", 13, MUTED, HORIZONTAL_ALIGNMENT_RIGHT)
+	var hero_card := _panel(_status, Rect2(18, 18, 278, 82), CREAM, Color("#bd8c4b"), 17)
+	_pic(hero_card, "heart", Rect2(12, 13, 27, 27))
+	_health = _bar(hero_card, Rect2(46, 40, 216, 13), Color("#dc7354"))
+	_health_text = _label(hero_card, Rect2(46, 12, 118, 24), "", 15)
+	_experience = _bar(hero_card, Rect2(46, 61, 216, 7), Color("#72a954"))
+	_xp_text = _label(hero_card, Rect2(142, 12, 120, 24), "", 12, MUTED, HORIZONTAL_ALIGNMENT_RIGHT)
 
-	var clock := _panel(_status, Rect2(544, 22, 192, 73), CREAM, Color("#bd8c4b"), 17)
-	_time_text = _label(clock, Rect2(0, 5, 192, 34), "", 29, INK, HORIZONTAL_ALIGNMENT_CENTER)
-	_wave_text = _label(clock, Rect2(0, 39, 192, 23), "", 15, MUTED, HORIZONTAL_ALIGNMENT_CENTER)
+	# Keep the clock/wave panel in the left margin (x <= 296) so it never covers the 3-lane combat corridor (x >= 306).
+	var clock := _panel(_status, Rect2(18, 110, 278, 60), CREAM, Color("#bd8c4b"), 15)
+	_time_text = _label(clock, Rect2(14, 4, 102, 52), "", 26, INK, HORIZONTAL_ALIGNMENT_LEFT)
+	_wave_text = _label(clock, Rect2(106, 6, 160, 48), "", 14, MUTED, HORIZONTAL_ALIGNMENT_RIGHT)
 
-	var team := _panel(_status, Rect2(937, 22, 260, 62), CREAM, Color("#bd8c4b"), 17)
-	_pic(team, "gold_icon", Rect2(14, 13, 35, 35))
-	_gold_text = _label(team, Rect2(58, 0, 64, 62), "", 21)
-	_pic(team, "army_icon", Rect2(133, 12, 49, 37))
-	_army_text = _label(team, Rect2(192, 0, 58, 62), "", 21)
+	# Keep top-right HUD panels in the right margin (x >= 980) outside the combat corridor (x <= 974).
+	var team := _panel(_status, Rect2(980, 18, 224, 60), CREAM, Color("#bd8c4b"), 17)
+	_pic(team, "gold_icon", Rect2(12, 13, 33, 33))
+	_gold_text = _label(team, Rect2(50, 0, 68, 60), "", 20)
+	_pic(team, "army_icon", Rect2(120, 12, 44, 35))
+	_army_text = _label(team, Rect2(168, 0, 50, 60), "", 20)
 
-	var pause := _button(_status, Rect2(1208, 25, 47, 47), "", game.pause_game)
+	var pause := _button(_status, Rect2(1214, 24, 47, 47), "", game.pause_game)
 	pause.tooltip_text = "Pause (Esc)"
 	pause.focus_mode = Control.FOCUS_NONE
 	_pic(pause, "pause_icon", Rect2(2, 2, 43, 43))
 
-	_boss_card = _panel(_status, Rect2(937, 97, 316, 57), CREAM, Color("#a6553a"), 15)
-	_boss_portrait = _pic(_boss_card, "boss_alert", Rect2(9, 6, 47, 44))
-	_boss_name = _label(_boss_card, Rect2(60, 4, 241, 25), "BOAR KING", 16, INK)
-	_boss_health = _bar(_boss_card, Rect2(60, 34, 241, 10), Color("#cc5347"))
+	_boss_card = _panel(_status, Rect2(980, 88, 282, 56), CREAM, Color("#a6553a"), 15)
+	_boss_portrait = _pic(_boss_card, "boss_alert", Rect2(8, 6, 44, 42))
+	_boss_name = _label(_boss_card, Rect2(56, 4, 214, 24), "BOAR KING", 15, INK)
+	_boss_health = _bar(_boss_card, Rect2(56, 33, 214, 10), Color("#cc5347"))
 	_build_summon_panel()
 
 
@@ -88,9 +90,9 @@ func update_stats() -> void:
 	_experience.value = game.xp
 	_xp_text.text = "Lv %d   ·   %d/%d XP" % [game.level, game.xp, game.xp_needed()]
 	_time_text.text = _time()
-	_wave_text.text = "BOSS ENCOUNTER" if game.elapsed >= game.BOSS_TIME else "WAVE %d / 5" % game.wave
+	_wave_text.text = ("BOSS · WAVE %d" if is_instance_valid(game.boss) else "ENDLESS · WAVE %d") % game.wave
 	_gold_text.text = str(game.gold)
-	_army_text.text = "%d / %d" % [game.army_count(), game.ARMY_CAP]
+	_army_text.text = "%d" % game.army_count()
 	_update_summon_panel()
 	_boss_card.visible = is_instance_valid(game.boss)
 	if _boss_card.visible:
@@ -175,8 +177,7 @@ func _build_summon_panel() -> void:
 
 func _update_summon_panel() -> void:
 	_summon_panel.visible = game.state in [game.State.RUNNING, game.State.PAUSED]
-	var full: bool = game.army_count() >= game.ARMY_CAP
-	_summon_capacity.text = "Army full" if full else "%d / %d slots" % [game.army_count(), game.ARMY_CAP]
+	_summon_capacity.text = "%d active" % game.army_count()
 	for role in _role_buttons:
 		var button: Button = _role_buttons[role]
 		var enabled: bool = game.can_summon(role)
@@ -187,8 +188,8 @@ func _update_summon_panel() -> void:
 			if child is TextureRect and child != frame:
 				child.modulate.a = 1.0 if enabled else 0.61
 	_train_button.disabled = not game.can_train()
-	_train_label.text = "Train army · %d/%d" % [game.training, game.MAX_TRAINING]
-	_train_price.text = "Fully trained" if game.training >= game.MAX_TRAINING else "%d Gold" % game.training_cost()
+	_train_label.text = "Train army · Lv %d" % game.training
+	_train_price.text = "%d Gold" % game.training_cost()
 
 
 func _time() -> String:
@@ -245,9 +246,11 @@ func show_result(won: bool) -> void:
 	for i in effects.size():
 		var drift := Vector2(-14 if i % 2 == 0 else 14, -32 if won else 20)
 		Polish.burst(panel, effects[i], positions[i], 82.0 - i * 6, 1.55 + i * 0.13, drift, 0.86)
-	var summary: String = "%s defeated" % game.boss_display_name() if won else "Sun Wukong fell"
+	var summary: String = "%s defeated" % game.boss_display_name() if won else (
+		"Reached Wave %d  ·  %d bosses defeated" % [game.wave, game.bosses_defeated])
 	_label(panel, Rect2(14, 115, 504, 29), summary, 22, MUTED, HORIZONTAL_ALIGNMENT_CENTER)
-	_label(panel, Rect2(14, 159, 504, 29), "%s   ·   %d enemies defeated   ·   Level %d" % [_time(), game.kills, game.level],
+	_label(panel, Rect2(14, 159, 504, 29), "%s   ·   %d kills   ·   Lv %d   ·   Peak %d" % [
+		_time(), game.kills, game.level, game.peak_army],
 		18, MUTED, HORIZONTAL_ALIGNMENT_CENTER)
 	var restart := _button(panel, Rect2(51, 222, 204, 49), "Restart", game.start_game, true)
 	_button(panel, Rect2(277, 222, 204, 49), "Main Menu", game.main_menu)
