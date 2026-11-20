@@ -1,6 +1,6 @@
 {
   "003": {
-    "source": "assets/inbox/003-create-one-4-3-sequential-sprite-sheet-for-the-archer-monkey.png",
+    "source": "assets/archive/adapted/survivor/combat/003-create-one-4-3-sequential-sprite-sheet-for-the-archer-monkey.png",
     "sha256": "1590df55733123ad6d1e152123ace5a34dd4beffe4fc636c61a9f82c53af4e03",
     "source_size": [
       1448,
@@ -327,7 +327,7 @@
     ]
   },
   "004": {
-    "source": "assets/inbox/004-create-one-4-3-sprite-sheet-for-magic-monkey-combat-casting-.png",
+    "source": "assets/archive/adapted/survivor/combat/004-create-one-4-3-sprite-sheet-for-magic-monkey-combat-casting-.png",
     "sha256": "7866cd1d2761ba6a72aa8939dc5918d6bb9afbc34cf360f7c94dbc855c6ad2fc",
     "source_size": [
       1448,
@@ -654,7 +654,7 @@
     ]
   },
   "005": {
-    "source": "assets/inbox/005-create-one-4-2-sequential-defensive-combat-sprite-sheet-for-.png",
+    "source": "assets/archive/adapted/survivor/combat/005-create-one-4-2-sequential-defensive-combat-sprite-sheet-for-.png",
     "sha256": "a30bc52fed271f70e763790fc61b390df8e6c1a01f6f5fa7efdbf8a398eb9723",
     "source_size": [
       1774,
@@ -877,7 +877,7 @@
     ]
   },
   "006": {
-    "source": "assets/inbox/006-create-one-4-2-sequential-healing-animation-sprite-sheet-for.png",
+    "source": "assets/archive/adapted/survivor/combat/006-create-one-4-2-sequential-healing-animation-sprite-sheet-for.png",
     "sha256": "709fe4ace942761ebe02d1a7c266bf1d1724bad12cf669d219fde5f7a38a3847",
     "source_size": [
       1774,
@@ -1100,7 +1100,7 @@
     ]
   },
   "007": {
-    "source": "assets/inbox/007-create-one-4-2-sequential-melee-slash-vfx-sprite-sheet-for-h.png",
+    "source": "assets/archive/adapted/survivor/combat/007-create-one-4-2-sequential-melee-slash-vfx-sprite-sheet-for-h.png",
     "sha256": "68bdd8bcd78e2b137dc912bd409f5c0c5d4729de37de9c4e3f63fecd4e7f73fa",
     "source_size": [
       1774,
@@ -1323,7 +1323,7 @@
     ]
   },
   "008": {
-    "source": "assets/inbox/008-create-one-4-2-modular-arrow-combat-vfx-sprite-sheet-for-hoa.png",
+    "source": "assets/archive/adapted/survivor/combat/008-create-one-4-2-modular-arrow-combat-vfx-sprite-sheet-for-hoa.png",
     "sha256": "55adcaf3134dba1cbd6372960191b31ce781d01639d56ff5166d247e57e9f6bf",
     "source_size": [
       1774,
@@ -1546,7 +1546,7 @@
     ]
   },
   "009": {
-    "source": "assets/inbox/009-create-one-4-2-sprite-sheet-of-advanced-magic-combat-vfx-for.png",
+    "source": "assets/archive/adapted/survivor/combat/009-create-one-4-2-sprite-sheet-of-advanced-magic-combat-vfx-for.png",
     "sha256": "e489769bbc7dbaec99de65faefe67b4e02a466a67bdc6256c20b147d7d789668",
     "source_size": [
       1774,
@@ -1769,7 +1769,7 @@
     ]
   },
   "010": {
-    "source": "assets/inbox/010-create-one-4-2-combat-hit-feedback-vfx-sprite-sheet-for-hoa-.png",
+    "source": "assets/archive/adapted/survivor/combat/010-create-one-4-2-combat-hit-feedback-vfx-sprite-sheet-for-hoa-.png",
     "sha256": "064b4d50ad151327ede5836b2cc6577f40421c19e68ef8f58ce620202346b8a6",
     "source_size": [
       1774,
@@ -1992,7 +1992,7 @@
     ]
   },
   "011": {
-    "source": "assets/inbox/011-create-one-4-2-sprite-sheet-of-advanced-boss-heavy-attack-vf.png",
+    "source": "assets/archive/adapted/survivor/combat/011-create-one-4-2-sprite-sheet-of-advanced-boss-heavy-attack-vf.png",
     "sha256": "bc8111792b0f83daff0a3a4db41f5712367727338364e37758e6da5b8d93af03",
     "source_size": [
       1774,
@@ -2215,7 +2215,7 @@
     ]
   },
   "012": {
-    "source": "assets/inbox/012-create-one-4-3-sequential-animation-sprite-sheet-for-the-sta.png",
+    "source": "assets/archive/adapted/survivor/combat/012-create-one-4-3-sequential-animation-sprite-sheet-for-the-sta.png",
     "sha256": "cfc17287665173ccfd4a26b853dd53e2fc93df426727bf486cc1d1ee8673a0b1",
     "source_size": [
       1448,

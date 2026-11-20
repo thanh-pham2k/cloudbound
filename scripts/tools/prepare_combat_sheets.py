@@ -10,7 +10,7 @@ from PIL import Image
 from scipy import ndimage
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE = ROOT / "assets/inbox"
+SOURCE = ROOT / "assets/archive/adapted/survivor/combat"
 DEST = ROOT / "assets/survivor/combat"
 
 # Sheet definitions: id -> (glob_hint, frame_names_or_prefix, rows, kind, visual_note)

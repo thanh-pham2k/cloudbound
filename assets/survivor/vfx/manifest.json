@@ -1,0 +1,2103 @@
+{
+  "missing_sheets": [
+    {
+      "sheet": "004",
+      "expected": "Hit feedback VFX (normal, heavy, critical, blocked)",
+      "status": "MISSING_FROM_INBOX",
+      "mitigation": "Reuses validated hit feedback sprites from assets/survivor/combat/ (hit_light, hit_spark, hit_burst, hit_heavy_crit, hit_shards, hit_sweep) plus enemy_hurt_flash / enemy_heavy_hurt (005) and guard_blue_shield / guard_blue_dome (007)."
+    }
+  ],
+  "sheets": {
+    "001": {
+      "source": "assets/archive/adapted/survivor/vfx/001-create-one-4-3-sprite-sheet-of-advanced-melee-slash-vfx-for-.png",
+      "sha256": "2b1fe7adac6500d81c7f39a0ddb873e95c93f2c85d6047df4bb34881c833cd74",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_mode": "RGBA",
+      "background": "native RGBA cleaned",
+      "note": "Advanced melee slash and combo VFX (4x3 RGBA).",
+      "frames": [
+        {
+          "id": "melee_spark_00",
+          "cell": [
+            0,
+            0
+          ],
+          "source_rect": [
+            110,
+            150,
+            121,
+            123
+          ],
+          "size": [
+            127,
+            129
+          ],
+          "pivot": [
+            63.5,
+            64.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "melee_arc_01",
+          "cell": [
+            1,
+            0
+          ],
+          "source_rect": [
+            422,
+            148,
+            226,
+            120
+          ],
+          "size": [
+            232,
+            126
+          ],
+          "pivot": [
+            116.0,
+            63.0
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "melee_arc_02",
+          "cell": [
+            2,
+            0
+          ],
+          "source_rect": [
+            754,
+            118,
+            289,
+            181
+          ],
+          "size": [
+            295,
+            187
+          ],
+          "pivot": [
+            147.5,
+            93.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "melee_arc_03",
+          "cell": [
+            3,
+            0
+          ],
+          "source_rect": [
+            1132,
+            131,
+            264,
+            170
+          ],
+          "size": [
+            270,
+            176
+          ],
+          "pivot": [
+            135.0,
+            88.0
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "melee_slam_00",
+          "cell": [
+            0,
+            1
+          ],
+          "source_rect": [
+            46,
+            464,
+            252,
+            162
+          ],
+          "size": [
+            258,
+            168
+          ],
+          "pivot": [
+            129.0,
+            84.0
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "melee_heavy_arc",
+          "cell": [
+            1,
+            1
+          ],
+          "source_rect": [
+            373,
+            453,
+            312,
+            195
+          ],
+          "size": [
+            318,
+            201
+          ],
+          "pivot": [
+            159.0,
+            100.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "melee_impact_star",
+          "cell": [
+            2,
+            1
+          ],
+          "source_rect": [
+            752,
+            447,
+            288,
+            203
+          ],
+          "size": [
+            294,
+            209
+          ],
+          "pivot": [
+            147.0,
+            104.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "melee_cloud_trail",
+          "cell": [
+            3,
+            1
+          ],
+          "source_rect": [
+            1117,
+            466,
+            285,
+            167
+          ],
+          "size": [
+            291,
+            173
+          ],
+          "pivot": [
+            145.5,
+            86.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "melee_thrust",
+          "cell": [
+            0,
+            2
+          ],
+          "source_rect": [
+            43,
+            830,
+            274,
+            154
+          ],
+          "size": [
+            280,
+            160
+          ],
+          "pivot": [
+            140.0,
+            80.0
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "melee_cross_slash",
+          "cell": [
+            1,
+            2
+          ],
+          "source_rect": [
+            415,
+            817,
+            253,
+            169
+          ],
+          "size": [
+            259,
+            175
+          ],
+          "pivot": [
+            129.5,
+            87.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "melee_combo_burst",
+          "cell": [
+            2,
+            2
+          ],
+          "source_rect": [
+            756,
+            780,
+            284,
+            224
+          ],
+          "size": [
+            290,
+            230
+          ],
+          "pivot": [
+            145.0,
+            115.0
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "melee_orbit_fade",
+          "cell": [
+            3,
+            2
+          ],
+          "source_rect": [
+            1153,
+            830,
+            210,
+            133
+          ],
+          "size": [
+            216,
+            139
+          ],
+          "pivot": [
+            108.0,
+            69.5
+          ],
+          "alpha_range": [
+            0,
+            252
+          ]
+        }
+      ]
+    },
+    "002": {
+      "source": "assets/archive/adapted/survivor/vfx/002-create-one-4-3-sprite-sheet-of-advanced-arrow-projectile-vfx.png",
+      "sha256": "469cc2a0b54c7badc7ca214a2875b0b4b2d29f14a88c61fec9e0bb27c4d12728",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_mode": "RGBA",
+      "background": "native RGBA cleaned",
+      "note": "Advanced arrow release, travel trail and impact VFX (4x3 RGBA).",
+      "frames": [
+        {
+          "id": "bow_spark",
+          "cell": [
+            0,
+            0
+          ],
+          "source_rect": [
+            99,
+            137,
+            162,
+            157
+          ],
+          "size": [
+            168,
+            163
+          ],
+          "pivot": [
+            84.0,
+            81.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "bow_charge_star",
+          "cell": [
+            1,
+            0
+          ],
+          "source_rect": [
+            398,
+            92,
+            273,
+            217
+          ],
+          "size": [
+            279,
+            223
+          ],
+          "pivot": [
+            139.5,
+            111.5
+          ],
+          "alpha_range": [
+            0,
+            254
+          ]
+        },
+        {
+          "id": "bow_release_burst",
+          "cell": [
+            2,
+            0
+          ],
+          "source_rect": [
+            747,
+            144,
+            282,
+            146
+          ],
+          "size": [
+            288,
+            152
+          ],
+          "pivot": [
+            144.0,
+            76.0
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "bow_power_ring",
+          "cell": [
+            3,
+            0
+          ],
+          "source_rect": [
+            1096,
+            69,
+            334,
+            287
+          ],
+          "size": [
+            340,
+            293
+          ],
+          "pivot": [
+            170.0,
+            146.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "arrow_trail_00",
+          "cell": [
+            0,
+            1
+          ],
+          "source_rect": [
+            66,
+            493,
+            204,
+            75
+          ],
+          "size": [
+            210,
+            81
+          ],
+          "pivot": [
+            105.0,
+            40.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "arrow_trail_01",
+          "cell": [
+            1,
+            1
+          ],
+          "source_rect": [
+            390,
+            470,
+            323,
+            131
+          ],
+          "size": [
+            329,
+            137
+          ],
+          "pivot": [
+            164.5,
+            68.5
+          ],
+          "alpha_range": [
+            0,
+            253
+          ]
+        },
+        {
+          "id": "arrow_trail_02",
+          "cell": [
+            2,
+            1
+          ],
+          "source_rect": [
+            713,
+            457,
+            351,
+            147
+          ],
+          "size": [
+            357,
+            153
+          ],
+          "pivot": [
+            178.5,
+            76.5
+          ],
+          "alpha_range": [
+            0,
+            253
+          ]
+        },
+        {
+          "id": "arrow_volley_trail",
+          "cell": [
+            3,
+            1
+          ],
+          "source_rect": [
+            1111,
+            452,
+            316,
+            156
+          ],
+          "size": [
+            322,
+            162
+          ],
+          "pivot": [
+            161.0,
+            81.0
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "arrow_hit_spark",
+          "cell": [
+            0,
+            2
+          ],
+          "source_rect": [
+            79,
+            789,
+            204,
+            155
+          ],
+          "size": [
+            210,
+            161
+          ],
+          "pivot": [
+            105.0,
+            80.5
+          ],
+          "alpha_range": [
+            0,
+            252
+          ]
+        },
+        {
+          "id": "arrow_hit_burst",
+          "cell": [
+            1,
+            2
+          ],
+          "source_rect": [
+            385,
+            724,
+            300,
+            267
+          ],
+          "size": [
+            306,
+            273
+          ],
+          "pivot": [
+            153.0,
+            136.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "arrow_hit_shatter",
+          "cell": [
+            2,
+            2
+          ],
+          "source_rect": [
+            741,
+            753,
+            300,
+            217
+          ],
+          "size": [
+            306,
+            223
+          ],
+          "pivot": [
+            153.0,
+            111.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "arrow_miss_dust",
+          "cell": [
+            3,
+            2
+          ],
+          "source_rect": [
+            1109,
+            771,
+            298,
+            198
+          ],
+          "size": [
+            304,
+            204
+          ],
+          "pivot": [
+            152.0,
+            102.0
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        }
+      ]
+    },
+    "003": {
+      "source": "assets/archive/adapted/survivor/vfx/003-create-one-4-3-sprite-sheet-of-advanced-magic-projectile-and.png",
+      "sha256": "8b0bdba289d7d0664ee6a1e2dd4c68a6edbe275c83f62a3a781561bf9742c7d1",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_mode": "RGBA",
+      "background": "native RGBA cleaned",
+      "note": "Advanced magic charge, projectiles and AoE explosions (4x3 RGBA, background veil cleaned).",
+      "frames": [
+        {
+          "id": "magic_charge_00",
+          "cell": [
+            0,
+            0
+          ],
+          "source_rect": [
+            95,
+            168,
+            180,
+            173
+          ],
+          "size": [
+            186,
+            179
+          ],
+          "pivot": [
+            93.0,
+            89.5
+          ],
+          "alpha_range": [
+            0,
+            253
+          ]
+        },
+        {
+          "id": "magic_charge_01",
+          "cell": [
+            1,
+            0
+          ],
+          "source_rect": [
+            409,
+            132,
+            308,
+            225
+          ],
+          "size": [
+            314,
+            231
+          ],
+          "pivot": [
+            157.0,
+            115.5
+          ],
+          "alpha_range": [
+            0,
+            252
+          ]
+        },
+        {
+          "id": "magic_charge_02",
+          "cell": [
+            2,
+            0
+          ],
+          "source_rect": [
+            717,
+            93,
+            369,
+            270
+          ],
+          "size": [
+            375,
+            276
+          ],
+          "pivot": [
+            187.5,
+            138.0
+          ],
+          "alpha_range": [
+            0,
+            253
+          ]
+        },
+        {
+          "id": "magic_cast_pillar",
+          "cell": [
+            3,
+            0
+          ],
+          "source_rect": [
+            1086,
+            61,
+            324,
+            302
+          ],
+          "size": [
+            330,
+            308
+          ],
+          "pivot": [
+            165.0,
+            154.0
+          ],
+          "alpha_range": [
+            0,
+            253
+          ]
+        },
+        {
+          "id": "magic_bolt_00",
+          "cell": [
+            0,
+            1
+          ],
+          "source_rect": [
+            54,
+            484,
+            305,
+            120
+          ],
+          "size": [
+            311,
+            126
+          ],
+          "pivot": [
+            155.5,
+            63.0
+          ],
+          "alpha_range": [
+            0,
+            252
+          ]
+        },
+        {
+          "id": "magic_lance_01",
+          "cell": [
+            1,
+            1
+          ],
+          "source_rect": [
+            359,
+            457,
+            344,
+            150
+          ],
+          "size": [
+            350,
+            156
+          ],
+          "pivot": [
+            175.0,
+            78.0
+          ],
+          "alpha_range": [
+            0,
+            252
+          ]
+        },
+        {
+          "id": "magic_comet_02",
+          "cell": [
+            2,
+            1
+          ],
+          "source_rect": [
+            703,
+            363,
+            369,
+            318
+          ],
+          "size": [
+            375,
+            324
+          ],
+          "pivot": [
+            187.5,
+            162.0
+          ],
+          "alpha_range": [
+            0,
+            253
+          ]
+        },
+        {
+          "id": "magic_wave_03",
+          "cell": [
+            3,
+            1
+          ],
+          "source_rect": [
+            1072,
+            363,
+            346,
+            280
+          ],
+          "size": [
+            352,
+            286
+          ],
+          "pivot": [
+            176.0,
+            143.0
+          ],
+          "alpha_range": [
+            0,
+            253
+          ]
+        },
+        {
+          "id": "magic_aoe_00",
+          "cell": [
+            0,
+            2
+          ],
+          "source_rect": [
+            44,
+            779,
+            238,
+            180
+          ],
+          "size": [
+            244,
+            186
+          ],
+          "pivot": [
+            122.0,
+            93.0
+          ],
+          "alpha_range": [
+            0,
+            253
+          ]
+        },
+        {
+          "id": "magic_aoe_01",
+          "cell": [
+            1,
+            2
+          ],
+          "source_rect": [
+            362,
+            749,
+            279,
+            206
+          ],
+          "size": [
+            285,
+            212
+          ],
+          "pivot": [
+            142.5,
+            106.0
+          ],
+          "alpha_range": [
+            0,
+            252
+          ]
+        },
+        {
+          "id": "magic_aoe_02",
+          "cell": [
+            2,
+            2
+          ],
+          "source_rect": [
+            641,
+            681,
+            440,
+            293
+          ],
+          "size": [
+            446,
+            299
+          ],
+          "pivot": [
+            223.0,
+            149.5
+          ],
+          "alpha_range": [
+            0,
+            254
+          ]
+        },
+        {
+          "id": "magic_aoe_03",
+          "cell": [
+            3,
+            2
+          ],
+          "source_rect": [
+            1081,
+            744,
+            335,
+            224
+          ],
+          "size": [
+            341,
+            230
+          ],
+          "pivot": [
+            170.5,
+            115.0
+          ],
+          "alpha_range": [
+            0,
+            251
+          ]
+        }
+      ]
+    },
+    "005": {
+      "source": "assets/archive/adapted/survivor/vfx/005-create-one-4-2-sprite-sheet-of-enemy-reaction-overlay-effect.png",
+      "sha256": "5c93098fba2bf02ffbc2e21e62f1beae22d07b4e7cf90556b241e37d428a0e86",
+      "source_size": [
+        1774,
+        887
+      ],
+      "source_mode": "RGBA",
+      "background": "native RGBA cleaned",
+      "note": "Enemy hurt, stun, daze, poison and defeat reaction overlays (4x2 RGBA).",
+      "frames": [
+        {
+          "id": "enemy_hurt_flash",
+          "cell": [
+            0,
+            0
+          ],
+          "source_rect": [
+            57,
+            79,
+            342,
+            313
+          ],
+          "size": [
+            348,
+            319
+          ],
+          "pivot": [
+            174.0,
+            159.5
+          ],
+          "alpha_range": [
+            0,
+            254
+          ]
+        },
+        {
+          "id": "enemy_heavy_hurt",
+          "cell": [
+            1,
+            0
+          ],
+          "source_rect": [
+            462,
+            62,
+            425,
+            336
+          ],
+          "size": [
+            431,
+            342
+          ],
+          "pivot": [
+            215.5,
+            171.0
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "enemy_stun_stars",
+          "cell": [
+            2,
+            0
+          ],
+          "source_rect": [
+            887,
+            78,
+            408,
+            289
+          ],
+          "size": [
+            414,
+            295
+          ],
+          "pivot": [
+            207.0,
+            147.5
+          ],
+          "alpha_range": [
+            0,
+            253
+          ]
+        },
+        {
+          "id": "enemy_daze_swirl",
+          "cell": [
+            3,
+            0
+          ],
+          "source_rect": [
+            1336,
+            70,
+            422,
+            374
+          ],
+          "size": [
+            428,
+            380
+          ],
+          "pivot": [
+            214.0,
+            190.0
+          ],
+          "alpha_range": [
+            0,
+            254
+          ]
+        },
+        {
+          "id": "enemy_poison_cloud",
+          "cell": [
+            0,
+            1
+          ],
+          "source_rect": [
+            60,
+            493,
+            339,
+            318
+          ],
+          "size": [
+            345,
+            324
+          ],
+          "pivot": [
+            172.5,
+            162.0
+          ],
+          "alpha_range": [
+            0,
+            253
+          ]
+        },
+        {
+          "id": "enemy_defeat_puff_00",
+          "cell": [
+            1,
+            1
+          ],
+          "source_rect": [
+            488,
+            568,
+            399,
+            240
+          ],
+          "size": [
+            405,
+            246
+          ],
+          "pivot": [
+            202.5,
+            123.0
+          ],
+          "alpha_range": [
+            0,
+            253
+          ]
+        },
+        {
+          "id": "enemy_defeat_puff_01",
+          "cell": [
+            2,
+            1
+          ],
+          "source_rect": [
+            887,
+            479,
+            432,
+            344
+          ],
+          "size": [
+            438,
+            350
+          ],
+          "pivot": [
+            219.0,
+            175.0
+          ],
+          "alpha_range": [
+            0,
+            253
+          ]
+        },
+        {
+          "id": "enemy_defeat_beam",
+          "cell": [
+            3,
+            1
+          ],
+          "source_rect": [
+            1358,
+            444,
+            370,
+            394
+          ],
+          "size": [
+            376,
+            400
+          ],
+          "pivot": [
+            188.0,
+            200.0
+          ],
+          "alpha_range": [
+            0,
+            253
+          ]
+        }
+      ]
+    },
+    "006": {
+      "source": "assets/archive/adapted/survivor/vfx/006-create-one-4-3-sprite-sheet-of-ground-contact-and-motion-fee.png",
+      "sha256": "16fe087e2cb33f7bd198395ded56cb2f5febb8cfbb2ea8cba398f2c8daf3daf5",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_mode": "RGBA",
+      "background": "native RGBA cleaned",
+      "note": "Movement, landing, formation and summon dust VFX (4x3 RGBA).",
+      "frames": [
+        {
+          "id": "dust_step",
+          "cell": [
+            0,
+            0
+          ],
+          "source_rect": [
+            80,
+            205,
+            193,
+            123
+          ],
+          "size": [
+            199,
+            129
+          ],
+          "pivot": [
+            99.5,
+            64.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "dust_puff",
+          "cell": [
+            1,
+            0
+          ],
+          "source_rect": [
+            399,
+            168,
+            273,
+            171
+          ],
+          "size": [
+            279,
+            177
+          ],
+          "pivot": [
+            139.5,
+            88.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "dust_dash_arc",
+          "cell": [
+            2,
+            0
+          ],
+          "source_rect": [
+            752,
+            163,
+            299,
+            173
+          ],
+          "size": [
+            305,
+            179
+          ],
+          "pivot": [
+            152.5,
+            89.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "dust_dash_cloud",
+          "cell": [
+            3,
+            0
+          ],
+          "source_rect": [
+            1088,
+            163,
+            329,
+            174
+          ],
+          "size": [
+            335,
+            180
+          ],
+          "pivot": [
+            167.5,
+            90.0
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "dust_land_small",
+          "cell": [
+            0,
+            1
+          ],
+          "source_rect": [
+            42,
+            494,
+            258,
+            166
+          ],
+          "size": [
+            264,
+            172
+          ],
+          "pivot": [
+            132.0,
+            86.0
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "dust_land_heavy",
+          "cell": [
+            1,
+            1
+          ],
+          "source_rect": [
+            368,
+            439,
+            346,
+            229
+          ],
+          "size": [
+            352,
+            235
+          ],
+          "pivot": [
+            176.0,
+            117.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "dust_ring_impact",
+          "cell": [
+            2,
+            1
+          ],
+          "source_rect": [
+            750,
+            487,
+            300,
+            169
+          ],
+          "size": [
+            306,
+            175
+          ],
+          "pivot": [
+            153.0,
+            87.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "dust_ring_scatter",
+          "cell": [
+            3,
+            1
+          ],
+          "source_rect": [
+            1106,
+            482,
+            316,
+            179
+          ],
+          "size": [
+            322,
+            185
+          ],
+          "pivot": [
+            161.0,
+            92.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "dust_redeploy",
+          "cell": [
+            0,
+            2
+          ],
+          "source_rect": [
+            41,
+            819,
+            262,
+            145
+          ],
+          "size": [
+            268,
+            151
+          ],
+          "pivot": [
+            134.0,
+            75.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "dust_summon_beam",
+          "cell": [
+            1,
+            2
+          ],
+          "source_rect": [
+            379,
+            747,
+            288,
+            236
+          ],
+          "size": [
+            294,
+            242
+          ],
+          "pivot": [
+            147.0,
+            121.0
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "dust_guard_arch",
+          "cell": [
+            2,
+            2
+          ],
+          "source_rect": [
+            735,
+            787,
+            327,
+            187
+          ],
+          "size": [
+            333,
+            193
+          ],
+          "pivot": [
+            166.5,
+            96.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "dust_swirl_leaf",
+          "cell": [
+            3,
+            2
+          ],
+          "source_rect": [
+            1104,
+            809,
+            315,
+            170
+          ],
+          "size": [
+            321,
+            176
+          ],
+          "pivot": [
+            160.5,
+            88.0
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        }
+      ]
+    },
+    "007": {
+      "source": "assets/archive/adapted/survivor/vfx/007-create-one-4-3-sprite-sheet-of-healing-and-support-skill-vfx.png",
+      "sha256": "0f83d5c83a2cbe9b102f743bef755f24fdc294f73455468d7a5da7752bea3fba",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_mode": "RGBA",
+      "background": "native RGBA cleaned",
+      "note": "Healing, support buff and defensive shield VFX (4x3 RGBA).",
+      "frames": [
+        {
+          "id": "heal_sparkle",
+          "cell": [
+            0,
+            0
+          ],
+          "source_rect": [
+            114,
+            166,
+            192,
+            179
+          ],
+          "size": [
+            198,
+            185
+          ],
+          "pivot": [
+            99.0,
+            92.5
+          ],
+          "alpha_range": [
+            0,
+            253
+          ]
+        },
+        {
+          "id": "heal_ring_rise",
+          "cell": [
+            1,
+            0
+          ],
+          "source_rect": [
+            418,
+            149,
+            271,
+            213
+          ],
+          "size": [
+            277,
+            219
+          ],
+          "pivot": [
+            138.5,
+            109.5
+          ],
+          "alpha_range": [
+            0,
+            252
+          ]
+        },
+        {
+          "id": "heal_cross_leaf",
+          "cell": [
+            2,
+            0
+          ],
+          "source_rect": [
+            767,
+            158,
+            270,
+            204
+          ],
+          "size": [
+            276,
+            210
+          ],
+          "pivot": [
+            138.0,
+            105.0
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "heal_burst_cross",
+          "cell": [
+            3,
+            0
+          ],
+          "source_rect": [
+            1107,
+            109,
+            269,
+            253
+          ],
+          "size": [
+            275,
+            259
+          ],
+          "pivot": [
+            137.5,
+            129.5
+          ],
+          "alpha_range": [
+            0,
+            253
+          ]
+        },
+        {
+          "id": "heal_wave_plus",
+          "cell": [
+            0,
+            1
+          ],
+          "source_rect": [
+            61,
+            429,
+            301,
+            236
+          ],
+          "size": [
+            307,
+            242
+          ],
+          "pivot": [
+            153.5,
+            121.0
+          ],
+          "alpha_range": [
+            0,
+            253
+          ]
+        },
+        {
+          "id": "support_buff_dome",
+          "cell": [
+            1,
+            1
+          ],
+          "source_rect": [
+            362,
+            362,
+            351,
+            305
+          ],
+          "size": [
+            357,
+            311
+          ],
+          "pivot": [
+            178.5,
+            155.5
+          ],
+          "alpha_range": [
+            0,
+            253
+          ]
+        },
+        {
+          "id": "support_shield_up",
+          "cell": [
+            2,
+            1
+          ],
+          "source_rect": [
+            777,
+            362,
+            271,
+            296
+          ],
+          "size": [
+            277,
+            302
+          ],
+          "pivot": [
+            138.5,
+            151.0
+          ],
+          "alpha_range": [
+            0,
+            253
+          ]
+        },
+        {
+          "id": "heal_pillar_leaf",
+          "cell": [
+            3,
+            1
+          ],
+          "source_rect": [
+            1105,
+            362,
+            281,
+            297
+          ],
+          "size": [
+            287,
+            303
+          ],
+          "pivot": [
+            143.5,
+            151.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "guard_blue_shield",
+          "cell": [
+            0,
+            2
+          ],
+          "source_rect": [
+            86,
+            755,
+            258,
+            169
+          ],
+          "size": [
+            264,
+            175
+          ],
+          "pivot": [
+            132.0,
+            87.5
+          ],
+          "alpha_range": [
+            0,
+            253
+          ]
+        },
+        {
+          "id": "heal_sprout_glow",
+          "cell": [
+            1,
+            2
+          ],
+          "source_rect": [
+            435,
+            730,
+            227,
+            217
+          ],
+          "size": [
+            233,
+            223
+          ],
+          "pivot": [
+            116.5,
+            111.5
+          ],
+          "alpha_range": [
+            0,
+            253
+          ]
+        },
+        {
+          "id": "guard_blue_dome",
+          "cell": [
+            2,
+            2
+          ],
+          "source_rect": [
+            749,
+            743,
+            293,
+            208
+          ],
+          "size": [
+            299,
+            214
+          ],
+          "pivot": [
+            149.5,
+            107.0
+          ],
+          "alpha_range": [
+            0,
+            253
+          ]
+        },
+        {
+          "id": "heal_ribbon_rise",
+          "cell": [
+            3,
+            2
+          ],
+          "source_rect": [
+            1113,
+            726,
+            256,
+            229
+          ],
+          "size": [
+            262,
+            235
+          ],
+          "pivot": [
+            131.0,
+            117.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        }
+      ]
+    },
+    "008": {
+      "source": "assets/archive/adapted/survivor/vfx/008-create-one-4-3-sprite-sheet-of-boss-skill-telegraph-and-heav.png",
+      "sha256": "c684c75e3dfb879e2b1e5f381d54a9752d8029f912eb42648f2d011335292763",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_mode": "RGB",
+      "background": "black matte keyed to RGBA",
+      "note": "Boss telegraph, shockwave and heavy impact VFX (4x3 RGB on black matte keyed to RGBA).",
+      "frames": [
+        {
+          "id": "boss_ring_00",
+          "cell": [
+            0,
+            0
+          ],
+          "source_rect": [
+            55,
+            203,
+            269,
+            127
+          ],
+          "size": [
+            275,
+            133
+          ],
+          "pivot": [
+            137.5,
+            66.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "boss_ring_01",
+          "cell": [
+            1,
+            0
+          ],
+          "source_rect": [
+            365,
+            145,
+            318,
+            200
+          ],
+          "size": [
+            324,
+            206
+          ],
+          "pivot": [
+            162.0,
+            103.0
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "boss_pillar_charge",
+          "cell": [
+            2,
+            0
+          ],
+          "source_rect": [
+            715,
+            59,
+            334,
+            277
+          ],
+          "size": [
+            340,
+            283
+          ],
+          "pivot": [
+            170.0,
+            141.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "boss_danger_alert",
+          "cell": [
+            3,
+            0
+          ],
+          "source_rect": [
+            1074,
+            87,
+            336,
+            249
+          ],
+          "size": [
+            342,
+            255
+          ],
+          "pivot": [
+            171.0,
+            127.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "boss_slam_spike",
+          "cell": [
+            0,
+            1
+          ],
+          "source_rect": [
+            31,
+            432,
+            290,
+            205
+          ],
+          "size": [
+            296,
+            211
+          ],
+          "pivot": [
+            148.0,
+            105.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "boss_shock_ripple",
+          "cell": [
+            1,
+            1
+          ],
+          "source_rect": [
+            363,
+            437,
+            324,
+            211
+          ],
+          "size": [
+            330,
+            217
+          ],
+          "pivot": [
+            165.0,
+            108.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "boss_boulder_burst",
+          "cell": [
+            2,
+            1
+          ],
+          "source_rect": [
+            720,
+            406,
+            335,
+            238
+          ],
+          "size": [
+            341,
+            244
+          ],
+          "pivot": [
+            170.5,
+            122.0
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "boss_flame_sweep",
+          "cell": [
+            3,
+            1
+          ],
+          "source_rect": [
+            1082,
+            412,
+            340,
+            228
+          ],
+          "size": [
+            346,
+            234
+          ],
+          "pivot": [
+            173.0,
+            117.0
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "boss_magma_crack",
+          "cell": [
+            0,
+            2
+          ],
+          "source_rect": [
+            32,
+            787,
+            295,
+            181
+          ],
+          "size": [
+            301,
+            187
+          ],
+          "pivot": [
+            150.5,
+            93.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "boss_dust_cloud",
+          "cell": [
+            1,
+            2
+          ],
+          "source_rect": [
+            356,
+            749,
+            328,
+            224
+          ],
+          "size": [
+            334,
+            230
+          ],
+          "pivot": [
+            167.0,
+            115.0
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "boss_rage_pillar",
+          "cell": [
+            2,
+            2
+          ],
+          "source_rect": [
+            703,
+            674,
+            332,
+            306
+          ],
+          "size": [
+            338,
+            312
+          ],
+          "pivot": [
+            169.0,
+            156.0
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        },
+        {
+          "id": "boss_nova_burst",
+          "cell": [
+            3,
+            2
+          ],
+          "source_rect": [
+            1050,
+            674,
+            378,
+            311
+          ],
+          "size": [
+            384,
+            317
+          ],
+          "pivot": [
+            192.0,
+            158.5
+          ],
+          "alpha_range": [
+            0,
+            255
+          ]
+        }
+      ]
+    }
+  }
+}
