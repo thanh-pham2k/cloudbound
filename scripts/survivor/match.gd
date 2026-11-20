@@ -245,13 +245,33 @@ func _move_army(delta: float) -> void:
 			_fx("vfx/dust_redeploy", Vector2(Battlefield.LANES[column], 545), 54.0, 0.34,
 				Vector2(0, -4), 0.65)
 	var weight := 1.0 - exp(-5.8 * delta)
+	var uncrowded := army_count() <= Army.SOCKETS.size()
 	for monkey in army:
 		if not is_instance_valid(monkey):
 			continue
 		var dx := monkey.goal_x - monkey.position.x
 		monkey.face(dx)
 		monkey.position.x = lerpf(monkey.position.x, monkey.goal_x, weight)
+		if uncrowded:
+			monkey.position.y = Army.ROWS[monkey.formation_row]
 		monkey.move_pose(absf(dx) > 2.0)
+	if uncrowded:
+		for row in Army.ROWS.size():
+			var rank: Array[Actor] = []
+			for monkey in army:
+				if is_instance_valid(monkey) and monkey.formation_row == row:
+					rank.append(monkey)
+			if rank.size() <= 1:
+				continue
+			rank.sort_custom(func(a: Actor, b: Actor): return a.position.x < b.position.x)
+			for i in range(1, rank.size()):
+				var min_x := rank[i - 1].position.x + Army.GAP
+				if rank[i].position.x < min_x:
+					rank[i].position.x = minf(min_x, Army.RIGHT)
+			for i in range(rank.size() - 2, -1, -1):
+				var max_x := rank[i + 1].position.x - Army.GAP
+				if rank[i].position.x > max_x:
+					rank[i].position.x = maxf(max_x, Army.LEFT)
 
 
 func _spawn_waves(delta: float) -> void:
@@ -782,6 +802,7 @@ func _damage(unit: Actor, amount: int, effect := "combat/hit_spark", knockback :
 	elif unit.slot >= 0:
 		Polish.sequence(_effects, ENEMY_DEFEAT_FRAMES, unit.position + Vector2(0, -12), 54.0, 0.36, Vector2(0, -8), 0.76)
 		army[unit.slot] = null
+		_next_plan = 0.0
 		hud.update_stats()
 	else:
 		enemies.erase(unit)

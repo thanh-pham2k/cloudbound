@@ -151,11 +151,11 @@ static func train_button_center() -> Vector2:
 
 func _build_summon_panel() -> void:
 	_summon_panel = _panel(_status, SUMMON_PANEL, Color("#fff1ce"), Color("#9b703c"), 15)
-	_pic(_summon_panel, "summon/tray", Rect2(10, 5, 149, 44))
-	_label(_summon_panel, Rect2(17, 13, 133, 23), "Summon", 18, INK, HORIZONTAL_ALIGNMENT_CENTER)
-	_summon_capacity = _label(_summon_panel, Rect2(30, 42, 110, 17), "", 13, MUTED)
+	_pic(_summon_panel, "summon/tray", Rect2(10, 4, 149, 36))
+	_label(_summon_panel, Rect2(17, 10, 133, 22), "Summon", 18, INK, HORIZONTAL_ALIGNMENT_CENTER)
+	_pic(_summon_panel, "summon/status_army", Rect2(24, 44, 18, 16))
+	_summon_capacity = _label(_summon_panel, Rect2(44, 43, 98, 18), "", 13, MUTED)
 	_summon_capacity.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_pic(_summon_panel, "summon/status_army", Rect2(15, 42, 20, 17))
 	for index in game.ROLE_ORDER.size():
 		var role: String = game.ROLE_ORDER[index]
 		var profile: Dictionary = game.ROLES[role]
@@ -170,9 +170,9 @@ func _build_summon_panel() -> void:
 		_pic(button, "summon/role_" + role, Rect2(125, 31, 20, 18))
 	_train_button = _button(_summon_panel, Rect2(TRAIN_X, 7, 223, 54), "", game.train_army, true)
 	_train_button.tooltip_text = "Train all current and future monkeys"
-	_pic(_train_button, "summon/train_button", Rect2(7, 8, 49, 38))
-	_train_label = _label(_train_button, Rect2(61, 5, 155, 22), "", 16)
-	_train_price = _label(_train_button, Rect2(61, 29, 155, 18), "", 13, MUTED)
+	_pic(_train_button, "summon/status_upgrade", Rect2(9, 6, 42, 42))
+	_train_label = _label(_train_button, Rect2(58, 5, 158, 22), "", 16)
+	_train_price = _label(_train_button, Rect2(58, 29, 158, 18), "", 13, MUTED)
 
 
 func _update_summon_panel() -> void:
