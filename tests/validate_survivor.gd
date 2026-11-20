@@ -80,6 +80,7 @@ func _run() -> void:
 	_validate_semantic_plan()
 	_validate_assets()
 	_validate_summon_assets()
+	_validate_combat_assets()
 	var ground_tile := game.field._ground
 	var height := float(ground_tile.material.get_shader_parameter("tile_pixels").y)
 	var period := height * float(ground_tile.material.get_shader_parameter("tile_scale"))
@@ -177,7 +178,9 @@ func _validate_combat_and_formation() -> void:
 	_check(tank.hp == health - 26, "Tank absorbs 35 percent of incoming damage")
 	healer.position.x = tank.position.x
 	game._attack(healer, 1.0)
-	_check(tank.hp == health, "Healer repairs the injured tank and clamps at max HP")
+	var healed_early := tank.hp != health - 26
+	game._attack(healer, 0.25)
+	_check(not healed_early and tank.hp == health, "Healer winds up then repairs the injured tank at impact frame")
 	_check(_formation_valid(), "All troop types use their role rows and the shared body")
 	var target := game._spawn_enemy("boar", 2)
 	target.position.y = 236.0
@@ -195,23 +198,34 @@ func _validate_combat_and_formation() -> void:
 	target.position = archer.position + Vector2(220.0, -90.0)
 	var hp := target.hp
 	game._attack(archer, 1.0)
+	var arrow_early := not game._projectiles.is_empty()
+	game._attack(archer, 0.20)
+	var arrow_released := not game._projectiles.is_empty()
 	game._move_projectiles(1.0)
-	_check(target.hp < hp, "Archer hits a target one lane-width away")
+	_check(not arrow_early and arrow_released and target.hp < hp,
+		"Archer winds up, releases arrow at strike frame, and hits a target one lane-width away")
 	var mage := game.army[2]
 	target.position = mage.position + Vector2(-220, -60)
 	var splash := game._spawn_enemy("slime", 0)
 	splash.position = target.position + Vector2(-26, -35)
 	game._attack(mage, 1.3)
-	_check(splash.hp < splash.max_hp, "Mage hits an adjacent lane and splashes a second enemy")
+	var mage_early := splash.hp < splash.max_hp
+	game._attack(mage, 0.25)
+	game._move_projectiles(1.0)
+	_check(not mage_early and splash.hp < splash.max_hp,
+		"Mage winds up, fires arcane orb on strike frame, and splashes a second enemy on arrival")
 	var staff := game.army[0]
 	target.position = staff.position + Vector2(210.0, -65.0)
 	splash.position = target.position + Vector2(0.0, -80.0)
 	hp = target.hp
 	game._attack(staff, 1.0)
+	game._attack(staff, 0.20)
 	_check(target.hp == hp, "Staff does not hit beyond melee range")
 	target.position = staff.position + Vector2(0.0, -85.0)
 	game._attack(staff, 1.0)
-	_check(target.hp < hp, "Staff hits a target in melee range")
+	var staff_early := target.hp < hp
+	game._attack(staff, 0.20)
+	_check(not staff_early and target.hp < hp, "Staff winds up and deals damage on melee impact frame")
 
 
 func _validate_enemy_lanes() -> void:
@@ -341,6 +355,18 @@ func _validate_summon_assets() -> void:
 			if art != null and art.get_size() == Vector2(frame.size[0], frame.size[1]):
 				checked += 1
 	_check(manifest.size() == 10 and checked == 104, "All 104 sprites from the ten summon sheets import at their recorded size")
+
+
+func _validate_combat_assets() -> void:
+	var dir := "res://assets/survivor/combat/"
+	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(dir + "manifest.json"))
+	var checked := 0
+	for sheet: Dictionary in manifest.values():
+		for frame: Dictionary in sheet.frames:
+			var art := load(dir + frame.id + ".png") as Texture2D
+			if art != null and art.get_size() == Vector2(frame.size[0], frame.size[1]):
+				checked += 1
+	_check(manifest.size() == 10 and checked == 92, "All 92 sprites from the ten combat sheets import at their recorded size")
 
 
 func _validate_semantic_plan() -> void:

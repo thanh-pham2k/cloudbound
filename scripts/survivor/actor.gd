@@ -17,6 +17,32 @@ const POSES := {
 	"boss": {"idle": [0, 1], "move": [0, 1, 2, 3],
 		"attack": [4, 5], "hurt": [6], "dead": [7]},
 }
+# Shared baby-monkey combat sequences from assets/survivor/combat/ (4 frames: ready, windup, strike, recovery).
+# Archer reuses shared-model draw/aim/release clips so all 5 roles preserve ONE baby monkey model.
+const MONKEY_ATTACKS := {
+	"staff": [
+		["combat/staff_00", "combat/staff_01", "combat/staff_02", "combat/staff_03"],
+		["combat/staff_04", "combat/staff_05", "combat/staff_06", "combat/staff_07"],
+		["combat/staff_08", "combat/staff_09", "combat/staff_10", "combat/staff_11"],
+	],
+	"archer": [
+		["combat/mage_00", "combat/mage_01", "combat/mage_02", "combat/mage_03"],
+		["combat/staff_08", "combat/staff_09", "combat/staff_10", "combat/staff_11"],
+	],
+	"mage": [
+		["combat/mage_00", "combat/mage_01", "combat/mage_02", "combat/mage_03"],
+		["combat/mage_04", "combat/mage_05", "combat/mage_06", "combat/mage_07"],
+		["combat/mage_08", "combat/mage_09", "combat/mage_10", "combat/mage_11"],
+	],
+	"tank": [
+		["combat/tank_04", "combat/tank_05", "combat/tank_06", "combat/tank_07"],
+	],
+	"healer": [
+		["combat/healer_00", "combat/healer_01", "combat/healer_02", "combat/healer_03"],
+		["combat/healer_04", "combat/healer_05", "combat/healer_06", "combat/healer_07"],
+	],
+}
+const TANK_GUARD := ["combat/tank_01", "combat/tank_02", "combat/tank_03"]
 const HEIGHTS := {"hero": 102.0, "monkey": 67.0, "slime": 65.0, "boar": 78.0, "boss": 152.0}
 
 var kind: String
@@ -42,6 +68,13 @@ var assigned_lane := -1
 var enemy_lane := -1
 var strikes_rear_line := false
 
+# Monkey Windup -> Strike -> Recovery pending combat state.
+var pending_attack := false
+var pending_target: Node2D
+var pending_damage := 0
+var pending_variation := 0
+var attack_count := 0
+
 var _sprite := Sprite2D.new()
 var _equipment := Sprite2D.new()
 var _frames: Array[Texture2D] = []
@@ -54,10 +87,20 @@ var _next_pose := "idle"
 var _pose_time := 0.0
 var _action_time := 0.0
 var _hit_time := 0.0
+var _hit_stop_time := 0.0
+var _knockback_offset := Vector2.ZERO
 var _death_time := 0.57
 var _faces_left := false
 var _entry: Sprite2D
 var _entry_time := 0.0
+
+var _attack_clip: Array = []
+var _attack_windup := 0.14
+var _attack_strike := 0.11
+var _attack_recovery := 0.12
+var _attack_phase := ""
+var _attack_variation := 0
+var _guard_time := 0.0
 
 
 func setup(actor_kind: String, health: int, foot_radius: float, look := "") -> void:
@@ -90,7 +133,8 @@ func setup(actor_kind: String, health: int, foot_radius: float, look := "") -> v
 func equip(id: String, art: Texture2D) -> void:
 	weapon_id = id
 	_equipment.texture = art
-	_equipment.scale = Vector2.ONE * minf(31.0 / art.get_height(), 31.0 / art.get_width())
+	var target_px := 35.0 if id in ["staff", "magic", "heal"] else 33.0
+	_equipment.scale = Vector2.ONE * minf(target_px / art.get_height(), target_px / art.get_width())
 	_equipment.show()
 
 
@@ -103,7 +147,31 @@ func move_pose(moving: bool) -> void:
 	_next_pose = "move" if moving else "idle"
 
 
+func begin_attack(role_name: String, windup_sec: float, strike_sec: float, recovery_sec: float, variation: int) -> void:
+	_attack_windup = windup_sec
+	_attack_strike = strike_sec
+	_attack_recovery = recovery_sec
+	_attack_variation = variation
+	_action_time = windup_sec + strike_sec + recovery_sec
+	_guard_time = 0.0
+	if kind == "monkey" and MONKEY_ATTACKS.has(role_name):
+		var clips: Array = MONKEY_ATTACKS[role_name]
+		_attack_clip = clips[variation % clips.size()]
+	else:
+		_attack_clip = []
+	var pose := "attack"
+	if kind == "monkey":
+		if weapon_id == "bow":
+			pose = "release"
+		elif weapon_id in ["magic", "heal"]:
+			pose = "cast"
+	_attack_phase = "windup"
+	_set_pose(pose, true)
+
+
 func attack_pose(duration: float) -> void:
+	_attack_clip = []
+	_attack_phase = ""
 	_action_time = duration
 	var pose := "attack"
 	if kind == "monkey":
@@ -114,6 +182,12 @@ func attack_pose(duration: float) -> void:
 	_set_pose(pose, true)
 
 
+func guard_pose() -> void:
+	if kind == "monkey" and role == "tank" and hp > 0 and _action_time <= 0.0:
+		_guard_time = 0.28
+		_pose_time = 0.0
+
+
 func command_pose() -> void:
 	if _action_time == 0.0:
 		_action_time = 0.20
@@ -121,6 +195,8 @@ func command_pose() -> void:
 
 
 func celebrate() -> void:
+	_attack_clip = []
+	_attack_phase = ""
 	_action_time = 2.1
 	_set_pose("cheer", true)
 
@@ -133,16 +209,43 @@ func arrive() -> void:
 	_equipment.hide()
 
 
+func hit_stop(duration: float) -> void:
+	_hit_stop_time = maxf(_hit_stop_time, duration)
+
+
+func apply_knockback(impulse: Vector2) -> void:
+	_knockback_offset = (_knockback_offset + impulse).limit_length(18.0)
+
+
 func has_hit_flash() -> bool:
 	return _hit_time > 0.0
 
 
+func weapon_tip_position() -> Vector2:
+	var direction := -1.0 if _faces_left else 1.0
+	var base: Vector2 = _weapon_transform().origin
+	var reach := Vector2(12.0 * direction, -8.0)
+	if weapon_id == "bow":
+		reach = Vector2(10.0 * direction, -2.0)
+	elif weapon_id in ["magic", "heal"]:
+		reach = Vector2(8.0 * direction, -14.0)
+	return position + base + reach
+
+
 func hurt(amount: int) -> void:
 	hp = maxi(0, hp - amount)
-	_hit_time = 0.17
-	if kind in ["hero", "monkey"]:
+	_hit_time = 0.18
+	if kind == "hero":
 		_action_time = 0.0
+	elif kind == "monkey":
+		if role == "tank" and hp > 0:
+			guard_pose()
+		elif not pending_attack:
+			_action_time = 0.0
 	if hp == 0:
+		pending_attack = false
+		_attack_clip = []
+		_attack_phase = ""
 		_set_pose("dead")
 		_entry_time = 0.0
 		if is_instance_valid(_entry):
@@ -151,16 +254,25 @@ func hurt(amount: int) -> void:
 
 
 func _process(delta: float) -> void:
+	if _hit_stop_time > 0.0:
+		_hit_stop_time = maxf(0.0, _hit_stop_time - delta)
+		_render_frame()
+		queue_redraw()
+		return
 	_pose_time += delta
 	_entry_time = maxf(0.0, _entry_time - delta)
 	_hit_time = maxf(0.0, _hit_time - delta)
+	_guard_time = maxf(0.0, _guard_time - delta)
 	_action_time = maxf(0.0, _action_time - delta)
+	_knockback_offset = _knockback_offset.lerp(Vector2.ZERO, 1.0 - exp(-18.0 * delta))
 	if hp == 0:
 		_death_time -= delta
 		modulate.a = clampf(_death_time / 0.24, 0.0, 1.0)
 		if _death_time <= 0.0:
 			queue_free()
 	elif _action_time == 0.0:
+		_attack_clip = []
+		_attack_phase = ""
 		_set_pose("hurt" if _hit_time > 0.0 else _next_pose)
 	_render_frame()
 	queue_redraw()
@@ -177,9 +289,143 @@ func _animation_frame(count: int, rate: float, looping: bool) -> int:
 	return index % count if looping else mini(index, count - 1)
 
 
+func _current_monkey_combat_texture() -> Texture2D:
+	if _guard_time > 0.0 and _action_time <= 0.0 and role == "tank":
+		var p := 1.0 - clampf(_guard_time / 0.28, 0.0, 1.0)
+		var idx := 0 if p < 0.20 else (1 if p < 0.72 else 2)
+		return Polish.texture(TANK_GUARD[idx])
+	if _attack_clip.is_empty() or _action_time <= 0.0:
+		return null
+	if _pose_time < _attack_windup:
+		_attack_phase = "windup"
+		var idx := 0 if _pose_time < _attack_windup * 0.35 else 1
+		return Polish.texture(str(_attack_clip[idx]))
+	elif _pose_time < _attack_windup + _attack_strike:
+		_attack_phase = "strike"
+		return Polish.texture(str(_attack_clip[2]))
+	_attack_phase = "recovery"
+	return Polish.texture(str(_attack_clip[3]))
+
+
+func _weapon_transform() -> Dictionary:
+	var direction := -1.0 if _faces_left else 1.0
+	var pos := Vector2(19.0, -21.0)
+	var deg := 0.0
+	var scale_mult := 1.0
+	var behind := false
+
+	if _guard_time > 0.0 and role == "tank":
+		pos = Vector2(21.0, -25.0)
+		deg = -8.0
+		scale_mult = 1.14
+	elif _action_time > 0.0 and _pose in ["attack", "release", "cast"]:
+		var phase := _attack_phase if not _attack_phase.is_empty() else "strike"
+		match weapon_id:
+			"staff":
+				if _attack_variation == 1:
+					# Overhead slam
+					if phase == "windup":
+						pos = Vector2(3.0, -56.0)
+						deg = -84.0
+					elif phase == "strike":
+						pos = Vector2(26.0, -14.0)
+						deg = 70.0
+						scale_mult = 1.12
+					else:
+						pos = Vector2(18.0, -20.0)
+						deg = 24.0
+				elif _attack_variation == 2:
+					# Power thrust
+					if phase == "windup":
+						pos = Vector2(-10.0, -25.0)
+						deg = -12.0
+						behind = true
+					elif phase == "strike":
+						pos = Vector2(31.0, -25.0)
+						deg = 8.0
+						scale_mult = 1.10
+					else:
+						pos = Vector2(20.0, -22.0)
+						deg = 4.0
+				else:
+					# Horizontal slash
+					if phase == "windup":
+						pos = Vector2(-11.0, -30.0)
+						deg = -56.0
+						behind = true
+					elif phase == "strike":
+						pos = Vector2(27.0, -27.0)
+						deg = 44.0
+						scale_mult = 1.12
+					else:
+						pos = Vector2(18.0, -22.0)
+						deg = 14.0
+			"bow":
+				if phase == "windup":
+					pos = Vector2(18.0, -28.0)
+					deg = -8.0
+					scale_mult = 0.96
+				elif phase == "strike":
+					pos = Vector2(25.0, -30.0)
+					deg = 5.0
+					scale_mult = 1.08
+				else:
+					pos = Vector2(19.0, -24.0)
+					deg = 0.0
+			"magic":
+				if phase == "windup":
+					pos = Vector2(14.0, -39.0)
+					deg = -22.0
+					scale_mult = 1.06
+				elif phase == "strike":
+					pos = Vector2(25.0, -35.0)
+					deg = 18.0
+					scale_mult = 1.12
+				else:
+					pos = Vector2(18.0, -26.0)
+					deg = 4.0
+			"shield":
+				if phase == "windup":
+					pos = Vector2(7.0, -25.0)
+					deg = -24.0
+				elif phase == "strike":
+					pos = Vector2(28.0, -24.0)
+					deg = 16.0
+					scale_mult = 1.15
+				else:
+					pos = Vector2(19.0, -22.0)
+					deg = 0.0
+			"heal":
+				if phase == "windup":
+					pos = Vector2(12.0, -36.0)
+					deg = -18.0
+				elif phase == "strike":
+					pos = Vector2(23.0, -42.0)
+					deg = 12.0
+					scale_mult = 1.10
+				else:
+					pos = Vector2(18.0, -28.0)
+					deg = 2.0
+	elif _pose == "move":
+		pos.y += sin(_pose_time * 19.0) * 2.0
+		deg = sin(_pose_time * 19.0) * 5.0
+
+	return {
+		"origin": Vector2(pos.x * direction, pos.y),
+		"rotation": deg_to_rad(deg * direction),
+		"scale_mult": scale_mult,
+		"behind": behind,
+	}
+
+
 func _render_frame() -> void:
 	var art: Texture2D
-	if _enemy_clips != null:
+	var combat_art: Texture2D
+	if kind == "monkey" and hp > 0:
+		combat_art = _current_monkey_combat_texture()
+	if combat_art != null:
+		art = combat_art
+	elif _enemy_clips != null:
 		var index := _animation_frame(_enemy_clips.get_frame_count(_pose),
 			_enemy_clips.get_animation_speed(_pose), _enemy_clips.get_animation_loop(_pose))
 		art = _enemy_clips.get_frame_texture(_pose, index)
@@ -187,10 +433,19 @@ func _render_frame() -> void:
 		var poses: Array = POSES[kind][_pose]
 		var rate := 6.0 if _pose == "idle" else (9.0 if _pose == "move" else 11.0)
 		art = _frames[poses[_animation_frame(poses.size(), rate, _pose in ["idle", "move"])]]
-	var size := art.get_size() * _size_scale
+
+	var draw_scale := _size_scale
+	if combat_art != null:
+		draw_scale = HEIGHTS["monkey"] / float(art.get_height())
+	var size := art.get_size() * draw_scale
 	var direction := -1.0 if _faces_left else 1.0
 	_sprite.texture = art
-	_sprite.scale = Vector2.ONE * _size_scale
+	var stretch := Vector2.ONE
+	if _hit_time > 0.11:
+		stretch = Vector2(1.08, 0.93)
+	elif combat_art != null and _attack_phase == "strike":
+		stretch = Vector2(1.06, 0.96)
+	_sprite.scale = Vector2.ONE * draw_scale * stretch
 	_sprite.flip_h = _faces_left != _art_faces_left
 	var reveal := clampf(1.0 - _entry_time / 0.40, 0.0, 1.0)
 	if hp > 0 and _pose in ["attack", "release", "cast"]:
@@ -203,14 +458,31 @@ func _render_frame() -> void:
 		lift -= 3.0 * _size_scale
 		if _pose == "move":
 			lift += absf(sin(_pose_time * 19.0)) * 3.0
-	_sprite.position = Vector2(0.0, -size.y * 0.5 - (1.0 - reveal) * 8.0 - lift)
-	_sprite.modulate = Color("#ffb6a0") if _hit_time > 0.0 else Color.WHITE
+	var lunge := Vector2.ZERO
+	if combat_art != null and _attack_phase == "strike" and weapon_id in ["staff", "shield"]:
+		lunge = Vector2(5.0 * direction, -2.0)
+	_sprite.position = Vector2(0.0, -size.y * 0.5 - (1.0 - reveal) * 8.0 - lift) + _knockback_offset + lunge
+	if _hit_time > 0.11:
+		_sprite.modulate = Color(1.75, 1.32, 1.15, 1.0)
+	elif _hit_time > 0.0:
+		_sprite.modulate = Color("#ffb6a0")
+	else:
+		_sprite.modulate = Color.WHITE
 	_sprite.modulate.a = lerpf(0.15, 1.0, reveal)
-	_equipment.flip_h = _faces_left
-	var hands := Vector2(19, -29) if _pose in ["attack", "release", "cast"] else Vector2(20, -21)
-	_equipment.position = Vector2(hands.x * direction, hands.y)
-	_equipment.modulate.a = reveal
-	_equipment.visible = _equipment.texture != null and hp > 0 and reveal > 0.25
+
+	if _equipment.texture != null:
+		var wt := _weapon_transform()
+		var target_px := 35.0 if weapon_id in ["staff", "magic", "heal"] else 33.0
+		var base_s := minf(target_px / _equipment.texture.get_height(), target_px / _equipment.texture.get_width())
+		_equipment.flip_h = _faces_left
+		_equipment.position = wt.origin + _knockback_offset + lunge
+		_equipment.rotation = wt.rotation
+		_equipment.scale = Vector2.ONE * base_s * float(wt.scale_mult)
+		_equipment.z_index = -1 if wt.behind else 1
+		_equipment.modulate.a = reveal
+		_equipment.visible = hp > 0 and reveal > 0.25
+	else:
+		_equipment.visible = false
 
 
 func _draw() -> void:

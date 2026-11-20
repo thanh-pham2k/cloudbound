@@ -1,0 +1,2544 @@
+{
+  "003": {
+    "source": "assets/inbox/003-create-one-4-3-sequential-sprite-sheet-for-the-archer-monkey.png",
+    "sha256": "1590df55733123ad6d1e152123ace5a34dd4beffe4fc636c61a9f82c53af4e03",
+    "source_size": [
+      1448,
+      1086
+    ],
+    "source_mode": "RGBA",
+    "kind": "character",
+    "background": "native RGBA cleaned",
+    "visual_consistency": "MODEL_MISMATCH: depicts yellow tunic + green belt monkey instead of shared red-bandana baby monkey; extracted for manifest audit, not used as runtime body to preserve ONE shared baby monkey model.",
+    "integrated": false,
+    "frames": [
+      {
+        "id": "archer_00",
+        "cell": [
+          0,
+          0
+        ],
+        "source_rect": [
+          90,
+          49,
+          205,
+          266
+        ],
+        "size": [
+          254,
+          272
+        ],
+        "pivot": [
+          127,
+          269
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": false
+      },
+      {
+        "id": "archer_01",
+        "cell": [
+          1,
+          0
+        ],
+        "source_rect": [
+          442,
+          48,
+          232,
+          267
+        ],
+        "size": [
+          258,
+          273
+        ],
+        "pivot": [
+          129,
+          270
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": false
+      },
+      {
+        "id": "archer_02",
+        "cell": [
+          2,
+          0
+        ],
+        "source_rect": [
+          794,
+          50,
+          236,
+          266
+        ],
+        "size": [
+          258,
+          272
+        ],
+        "pivot": [
+          129,
+          269
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": false
+      },
+      {
+        "id": "archer_03",
+        "cell": [
+          3,
+          0
+        ],
+        "source_rect": [
+          1144,
+          52,
+          240,
+          263
+        ],
+        "size": [
+          262,
+          269
+        ],
+        "pivot": [
+          131,
+          266
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": false
+      },
+      {
+        "id": "archer_04",
+        "cell": [
+          0,
+          1
+        ],
+        "source_rect": [
+          84,
+          406,
+          218,
+          258
+        ],
+        "size": [
+          246,
+          264
+        ],
+        "pivot": [
+          123,
+          261
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": false
+      },
+      {
+        "id": "archer_05",
+        "cell": [
+          1,
+          1
+        ],
+        "source_rect": [
+          440,
+          407,
+          240,
+          255
+        ],
+        "size": [
+          250,
+          261
+        ],
+        "pivot": [
+          125,
+          258
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": false
+      },
+      {
+        "id": "archer_06",
+        "cell": [
+          2,
+          1
+        ],
+        "source_rect": [
+          796,
+          409,
+          242,
+          254
+        ],
+        "size": [
+          254,
+          260
+        ],
+        "pivot": [
+          127,
+          257
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": false
+      },
+      {
+        "id": "archer_07",
+        "cell": [
+          3,
+          1
+        ],
+        "source_rect": [
+          1139,
+          406,
+          221,
+          258
+        ],
+        "size": [
+          256,
+          264
+        ],
+        "pivot": [
+          128,
+          261
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": false
+      },
+      {
+        "id": "archer_08",
+        "cell": [
+          0,
+          2
+        ],
+        "source_rect": [
+          79,
+          761,
+          211,
+          263
+        ],
+        "size": [
+          260,
+          269
+        ],
+        "pivot": [
+          130,
+          266
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": false
+      },
+      {
+        "id": "archer_09",
+        "cell": [
+          1,
+          2
+        ],
+        "source_rect": [
+          437,
+          761,
+          237,
+          263
+        ],
+        "size": [
+          260,
+          269
+        ],
+        "pivot": [
+          130,
+          266
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": false
+      },
+      {
+        "id": "archer_10",
+        "cell": [
+          2,
+          2
+        ],
+        "source_rect": [
+          794,
+          761,
+          237,
+          263
+        ],
+        "size": [
+          262,
+          269
+        ],
+        "pivot": [
+          131,
+          266
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": false
+      },
+      {
+        "id": "archer_11",
+        "cell": [
+          3,
+          2
+        ],
+        "source_rect": [
+          1149,
+          760,
+          206,
+          264
+        ],
+        "size": [
+          264,
+          270
+        ],
+        "pivot": [
+          132,
+          267
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": false
+      }
+    ]
+  },
+  "004": {
+    "source": "assets/inbox/004-create-one-4-3-sprite-sheet-for-magic-monkey-combat-casting-.png",
+    "sha256": "7866cd1d2761ba6a72aa8939dc5918d6bb9afbc34cf360f7c94dbc855c6ad2fc",
+    "source_size": [
+      1448,
+      1086
+    ],
+    "source_mode": "RGBA",
+    "kind": "character",
+    "background": "native RGBA cleaned",
+    "visual_consistency": "Matches shared baby monkey model (red bandana, cream belly, brown fur); 3 casting variations (4 frames each).",
+    "integrated": true,
+    "frames": [
+      {
+        "id": "mage_00",
+        "cell": [
+          0,
+          0
+        ],
+        "source_rect": [
+          44,
+          25,
+          265,
+          311
+        ],
+        "size": [
+          284,
+          317
+        ],
+        "pivot": [
+          142,
+          314
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "mage_01",
+        "cell": [
+          1,
+          0
+        ],
+        "source_rect": [
+          399,
+          15,
+          260,
+          320
+        ],
+        "size": [
+          282,
+          326
+        ],
+        "pivot": [
+          141,
+          323
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "mage_02",
+        "cell": [
+          2,
+          0
+        ],
+        "source_rect": [
+          754,
+          20,
+          279,
+          318
+        ],
+        "size": [
+          288,
+          324
+        ],
+        "pivot": [
+          144,
+          321
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "mage_03",
+        "cell": [
+          3,
+          0
+        ],
+        "source_rect": [
+          1112,
+          20,
+          264,
+          317
+        ],
+        "size": [
+          296,
+          323
+        ],
+        "pivot": [
+          148,
+          320
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "mage_04",
+        "cell": [
+          0,
+          1
+        ],
+        "source_rect": [
+          38,
+          393,
+          258,
+          305
+        ],
+        "size": [
+          288,
+          311
+        ],
+        "pivot": [
+          144,
+          308
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "mage_05",
+        "cell": [
+          1,
+          1
+        ],
+        "source_rect": [
+          407,
+          375,
+          269,
+          320
+        ],
+        "size": [
+          290,
+          326
+        ],
+        "pivot": [
+          145,
+          323
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "mage_06",
+        "cell": [
+          2,
+          1
+        ],
+        "source_rect": [
+          760,
+          377,
+          285,
+          320
+        ],
+        "size": [
+          298,
+          326
+        ],
+        "pivot": [
+          149,
+          323
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "mage_07",
+        "cell": [
+          3,
+          1
+        ],
+        "source_rect": [
+          1114,
+          386,
+          262,
+          311
+        ],
+        "size": [
+          296,
+          317
+        ],
+        "pivot": [
+          148,
+          314
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "mage_08",
+        "cell": [
+          0,
+          2
+        ],
+        "source_rect": [
+          42,
+          752,
+          271,
+          309
+        ],
+        "size": [
+          284,
+          315
+        ],
+        "pivot": [
+          142,
+          312
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "mage_09",
+        "cell": [
+          1,
+          2
+        ],
+        "source_rect": [
+          396,
+          744,
+          289,
+          317
+        ],
+        "size": [
+          300,
+          323
+        ],
+        "pivot": [
+          150,
+          320
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "mage_10",
+        "cell": [
+          2,
+          2
+        ],
+        "source_rect": [
+          763,
+          736,
+          284,
+          323
+        ],
+        "size": [
+          300,
+          329
+        ],
+        "pivot": [
+          150,
+          326
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "mage_11",
+        "cell": [
+          3,
+          2
+        ],
+        "source_rect": [
+          1123,
+          748,
+          263,
+          311
+        ],
+        "size": [
+          296,
+          317
+        ],
+        "pivot": [
+          148,
+          314
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      }
+    ]
+  },
+  "005": {
+    "source": "assets/inbox/005-create-one-4-2-sequential-defensive-combat-sprite-sheet-for-.png",
+    "sha256": "a30bc52fed271f70e763790fc61b390df8e6c1a01f6f5fa7efdbf8a398eb9723",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGB",
+    "kind": "character",
+    "background": "white matte flood-removed + edge decontaminated",
+    "visual_consistency": "Matches shared baby monkey model; RGB source with light matte removed. Row 0 = guard/block, Row 1 = shield bash.",
+    "integrated": true,
+    "frames": [
+      {
+        "id": "tank_00",
+        "cell": [
+          0,
+          0
+        ],
+        "source_rect": [
+          57,
+          17,
+          322,
+          396
+        ],
+        "size": [
+          374,
+          402
+        ],
+        "pivot": [
+          187,
+          399
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "tank_01",
+        "cell": [
+          1,
+          0
+        ],
+        "source_rect": [
+          471,
+          17,
+          372,
+          398
+        ],
+        "size": [
+          388,
+          404
+        ],
+        "pivot": [
+          194,
+          401
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "tank_02",
+        "cell": [
+          2,
+          0
+        ],
+        "source_rect": [
+          923,
+          34,
+          378,
+          381
+        ],
+        "size": [
+          396,
+          387
+        ],
+        "pivot": [
+          198,
+          384
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "tank_03",
+        "cell": [
+          3,
+          0
+        ],
+        "source_rect": [
+          1377,
+          17,
+          350,
+          401
+        ],
+        "size": [
+          374,
+          407
+        ],
+        "pivot": [
+          187,
+          404
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "tank_04",
+        "cell": [
+          0,
+          1
+        ],
+        "source_rect": [
+          47,
+          454,
+          336,
+          399
+        ],
+        "size": [
+          384,
+          405
+        ],
+        "pivot": [
+          192,
+          402
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "tank_05",
+        "cell": [
+          1,
+          1
+        ],
+        "source_rect": [
+          462,
+          464,
+          387,
+          388
+        ],
+        "size": [
+          438,
+          394
+        ],
+        "pivot": [
+          219,
+          391
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "tank_06",
+        "cell": [
+          2,
+          1
+        ],
+        "source_rect": [
+          921,
+          503,
+          378,
+          347
+        ],
+        "size": [
+          460,
+          353
+        ],
+        "pivot": [
+          230,
+          350
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "tank_07",
+        "cell": [
+          3,
+          1
+        ],
+        "source_rect": [
+          1389,
+          455,
+          328,
+          400
+        ],
+        "size": [
+          370,
+          406
+        ],
+        "pivot": [
+          185,
+          403
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      }
+    ]
+  },
+  "006": {
+    "source": "assets/inbox/006-create-one-4-2-sequential-healing-animation-sprite-sheet-for.png",
+    "sha256": "709fe4ace942761ebe02d1a7c266bf1d1724bad12cf669d219fde5f7a38a3847",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGB",
+    "kind": "character",
+    "background": "white matte flood-removed + edge decontaminated",
+    "visual_consistency": "Matches shared baby monkey model; RGB source with light matte removed. 2 healing cast variations (4 frames each).",
+    "integrated": true,
+    "frames": [
+      {
+        "id": "healer_00",
+        "cell": [
+          0,
+          0
+        ],
+        "source_rect": [
+          54,
+          18,
+          326,
+          396
+        ],
+        "size": [
+          378,
+          402
+        ],
+        "pivot": [
+          189,
+          399
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "healer_01",
+        "cell": [
+          1,
+          0
+        ],
+        "source_rect": [
+          489,
+          19,
+          327,
+          395
+        ],
+        "size": [
+          378,
+          401
+        ],
+        "pivot": [
+          189,
+          398
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "healer_02",
+        "cell": [
+          2,
+          0
+        ],
+        "source_rect": [
+          934,
+          21,
+          358,
+          394
+        ],
+        "size": [
+          370,
+          400
+        ],
+        "pivot": [
+          185,
+          397
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "healer_03",
+        "cell": [
+          3,
+          0
+        ],
+        "source_rect": [
+          1379,
+          17,
+          350,
+          399
+        ],
+        "size": [
+          390,
+          405
+        ],
+        "pivot": [
+          195,
+          402
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "healer_04",
+        "cell": [
+          0,
+          1
+        ],
+        "source_rect": [
+          46,
+          458,
+          334,
+          400
+        ],
+        "size": [
+          380,
+          406
+        ],
+        "pivot": [
+          190,
+          403
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "healer_05",
+        "cell": [
+          1,
+          1
+        ],
+        "source_rect": [
+          489,
+          450,
+          342,
+          408
+        ],
+        "size": [
+          382,
+          414
+        ],
+        "pivot": [
+          191,
+          411
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "healer_06",
+        "cell": [
+          2,
+          1
+        ],
+        "source_rect": [
+          924,
+          444,
+          380,
+          415
+        ],
+        "size": [
+          420,
+          421
+        ],
+        "pivot": [
+          210,
+          418
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "healer_07",
+        "cell": [
+          3,
+          1
+        ],
+        "source_rect": [
+          1382,
+          457,
+          323,
+          402
+        ],
+        "size": [
+          380,
+          408
+        ],
+        "pivot": [
+          190,
+          405
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      }
+    ]
+  },
+  "007": {
+    "source": "assets/inbox/007-create-one-4-2-sequential-melee-slash-vfx-sprite-sheet-for-h.png",
+    "sha256": "68bdd8bcd78e2b137dc912bd409f5c0c5d4729de37de9c4e3f63fecd4e7f73fa",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGBA",
+    "kind": "vfx_sequence",
+    "background": "native RGBA cleaned",
+    "visual_consistency": "8-frame sequential golden crescent slash VFX (native RGBA).",
+    "integrated": true,
+    "frames": [
+      {
+        "id": "slash_00",
+        "cell": [
+          0,
+          0
+        ],
+        "source_rect": [
+          188,
+          196,
+          97,
+          81
+        ],
+        "size": [
+          425,
+          327
+        ],
+        "pivot": [
+          212.5,
+          163.5
+        ],
+        "alpha_range": [
+          0,
+          253
+        ],
+        "integrated": true
+      },
+      {
+        "id": "slash_01",
+        "cell": [
+          1,
+          0
+        ],
+        "source_rect": [
+          606,
+          172,
+          205,
+          139
+        ],
+        "size": [
+          425,
+          327
+        ],
+        "pivot": [
+          212.5,
+          163.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "slash_02",
+        "cell": [
+          2,
+          0
+        ],
+        "source_rect": [
+          992,
+          132,
+          295,
+          222
+        ],
+        "size": [
+          425,
+          327
+        ],
+        "pivot": [
+          212.5,
+          163.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "slash_03",
+        "cell": [
+          3,
+          0
+        ],
+        "source_rect": [
+          1357,
+          83,
+          398,
+          297
+        ],
+        "size": [
+          425,
+          327
+        ],
+        "pivot": [
+          212.5,
+          163.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "slash_04",
+        "cell": [
+          0,
+          1
+        ],
+        "source_rect": [
+          22,
+          506,
+          409,
+          311
+        ],
+        "size": [
+          425,
+          327
+        ],
+        "pivot": [
+          212.5,
+          163.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "slash_05",
+        "cell": [
+          1,
+          1
+        ],
+        "source_rect": [
+          479,
+          534,
+          367,
+          240
+        ],
+        "size": [
+          425,
+          327
+        ],
+        "pivot": [
+          212.5,
+          163.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "slash_06",
+        "cell": [
+          2,
+          1
+        ],
+        "source_rect": [
+          946,
+          562,
+          323,
+          182
+        ],
+        "size": [
+          425,
+          327
+        ],
+        "pivot": [
+          212.5,
+          163.5
+        ],
+        "alpha_range": [
+          0,
+          252
+        ],
+        "integrated": true
+      },
+      {
+        "id": "slash_07",
+        "cell": [
+          3,
+          1
+        ],
+        "source_rect": [
+          1478,
+          591,
+          134,
+          133
+        ],
+        "size": [
+          425,
+          327
+        ],
+        "pivot": [
+          212.5,
+          163.5
+        ],
+        "alpha_range": [
+          0,
+          252
+        ],
+        "integrated": true
+      }
+    ]
+  },
+  "008": {
+    "source": "assets/inbox/008-create-one-4-2-modular-arrow-combat-vfx-sprite-sheet-for-hoa.png",
+    "sha256": "55adcaf3134dba1cbd6372960191b31ce781d01639d56ff5166d247e57e9f6bf",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGBA",
+    "kind": "vfx",
+    "background": "native RGBA cleaned",
+    "visual_consistency": "Modular arrow combat VFX (native RGBA with faint background veil cleaned).",
+    "integrated": true,
+    "frames": [
+      {
+        "id": "arrow_release",
+        "cell": [
+          0,
+          0
+        ],
+        "source_rect": [
+          114,
+          188,
+          161,
+          181
+        ],
+        "size": [
+          167,
+          187
+        ],
+        "pivot": [
+          83.5,
+          93.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "arrow_fly_00",
+        "cell": [
+          1,
+          0
+        ],
+        "source_rect": [
+          451,
+          227,
+          376,
+          95
+        ],
+        "size": [
+          382,
+          101
+        ],
+        "pivot": [
+          191.0,
+          50.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "arrow_fly_01",
+        "cell": [
+          2,
+          0
+        ],
+        "source_rect": [
+          827,
+          197,
+          393,
+          139
+        ],
+        "size": [
+          399,
+          145
+        ],
+        "pivot": [
+          199.5,
+          72.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "arrow_fly_02",
+        "cell": [
+          3,
+          0
+        ],
+        "source_rect": [
+          1221,
+          183,
+          529,
+          177
+        ],
+        "size": [
+          535,
+          183
+        ],
+        "pivot": [
+          267.5,
+          91.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "arrow_spark",
+        "cell": [
+          0,
+          1
+        ],
+        "source_rect": [
+          129,
+          563,
+          156,
+          170
+        ],
+        "size": [
+          162,
+          176
+        ],
+        "pivot": [
+          81.0,
+          88.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "arrow_burst",
+        "cell": [
+          1,
+          1
+        ],
+        "source_rect": [
+          444,
+          518,
+          340,
+          247
+        ],
+        "size": [
+          346,
+          253
+        ],
+        "pivot": [
+          173.0,
+          126.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "arrow_shatter",
+        "cell": [
+          2,
+          1
+        ],
+        "source_rect": [
+          926,
+          545,
+          271,
+          212
+        ],
+        "size": [
+          277,
+          218
+        ],
+        "pivot": [
+          138.5,
+          109.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "arrow_ground_dust",
+        "cell": [
+          3,
+          1
+        ],
+        "source_rect": [
+          1361,
+          532,
+          329,
+          211
+        ],
+        "size": [
+          335,
+          217
+        ],
+        "pivot": [
+          167.5,
+          108.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      }
+    ]
+  },
+  "009": {
+    "source": "assets/inbox/009-create-one-4-2-sprite-sheet-of-advanced-magic-combat-vfx-for.png",
+    "sha256": "e489769bbc7dbaec99de65faefe67b4e02a466a67bdc6256c20b147d7d789668",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGBA",
+    "kind": "vfx",
+    "background": "native RGBA cleaned",
+    "visual_consistency": "Advanced magic combat VFX: charge, flying orb, and 4-frame AoE detonation (native RGBA).",
+    "integrated": true,
+    "frames": [
+      {
+        "id": "magic_charge_00",
+        "cell": [
+          0,
+          0
+        ],
+        "source_rect": [
+          135,
+          140,
+          167,
+          188
+        ],
+        "size": [
+          173,
+          194
+        ],
+        "pivot": [
+          86.5,
+          97.0
+        ],
+        "alpha_range": [
+          0,
+          253
+        ],
+        "integrated": true
+      },
+      {
+        "id": "magic_charge_01",
+        "cell": [
+          1,
+          0
+        ],
+        "source_rect": [
+          475,
+          96,
+          277,
+          264
+        ],
+        "size": [
+          283,
+          270
+        ],
+        "pivot": [
+          141.5,
+          135.0
+        ],
+        "alpha_range": [
+          0,
+          253
+        ],
+        "integrated": true
+      },
+      {
+        "id": "magic_orb_00",
+        "cell": [
+          2,
+          0
+        ],
+        "source_rect": [
+          845,
+          144,
+          421,
+          193
+        ],
+        "size": [
+          427,
+          199
+        ],
+        "pivot": [
+          213.5,
+          99.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "magic_orb_01",
+        "cell": [
+          3,
+          0
+        ],
+        "source_rect": [
+          1266,
+          126,
+          489,
+          210
+        ],
+        "size": [
+          495,
+          216
+        ],
+        "pivot": [
+          247.5,
+          108.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "magic_impact_00",
+        "cell": [
+          0,
+          1
+        ],
+        "source_rect": [
+          55,
+          554,
+          376,
+          207
+        ],
+        "size": [
+          382,
+          213
+        ],
+        "pivot": [
+          191.0,
+          106.5
+        ],
+        "alpha_range": [
+          0,
+          253
+        ],
+        "integrated": true
+      },
+      {
+        "id": "magic_impact_01",
+        "cell": [
+          1,
+          1
+        ],
+        "source_rect": [
+          431,
+          516,
+          336,
+          249
+        ],
+        "size": [
+          342,
+          255
+        ],
+        "pivot": [
+          171.0,
+          127.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "magic_impact_02",
+        "cell": [
+          2,
+          1
+        ],
+        "source_rect": [
+          767,
+          453,
+          547,
+          322
+        ],
+        "size": [
+          553,
+          328
+        ],
+        "pivot": [
+          276.5,
+          164.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "magic_impact_03",
+        "cell": [
+          3,
+          1
+        ],
+        "source_rect": [
+          1314,
+          546,
+          427,
+          213
+        ],
+        "size": [
+          433,
+          219
+        ],
+        "pivot": [
+          216.5,
+          109.5
+        ],
+        "alpha_range": [
+          0,
+          253
+        ],
+        "integrated": true
+      }
+    ]
+  },
+  "010": {
+    "source": "assets/inbox/010-create-one-4-2-combat-hit-feedback-vfx-sprite-sheet-for-hoa-.png",
+    "sha256": "064b4d50ad151327ede5836b2cc6577f40421c19e68ef8f58ce620202346b8a6",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGBA",
+    "kind": "vfx",
+    "background": "native RGBA cleaned",
+    "visual_consistency": "Combat hit feedback & dust VFX (native RGBA with semi-transparent background veil removed).",
+    "integrated": true,
+    "frames": [
+      {
+        "id": "hit_light",
+        "cell": [
+          0,
+          0
+        ],
+        "source_rect": [
+          150,
+          191,
+          97,
+          134
+        ],
+        "size": [
+          103,
+          140
+        ],
+        "pivot": [
+          51.5,
+          70.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "hit_spark",
+        "cell": [
+          1,
+          0
+        ],
+        "source_rect": [
+          423,
+          146,
+          245,
+          214
+        ],
+        "size": [
+          251,
+          220
+        ],
+        "pivot": [
+          125.5,
+          110.0
+        ],
+        "alpha_range": [
+          0,
+          253
+        ],
+        "integrated": true
+      },
+      {
+        "id": "hit_burst",
+        "cell": [
+          2,
+          0
+        ],
+        "source_rect": [
+          819,
+          84,
+          376,
+          313
+        ],
+        "size": [
+          382,
+          319
+        ],
+        "pivot": [
+          191.0,
+          159.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "hit_heavy_crit",
+        "cell": [
+          3,
+          0
+        ],
+        "source_rect": [
+          1272,
+          27,
+          470,
+          378
+        ],
+        "size": [
+          476,
+          384
+        ],
+        "pivot": [
+          238.0,
+          192.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "dust_small",
+        "cell": [
+          0,
+          1
+        ],
+        "source_rect": [
+          44,
+          592,
+          234,
+          182
+        ],
+        "size": [
+          240,
+          188
+        ],
+        "pivot": [
+          120.0,
+          94.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "dust_large",
+        "cell": [
+          1,
+          1
+        ],
+        "source_rect": [
+          356,
+          499,
+          427,
+          293
+        ],
+        "size": [
+          433,
+          299
+        ],
+        "pivot": [
+          216.5,
+          149.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "hit_shards",
+        "cell": [
+          2,
+          1
+        ],
+        "source_rect": [
+          836,
+          536,
+          313,
+          266
+        ],
+        "size": [
+          319,
+          272
+        ],
+        "pivot": [
+          159.5,
+          136.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "hit_sweep",
+        "cell": [
+          3,
+          1
+        ],
+        "source_rect": [
+          1261,
+          486,
+          425,
+          316
+        ],
+        "size": [
+          431,
+          322
+        ],
+        "pivot": [
+          215.5,
+          161.0
+        ],
+        "alpha_range": [
+          0,
+          254
+        ],
+        "integrated": true
+      }
+    ]
+  },
+  "011": {
+    "source": "assets/inbox/011-create-one-4-2-sprite-sheet-of-advanced-boss-heavy-attack-vf.png",
+    "sha256": "bc8111792b0f83daff0a3a4db41f5712367727338364e37758e6da5b8d93af03",
+    "source_size": [
+      1774,
+      887
+    ],
+    "source_mode": "RGB",
+    "kind": "vfx",
+    "background": "checkerboard light matte keyed",
+    "visual_consistency": "Advanced Boss heavy attack VFX (RGB source with baked checkerboard/light matte removed).",
+    "integrated": true,
+    "frames": [
+      {
+        "id": "boss_telegraph_ring",
+        "cell": [
+          0,
+          0
+        ],
+        "source_rect": [
+          13,
+          18,
+          417,
+          372
+        ],
+        "size": [
+          423,
+          378
+        ],
+        "pivot": [
+          211.5,
+          189.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "boss_slam_burst",
+        "cell": [
+          1,
+          0
+        ],
+        "source_rect": [
+          465,
+          60,
+          389,
+          321
+        ],
+        "size": [
+          395,
+          327
+        ],
+        "pivot": [
+          197.5,
+          163.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "boss_shock_ring",
+        "cell": [
+          2,
+          0
+        ],
+        "source_rect": [
+          888,
+          146,
+          435,
+          230
+        ],
+        "size": [
+          441,
+          236
+        ],
+        "pivot": [
+          220.5,
+          118.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "boss_rock_debris",
+        "cell": [
+          3,
+          0
+        ],
+        "source_rect": [
+          1350,
+          46,
+          406,
+          323
+        ],
+        "size": [
+          412,
+          329
+        ],
+        "pivot": [
+          206.0,
+          164.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "boss_rage_vortex",
+        "cell": [
+          0,
+          1
+        ],
+        "source_rect": [
+          21,
+          483,
+          393,
+          330
+        ],
+        "size": [
+          399,
+          336
+        ],
+        "pivot": [
+          199.5,
+          168.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "boss_flame_wave",
+        "cell": [
+          1,
+          1
+        ],
+        "source_rect": [
+          453,
+          528,
+          418,
+          246
+        ],
+        "size": [
+          424,
+          252
+        ],
+        "pivot": [
+          212.0,
+          126.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "boss_ground_crack",
+        "cell": [
+          2,
+          1
+        ],
+        "source_rect": [
+          906,
+          554,
+          407,
+          259
+        ],
+        "size": [
+          413,
+          265
+        ],
+        "pivot": [
+          206.5,
+          132.5
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "boss_dust_billow",
+        "cell": [
+          3,
+          1
+        ],
+        "source_rect": [
+          1350,
+          582,
+          407,
+          198
+        ],
+        "size": [
+          413,
+          204
+        ],
+        "pivot": [
+          206.5,
+          102.0
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      }
+    ]
+  },
+  "012": {
+    "source": "assets/inbox/012-create-one-4-3-sequential-animation-sprite-sheet-for-the-sta.png",
+    "sha256": "cfc17287665173ccfd4a26b853dd53e2fc93df426727bf486cc1d1ee8673a0b1",
+    "source_size": [
+      1448,
+      1086
+    ],
+    "source_mode": "RGBA",
+    "kind": "character",
+    "background": "native RGBA cleaned",
+    "visual_consistency": "Matches shared baby monkey model; 3 melee staff attack variations (horizontal slash, overhead slam, thrust).",
+    "integrated": true,
+    "frames": [
+      {
+        "id": "staff_00",
+        "cell": [
+          0,
+          0
+        ],
+        "source_rect": [
+          51,
+          31,
+          254,
+          305
+        ],
+        "size": [
+          286,
+          311
+        ],
+        "pivot": [
+          143,
+          308
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "staff_01",
+        "cell": [
+          1,
+          0
+        ],
+        "source_rect": [
+          412,
+          33,
+          252,
+          306
+        ],
+        "size": [
+          286,
+          312
+        ],
+        "pivot": [
+          143,
+          309
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "staff_02",
+        "cell": [
+          2,
+          0
+        ],
+        "source_rect": [
+          746,
+          41,
+          291,
+          297
+        ],
+        "size": [
+          328,
+          303
+        ],
+        "pivot": [
+          164,
+          300
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "staff_03",
+        "cell": [
+          3,
+          0
+        ],
+        "source_rect": [
+          1125,
+          47,
+          271,
+          292
+        ],
+        "size": [
+          278,
+          298
+        ],
+        "pivot": [
+          139,
+          295
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "staff_04",
+        "cell": [
+          0,
+          1
+        ],
+        "source_rect": [
+          51,
+          393,
+          254,
+          305
+        ],
+        "size": [
+          286,
+          311
+        ],
+        "pivot": [
+          143,
+          308
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "staff_05",
+        "cell": [
+          1,
+          1
+        ],
+        "source_rect": [
+          417,
+          389,
+          242,
+          311
+        ],
+        "size": [
+          290,
+          317
+        ],
+        "pivot": [
+          145,
+          314
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "staff_06",
+        "cell": [
+          2,
+          1
+        ],
+        "source_rect": [
+          750,
+          432,
+          297,
+          268
+        ],
+        "size": [
+          304,
+          274
+        ],
+        "pivot": [
+          152,
+          271
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "staff_07",
+        "cell": [
+          3,
+          1
+        ],
+        "source_rect": [
+          1121,
+          436,
+          274,
+          265
+        ],
+        "size": [
+          296,
+          271
+        ],
+        "pivot": [
+          148,
+          268
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "staff_08",
+        "cell": [
+          0,
+          2
+        ],
+        "source_rect": [
+          51,
+          755,
+          254,
+          305
+        ],
+        "size": [
+          286,
+          311
+        ],
+        "pivot": [
+          143,
+          308
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "staff_09",
+        "cell": [
+          1,
+          2
+        ],
+        "source_rect": [
+          411,
+          758,
+          252,
+          308
+        ],
+        "size": [
+          278,
+          314
+        ],
+        "pivot": [
+          139,
+          311
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "staff_10",
+        "cell": [
+          2,
+          2
+        ],
+        "source_rect": [
+          747,
+          763,
+          302,
+          299
+        ],
+        "size": [
+          322,
+          305
+        ],
+        "pivot": [
+          161,
+          302
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      },
+      {
+        "id": "staff_11",
+        "cell": [
+          3,
+          2
+        ],
+        "source_rect": [
+          1135,
+          756,
+          263,
+          309
+        ],
+        "size": [
+          282,
+          315
+        ],
+        "pivot": [
+          141,
+          312
+        ],
+        "alpha_range": [
+          0,
+          255
+        ],
+        "integrated": true
+      }
+    ]
+  }
+}

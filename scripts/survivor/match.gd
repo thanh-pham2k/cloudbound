@@ -9,6 +9,7 @@ const Hud := preload("res://scripts/survivor/hud.gd")
 const DamageText := preload("res://scripts/ui/floating_text.gd")
 const ART := "res://assets/survivor/"
 const COMMANDER_Y := 632.0
+const DEFAULT_SPEED := 2.0
 # A full army must fit on one rank if every recruit shares a role.
 const ARMY_CAP := 8
 const START_GOLD := 44
@@ -24,16 +25,23 @@ const ROLES := {
 const BOSS_TIME := 289.0
 const WEAPONS := {
 	"staff": {"art":"staff", "elite":"staff", "damage":16, "range":136.0,
-		"cooldown":0.86, "kind":"melee"},
+		"cooldown":0.86, "kind":"melee", "windup":0.14, "strike":0.11, "recovery":0.12},
 	"bow": {"art":"bow", "elite":"elite_bow", "damage":16, "range":324.0,
-		"cooldown":0.79, "kind":"ranged"},
+		"cooldown":0.79, "kind":"ranged", "windup":0.15, "strike":0.10, "recovery":0.12},
 	"magic": {"art":"mage_staff", "elite":"elite_staff", "damage":27, "range":270.0,
-		"cooldown":1.18, "kind":"area", "blast":120.0},
+		"cooldown":1.18, "kind":"area", "blast":120.0, "windup":0.20, "strike":0.12, "recovery":0.14},
 	"shield": {"art":"shield", "elite":"elite_shield", "damage":12, "range":126.0,
-		"cooldown":0.97, "kind":"melee"},
+		"cooldown":0.97, "kind":"melee", "windup":0.16, "strike":0.12, "recovery":0.12},
 	"heal": {"art":"healer_staff", "elite":"healer_staff", "damage":22, "range":322.0,
-		"cooldown":1.05, "kind":"heal"},
+		"cooldown":1.05, "kind":"heal", "windup":0.18, "strike":0.12, "recovery":0.14},
 }
+const SLASH_FRAMES := [
+	"combat/slash_00", "combat/slash_01", "combat/slash_02", "combat/slash_03",
+	"combat/slash_04", "combat/slash_05", "combat/slash_06", "combat/slash_07",
+]
+const MAGIC_IMPACT_FRAMES := [
+	"combat/magic_impact_00", "combat/magic_impact_01", "combat/magic_impact_02", "combat/magic_impact_03",
+]
 # Health, advance speed, strike reach, damage, gold, XP, foot radius.
 const ENEMIES := {
 	"slime": [51, 82.0, 79.0, 9, 5, 10, 23.0],
@@ -78,6 +86,7 @@ var _projectiles: Array[Dictionary] = []
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	Engine.time_scale = DEFAULT_SPEED
 	hud = Hud.new()
 	hud.game = self
 	add_child(hud)
@@ -166,6 +175,7 @@ func _enter(next: State) -> void:
 
 
 func _exit_tree() -> void:
+	Engine.time_scale = 1.0
 	get_tree().paused = false
 
 
@@ -369,7 +379,7 @@ func _begin_enemy_strike(enemy: Actor, at: Vector2, rear_line: bool) -> void:
 	enemy.attack_pose(enemy.windup + 0.17)
 	_telegraph(at, _strike_radius(enemy), enemy.enemy_lane, enemy.windup)
 	if enemy.kind == "boss":
-		var warning := _fx("boss_warning", at, 86.0, enemy.windup, Vector2.ZERO, 0.62)
+		var warning := _fx("combat/boss_telegraph_ring", at, 148.0, enemy.windup, Vector2.ZERO, 0.78)
 		warning.z_as_relative = false
 		warning.z_index = -1
 
@@ -380,21 +390,31 @@ func _strike_radius(enemy: Actor) -> float:
 
 func _enemy_strike(enemy: Actor, allies: Array[Actor]) -> void:
 	var is_boss := enemy.kind == "boss"
-	enemy.cooldown = 1.16 if is_boss and enemy.hp * 2 < enemy.max_hp else (1.63 if is_boss else 1.00)
+	var enraged := is_boss and enemy.hp * 2 < enemy.max_hp
+	enemy.cooldown = 1.16 if enraged else (1.63 if is_boss else 1.00)
 	if is_boss:
-		var effect := "boss_slam" if enemy.hp * 2 < enemy.max_hp else "boss_impact"
-		_fx(effect, enemy.strike_position + Vector2(0, -12), 131.0, 0.44, Vector2.ZERO, 0.78)
-		_fx("boss_shockwave", enemy.strike_position, 170.0, 0.40, Vector2.ZERO, 0.54)
+		enemy.hit_stop(0.05)
+		if enraged:
+			_fx("combat/boss_flame_wave", enemy.strike_position + Vector2(0, -14), 168.0, 0.44, Vector2.ZERO, 0.86)
+			_fx("combat/boss_rock_debris", enemy.strike_position + Vector2(0, -18), 152.0, 0.48, Vector2(0, -6), 0.84)
+			var crack := _fx("combat/boss_ground_crack", enemy.strike_position + Vector2(0, 4), 156.0, 0.65, Vector2.ZERO, 0.72)
+			crack.z_as_relative = false
+			crack.z_index = -1
+		else:
+			_fx("combat/boss_slam_burst", enemy.strike_position + Vector2(0, -18), 146.0, 0.36, Vector2.ZERO, 0.86)
+			_fx("combat/boss_shock_ring", enemy.strike_position + Vector2(0, 2), 182.0, 0.40, Vector2.ZERO, 0.72)
+			_fx("combat/boss_dust_billow", enemy.strike_position + Vector2(0, 6), 148.0, 0.48, Vector2(0, -6), 0.68)
 	else:
-		_fx("impact_dust" if enemy.kind == "boar" else "hit_chip",
-			enemy.strike_position, 36.0, 0.27, Vector2.ZERO, 0.74)
+		_fx("combat/dust_small" if enemy.kind == "boar" else "combat/hit_light",
+			enemy.strike_position, 40.0 if enemy.kind == "boar" else 30.0, 0.24, Vector2.ZERO, 0.72)
 	if enemy.strikes_rear_line:
-		_damage(hero, enemy.attack_damage)
+		_damage(hero, enemy.attack_damage, "combat/hit_heavy_crit" if is_boss else "combat/hit_spark", Vector2(0, 10))
 		return
 	for ally in allies:
 		if Battlefield.in_lane(ally.position.x, enemy.enemy_lane) and (
 				ally.position.distance_to(enemy.strike_position) <= _strike_radius(enemy) + ally.radius * 0.28):
-			_damage(ally, enemy.attack_damage)
+			_damage(ally, enemy.attack_damage, "combat/hit_heavy_crit" if is_boss else "combat/hit_spark",
+				Vector2(0, 12 if is_boss else 7))
 			if state == State.DEFEAT:
 				return
 
@@ -423,48 +443,135 @@ func _closest(at: Vector2, candidates: Array[Actor], attack_range: float) -> Act
 func _attack(unit: Actor, delta: float) -> void:
 	if state != State.RUNNING or unit.hp <= 0 or not WEAPONS.has(unit.weapon_id):
 		return
+	var weapon: Dictionary = WEAPONS[unit.weapon_id]
 	unit.cooldown = maxf(0.0, unit.cooldown - delta)
+	if unit.pending_attack:
+		unit.windup = maxf(0.0, unit.windup - delta)
+		if unit.windup <= 0.0:
+			_execute_monkey_strike(unit, weapon)
+		return
 	if unit.cooldown > 0.0:
 		return
-	var weapon: Dictionary = WEAPONS[unit.weapon_id]
 	if weapon.kind == "heal":
-		_heal(unit, weapon)
+		var patient := _find_heal_target(unit, weapon)
+		if patient == null:
+			return
+		_begin_monkey_attack(unit, weapon, patient, int(weapon.damage) + training * 5)
 		return
 	var target := _closest(unit.position, enemies, weapon.range)
 	if target == null:
 		return
-	unit.cooldown = weapon.cooldown
 	var damage := int(weapon.damage) + training * 3
+	_begin_monkey_attack(unit, weapon, target, damage)
+
+
+func _begin_monkey_attack(unit: Actor, weapon: Dictionary, target: Actor, amount: int) -> void:
+	var windup_sec := float(weapon.windup)
+	var strike_sec := float(weapon.strike)
+	var recovery_sec := float(weapon.recovery)
+	var variation := unit.attack_count
+	unit.attack_count += 1
+	unit.cooldown = float(weapon.cooldown)
+	unit.windup = windup_sec
+	unit.pending_attack = true
+	unit.pending_target = target
+	unit.pending_damage = amount
+	unit.pending_variation = variation
 	unit.face(target.position.x - unit.position.x)
-	unit.attack_pose(0.30)
+	unit.begin_attack(unit.role, windup_sec, strike_sec, recovery_sec, variation)
+	# Subtle windup telegraph VFX at weapon tip for casters.
+	if weapon.kind == "area":
+		Polish.sequence(_effects, ["combat/magic_charge_00", "combat/magic_charge_01"],
+			unit.weapon_tip_position(), 36.0, windup_sec, Vector2.ZERO, 0.80)
+	elif weapon.kind == "heal":
+		_fx("summon/heal_sparks", unit.weapon_tip_position(), 28.0, windup_sec, Vector2(0, -6), 0.72)
+
+
+func _execute_monkey_strike(unit: Actor, weapon: Dictionary) -> void:
+	unit.pending_attack = false
+	if state != State.RUNNING or unit.hp <= 0:
+		return
+	if weapon.kind == "heal":
+		var patient := unit.pending_target as Actor
+		if not is_instance_valid(patient) or patient.hp <= 0 or patient.hp >= patient.max_hp:
+			patient = _find_heal_target(unit, weapon)
+		if patient == null:
+			return
+		_apply_heal(unit, patient, unit.pending_damage)
+		return
+
+	var target := unit.pending_target as Actor
+	if not is_instance_valid(target) or target.hp <= 0:
+		target = _closest(unit.position, enemies, weapon.range)
+	if target == null:
+		return
+	var damage := unit.pending_damage
+	var variation := unit.pending_variation % 3
+	unit.face(target.position.x - unit.position.x)
+	var dir_vec := (target.position - unit.position).normalized()
+	if dir_vec == Vector2.ZERO:
+		dir_vec = Vector2(0, -1)
+
 	match weapon.kind:
 		"melee":
-			var slash_pos := unit.position.lerp(target.position, 0.64) + Vector2(0, -37)
+			var slash_pos := unit.position.lerp(target.position, 0.68) + Vector2(0, -34)
 			var tank := unit.role == "tank"
-			var slash := _fx("summon/guard_ring" if tank else "staff_arc", slash_pos,
-				54.0 if tank else 61.0, 0.27)
-			slash.flip_h = target.position.x < unit.position.x
-			_damage(target, damage, "summon/strike_spark" if tank else "staff_contact")
+			if tank:
+				_fx("summon/guard_ring", slash_pos, 52.0, 0.24, Vector2.ZERO, 0.72)
+				var sweep := _fx("combat/hit_sweep", slash_pos + Vector2(0, -4), 60.0, 0.22, Vector2.ZERO, 0.82)
+				sweep.flip_h = target.position.x < unit.position.x
+				unit.hit_stop(0.045)
+				target.hit_stop(0.045)
+				_fx("combat/dust_small", target.position + Vector2(0, -4), 42.0, 0.28, Vector2(0, -4), 0.65)
+				_damage(target, damage, "combat/hit_shards", dir_vec * 14.0)
+			else:
+				var flip := target.position.x < unit.position.x
+				var tilt := 0.0
+				if variation == 1:
+					tilt = -0.82 if flip else 0.82
+				elif variation == 2:
+					tilt = 0.18 if flip else -0.18
+				Polish.sequence(_effects, SLASH_FRAMES, slash_pos, 82.0 if variation == 1 else 74.0,
+					0.24, Vector2.ZERO, 0.88, tilt, flip)
+				unit.hit_stop(0.035 if variation != 1 else 0.048)
+				target.hit_stop(0.035 if variation != 1 else 0.048)
+				var hit_fx := "combat/hit_burst" if (variation == 1 or training >= 2) else "combat/hit_spark"
+				if variation == 1:
+					_fx("combat/dust_small", target.position + Vector2(0, -2), 40.0, 0.26, Vector2.ZERO, 0.62)
+				_damage(target, damage, hit_fx, dir_vec * (13.0 if variation == 1 else 9.5))
 		"ranged":
-			var origin := unit.position + Vector2(0, -32)
-			var release := _fx("bow_release", origin, 31.0, 0.19, Vector2.ZERO, 0.66)
-			release.rotation = (target.position - unit.position).angle()
-			var arrow := Polish.sprite(_effects, "arrow_streak", origin, 34.0)
-			_projectiles.append({"sprite": arrow, "target": target, "damage": damage,
-				"destination": target.position + Vector2(0, -28)})
+			var origin := unit.weapon_tip_position()
+			var release := _fx("combat/arrow_release", origin, 32.0, 0.14, Vector2.ZERO, 0.82)
+			release.rotation = (target.position - origin).angle()
+			var arrow := Polish.sprite(_effects, "combat/arrow_fly_00", origin, 34.0)
+			_projectiles.append({
+				"kind": "arrow",
+				"sprite": arrow,
+				"target": target,
+				"damage": damage,
+				"destination": target.position + Vector2(0, -28),
+				"speed": 720.0,
+				"age": 0.0,
+				"stage": 0,
+				"trained": training >= 2,
+			})
 		"area":
-			var impact := target.position
-			_fx("magic_cast", unit.position + Vector2(0, -12), 46.0, 0.31, Vector2.ZERO, 0.65)
-			var span := impact - unit.position
-			var bolt := _fx("magic_bolt", unit.position + Vector2(0, -34), 43.0, 0.19, span, 0.76)
-			bolt.rotation = span.angle() + PI * 0.30
-			_fx("magic_area", impact + Vector2(0, -20), weapon.blast * 1.13, 0.44, Vector2.ZERO, 0.75)
-			for enemy in enemies.duplicate():
-				if state == State.RUNNING and enemy.position.distance_to(impact) <= weapon.blast + enemy.radius * 0.3:
-					_damage(enemy, damage, "magic_contact" if enemy != target else "enemy_hit")
+			var origin := unit.weapon_tip_position()
+			var orb := Polish.sprite(_effects, "combat/magic_orb_00", origin, 42.0)
+			_projectiles.append({
+				"kind": "magic",
+				"sprite": orb,
+				"target": target,
+				"damage": damage,
+				"blast": float(weapon.blast),
+				"destination": target.position + Vector2(0, -22),
+				"speed": 690.0,
+				"age": 0.0,
+				"stage": 0,
+			})
 
 
-func _heal(unit: Actor, weapon: Dictionary) -> void:
+func _find_heal_target(unit: Actor, weapon: Dictionary) -> Actor:
 	var target: Actor
 	var worst := 1.0
 	for ally in army:
@@ -474,13 +581,15 @@ func _heal(unit: Actor, weapon: Dictionary) -> void:
 		if ratio < worst - 0.045:
 			target = ally
 			worst = ratio
-	if target == null:
+	return target
+
+
+func _apply_heal(unit: Actor, target: Actor, raw_amount: int) -> void:
+	var amount := mini(target.max_hp - target.hp, raw_amount)
+	if amount <= 0:
 		return
-	var amount := mini(target.max_hp - target.hp, int(weapon.damage) + training * 5)
 	target.hp += amount
-	unit.cooldown = weapon.cooldown
 	unit.face(target.position.x - unit.position.x)
-	unit.attack_pose(0.30)
 	_fx("summon/heal_floor", target.position, 75.0, 0.49, Vector2.ZERO, 0.75)
 	_fx("summon/heal_plus", target.position + Vector2(18, -53), 34.0, 0.68, Vector2(0, -21), 0.94)
 	var number := DamageText.new()
@@ -493,23 +602,56 @@ func _move_projectiles(delta: float) -> void:
 	for i in range(_projectiles.size() - 1, -1, -1):
 		if state != State.RUNNING:
 			break
-		var arrow: Dictionary = _projectiles[i]
-		var sprite: Sprite2D = arrow.sprite
-		if is_instance_valid(arrow.target) and arrow.target.hp > 0:
-			arrow.destination = arrow.target.position + Vector2(0, -28)
-		var destination: Vector2 = arrow.destination
-		sprite.rotation = (destination - sprite.position).angle()
-		sprite.position = sprite.position.move_toward(destination, delta * 660.0)
+		var proj: Dictionary = _projectiles[i]
+		var sprite: Sprite2D = proj.sprite
+		var pkind: String = proj.get("kind", "arrow")
+		proj.age = float(proj.age) + delta
+		if is_instance_valid(proj.target) and proj.target.hp > 0:
+			proj.destination = proj.target.position + Vector2(0, -28 if pkind == "arrow" else -22)
+		var destination: Vector2 = proj.destination
+		var to_dest := destination - sprite.position
+		var move_dir := to_dest.normalized()
+		if move_dir == Vector2.ZERO:
+			move_dir = Vector2(0, -1)
+		sprite.rotation = to_dest.angle()
+		if pkind == "arrow":
+			var desired := 2 if proj.age > 0.11 else (1 if proj.age > 0.045 else 0)
+			if desired != int(proj.stage):
+				proj.stage = desired
+				Polish.swap(sprite, "combat/arrow_fly_%02d" % desired, 42.0 if desired == 2 else 38.0)
+		elif pkind == "magic" and int(proj.stage) == 0 and proj.age > 0.06:
+			proj.stage = 1
+			Polish.swap(sprite, "combat/magic_orb_01", 50.0)
+		sprite.position = sprite.position.move_toward(destination, delta * float(proj.get("speed", 680.0)))
 		if sprite.position.is_equal_approx(destination):
 			_projectiles.remove_at(i)
 			sprite.queue_free()
-			if is_instance_valid(arrow.target) and arrow.target.hp > 0:
-				_damage(arrow.target, arrow.damage, "arrow_contact")
+			if pkind == "magic":
+				var impact_pt := destination + Vector2(0, 12)
+				var blast := float(proj.get("blast", 120.0))
+				Polish.sequence(_effects, MAGIC_IMPACT_FRAMES, impact_pt, blast * 1.28, 0.34, Vector2.ZERO, 0.86)
+				var damaged := 0
+				for enemy: Actor in enemies.duplicate():
+					if state == State.RUNNING and is_instance_valid(enemy) and enemy.hp > 0 and (
+							enemy.position.distance_to(impact_pt) <= blast + enemy.radius * 0.3):
+						var kb := (enemy.position - impact_pt).normalized()
+						if kb == Vector2.ZERO:
+							kb = Vector2(0, -1)
+						if damaged == 0:
+							enemy.hit_stop(0.035)
+						_damage(enemy, int(proj.damage), "combat/hit_spark" if damaged == 0 else "combat/hit_light", kb * 10.0)
+						damaged += 1
 			else:
-				_fx("arrow_ground", destination + Vector2(0, 18), 35.0, 0.26, Vector2.ZERO, 0.55)
+				if is_instance_valid(proj.target) and proj.target.hp > 0:
+					var hit_seq := ["combat/arrow_spark", "combat/arrow_shatter"] if proj.get("trained", false) else [
+						"combat/arrow_spark", "combat/arrow_burst"]
+					Polish.sequence(_effects, hit_seq, destination, 44.0, 0.20, Vector2.ZERO, 0.86)
+					_damage(proj.target, int(proj.damage), "", move_dir * 7.5)
+				else:
+					_fx("combat/arrow_ground_dust", destination + Vector2(0, 18), 44.0, 0.28, Vector2.ZERO, 0.72)
 
 
-func _damage(unit: Actor, amount: int, effect := "enemy_hit") -> void:
+func _damage(unit: Actor, amount: int, effect := "combat/hit_spark", knockback := Vector2.ZERO) -> void:
 	if unit.hp <= 0:
 		return
 	if unit.role == "tank":
@@ -519,16 +661,20 @@ func _damage(unit: Actor, amount: int, effect := "enemy_hit") -> void:
 	var fresh_hit := not unit.has_hit_flash()
 	var was_calm := unit.hp * 2 >= unit.max_hp
 	unit.hurt(amount)
+	if knockback != Vector2.ZERO and unit.hp > 0:
+		var scale_kb := 0.35 if unit.kind == "boss" else (0.55 if unit.role == "tank" else 1.0)
+		unit.apply_knockback(knockback * scale_kb)
 	if fresh_hit and effect != "":
+		var chosen := effect
 		if unit.gold_reward == 0:
-			effect = "hit_heavy" if amount >= 30 else "hit_flash"
-		elif effect == "enemy_hit" and unit.kind == "slime":
-			effect = "enemy_chip"
-		_fx(effect, unit.position + Vector2(0, -28 if unit.kind != "boss" else -81),
-			35.0 if unit.kind != "boss" else 48.0, 0.25, Vector2(0, -7), 0.76)
+			chosen = "combat/hit_heavy_crit" if amount >= 30 else "combat/hit_spark"
+		elif chosen == "combat/hit_spark" and amount >= 32:
+			chosen = "combat/hit_burst"
+		_fx(chosen, unit.position + Vector2(0, -28 if unit.kind != "boss" else -81),
+			42.0 if unit.kind != "boss" else 56.0, 0.22, Vector2(0, -6), 0.82)
 	if unit.kind == "boss" and was_calm and unit.hp > 0 and unit.hp * 2 < unit.max_hp:
-		_fx("boss_rage", unit.position + Vector2(0, -17), 115.0, 0.72, Vector2.ZERO, 0.75)
-		_fx("boss_charge", unit.position + Vector2(0, 8), 100.0, 0.46, Vector2(0, 25), 0.6)
+		_fx("combat/boss_rage_vortex", unit.position + Vector2(0, -42), 165.0, 0.68, Vector2.ZERO, 0.84)
+		_fx("combat/boss_shock_ring", unit.position + Vector2(0, 6), 190.0, 0.46, Vector2.ZERO, 0.72)
 	var number := DamageText.new()
 	number.setup(str(amount), Color("#ffedb3") if unit.gold_reward > 0 else Color("#ff9785"))
 	number.position = unit.position + Vector2(0, -146 if unit.kind == "boss" else -62)

@@ -9,7 +9,7 @@ static var _textures := {}
 
 static func texture(id: String) -> Texture2D:
 	if not _textures.has(id):
-		var path := "res://assets/survivor/" + id if id.begins_with("summon/") else ART + id
+		var path := "res://assets/survivor/" + id if (id.begins_with("summon/") or id.begins_with("combat/")) else ART + id
 		_textures[id] = load(path + ".png")
 	return _textures[id] as Texture2D
 
@@ -50,6 +50,30 @@ static func summon_sequence(parent: Node, id: String, at: Vector2, width: float)
 	tween.tween_interval(SUMMON_TIME / 8.0)
 	tween.tween_callback(node.queue_free)
 	return node
+
+
+static func sequence(parent: Node, ids: Array, at: Vector2, width: float, life: float,
+		drift := Vector2.ZERO, opacity := 1.0, angle := 0.0, flip_h := false) -> Sprite2D:
+	var node := sprite(parent, str(ids[0]), at, width)
+	node.modulate.a = opacity
+	node.rotation = angle
+	node.flip_h = flip_h
+	var step := life / float(maxi(1, ids.size()))
+	var tween := node.create_tween()
+	for i in range(1, ids.size()):
+		tween.tween_interval(step)
+		tween.tween_callback(_swap_frame.bind(node, str(ids[i]), width))
+	tween.tween_interval(step)
+	tween.tween_callback(node.queue_free)
+	if drift != Vector2.ZERO:
+		var move := node.create_tween()
+		move.tween_property(node, "position", at + drift, life)
+	return node
+
+
+static func _swap_frame(node: Sprite2D, id: String, width: float) -> void:
+	if is_instance_valid(node):
+		swap(node, id, width)
 
 
 static func _sequence_frame(node: Sprite2D, id: String, frame: int) -> void:
