@@ -111,15 +111,23 @@ func _validate_shop() -> void:
 	game.hud.update_stats()
 	_check(game.hud._role_buttons.staff.disabled and not game.summon("staff") and not game.summon("unknown"),
 		"Unfunded and unknown purchases are rejected")
+	# At Level 1, only Staff is unlocked; Mage and Healer must remain level-locked even with Gold.
 	game.gold = 250
+	game.hud.update_stats()
+	_check(game.is_role_unlocked("staff") and not game.is_role_unlocked("mage") and not game.is_role_unlocked("healer")
+		and not game.summon("mage") and not game.summon("healer"),
+		"Higher-tier roles (Mage, Healer) stay locked until their required Commander level")
+	# Level up to Lv 9 so all five roles unlock.
+	game.level = 9
 	game.hud.update_stats()
 	var paid := 0
 	for i in game.ROLE_ORDER.size():
 		var role: String = game.ROLE_ORDER[i]
+		var price: int = game.summon_cost(role)
 		_click(ShopHud.summon_button_center(i))
-		paid += game.ROLES[role].cost
+		paid += price
 	_check(game.army_count() == 5 and game.gold == 250 - paid and not paused,
-		"All five role cards buy during combat at the listed prices")
+		"All five role cards buy during combat once unlocked at their listed prices")
 	_check(not game.hud._role_buttons.staff.disabled, "Summon panel remains enabled at five troops")
 	var staff := game.army[0]
 	var previous_hp := staff.max_hp
@@ -132,17 +140,27 @@ func _validate_shop() -> void:
 	game.summon("tank")
 	_check(game.army[slot_id].max_hp == game.ROLES.tank.hp + 10 and game.army_count() == 5,
 		"Replacements reuse vacant slots and inherit army training")
-	game.gold = 600
+	# Dynamic summon pricing scales up above 5 active troops.
+	game.gold = 1000
+	game.hud.update_stats()
+	var cost_at_5: int = game.summon_cost("staff")
+	game.summon("staff")
+	var cost_at_6: int = game.summon_cost("staff")
+	_check(cost_at_6 > cost_at_5, "Summon cost scales dynamically above 5 troops (%d -> %d)" % [cost_at_5, cost_at_6])
+	game._damage(game.army[5], 1000)
+	_check(game.summon_cost("staff") == cost_at_5, "Summon cost drops back when troops fall")
+	game.gold = 900
 	game.train_army()
 	game.train_army()
 	game.train_army()
 	_check(game.training == 4 and game.can_train(), "Training scales without an upper cap when funded")
+	var prev_lvl := game.level
 	game.award(0, game.xp_needed())
-	_check(game.level == 2 and game.state == game.State.RUNNING and not paused, "XP still levels up during combat")
+	_check(game.level == prev_lvl + 1 and game.state == game.State.RUNNING and not paused, "XP still levels up during combat")
 
 
 func _validate_expanded_army() -> void:
-	game.gold = 1000
+	game.gold = 4000
 	game.hud.update_stats()
 	var clear := true
 	for i in 12:
@@ -256,7 +274,7 @@ func _validate_enemy_lanes() -> void:
 
 	# A windup begun in lane 0 cannot follow Wukong out of lane 0.
 	game.hero.position = Vector2(420, 430)
-	leader.position = Vector2(420, 350)
+	leader.position = Vector2(420, 376)
 	var hp := game.hero.hp
 	game._update_enemy(leader, allies, null, 0.016)
 	var wound_up := leader.windup > 0.0
@@ -415,23 +433,30 @@ func _validate_semantic_plan() -> void:
 		_check(image.save_png("res://docs/survivor/semantic-plan.png") == OK, "Exported canonical semantic plan")
 
 
+var _shop_cursor := 0
+
+
 func _shop() -> void:
 	for role in ["staff", "archer", "tank", "mage", "healer"]:
+		if not game.is_role_unlocked(role):
+			continue
 		var present := false
 		for soldier in game.army:
 			present = present or (is_instance_valid(soldier) and soldier.role == role)
 		if not present:
 			if game.can_summon(role):
 				_click(ShopHud.summon_button_center(game.ROLE_ORDER.find(role)))
-			else:
-				break
-	if game.army_count() < game.ROLE_ORDER.size():
-		return
-	if game.can_train():
+			return
+	if game.can_train() and game.training < 1 + game.wave:
 		_click(ShopHud.train_button_center())
-	for role in ["staff", "archer", "tank"]:
+		return
+	var rotation := ["mage", "archer", "tank", "healer", "staff"]
+	for step in rotation.size():
+		var role: String = rotation[(_shop_cursor + step) % rotation.size()]
 		if game.can_summon(role):
 			_click(ShopHud.summon_button_center(game.ROLE_ORDER.find(role)))
+			_shop_cursor = (_shop_cursor + step + 1) % rotation.size()
+			return
 
 
 func _shot(name: String) -> void:

@@ -9,7 +9,7 @@ const Hud := preload("res://scripts/survivor/hud.gd")
 const DamageText := preload("res://scripts/ui/floating_text.gd")
 const ART := "res://assets/survivor/"
 const COMMANDER_Y := 632.0
-const DEFAULT_SPEED := 2.0
+const DEFAULT_SPEED := 1.0
 const START_GOLD := 44
 const MAX_TRAINING := 3
 const WAVE_DURATION := 45.0
@@ -17,11 +17,11 @@ const BOSS_INTERVAL_WAVES := 5
 const BOSS_ROTATION := ["boar_king", "ancient_treant", "nine_tailed_fox", "bull_demon_king", "golden_dragon"]
 const ROLE_ORDER := ["staff", "archer", "mage", "tank", "healer"]
 const ROLES := {
-	"staff": {"name":"Staff", "cost":15, "hp":112, "rank":0, "weapon":"staff", "hint":"Frontline melee"},
-	"archer": {"name":"Archer", "cost":22, "hp":96, "rank":1, "weapon":"bow", "hint":"Long-range arrows"},
-	"mage": {"name":"Mage", "cost":26, "hp":98, "rank":1, "weapon":"magic", "hint":"Area damage"},
-	"tank": {"name":"Tank", "cost":20, "hp":168, "rank":0, "weapon":"shield", "hint":"Frontline guard, 35% damage reduction"},
-	"healer": {"name":"Healer", "cost":21, "hp":100, "rank":2, "weapon":"heal", "hint":"Restores injured monkeys"},
+	"staff": {"name":"Staff", "cost":15, "unlock_level":1, "hp":112, "rank":0, "weapon":"staff", "hint":"Frontline melee"},
+	"archer": {"name":"Archer", "cost":22, "unlock_level":2, "hp":96, "rank":1, "weapon":"bow", "hint":"Long-range arrows"},
+	"mage": {"name":"Mage", "cost":26, "unlock_level":6, "hp":98, "rank":1, "weapon":"magic", "hint":"Area damage"},
+	"tank": {"name":"Tank", "cost":20, "unlock_level":4, "hp":168, "rank":0, "weapon":"shield", "hint":"Frontline guard, 35% damage reduction"},
+	"healer": {"name":"Healer", "cost":21, "unlock_level":9, "hp":100, "rank":2, "weapon":"heal", "hint":"Restores injured monkeys"},
 }
 const WEAPONS := {
 	"staff": {"art":"staff", "elite":"staff", "damage":16, "range":136.0,
@@ -32,8 +32,8 @@ const WEAPONS := {
 		"cooldown":1.18, "kind":"area", "blast":120.0, "windup":0.20, "strike":0.12, "recovery":0.14},
 	"shield": {"art":"shield", "elite":"elite_shield", "damage":12, "range":126.0,
 		"cooldown":0.97, "kind":"melee", "windup":0.16, "strike":0.12, "recovery":0.12},
-	"heal": {"art":"healer_staff", "elite":"healer_staff", "damage":22, "range":322.0,
-		"cooldown":1.05, "kind":"heal", "windup":0.18, "strike":0.12, "recovery":0.14},
+	"heal": {"art":"healer_staff", "elite":"healer_staff", "damage":18, "range":322.0,
+		"cooldown":1.30, "kind":"heal", "windup":0.18, "strike":0.12, "recovery":0.14},
 }
 const MELEE_SLASH_FRAMES := [
 	"vfx/melee_spark_00", "vfx/melee_arc_01", "vfx/melee_arc_02", "vfx/melee_arc_03",
@@ -61,9 +61,9 @@ const HEAL_CAST_FRAMES := [
 ]
 # Health, advance speed, strike reach, damage, gold, XP, foot radius.
 const ENEMIES := {
-	"slime": [55, 86.0, 92.0, 10, 5, 10, 23.0],
-	"boar": [98, 105.0, 104.0, 16, 8, 16, 30.0],
-	"boss": [1250, 94.0, 132.0, 42, 45, 65, 56.0],
+	"slime": [55, 86.0, 56.0, 10, 5, 8, 23.0],
+	"boar": [98, 105.0, 64.0, 16, 7, 13, 30.0],
+	"boss": [1350, 94.0, 96.0, 44, 40, 55, 56.0],
 }
 const LANE_ORDER := [1, 0, 2, 1, 2, 0, 2, 1, 0]
 
@@ -256,22 +256,30 @@ func _move_army(delta: float) -> void:
 			monkey.position.y = Army.ROWS[monkey.formation_row]
 		monkey.move_pose(absf(dx) > 2.0)
 	if uncrowded:
-		for row in Army.ROWS.size():
-			var rank: Array[Actor] = []
-			for monkey in army:
-				if is_instance_valid(monkey) and monkey.formation_row == row:
-					rank.append(monkey)
-			if rank.size() <= 1:
-				continue
-			rank.sort_custom(func(a: Actor, b: Actor): return a.position.x < b.position.x)
-			for i in range(1, rank.size()):
-				var min_x := rank[i - 1].position.x + Army.GAP
-				if rank[i].position.x < min_x:
-					rank[i].position.x = minf(min_x, Army.RIGHT)
-			for i in range(rank.size() - 2, -1, -1):
-				var max_x := rank[i + 1].position.x - Army.GAP
-				if rank[i].position.x > max_x:
-					rank[i].position.x = maxf(max_x, Army.LEFT)
+		_rebalance_uncrowded_formation()
+
+
+func _rebalance_uncrowded_formation() -> void:
+	for row in Army.ROWS.size():
+		var rank: Array[Actor] = []
+		for monkey in army:
+			if is_instance_valid(monkey) and monkey.formation_row == row:
+				rank.append(monkey)
+		if rank.is_empty():
+			continue
+		for monkey in rank:
+			monkey.position.y = Army.ROWS[row]
+		if rank.size() <= 1:
+			continue
+		rank.sort_custom(func(a: Actor, b: Actor): return a.position.x < b.position.x)
+		for i in range(1, rank.size()):
+			var min_x := rank[i - 1].position.x + Army.GAP
+			if rank[i].position.x < min_x:
+				rank[i].position.x = minf(min_x, Army.RIGHT)
+		for i in range(rank.size() - 2, -1, -1):
+			var max_x := rank[i + 1].position.x - Army.GAP
+			if rank[i].position.x > max_x:
+				rank[i].position.x = maxf(max_x, Army.LEFT)
 
 
 func _spawn_waves(delta: float) -> void:
@@ -337,22 +345,23 @@ func _spawn_enemy(kind: String, column: int, offset_x := 0.0, start_y := -8.0) -
 	var xp_bonus := 0
 	if kind == "boss":
 		var tier := maxi(1, wave / BOSS_INTERVAL_WAVES)
-		hp_bonus = roundi(float(data[0]) * 0.75 * float(tier - 1))
-		dmg_bonus = (tier - 1) * 12
-		gold_bonus = (tier - 1) * 20
-		xp_bonus = (tier - 1) * 30
+		hp_bonus = roundi(float(data[0]) * (pow(1.85, float(tier - 1)) - 1.0))
+		dmg_bonus = (tier - 1) * 28 + (tier - 1) * (tier - 1) * 10
+		gold_bonus = (tier - 1) * 15
+		xp_bonus = (tier - 1) * 25
 	else:
-		var late := maxf(0.0, float(wave - 3))
-		hp_bonus = (wave - 1) * (24 if kind == "boar" else 14) + int(pow(late, 1.65) * 14.0)
-		dmg_bonus = int(float(wave - 1) * 0.85)
+		var late := maxf(0.0, float(wave - 4))
+		hp_bonus = (wave - 1) * (24 if kind == "boar" else 14) + int(pow(late, 1.72) * 15.0)
+		dmg_bonus = (wave - 1) * 2 + int(pow(maxf(0.0, float(wave - 5)), 1.45) * 2.2)
 	var look := _next_enemy_look(kind)
 	var enemy := _new_actor(kind, int(data[0]) + hp_bonus, data[6], position_on_entry, look)
 	enemy.enemy_lane = column
-	enemy.speed = float(data[1]) * minf(1.75, 1.0 + maxf(0.0, float(wave - 2)) * 0.06)
+	enemy.speed = float(data[1]) * minf(1.85, 1.0 + maxf(0.0, float(wave - 2)) * 0.065)
 	enemy.attack_range = data[2]
 	enemy.attack_damage = int(data[3]) + dmg_bonus
-	enemy.gold_reward = int(data[4]) + gold_bonus
-	enemy.xp_reward = int(data[5]) + xp_bonus
+	var reward_scale := 1.0 if kind == "boss" else maxf(0.32, 1.0 / (1.0 + maxf(0.0, float(wave - 5)) * 0.16))
+	enemy.gold_reward = maxi(1, roundi(float(int(data[4]) + gold_bonus) * reward_scale))
+	enemy.xp_reward = maxi(2, roundi(float(int(data[5]) + xp_bonus) * reward_scale))
 	enemies.append(enemy)
 	field.warn(column, ("warning_boss" if look.is_empty() else "warning_red") if kind == "boss" else (
 		"warning_orange" if kind == "boar" else ("warning_gold" if wave >= 3 else "warning_green")))
@@ -401,14 +410,20 @@ func _update_enemy(enemy: Actor, allies: Array[Actor], ahead_in_lane, delta: flo
 
 	var target: Actor
 	var nearest := INF
+	var approach_target: Actor
+	var nearest_ahead := INF
 	for ally in allies:
 		var depth := ally.position.y - enemy.position.y
-		if ally.hp <= 0 or depth < 0.0 or depth > enemy.attack_range:
+		if ally.hp <= 0 or depth < -14.0:
 			continue
 		if not Battlefield.in_lane(ally.position.x, column):
 			continue
 		var distance := enemy.position.distance_squared_to(ally.position)
-		if distance < nearest:
+		if depth >= 0.0 and depth <= 220.0 and distance < nearest_ahead:
+			nearest_ahead = distance
+			approach_target = ally
+		var reach := enemy.attack_range + ally.radius * 0.4
+		if depth <= reach and distance <= reach * reach and distance < nearest:
 			nearest = distance
 			target = ally
 	if target != null:
@@ -433,6 +448,8 @@ func _update_enemy(enemy: Actor, allies: Array[Actor], ahead_in_lane, delta: flo
 	var rage := 1.24 if is_boss and enemy.hp * 2 < enemy.max_hp else 1.0
 	var next_y := minf(enemy.position.y + enemy.speed * rage * delta, Battlefield.REAR_LINE_Y)
 	var preferred_x := enemy.position.x if not is_boss else center
+	if not is_boss and approach_target != null:
+		preferred_x = approach_target.position.x
 	var peers: Array = []
 	if ahead_in_lane is Array:
 		peers = ahead_in_lane
@@ -477,14 +494,23 @@ func _begin_enemy_strike(enemy: Actor, at: Vector2, rear_line: bool) -> void:
 			Vector2(0, -10), 0.90)
 
 
+func _boss_tier() -> int:
+	return maxi(1, wave / BOSS_INTERVAL_WAVES)
+
+
 func _strike_radius(enemy: Actor) -> float:
-	return 105.0 if enemy.kind == "boss" else 48.0
+	if enemy.kind == "boss":
+		return 105.0 + float(_boss_tier() - 1) * 24.0
+	return 48.0
 
 
 func _enemy_strike(enemy: Actor, allies: Array[Actor]) -> void:
 	var is_boss := enemy.kind == "boss"
+	var tier := _boss_tier() if is_boss else 1
 	var enraged := is_boss and enemy.hp * 2 < enemy.max_hp
-	enemy.cooldown = 1.16 if enraged else (1.63 if is_boss else 1.00)
+	var base_cd := (1.16 if enraged else 1.63) if is_boss else 1.00
+	enemy.cooldown = maxf(0.70, base_cd - float(tier - 1) * 0.14) if is_boss else base_cd
+	var strike_dmg := roundi(float(enemy.attack_damage) * (1.25 if enraged else 1.0))
 	if is_boss:
 		enemy.hit_stop(0.05)
 		if enraged:
@@ -501,12 +527,13 @@ func _enemy_strike(enemy: Actor, allies: Array[Actor]) -> void:
 		_fx("vfx/dust_land_small" if enemy.kind == "boar" else "combat/hit_light",
 			enemy.strike_position, 44.0 if enemy.kind == "boar" else 30.0, 0.24, Vector2.ZERO, 0.72)
 	if enemy.strikes_rear_line:
-		_damage(hero, enemy.attack_damage, "combat/hit_heavy_crit" if is_boss else "combat/hit_spark", Vector2(0, 10))
+		_damage(hero, strike_dmg, "combat/hit_heavy_crit" if is_boss else "combat/hit_spark", Vector2(0, 10))
 		return
+	var cross_lane_cleave := is_boss and tier >= 2
 	for ally in allies:
-		if Battlefield.in_lane(ally.position.x, enemy.enemy_lane) and (
+		if (cross_lane_cleave or Battlefield.in_lane(ally.position.x, enemy.enemy_lane)) and (
 				ally.position.distance_to(enemy.strike_position) <= _strike_radius(enemy) + ally.radius * 0.28):
-			_damage(ally, enemy.attack_damage, "combat/hit_heavy_crit" if is_boss else "combat/hit_spark",
+			_damage(ally, strike_dmg, "combat/hit_heavy_crit" if is_boss else "combat/hit_spark",
 				Vector2(0, 12 if is_boss else 7))
 			if state == State.DEFEAT:
 				return
@@ -549,7 +576,7 @@ func _attack(unit: Actor, delta: float) -> void:
 		var patient := _find_heal_target(unit, weapon)
 		if patient == null:
 			return
-		_begin_monkey_attack(unit, weapon, patient, int(weapon.damage) + training * 5)
+		_begin_monkey_attack(unit, weapon, patient, int(weapon.damage) + training * 2)
 		return
 	var target := _closest(unit.position, enemies, weapon.range)
 	if target == null:
@@ -587,16 +614,16 @@ func _execute_monkey_strike(unit: Actor, weapon: Dictionary) -> void:
 	if state != State.RUNNING or unit.hp <= 0:
 		return
 	if weapon.kind == "heal":
-		var patient := unit.pending_target as Actor
-		if not is_instance_valid(patient) or patient.hp <= 0 or patient.hp >= patient.max_hp:
+		var patient: Actor = unit.pending_target if is_instance_valid(unit.pending_target) else null
+		if patient == null or patient.hp <= 0 or patient.hp >= patient.max_hp:
 			patient = _find_heal_target(unit, weapon)
 		if patient == null:
 			return
 		_apply_heal(unit, patient, unit.pending_damage)
 		return
 
-	var target := unit.pending_target as Actor
-	if not is_instance_valid(target) or target.hp <= 0:
+	var target: Actor = unit.pending_target if is_instance_valid(unit.pending_target) else null
+	if target == null or target.hp <= 0:
 		target = _closest(unit.position, enemies, weapon.range)
 	if target == null:
 		return
@@ -803,6 +830,8 @@ func _damage(unit: Actor, amount: int, effect := "combat/hit_spark", knockback :
 		Polish.sequence(_effects, ENEMY_DEFEAT_FRAMES, unit.position + Vector2(0, -12), 54.0, 0.36, Vector2(0, -8), 0.76)
 		army[unit.slot] = null
 		_next_plan = 0.0
+		if army_count() <= Army.SOCKETS.size():
+			_rebalance_uncrowded_formation()
 		hud.update_stats()
 	else:
 		enemies.erase(unit)
@@ -837,7 +866,7 @@ func _reward_fx(at: Vector2, coins: bool) -> void:
 
 
 func xp_needed() -> int:
-	return 17 + level * 12
+	return 22 + level * 15
 
 
 func award(coins: int, experience: int) -> void:
@@ -847,16 +876,34 @@ func award(coins: int, experience: int) -> void:
 		xp -= xp_needed()
 		level += 1
 		hero.max_hp += 3
-		hero.hp = mini(hero.max_hp, hero.hp + 23)
+		hero.hp = mini(hero.max_hp, hero.hp + 15)
 		_fx("summon/upgrade_level", hero.position + Vector2(0, -35), 71.0, 0.55, Vector2.ZERO, 0.6)
+		for role in ROLE_ORDER:
+			if int(ROLES[role].unlock_level) == level:
+				hud.unlock_feedback(role)
 
 
 func army_count() -> int:
 	return army.size() - army.count(null)
 
 
+func is_role_unlocked(role: String) -> bool:
+	return ROLES.has(role) and level >= int(ROLES[role].unlock_level)
+
+
+func summon_cost(role: String) -> int:
+	if not ROLES.has(role):
+		return 0
+	var base := int(ROLES[role].cost)
+	var excess := maxi(0, army_count() - 5)
+	if excess == 0:
+		return base
+	var surcharge := roundi(float(excess) * 1.8 + float(excess * excess) * 0.22)
+	return base + surcharge
+
+
 func can_summon(role: String) -> bool:
-	return state == State.RUNNING and ROLES.has(role) and gold >= ROLES[role].cost
+	return state == State.RUNNING and is_role_unlocked(role) and gold >= summon_cost(role)
 
 
 func summon(role: String) -> bool:
@@ -881,10 +928,11 @@ func summon(role: String) -> bool:
 	for column in Battlefield.LANES.size():
 		if Battlefield.in_lane(at.x, column):
 			monkey.assigned_lane = column
+	var price := summon_cost(role)
 	army[slot] = monkey
 	peak_army = maxi(peak_army, army_count())
 	_equip(monkey, profile.weapon)
-	gold -= int(profile.cost)
+	gold -= price
 	monkey.arrive()
 	var ring := Polish.summon_sequence(_effects, "summon", at, 85.0)
 	ring.z_as_relative = false
@@ -897,7 +945,7 @@ func summon(role: String) -> bool:
 
 
 func training_cost() -> int:
-	return 32 + 28 * training + 5 * training * training
+	return 30 + 25 * training + 5 * training * training
 
 
 func can_train() -> bool:

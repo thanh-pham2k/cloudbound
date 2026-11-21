@@ -35,6 +35,7 @@ var _summon_panel: Panel
 var _summon_capacity: Label
 var _role_buttons := {}
 var _role_frames := {}
+var _role_prices := {}
 var _train_button: Button
 var _train_label: Label
 var _train_price: Label
@@ -141,6 +142,17 @@ func purchase_feedback(role: String) -> void:
 		Vector2(0, -25), 0.96)
 
 
+func unlock_feedback(role: String) -> void:
+	if not _status.visible:
+		return
+	var index: int = game.ROLE_ORDER.find(role)
+	if index < 0:
+		return
+	var x := CARD_START + CARD_SPACING * index + CARD_WIDTH * 0.5
+	Polish.burst(_summon_panel, "summon/upgrade_burst", Vector2(x, 22), 58.0, 0.78,
+		Vector2(0, -22), 0.96)
+
+
 static func summon_button_center(index: int) -> Vector2:
 	return SUMMON_PANEL.position + Vector2(CARD_START + index * CARD_SPACING + CARD_WIDTH * 0.5, 34)
 
@@ -166,7 +178,7 @@ func _build_summon_panel() -> void:
 		_role_frames[role] = _pic(button, "summon/card", Rect2(4, 3, 43, 48))
 		_pic(button, "summon/portrait_" + role, Rect2(7, 5, 38, 43))
 		_label(button, Rect2(51, 5, 96, 22), profile.name, 16)
-		_label(button, Rect2(51, 29, 94, 18), "%d Gold" % profile.cost, 13, MUTED)
+		_role_prices[role] = _label(button, Rect2(51, 29, 94, 18), "%d Gold" % profile.cost, 13, MUTED)
 		_pic(button, "summon/role_" + role, Rect2(125, 31, 20, 18))
 	_train_button = _button(_summon_panel, Rect2(TRAIN_X, 7, 223, 54), "", game.train_army, true)
 	_train_button.tooltip_text = "Train all current and future monkeys"
@@ -180,13 +192,24 @@ func _update_summon_panel() -> void:
 	_summon_capacity.text = "%d active" % game.army_count()
 	for role in _role_buttons:
 		var button: Button = _role_buttons[role]
+		var unlocked: bool = game.is_role_unlocked(role)
 		var enabled: bool = game.can_summon(role)
 		var frame: TextureRect = _role_frames[role]
+		var price_label: Label = _role_prices[role]
+		var profile: Dictionary = game.ROLES[role]
 		button.disabled = not enabled
 		frame.texture = Polish.texture("summon/card" if enabled else "summon/card_disabled")
+		if unlocked:
+			price_label.text = "%d Gold" % game.summon_cost(role)
+			price_label.add_theme_color_override("font_color", MUTED)
+			button.tooltip_text = profile.hint
+		else:
+			price_label.text = "Unlock Lv %d" % int(profile.unlock_level)
+			price_label.add_theme_color_override("font_color", Color("#8c4b37"))
+			button.tooltip_text = "Unlocks at Commander Level %d" % int(profile.unlock_level)
 		for child in button.get_children():
 			if child is TextureRect and child != frame:
-				child.modulate.a = 1.0 if enabled else 0.61
+				child.modulate.a = 1.0 if enabled else (0.61 if unlocked else 0.35)
 	_train_button.disabled = not game.can_train()
 	_train_label.text = "Train army · Lv %d" % game.training
 	_train_price.text = "%d Gold" % game.training_cost()
